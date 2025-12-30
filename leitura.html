@@ -1,61 +1,218 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Fila de Caminhões</title>
-  <style>
-    body { font-family: Arial; background:#f4f6f8; padding:20px; }
-    h1 { text-align:center; }
-    table { width:100%; border-collapse:collapse; background:#fff; }
-    th, td { border:1px solid #ddd; padding:10px; text-align:center; }
-    th { background:#e9ecef; }
-    tr:first-child { background:#fff3cd; font-weight:bold; }
-  </style>
+<meta charset="UTF-8">
+<title>Fila de Caminhões | Rio Branco</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --azul-escuro:#0A3D91;
+  --azul-claro:#1E90FF;
+  --vermelho:#D71920;
+  --branco:#FFFFFF;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg,var(--azul-escuro),var(--azul-claro));
+  color:#fff;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 30px;
+  background:var(--azul-escuro);
+  border-bottom:6px solid var(--vermelho);
+}
+
+header h1{
+  margin:0;
+  font-size:26px;
+  font-weight:600;
+}
+
+header span{
+  font-size:14px;
+  opacity:.9;
+}
+
+.container{
+  padding:30px;
+  max-width:1600px;
+  margin:auto;
+}
+
+.proximo{
+  background:var(--vermelho);
+  padding:30px;
+  border-radius:14px;
+  text-align:center;
+  margin-bottom:30px;
+  box-shadow:0 8px 25px rgba(0,0,0,.35);
+}
+
+.proximo h2{
+  margin:0 0 12px;
+  font-size:26px;
+}
+
+.proximo div{
+  font-size:44px;
+  font-weight:700;
+}
+
+.table-wrapper{
+  width:100%;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  color:#000;
+  border-radius:12px;
+  overflow:hidden;
+  min-width:700px;
+}
+
+thead th{
+  background:var(--azul-escuro);
+  color:#fff;
+  padding:16px;
+  font-size:18px;
+}
+
+tbody td{
+  padding:16px;
+  font-size:18px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+}
+
+tbody tr:first-child{
+  background:#FFF3CD;
+  font-weight:700;
+}
+
+footer{
+  text-align:center;
+  padding:15px;
+  font-size:12px;
+  opacity:.8;
+}
+
+@media (max-width:900px){
+  header h1{font-size:20px;}
+  .proximo div{font-size:30px;}
+  thead th, tbody td{font-size:14px;padding:10px;}
+}
+</style>
 </head>
+
 <body>
 
-<h1>🚛 Fila de Caminhões</h1>
+<header>
+  <h1>Rio Branco Distribuidora de Combustíveis</h1>
+  <span>Fila de Espera de Caminhões</span>
+</header>
 
-<table>
-  <thead>
-    <tr>
-      <th>Ordem</th>
-      <th>Placa</th>
-      <th>Compartimento</th>
-      <th>Data</th>
-      <th>Hora</th>
-    </tr>
-  </thead>
-  <tbody id="fila"></tbody>
-</table>
+<div class="container">
+
+  <div class="proximo">
+    <h2>🔔 PRÓXIMO DA FILA</h2>
+    <div id="proximo">Carregando…</div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Ordem</th>
+          <th>Placa</th>
+          <th>Compartimento</th>
+          <th>Data</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody id="fila"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  Sistema de Consulta • Somente Leitura
+</footer>
 
 <script>
-const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
+const url = "COLE_AQUI_SEU_LINK_CSV";
 
-async function carregarFila() {
-  const res = await fetch(url);
-  const texto = await res.text();
-  const linhas = texto.trim().split("\n").slice(1);
+function parseCSV(text){
+  const rows = [];
+  let current = '';
+  let row = [];
+  let insideQuotes = false;
+
+  for (let char of text) {
+    if (char === '"') insideQuotes = !insideQuotes;
+    else if (char === ',' && !insideQuotes) {
+      row.push(current);
+      current = '';
+    } else if (char === '\n' && !insideQuotes) {
+      row.push(current);
+      rows.push(row);
+      row = [];
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  if (current) row.push(current);
+  if (row.length) rows.push(row);
+  return rows;
+}
+
+async function carregarFila(){
+  const res = await fetch(url, { cache: "no-store" });
+  const text = await res.text();
+  const data = parseCSV(text).slice(1);
 
   const tbody = document.getElementById("fila");
+  const proximo = document.getElementById("proximo");
   tbody.innerHTML = "";
 
-  linhas.forEach(linha => {
-    const cols = linha.split(",");
+  if (data.length === 0) {
+    proximo.textContent = "Nenhum caminhão na fila";
+    return;
+  }
+
+  data.forEach(l => {
+    if (!l[0]) return;
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${cols[0]}</td>
-      <td>${cols[1]}</td>
-      <td>${cols[2]}</td>
-      <td>${cols[3]}</td>
-      <td>${cols[4]}</td>
+      <td>${l[0]}</td>
+      <td>${l[1]}</td>
+      <td>${l[2]}</td>
+      <td>${l[3]}</td>
+      <td>${l[4]}</td>
     `;
     tbody.appendChild(tr);
   });
+
+  proximo.textContent = `${data[0][1]} • Comp. ${data[0][2]}`;
 }
 
 carregarFila();
-setInterval(carregarFila, 10000); // atualiza a cada 10s
+setInterval(carregarFila, 10000);
 </script>
 
 </body>
