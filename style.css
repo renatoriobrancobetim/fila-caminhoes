@@ -9,7 +9,7 @@ h1 {
 }
 
 .form {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 input {
@@ -20,6 +20,13 @@ input {
 button {
   padding: 8px 12px;
   cursor: pointer;
+}
+
+.chamar {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  margin-bottom: 15px;
 }
 
 table {
@@ -43,3 +50,8 @@ tr:first-child {
   font-weight: bold;
 }
 
+.remover {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
