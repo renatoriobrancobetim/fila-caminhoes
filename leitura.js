@@ -1,40 +1,23 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore, collection, query,
-  orderBy, onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+function renderizar() {
+  const fila = JSON.parse(localStorage.getItem("fila")) || [];
+  const tbody = document.getElementById("fila");
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_DOMINIO",
-  projectId: "SEU_PROJECT_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const filaRef = query(
-  collection(db, "fila"),
-  orderBy("criadoEm")
-);
-
-const tbody = document.getElementById("fila");
-
-onSnapshot(filaRef, snapshot => {
   tbody.innerHTML = "";
-  let ordem = 1;
 
-  snapshot.forEach(doc => {
-    const d = doc.data();
+  fila.forEach((item, index) => {
     const tr = document.createElement("tr");
-
     tr.innerHTML = `
-      <td>${ordem++}</td>
-      <td>${d.placa}</td>
-      <td>${d.compartimento}</td>
-      <td>${d.hora}</td>
+      <td>${index + 1}</td>
+      <td>${item.placa}</td>
+      <td>${item.compartimento}</td>
+      <td>${item.data}</td>
+      <td>${item.hora}</td>
     `;
-
     tbody.appendChild(tr);
   });
-});
+}
+
+renderizar();
+
+// Atualiza automaticamente a cada 5 segundos
+setInterval(renderizar, 5000);
