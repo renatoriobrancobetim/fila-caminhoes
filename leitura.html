@@ -2,12 +2,19 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Fila de Caminhões - Consulta</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Fila de Caminhões</title>
+  <style>
+    body { font-family: Arial; background:#f4f6f8; padding:20px; }
+    h1 { text-align:center; }
+    table { width:100%; border-collapse:collapse; background:#fff; }
+    th, td { border:1px solid #ddd; padding:10px; text-align:center; }
+    th { background:#e9ecef; }
+    tr:first-child { background:#fff3cd; font-weight:bold; }
+  </style>
 </head>
 <body>
 
-<h1>👀 Fila de Caminhões (Consulta)</h1>
+<h1>🚛 Fila de Caminhões</h1>
 
 <table>
   <thead>
@@ -22,6 +29,34 @@
   <tbody id="fila"></tbody>
 </table>
 
-<script src="leitura.js"></script>
+<script>
+const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
+
+async function carregarFila() {
+  const res = await fetch(url);
+  const texto = await res.text();
+  const linhas = texto.trim().split("\n").slice(1);
+
+  const tbody = document.getElementById("fila");
+  tbody.innerHTML = "";
+
+  linhas.forEach(linha => {
+    const cols = linha.split(",");
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${cols[0]}</td>
+      <td>${cols[1]}</td>
+      <td>${cols[2]}</td>
+      <td>${cols[3]}</td>
+      <td>${cols[4]}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+carregarFila();
+setInterval(carregarFila, 10000); // atualiza a cada 10s
+</script>
+
 </body>
 </html>
