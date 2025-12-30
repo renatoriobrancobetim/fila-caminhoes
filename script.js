@@ -1,49 +1,69 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore, collection, addDoc,
-  getDocs, query, orderBy, deleteDoc, doc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+let fila = JSON.parse(localStorage.getItem("fila")) || [];
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_DOMINIO",
-  projectId: "SEU_PROJECT_ID"
-};
+function adicionar() {
+  const placa = document.getElementById("placa").value.trim();
+  const compartimento = document.getElementById("compartimento").value.trim();
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  if (!placa || !compartimento) {
+    alert("Preencha placa e compartimento");
+    return;
+  }
 
-const filaRef = collection(db, "fila");
+  const agora = new Date();
 
-export async function adicionar() {
-  const placa = document.getElementById("placa").value;
-  const compartimento = document.getElementById("compartimento").value;
-
-  await addDoc(filaRef, {
+  fila.push({
     placa,
     compartimento,
-    data: new Date().toLocaleDateString(),
-    hora: new Date().toLocaleTimeString(),
-    criadoEm: new Date()
+    data: agora.toLocaleDateString(),
+    hora: agora.toLocaleTimeString()
   });
 
-  alert("Adicionado à fila");
+  salvar();
+  document.getElementById("placa").value = "";
+  document.getElementById("compartimento").value = "";
 }
 
-export async function chamar() {
-  const q = query(filaRef, orderBy("criadoEm"));
-  const snapshot = await getDocs(q);
-
-  if (snapshot.empty) {
+function chamar() {
+  if (fila.length === 0) {
     alert("Fila vazia");
     return;
   }
 
-  const primeiro = snapshot.docs[0];
-  await deleteDoc(doc(db, "fila", primeiro.id));
-
-  alert(`Chamado: ${primeiro.data().placa}`);
+  const chamado = fila.shift();
+  alert(`🔔 Caminhão chamado:\nPlaca: ${chamado.placa}\nCompartimento: ${chamado.compartimento}`);
+  salvar();
 }
 
-window.adicionar = adicionar;
-window.chamar = chamar;
+function remover(index) {
+  if (confirm("Remover este caminhão da fila?")) {
+    fila.splice(index, 1);
+    salvar();
+  }
+}
+
+function salvar() {
+  localStorage.setItem("fila", JSON.stringify(fila));
+  renderizar();
+}
+
+function renderizar() {
+  const tbody = document.getElementById("fila");
+  tbody.innerHTML = "";
+
+  fila.forEach((item, index) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${item.placa}</td>
+      <td>${item.compartimento}</td>
+      <td>${item.data}</td>
+      <td>${item.hora}</td>
+      <td>
+        <button class="remover" onclick="remover(${index})">❌ Remover</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+renderizar();
