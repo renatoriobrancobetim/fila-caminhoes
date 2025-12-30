@@ -1,182 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Fila de Caminhões | Rio Branco</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #0A3D91, #1E90FF);
-      color: #ffffff;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 30px;
-      background: #0A3D91;
-      border-bottom: 5px solid #D71920;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 600;
-    }
-
-    header span {
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    .container {
-      padding: 30px;
-    }
-
-    .proximo {
-      background: #D71920;
-      padding: 25px;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    .proximo h2 {
-      margin: 0 0 10px;
-      font-size: 24px;
-    }
-
-    .proximo div {
-      font-size: 40px;
-      font-weight: bold;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #ffffff;
-      color: #000;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    th {
-      background: #0A3D91;
-      color: #fff;
-      padding: 14px;
-      font-size: 18px;
-    }
-
-    td {
-      padding: 14px;
-      font-size: 18px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
-
-    tbody tr:first-child {
-      background: #FFF3CD;
-      font-weight: bold;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      font-size: 12px;
-      opacity: 0.8;
-    }
-
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 20px;
-      }
-      .proximo div {
-        font-size: 28px;
-      }
-      th, td {
-        font-size: 14px;
-        padding: 10px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Lançamento de Fila - Rio Branco</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#0A3D91;
+  color:#fff;
+  padding:30px;
+}
+input, button{
+  padding:12px;
+  font-size:16px;
+  margin:5px 0;
+  width:100%;
+}
+button{
+  background:#D71920;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+.container{
+  max-width:400px;
+  margin:auto;
+}
+</style>
 </head>
-
 <body>
 
-<header>
-  <h1>Rio Branco Distribuidora de Combustíveis</h1>
-  <span>Fila de Espera de Caminhões</span>
-</header>
-
 <div class="container">
+  <h2>Lançamento de Caminhão</h2>
 
-  <div class="proximo">
-    <h2>🔔 PRÓXIMO DA FILA</h2>
-    <div id="proximo">Carregando...</div>
-  </div>
+  <input id="placa" placeholder="Placa do caminhão">
+  <input id="compartimento" placeholder="Compartimento">
 
-  <table>
-    <thead>
-      <tr>
-        <th>Ordem</th>
-        <th>Placa</th>
-        <th>Compartimento</th>
-        <th>Data</th>
-        <th>Hora</th>
-      </tr>
-    </thead>
-    <tbody id="fila"></tbody>
-  </table>
+  <button onclick="enviar()">Adicionar à Fila</button>
 
+  <p id="msg"></p>
 </div>
 
-<footer>
-  Sistema de Consulta • Somente Leitura
-</footer>
-
 <script>
-  // 👉 COLE AQUI O LINK CSV DO GOOGLE SHEETS
-  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
+const url = "https://script.google.com/macros/s/AKfycbzjWIcSH97P1roaTZOONbLGsknciL0uhVfRGTHxsiLzoURiAtpIY1kx5krLy-7OTDL0/exec";
 
-  async function carregarFila() {
-    const res = await fetch(url);
-    const texto = await res.text();
-    const linhas = texto.trim().split("\n").slice(1);
+async function enviar(){
+  const placa = document.getElementById("placa").value.trim();
+  const compartimento = document.getElementById("compartimento").value.trim();
+  const msg = document.getElementById("msg");
 
-    const tbody = document.getElementById("fila");
-    const proximo = document.getElementById("proximo");
-
-    tbody.innerHTML = "";
-
-    if (linhas.length === 0) {
-      proximo.textContent = "Nenhum caminhão na fila";
-      return;
-    }
-
-    linhas.forEach(l => {
-      const c = l.split(",");
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${c[0]}</td>
-        <td>${c[1]}</td>
-        <td>${c[2]}</td>
-        <td>${c[3]}</td>
-        <td>${c[4]}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    // Destaque do próximo
-    proximo.textContent = `${linhas[0].split(",")[1]} • Comp. ${linhas[0].split(",")[2]}`;
+  if(!placa || !compartimento){
+    msg.textContent = "Preencha todos os campos";
+    return;
   }
 
-  carregarFila();
-  setInterval(carregarFila, 10000);
+  msg.textContent = "Enviando...";
+
+  const res = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({ placa, compartimento })
+  });
+
+  if(res.ok){
+    msg.textContent = "✅ Caminhão adicionado à fila";
+    document.getElementById("placa").value = "";
+    document.getElementById("compartimento").value = "";
+  } else {
+    msg.textContent = "❌ Erro ao enviar";
+  }
+}
 </script>
 
 </body>
