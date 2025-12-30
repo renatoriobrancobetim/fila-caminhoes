@@ -2,17 +2,37 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Fila de Caminhões - Operação</title>
+  <title>Fila de Espera - Caminhões</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Operação - Fila de Caminhões</h1>
+<h1>🚛 Fila de Espera de Caminhões</h1>
 
-<input id="placa" placeholder="Placa">
-<input id="compartimento" placeholder="Compartimento">
-<button onclick="adicionar()">Adicionar</button>
-<button onclick="chamar()">Chamar Próximo</button>
+<div class="form">
+  <input type="text" id="placa" placeholder="Placa do caminhão">
+  <input type="text" id="compartimento" placeholder="Compartimento">
+  <button onclick="adicionar()">Adicionar à fila</button>
+</div>
 
-<script type="module" src="script.js"></script>
+<button class="chamar" onclick="chamar()">🔔 Chamar Próximo</button>
+
+<h2>Fila atual</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ordem</th>
+      <th>Placa</th>
+      <th>Compartimento</th>
+      <th>Data</th>
+      <th>Hora</th>
+      <th>Ação</th>
+    </tr>
+  </thead>
+  <tbody id="fila"></tbody>
+</table>
+
+<script src="script.js"></script>
 </body>
 </html>
