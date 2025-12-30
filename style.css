@@ -55,3 +55,9 @@ tr:first-child {
   color: white;
   border: none;
 }
+
+tr:first-child {
+  background: #fff3cd;
+  font-weight: bold;
+}
+
