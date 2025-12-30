@@ -2,37 +2,182 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Fila de Espera - Caminhões</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Fila de Caminhões | Rio Branco</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #0A3D91, #1E90FF);
+      color: #ffffff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      background: #0A3D91;
+      border-bottom: 5px solid #D71920;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 600;
+    }
+
+    header span {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    .proximo {
+      background: #D71920;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .proximo h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+
+    .proximo div {
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      color: #000;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th {
+      background: #0A3D91;
+      color: #fff;
+      padding: 14px;
+      font-size: 18px;
+    }
+
+    td {
+      padding: 14px;
+      font-size: 18px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:first-child {
+      background: #FFF3CD;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 20px;
+      }
+      .proximo div {
+        font-size: 28px;
+      }
+      th, td {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>🚛 Fila de Espera de Caminhões</h1>
+<header>
+  <h1>Rio Branco Distribuidora de Combustíveis</h1>
+  <span>Fila de Espera de Caminhões</span>
+</header>
 
-<div class="form">
-  <input type="text" id="placa" placeholder="Placa do caminhão">
-  <input type="text" id="compartimento" placeholder="Compartimento">
-  <button onclick="adicionar()">Adicionar à fila</button>
+<div class="container">
+
+  <div class="proximo">
+    <h2>🔔 PRÓXIMO DA FILA</h2>
+    <div id="proximo">Carregando...</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ordem</th>
+        <th>Placa</th>
+        <th>Compartimento</th>
+        <th>Data</th>
+        <th>Hora</th>
+      </tr>
+    </thead>
+    <tbody id="fila"></tbody>
+  </table>
+
 </div>
 
-<button class="chamar" onclick="chamar()">🔔 Chamar Próximo</button>
+<footer>
+  Sistema de Consulta • Somente Leitura
+</footer>
 
-<h2>Fila atual</h2>
+<script>
+  // 👉 COLE AQUI O LINK CSV DO GOOGLE SHEETS
+  const url = "COLE_AQUI_SEU_LINK_CSV";
 
-<table>
-  <thead>
-    <tr>
-      <th>Ordem</th>
-      <th>Placa</th>
-      <th>Compartimento</th>
-      <th>Data</th>
-      <th>Hora</th>
-      <th>Ação</th>
-    </tr>
-  </thead>
-  <tbody id="fila"></tbody>
-</table>
+  async function carregarFila() {
+    const res = await fetch(url);
+    const texto = await res.text();
+    const linhas = texto.trim().split("\n").slice(1);
 
-<script src="script.js"></script>
+    const tbody = document.getElementById("fila");
+    const proximo = document.getElementById("proximo");
+
+    tbody.innerHTML = "";
+
+    if (linhas.length === 0) {
+      proximo.textContent = "Nenhum caminhão na fila";
+      return;
+    }
+
+    linhas.forEach(l => {
+      const c = l.split(",");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${c[0]}</td>
+        <td>${c[1]}</td>
+        <td>${c[2]}</td>
+        <td>${c[3]}</td>
+        <td>${c[4]}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // Destaque do próximo
+    proximo.textContent = `${linhas[0].split(",")[1]} • Comp. ${linhas[0].split(",")[2]}`;
+  }
+
+  carregarFila();
+  setInterval(carregarFila, 10000);
+</script>
+
 </body>
 </html>
