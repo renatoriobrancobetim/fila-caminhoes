@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Fila de Espera - Caminhões</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🚛 Fila de Espera de Caminhões</h1>
+
+<div class="form">
+  <input type="text" id="placa" placeholder="Placa do caminhão">
+  <input type="text" id="compartimento" placeholder="Compartimento">
+  <button onclick="adicionar()">Adicionar à fila</button>
+</div>
+
+<h2>Fila atual</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ordem</th>
+      <th>Placa</th>
+      <th>Compartimento</th>
+      <th>Data</th>
+      <th>Hora</th>
+    </tr>
+  </thead>
+  <tbody id="fila"></tbody>
+</table>
+
+<script src="script.js"></script>
+</body>
+</html>
 
