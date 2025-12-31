@@ -49,33 +49,33 @@ button{
 <div class="container">
   <h2>Lançamento de Caminhão</h2>
 
-<form
-  action="https://script.google.com/macros/s/AKfycbzCkbQFn5SD0ok8FC4TQyrGPyNZ-Flf5Untbdm0kbArfcaTz40_qFJ-nv6tjmmaOA97/exec"
-  method="POST"
-  target="hidden_iframe"
->
+  <form
+    action="https://script.google.com/macros/s/AKfycbycq3FR9TM239tavt2wb7q0049DXehPibyxbiMKicOoan6aF7L5K_13v88L2F1mpI1d/exec"
+    method="POST"
+    target="hidden_iframe"
+    onsubmit="mostrarMensagem()"
+  >
 
-  <input name="placa" placeholder="Placa do caminhão">
-  <input name="compartimento" placeholder="Compartimento">
-  <input name="senha" type="password" placeholder="Senha" required>
+    <input name="placa" id="placa" placeholder="Placa do caminhão">
+    <input name="compartimento" id="compartimento" placeholder="Compartimento">
+    <input name="senha" type="password" placeholder="Senha" required>
 
-  <input type="hidden" name="acao" id="acao">
+    <input type="hidden" name="acao" id="acao">
 
-  <button
-    type="submit"
-    onclick="document.getElementById('acao').value='inserir'">
-    Adicionar à Fila
-  </button>
+    <button
+      type="submit"
+      onclick="document.getElementById('acao').value='inserir'">
+      Adicionar à Fila
+    </button>
 
-  <button
-    type="submit"
-    class="chamar"
-    onclick="document.getElementById('acao').value='chamar'">
-    🔔 Chamar Próximo
-  </button>
+    <button
+      type="submit"
+      class="chamar"
+      onclick="document.getElementById('acao').value='chamar'">
+      🔔 Chamar Próximo
+    </button>
 
-</form>
-
+  </form>
 
   <div class="msg" id="msg"></div>
 </div>
@@ -83,11 +83,7 @@ button{
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-function setAcao(valor){
-  document.getElementById("acao").value = valor;
-}
-
-function enviado(){
+function mostrarMensagem(){
   document.getElementById("msg").textContent =
     "✅ Solicitação enviada com sucesso.";
 }
