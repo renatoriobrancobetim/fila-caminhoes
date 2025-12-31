@@ -1,39 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fila de Caminhões | Rio Branco</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0A3D91;
+  color:#fff;
+  padding:30px;
+}
+h1{text-align:center;}
+.alert{
+  background:#D71920;
+  padding:15px;
+  border-radius:8px;
+  margin-bottom:20px;
+  display:none;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  color:#000;
+}
+th,td{
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:center;
+}
+th{background:#0A3D91;color:#fff;}
+tr:first-child{background:#FFF3CD;font-weight:bold;}
+</style>
+</head>
+
+<body>
+
+<h1>Rio Branco Distribuidora de Combustíveis</h1>
+
+<div id="erro" class="alert"></div>
+
+<table>
+<thead>
+<tr>
+  <th>Ordem</th>
+  <th>Placa</th>
+  <th>Compartimento</th>
+  <th>Data</th>
+  <th>Hora</th>
+</tr>
+</thead>
+<tbody id="fila"></tbody>
+</table>
+
 <script>
-const url = "https://script.google.com/macros/s/AKfycbw-r2UmnAigw4fk6Mm3OBpJ4WxPcMnipmleRgbcmbZ_5iWOaGCaCMefUVC_4JKCmORv/exec";
+const url = ""; // 👈 DEIXE VAZIO POR ENQUANTO
 
-async function enviar() {
-  const placa = document.getElementById("placa").value.trim();
-  const compartimento = document.getElementById("compartimento").value.trim();
-  const msg = document.getElementById("msg");
+function mostrarErro(msg){
+  const e = document.getElementById("erro");
+  e.style.display = "block";
+  e.textContent = msg;
+}
 
-  if (!placa || !compartimento) {
-    msg.textContent = "Preencha todos os campos";
+async function carregarFila(){
+  if(!url){
+    mostrarErro("⚠️ URL do Google Sheets não configurada.");
     return;
   }
 
-  msg.textContent = "Enviando...";
+  try{
+    const res = await fetch(url);
+    const texto = await res.text();
 
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ placa, compartimento })
+    const linhas = texto.trim().split("\n").slice(1);
+    const tbody = document.getElementById("fila");
+    tbody.innerHTML = "";
+
+    linhas.forEach(l=>{
+      const c = l.split(",");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${c[0]}</td>
+        <td>${c[1]}</td>
+        <td>${c[2]}</td>
+        <td>${c[3]}</td>
+        <td>${c[4]}</td>
+      `;
+      tbody.appendChild(tr);
     });
 
-    const result = await response.json();
-
-    if (result.status === "ok") {
-      msg.textContent = "✅ Caminhão adicionado à fila";
-      document.getElementById("placa").value = "";
-      document.getElementById("compartimento").value = "";
-    } else {
-      msg.textContent = "❌ Erro: " + result.mensagem;
-    }
-
-  } catch (error) {
-    msg.textContent = "❌ Erro de conexão";
+  }catch(err){
+    mostrarErro("❌ Erro ao carregar dados da planilha.");
   }
 }
+
+carregarFila();
 </script>
+
+</body>
+</html>
