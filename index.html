@@ -49,28 +49,33 @@ button{
 <div class="container">
   <h2>Lançamento de Caminhão</h2>
 
-  <form
-    action="https://script.google.com/macros/s/AKfycbw8Q_Vdwc3xzrseM4uIR_tzWXFdRyFaqwhWibLYprgNfzplkfsBZ5j_yE4CitRfVTKg/exec"
-    method="POST"
-    target="hidden_iframe"
-    onsubmit="enviado()"
-  >
+<form
+  action="https://script.google.com/macros/s/AKfycbzCkbQFn5SD0ok8FC4TQyrGPyNZ-Flf5Untbdm0kbArfcaTz40_qFJ-nv6tjmmaOA97/exec"
+  method="POST"
+  target="hidden_iframe"
+>
 
-    <input name="placa" placeholder="Placa do caminhão">
-    <input name="compartimento" placeholder="Compartimento">
-    <input name="senha" type="password" placeholder="Senha" required>
+  <input name="placa" placeholder="Placa do caminhão">
+  <input name="compartimento" placeholder="Compartimento">
+  <input name="senha" type="password" placeholder="Senha" required>
 
-    <input type="hidden" name="acao" id="acao" value="inserir">
+  <input type="hidden" name="acao" id="acao">
 
-    <button type="submit" onclick="setAcao('inserir')">
-      Adicionar à Fila
-    </button>
+  <button
+    type="submit"
+    onclick="document.getElementById('acao').value='inserir'">
+    Adicionar à Fila
+  </button>
 
-    <button type="submit" class="chamar" onclick="setAcao('chamar')">
-      🔔 Chamar Próximo
-    </button>
+  <button
+    type="submit"
+    class="chamar"
+    onclick="document.getElementById('acao').value='chamar'">
+    🔔 Chamar Próximo
+  </button>
 
-  </form>
+</form>
+
 
   <div class="msg" id="msg"></div>
 </div>
