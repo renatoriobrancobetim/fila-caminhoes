@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Fila de Caminhões | Rio Branco</title>
+<title>Lançamento de Fila | Rio Branco</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -13,91 +13,82 @@ body{
   color:#fff;
   padding:30px;
 }
-h1{text-align:center;}
-.alert{
-  background:#D71920;
-  padding:15px;
-  border-radius:8px;
-  margin-bottom:20px;
-  display:none;
+.container{
+  max-width:420px;
+  margin:auto;
 }
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-  color:#000;
-}
-th,td{
-  border:1px solid #ddd;
-  padding:10px;
+h2{
   text-align:center;
 }
-th{background:#0A3D91;color:#fff;}
-tr:first-child{background:#FFF3CD;font-weight:bold;}
+input, button{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  margin-top:10px;
+}
+button{
+  background:#D71920;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+.msg{
+  margin-top:15px;
+  text-align:center;
+  font-weight:bold;
+}
 </style>
 </head>
 
 <body>
 
-<h1>Rio Branco Distribuidora de Combustíveis</h1>
+<div class="container">
+  <h2>Lançamento de Caminhão</h2>
 
-<div id="erro" class="alert"></div>
+  <input id="placa" placeholder="Placa do caminhão">
+  <input id="compartimento" placeholder="Compartimento">
 
-<table>
-<thead>
-<tr>
-  <th>Ordem</th>
-  <th>Placa</th>
-  <th>Compartimento</th>
-  <th>Data</th>
-  <th>Hora</th>
-</tr>
-</thead>
-<tbody id="fila"></tbody>
-</table>
+  <button onclick="enviar()">Adicionar à Fila</button>
+
+  <div id="msg" class="msg"></div>
+</div>
 
 <script>
-const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv"; // 👈 DEIXE VAZIO POR ENQUANTO
+const url = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
 
-function mostrarErro(msg){
-  const e = document.getElementById("erro");
-  e.style.display = "block";
-  e.textContent = msg;
-}
+async function enviar() {
+  const placa = document.getElementById("placa").value.trim();
+  const compartimento = document.getElementById("compartimento").value.trim();
+  const msg = document.getElementById("msg");
 
-async function carregarFila(){
-  if(!url){
-    mostrarErro("⚠️ URL do Google Sheets não configurada.");
+  if (!placa || !compartimento) {
+    msg.textContent = "⚠️ Preencha todos os campos";
     return;
   }
 
-  try{
-    const res = await fetch(url);
-    const texto = await res.text();
+  msg.textContent = "⏳ Enviando...";
 
-    const linhas = texto.trim().split("\n").slice(1);
-    const tbody = document.getElementById("fila");
-    tbody.innerHTML = "";
-
-    linhas.forEach(l=>{
-      const c = l.split(",");
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${c[0]}</td>
-        <td>${c[1]}</td>
-        <td>${c[2]}</td>
-        <td>${c[3]}</td>
-        <td>${c[4]}</td>
-      `;
-      tbody.appendChild(tr);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ placa, compartimento })
     });
 
-  }catch(err){
-    mostrarErro("❌ Erro ao carregar dados da planilha.");
+    const resultado = await response.json();
+
+    if (resultado.status === "ok") {
+      msg.textContent = "✅ Caminhão adicionado à fila";
+      document.getElementById("placa").value = "";
+      document.getElementById("compartimento").value = "";
+    } else {
+      msg.textContent = "❌ Erro ao salvar";
+    }
+
+  } catch (e) {
+    msg.textContent = "❌ Falha de conexão";
   }
 }
-
-carregarFila();
 </script>
 
 </body>
