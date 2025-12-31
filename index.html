@@ -53,43 +53,24 @@ button{
   <div id="msg" class="msg"></div>
 </div>
 
+<form action="https://script.google.com/macros/s/AKfycbyLkZZpbOsvG7912dC9w5Zmlp7O40CLcMjBfF7uQCYD8MMdDUUGV7F9Md_b0Qacj7LS/exec" method="POST" target="hidden_iframe" onsubmit="enviado()">
+
+  <input name="placa" placeholder="Placa do caminhão" required>
+  <input name="compartimento" placeholder="Compartimento" required>
+
+  <button type="submit">Adicionar à Fila</button>
+</form>
+
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
+<p id="msg"></p>
+
 <script>
-const url = "https://script.google.com/macros/s/AKfycbz0gfScz-JgQZYxE4Nqrs67mtlmLqyA4ZIO3VSBngd88GyZS6O1vBf0cEN9wf6zaIcU/exec";
-
-async function enviar() {
-  const placa = document.getElementById("placa").value.trim();
-  const compartimento = document.getElementById("compartimento").value.trim();
-  const msg = document.getElementById("msg");
-
-  if (!placa || !compartimento) {
-    msg.textContent = "⚠️ Preencha todos os campos";
-    return;
-  }
-
-  msg.textContent = "⏳ Enviando...";
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ placa, compartimento })
-    });
-
-    const resultado = await response.json();
-
-    if (resultado.status === "ok") {
-      msg.textContent = "✅ Caminhão adicionado à fila";
-      document.getElementById("placa").value = "";
-      document.getElementById("compartimento").value = "";
-    } else {
-      msg.textContent = "❌ Erro ao salvar";
-    }
-
-  } catch (e) {
-    msg.textContent = "❌ Falha de conexão";
-  }
+function enviado() {
+  document.getElementById("msg").textContent = "✅ Caminhão enviado para a fila";
 }
 </script>
+
 
 </body>
 </html>
