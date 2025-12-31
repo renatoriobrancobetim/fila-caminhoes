@@ -32,24 +32,26 @@ button{background:#D71920;color:#fff;border:none;cursor:pointer;}
 <div class="container">
   <h2>Lançamento de Caminhão</h2>
 
+  <!-- FORM INSERIR -->
   <form
     action="https://script.google.com/macros/s/AKfycbzCkbQFn5SD0ok8FC4TQyrGPyNZ-Flf5Untbdm0kbArfcaTz40_qFJ-nv6tjmmaOA97/exec"
     method="POST"
   >
-    <input name="placa" placeholder="Placa do caminhão">
-    <input name="compartimento" placeholder="Compartimento">
-    <input name="senha" type="password" placeholder="Senha">
+    <input name="placa" placeholder="Placa do caminhão" required>
+    <input name="compartimento" placeholder="Compartimento" required>
+    <input name="senha" type="password" placeholder="Senha" required>
 
     <input type="hidden" name="acao" value="inserir">
 
     <button type="submit">Adicionar à Fila</button>
   </form>
 
+  <!-- FORM CHAMAR -->
   <form
     action="https://script.google.com/macros/s/AKfycbzCkbQFn5SD0ok8FC4TQyrGPyNZ-Flf5Untbdm0kbArfcaTz40_qFJ-nv6tjmmaOA97/exec"
     method="POST"
   >
-    <input type="hidden" name="senha">
+    <input name="senha" type="password" placeholder="Senha" required>
     <input type="hidden" name="acao" value="chamar">
 
     <button type="submit" class="chamar">🔔 Chamar Próximo</button>
