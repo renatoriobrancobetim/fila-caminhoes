@@ -29,15 +29,26 @@ h1{margin:0;}
 }
 
 .card{
-  padding:20px;
-  border-radius:10px;
+  padding:22px;
+  border-radius:12px;
   text-align:center;
-  font-size:22px;
+  font-size:24px;
   font-weight:bold;
+  transition:transform .3s;
 }
 
 .proximo{background:#D71920;}
 .ultimo{background:#1E90FF;}
+
+.flash{
+  animation:flash 1s ease;
+}
+
+@keyframes flash{
+  0%   {transform:scale(1); box-shadow:none;}
+  30%  {transform:scale(1.05); box-shadow:0 0 25px rgba(255,255,255,.8);}
+  100% {transform:scale(1); box-shadow:none;}
+}
 
 table{
   width:100%;
@@ -106,6 +117,16 @@ tr:first-child{
 const URL_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const URL_HIST = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=864994074&single=true&output=csv";
 
+let ultimoProximo = "";
+let ultimoChamado = "";
+
+function destacar(id){
+  const el = document.getElementById(id);
+  el.classList.remove("flash");
+  void el.offsetWidth; // força reflow
+  el.classList.add("flash");
+}
+
 async function carregarFila(){
   try{
     const url = URL_FILA + "&nocache=" + Date.now();
@@ -114,12 +135,16 @@ async function carregarFila(){
 
     const linhas = texto.trim().split("\n").slice(1);
     const tbody = document.getElementById("fila");
-    const proximo = document.getElementById("proximo");
+    const proximoEl = document.getElementById("proximo");
 
     tbody.innerHTML = "";
 
     if(linhas.length === 0){
-      proximo.textContent = "Fila vazia";
+      if(ultimoProximo !== "vazio"){
+        ultimoProximo = "vazio";
+        proximoEl.textContent = "Fila vazia";
+        destacar("proximo");
+      }
     } else {
       linhas.forEach(l=>{
         const c = l.split(",");
@@ -134,9 +159,20 @@ async function carregarFila(){
         tbody.appendChild(tr);
       });
 
-      proximo.textContent =
-        "🔔 Próximo: " + linhas[0].split(",")[1] +
-        " • Comp. " + linhas[0].split(",")[2];
+      const atual =
+        linhas[0].split(",")[1] + "-" +
+        linhas[0].split(",")[2];
+
+      proximoEl.textContent =
+        "🔔 Próximo: " +
+        linhas[0].split(",")[1] +
+        " • Comp. " +
+        linhas[0].split(",")[2];
+
+      if(atual !== ultimoProximo){
+        ultimoProximo = atual;
+        destacar("proximo");
+      }
     }
 
     document.getElementById("status").textContent =
@@ -154,18 +190,23 @@ async function carregarUltimoChamado(){
     const texto = await res.text();
 
     const linhas = texto.trim().split("\n").slice(1);
-    const ultimo = document.getElementById("ultimo");
+    const ultimoEl = document.getElementById("ultimo");
 
-    if(linhas.length === 0){
-      ultimo.textContent = "Último chamado: --";
-      return;
-    }
+    if(linhas.length === 0) return;
 
     const ultimaLinha = linhas[linhas.length - 1].split(",");
+    const atual = ultimaLinha[0] + "-" + ultimaLinha[1];
 
-    ultimo.textContent =
-      "Último chamado: " + ultimaLinha[0] +
-      " • Comp. " + ultimaLinha[1];
+    ultimoEl.textContent =
+      "Último chamado: " +
+      ultimaLinha[0] +
+      " • Comp. " +
+      ultimaLinha[1];
+
+    if(atual !== ultimoChamado){
+      ultimoChamado = atual;
+      destacar("ultimo");
+    }
 
   }catch(e){
     console.error("Erro histórico");
