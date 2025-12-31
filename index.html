@@ -45,32 +45,30 @@ button{
 <div class="container">
   <h2>Lançamento de Caminhão</h2>
 
-  <input id="placa" placeholder="Placa do caminhão">
-  <input id="compartimento" placeholder="Compartimento">
+  <form
+    action="https://script.google.com/macros/s/AKfycbyLkZZpbOsvG7912dC9w5Zmlp7O40CLcMjBfF7uQCYD8MMdDUUGV7F9Md_b0Qacj7LS/exec"
+    method="POST"
+    target="hidden_iframe"
+    onsubmit="enviado()"
+  >
 
-  <button onclick="enviar()">Adicionar à Fila</button>
+    <input name="placa" placeholder="Placa do caminhão" required>
+    <input name="compartimento" placeholder="Compartimento" required>
+
+    <button type="submit">Adicionar à Fila</button>
+  </form>
 
   <div id="msg" class="msg"></div>
 </div>
 
-<form action="https://script.google.com/macros/s/AKfycbyLkZZpbOsvG7912dC9w5Zmlp7O40CLcMjBfF7uQCYD8MMdDUUGV7F9Md_b0Qacj7LS/exec" method="POST" target="hidden_iframe" onsubmit="enviado()">
-
-  <input name="placa" placeholder="Placa do caminhão" required>
-  <input name="compartimento" placeholder="Compartimento" required>
-
-  <button type="submit">Adicionar à Fila</button>
-</form>
-
 <iframe name="hidden_iframe" style="display:none;"></iframe>
-
-<p id="msg"></p>
 
 <script>
 function enviado() {
-  document.getElementById("msg").textContent = "✅ Caminhão enviado para a fila";
+  document.getElementById("msg").textContent =
+    "✅ Caminhão enviado para a fila";
 }
 </script>
-
 
 </body>
 </html>
