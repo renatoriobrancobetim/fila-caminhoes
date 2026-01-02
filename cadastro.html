@@ -13,10 +13,7 @@ body{
   color:#fff;
   padding:20px;
 }
-.container{
-  max-width:480px;
-  margin:auto;
-}
+.container{max-width:480px;margin:auto;}
 h2{text-align:center;}
 
 input,button{
@@ -31,6 +28,10 @@ button{
   border:none;
   cursor:pointer;
 }
+button:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
 
 .msg{
   margin-top:15px;
@@ -44,9 +45,10 @@ button{
   background:#fff;
   color:#000;
   border-radius:10px;
-  overflow:hidden;
+  min-height:80px;
 }
 
+/* ITEM */
 .item{
   display:flex;
   justify-content:space-between;
@@ -63,7 +65,21 @@ button{
   color:#fff;
   border:none;
   padding:6px 10px;
-  cursor:pointer;
+}
+
+/* SPINNER */
+.spinner{
+  border:4px solid #f3f3f3;
+  border-top:4px solid #D71920;
+  border-radius:50%;
+  width:28px;
+  height:28px;
+  animation:spin 1s linear infinite;
+  margin:20px auto;
+}
+@keyframes spin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
 }
 
 footer{
@@ -81,26 +97,21 @@ footer{
   <h2>Cadastro de Caminhões</h2>
 
   <!-- FORM CADASTRO -->
-  <form
-    action="https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec"
-    method="POST"
-    target="hidden_iframe"
-    onsubmit="mostrarMsg()"
-  >
-    <input name="placa" placeholder="Placa do caminhão" required>
-    <input name="compartimento" placeholder="Compartimento" required>
-    <input name="senha" type="password" placeholder="Senha" required>
+  <form onsubmit="cadastrar(event)">
+    <input id="placa" placeholder="Placa do caminhão" required>
+    <input id="compartimento" placeholder="Compartimento" required>
+    <input id="senha" type="password" placeholder="Senha" required>
 
-    <input type="hidden" name="acao" value="cadastrar">
-
-    <button type="submit">Cadastrar Caminhão</button>
+    <button id="btnCadastrar" type="submit">
+      Cadastrar Caminhão
+    </button>
   </form>
 
   <div class="msg" id="msg"></div>
 
   <!-- LISTA CAMINHÕES -->
   <div class="lista" id="lista">
-    <div class="item">Carregando caminhões...</div>
+    <div class="spinner"></div>
   </div>
 </div>
 
@@ -114,72 +125,105 @@ footer{
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 const SCRIPT_URL   = "https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec";
 
-function mostrarMsg(){
-  document.getElementById("msg").textContent =
-    "✅ Caminhão cadastrado (se não for duplicado)";
+const lista = document.getElementById("lista");
+const msg = document.getElementById("msg");
+const btn = document.getElementById("btnCadastrar");
+
+function showSpinner(){
+  lista.innerHTML = '<div class="spinner"></div>';
+}
+
+function setLoading(v, texto){
+  btn.disabled = v;
+  msg.textContent = v ? texto : "";
+}
+
+function post(dados){
+  const f=document.createElement("form");
+  f.method="POST";
+  f.action=SCRIPT_URL;
+  f.target="hidden_iframe";
+
+  Object.keys(dados).forEach(k=>{
+    const i=document.createElement("input");
+    i.name=k; i.value=dados[k];
+    f.appendChild(i);
+  });
+
+  document.body.appendChild(f);
+  f.submit();
+  f.remove();
+}
+
+function cadastrar(e){
+  e.preventDefault();
+
+  if(!placa.value||!compartimento.value||!senha.value){
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  setLoading(true,"⏳ Cadastrando caminhão...");
+
+  post({
+    acao:"cadastrar",
+    placa:placa.value.toUpperCase(),
+    compartimento:compartimento.value,
+    senha:senha.value
+  });
+
+  setTimeout(()=>{
+    setLoading(false,"✅ Cadastro enviado");
+    placa.value="";
+    compartimento.value="";
+    carregarCaminhoes();
+  },1500);
 }
 
 async function carregarCaminhoes(){
-  try{
-    const res = await fetch(CSV_CAMINHOES + "&nocache=" + Date.now());
-    const txt = await res.text();
-    const linhas = txt.trim().split("\n").slice(1);
+  showSpinner();
+  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
+  const t = await r.text();
+  const linhas = t.trim().split("\n").slice(1);
 
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "";
+  lista.innerHTML="";
 
-    if(linhas.length === 0){
-      lista.innerHTML = "<div class='item'>Nenhum caminhão cadastrado</div>";
-      return;
-    }
+  if(linhas.length===0){
+    lista.innerHTML="<div class='item'>Nenhum caminhão cadastrado</div>";
+    return;
+  }
 
-    linhas.forEach(l=>{
-      const c = l.split(",");
-      const placa = c[0];
-      const comp  = c[1];
-
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
+  linhas.forEach(l=>{
+    const c=l.split(",");
+    lista.innerHTML+=`
+      <div class="item">
         <div>
-          <div class="placa">${placa}</div>
-          <div class="comp">Comp: ${comp}</div>
+          <div class="placa">${c[0]}</div>
+          <div class="comp">Comp: ${c[1]}</div>
         </div>
         <button class="btn-excluir"
-          onclick="excluir('${placa}')">Excluir</button>
-      `;
-      lista.appendChild(div);
-    });
-
-  }catch(e){
-    console.error("Erro ao carregar caminhões");
-  }
+          onclick="excluir('${c[0]}')">Excluir</button>
+      </div>`;
+  });
 }
 
-function excluir(placa){
-  if(!confirm("Excluir o caminhão " + placa + "?")) return;
+function excluir(p){
+  if(!confirm("Excluir o caminhão "+p+"?")) return;
+  const s = prompt("Informe a senha:");
+  if(!s) return;
 
-  const senha = prompt("Informe a senha:");
-  if(!senha) return;
+  setLoading(true,"⏳ Excluindo caminhão...");
 
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = SCRIPT_URL;
-  form.target = "hidden_iframe";
+  post({acao:"excluir-cadastro",placa:p,senha:s});
 
-  form.innerHTML = `
-    <input name="placa" value="${placa}">
-    <input name="senha" value="${senha}">
-    <input name="acao" value="excluir-cadastro">
-  `;
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
+  setTimeout(()=>{
+    setLoading(false,"✅ Caminhão removido");
+    carregarCaminhoes();
+  },1500);
 }
 
 carregarCaminhoes();
-setInterval(carregarCaminhoes, 5000);
+setInterval(carregarCaminhoes,5000);
 </script>
 
 </body>
