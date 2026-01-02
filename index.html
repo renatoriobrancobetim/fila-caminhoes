@@ -82,11 +82,12 @@ button:disabled{
   100%{transform:rotate(360deg)}
 }
 
-/* MENSAGEM */
+/* MENSAGENS */
 .msg{
   text-align:center;
   margin-top:10px;
   font-weight:bold;
+  min-height:18px;
 }
 
 /* BOTÃO REMOVER */
@@ -111,7 +112,7 @@ footer{
 <div class="container">
   <h2>Lançamento de Caminhão</h2>
 
-  <input id="placa" placeholder="Placa do caminhão" onblur="buscarCompartimento()">
+  <input id="placa" placeholder="Placa do caminhão">
   <input id="compartimento" placeholder="Compartimento" readonly>
   <input id="senha" type="password" placeholder="Senha">
 
@@ -119,6 +120,7 @@ footer{
   <button id="btnChamar" onclick="chamarProximo()">🔔 Chamar Próximo</button>
 
   <div class="msg" id="msg"></div>
+  <div class="msg" id="statusAtualizacao"></div>
 
   <div class="lista" id="lista">
     <div class="spinner"></div>
@@ -130,62 +132,30 @@ footer{
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
+/* CONFIG */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec";
 const CSV_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 
+/* VARIÁVEIS */
 let cadastro = {};
+let intervaloFila = null;
+let pausado = false;
+let ultimaAtualizacao = Date.now();
+
 const lista = document.getElementById("lista");
 const msg = document.getElementById("msg");
+const statusAtualizacao = document.getElementById("statusAtualizacao");
 
+/* UTIL */
 function showSpinner(){
   lista.innerHTML = '<div class="spinner"></div>';
 }
 
-function setLoading(v){
+function setLoading(v,texto){
   btnAdd.disabled = v;
   btnChamar.disabled = v;
-  msg.textContent = v ? "⏳ Processando..." : "";
-}
-
-async function carregarCaminhoes(){
-  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
-  const t = await r.text();
-  t.split("\n").slice(1).forEach(l=>{
-    const c=l.split(",");
-    cadastro[c[0]] = c[1];
-  });
-}
-
-function buscarCompartimento(){
-  const p = placa.value.trim().toUpperCase();
-  placa.value = p;
-  compartimento.value = cadastro[p] || "";
-}
-
-async function carregarFila(){
-  showSpinner();
-  const r = await fetch(CSV_FILA+"&t="+Date.now());
-  const t = await r.text();
-  const linhas = t.split("\n").slice(1);
-  lista.innerHTML = "";
-
-  if(linhas.length === 0){
-    lista.innerHTML = "<div class='item'>Fila vazia</div>";
-    return;
-  }
-
-  linhas.forEach((l,i)=>{
-    const c=l.split(",");
-    lista.innerHTML += `
-      <div class="item ${i==0?"proximo":""}">
-        <div>
-          ${i==0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
-          <b>${c[1]}</b><br>Comp: ${c[2]}
-        </div>
-        <button class="btn-remover" onclick="remover('${c[1]}')">Excluir</button>
-      </div>`;
-  });
+  msg.textContent = v ? texto : "";
 }
 
 function post(dados){
@@ -198,30 +168,120 @@ function post(dados){
   document.body.appendChild(f); f.submit(); f.remove();
 }
 
+/* PAUSAR / RETOMAR */
+function pausarAtualizacao(){
+  if(intervaloFila){
+    clearInterval(intervaloFila);
+    intervaloFila=null;
+    pausado=true;
+    msg.textContent="⏸ Atualização pausada (digitando)";
+  }
+}
+
+function retomarAtualizacao(){
+  if(!intervaloFila){
+    iniciarIntervalo();
+    pausado=false;
+    msg.textContent="";
+  }
+}
+
+/* INPUT EVENTS */
+["placa","senha"].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener("focus",pausarAtualizacao);
+  el.addEventListener("blur",retomarAtualizacao);
+});
+
+/* DADOS */
+async function carregarCaminhoes(){
+  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
+  const t = await r.text();
+  cadastro = {};
+  t.split("\n").slice(1).forEach(l=>{
+    const c=l.split(",");
+    cadastro[c[0]] = c[1];
+  });
+}
+
+function buscarCompartimento(){
+  const p = placa.value.trim().toUpperCase();
+  placa.value=p;
+  compartimento.value=cadastro[p]||"";
+}
+
+/* FILA */
+async function carregarFila(){
+  showSpinner();
+  const r = await fetch(CSV_FILA+"&t="+Date.now());
+  const t = await r.text();
+  const linhas = t.split("\n").slice(1);
+  lista.innerHTML="";
+
+  if(linhas.length===0){
+    lista.innerHTML="<div class='item'>Fila vazia</div>";
+    return;
+  }
+
+  linhas.forEach((l,i)=>{
+    const c=l.split(",");
+    lista.innerHTML+=`
+      <div class="item ${i===0?"proximo":""}">
+        <div>
+          ${i===0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
+          <b>${c[1]}</b><br>Comp: ${c[2]}
+        </div>
+        <button class="btn-remover" onclick="remover('${c[1]}')">Excluir</button>
+      </div>`;
+  });
+
+  ultimaAtualizacao=Date.now();
+}
+
+/* AÇÕES */
+function atualizarAgora(){
+  carregarFila();
+}
+
 function adicionarFila(){
-  if(!placa.value||!compartimento.value||!senha.value){alert("Dados inválidos");return;}
-  setLoading(true);
+  buscarCompartimento();
+  if(!placa.value||!compartimento.value||!senha.value){
+    alert("Dados inválidos");return;
+  }
+  setLoading(true,"⏳ Adicionando...");
   post({acao:"inserir",placa:placa.value,senha:senha.value});
-  setTimeout(()=>{setLoading(false);carregarFila();},1500);
+  setTimeout(()=>{setLoading(false);atualizarAgora();},500);
 }
 
 function chamarProximo(){
   if(!senha.value){alert("Informe a senha");return;}
-  setLoading(true);
+  setLoading(true,"🔔 Chamando...");
   post({acao:"chamar",senha:senha.value});
-  setTimeout(()=>{setLoading(false);carregarFila();},1500);
+  setTimeout(()=>{setLoading(false);atualizarAgora();},500);
 }
 
 function remover(p){
-  if(!confirm("Remover "+p+"?")) return;
-  setLoading(true);
+  if(!confirm("Remover "+p+"?"))return;
+  setLoading(true,"⏳ Removendo...");
   post({acao:"remover",placa:p,senha:senha.value});
-  setTimeout(()=>{setLoading(false);carregarFila();},1500);
+  setTimeout(()=>{setLoading(false);atualizarAgora();},500);
 }
 
+/* STATUS TEMPO */
+setInterval(()=>{
+  const diff=Math.floor((Date.now()-ultimaAtualizacao)/1000);
+  if(!pausado) statusAtualizacao.textContent="🔄 Atualizado há "+diff+"s";
+},1000);
+
+/* INTERVALO */
+function iniciarIntervalo(){
+  intervaloFila=setInterval(carregarFila,2000);
+}
+
+/* INIT */
 carregarCaminhoes();
 carregarFila();
-setInterval(carregarFila,3000);
+iniciarIntervalo();
 </script>
 
 </body>
