@@ -269,14 +269,15 @@ function remover(p){
 
 /* STATUS TEMPO */
 setInterval(()=>{
-  const diff=Math.floor((Date.now()-ultimaAtualizacao)/30000);
+  const diff=Math.floor((Date.now()-ultimaAtualizacao)/1000);
   if(!pausado) statusAtualizacao.textContent="🔄 Atualizado há "+diff+"s";
 },1000);
 
 /* INTERVALO */
 function iniciarIntervalo(){
-  intervaloFila=setInterval(carregarFila,2000);
+  intervaloFila = setInterval(carregarFila,30000); // 30 segundos
 }
+
 
 /* INIT */
 carregarCaminhoes();
