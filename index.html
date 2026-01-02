@@ -149,9 +149,10 @@ footer{
 </button>
 
 
-    <button type="submit" onclick="setAcao('chamar')">
-      🔔 Chamar Próximo
-    </button>
+    <button type="button" onclick="chamarProximo()">
+  🔔 Chamar Próximo
+</button>
+
   </form>
 
   <div class="msg">
@@ -329,6 +330,32 @@ function adicionarFila(){
   document.getElementById("compartimento").value = "";
 }
 </script>
+  <script>
+function chamarProximo(){
+
+  const senha = document.querySelector('input[name="senha"]').value.trim();
+
+  if(!senha){
+    alert("Informe a senha");
+    return;
+  }
+
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+  form.target = "hidden_iframe";
+
+  form.innerHTML = `
+    <input name="senha" value="${senha}">
+    <input name="acao" value="chamar">
+  `;
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+}
+</script>
+
 
 </script>
 
