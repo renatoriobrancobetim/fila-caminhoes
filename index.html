@@ -28,12 +28,8 @@ button{
   border:none;
   cursor:pointer;
 }
-button:disabled{
-  opacity:0.6;
-  cursor:not-allowed;
-}
+button:disabled{opacity:0.6;cursor:not-allowed;}
 
-/* LISTA */
 .lista{
   margin-top:25px;
   background:#fff;
@@ -42,20 +38,17 @@ button:disabled{
   min-height:80px;
 }
 
-/* ITEM */
 .item{
   display:flex;
   justify-content:space-between;
   padding:14px;
   border-bottom:1px solid #ddd;
-  transition:background .3s;
 }
 .item.proximo{
   background:#FFF3CD;
   border-left:6px solid #D71920;
 }
 
-/* TAG PRÓXIMO */
 .tag-proximo{
   font-size:11px;
   font-weight:bold;
@@ -70,17 +63,15 @@ button:disabled{
   100%{transform:scale(1)}
 }
 
-/* ANIMAÇÃO REMOÇÃO */
+/* REMOÇÃO VISUAL */
 .item.removendo{
   background:#F8D7DA !important;
-  animation:removerItem .6s ease forwards;
+  animation:removerItem .5s ease forwards;
 }
 @keyframes removerItem{
-  from{opacity:1; transform:translateX(0);}
   to{opacity:0; transform:translateX(-40px);}
 }
 
-/* SPINNER */
 .spinner{
   border:4px solid #f3f3f3;
   border-top:4px solid #D71920;
@@ -91,11 +82,9 @@ button:disabled{
   margin:20px auto;
 }
 @keyframes spin{
-  from{transform:rotate(0deg)}
   to{transform:rotate(360deg)}
 }
 
-/* MENSAGENS */
 .msg{
   text-align:center;
   margin-top:10px;
@@ -103,7 +92,6 @@ button:disabled{
   min-height:18px;
 }
 
-/* BOTÃO REMOVER */
 .btn-remover{
   background:#D71920;
   color:#fff;
@@ -145,66 +133,32 @@ footer{
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-/* CONFIGURAÇÃO */
+/* CONFIG */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec";
 const CSV_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 
-/* VARIÁVEIS */
-let cadastro = {};
-let intervaloFila = null;
-let pausado = false;
-let ultimaAtualizacao = Date.now();
+let cadastro={}, intervaloFila=null, pausado=false, ultimaAtualizacao=Date.now();
+const lista=document.getElementById("lista");
+const msg=document.getElementById("msg");
+const statusAtualizacao=document.getElementById("statusAtualizacao");
 
-const lista = document.getElementById("lista");
-const msg = document.getElementById("msg");
-const statusAtualizacao = document.getElementById("statusAtualizacao");
-
-/* UTIL */
-function showSpinner(){
-  lista.innerHTML = '<div class="spinner"></div>';
-}
-function setLoading(v,texto){
-  btnAdd.disabled = v;
-  btnChamar.disabled = v;
-  msg.textContent = v ? texto : "";
-}
-function post(dados){
+function showSpinner(){lista.innerHTML='<div class="spinner"></div>';}
+function setLoading(v,t){btnAdd.disabled=v;btnChamar.disabled=v;msg.textContent=v?t:"";}
+function post(d){
   const f=document.createElement("form");
   f.method="POST"; f.action=SCRIPT_URL; f.target="hidden_iframe";
-  Object.keys(dados).forEach(k=>{
+  Object.keys(d).forEach(k=>{
     const i=document.createElement("input");
-    i.name=k; i.value=dados[k]; f.appendChild(i);
+    i.name=k; i.value=d[k]; f.appendChild(i);
   });
   document.body.appendChild(f); f.submit(); f.remove();
 }
 
-/* PAUSAR / RETOMAR */
-function pausarAtualizacao(){
-  if(intervaloFila){
-    clearInterval(intervaloFila);
-    intervaloFila=null;
-    pausado=true;
-    msg.textContent="⏸ Atualização pausada (digitando)";
-  }
-}
-function retomarAtualizacao(){
-  if(!intervaloFila){
-    iniciarIntervalo();
-    pausado=false;
-    msg.textContent="";
-  }
-}
-["placa","senha"].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener("focus",pausarAtualizacao);
-  el.addEventListener("blur",retomarAtualizacao);
-});
-
 /* DADOS */
 async function carregarCaminhoes(){
-  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
-  const t = await r.text();
+  const r=await fetch(CSV_CAMINHOES+"&t="+Date.now());
+  const t=await r.text();
   cadastro={};
   t.split("\n").slice(1).forEach(l=>{
     const c=l.split(",");
@@ -220,38 +174,34 @@ function buscarCompartimento(){
 /* FILA */
 async function carregarFila(){
   showSpinner();
-  const r = await fetch(CSV_FILA+"&t="+Date.now());
-  const t = await r.text();
+  const r=await fetch(CSV_FILA+"&t="+Date.now());
+  const t=await r.text();
   const linhas=t.split("\n").slice(1);
   lista.innerHTML="";
-
-  if(linhas.length===0){
+  if(!linhas.length){
     lista.innerHTML="<div class='item'>Fila vazia</div>";
     return;
   }
-
   linhas.forEach((l,i)=>{
     const c=l.split(",");
     lista.innerHTML+=`
-      <div class="item ${i===0?"proximo":""}" id="item-${c[1]}">
+      <div class="item ${i===0?"proximo":""}" data-placa="${c[1]}">
         <div>
           ${i===0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
           <b>${c[1]}</b><br>Comp: ${c[2]}
         </div>
-        <button class="btn-remover" onclick="remover('${c[1]}')">Excluir</button>
+        <button class="btn-remover" onclick="remover(this,'${c[1]}')">Excluir</button>
       </div>`;
   });
   ultimaAtualizacao=Date.now();
 }
 
 /* AÇÕES */
-function atualizarAgora(){ carregarFila(); }
+function atualizarAgora(){carregarFila();}
 
 function adicionarFila(){
   buscarCompartimento();
-  if(!placa.value||!compartimento.value||!senha.value){
-    alert("Dados inválidos");return;
-  }
+  if(!placa.value||!compartimento.value||!senha.value){alert("Dados inválidos");return;}
   setLoading(true,"⏳ Adicionando...");
   post({acao:"inserir",placa:placa.value,senha:senha.value});
   setTimeout(()=>{setLoading(false,"");atualizarAgora();},500);
@@ -264,38 +214,34 @@ function chamarProximo(){
   setTimeout(()=>{setLoading(false,"");atualizarAgora();},500);
 }
 
-function remover(placa){
+/* EXCLUIR — AGORA FUNCIONA */
+function remover(btn, placa){
   if(!confirm("Remover o caminhão "+placa+"?")) return;
   if(!senha.value){alert("Informe a senha");return;}
 
-  const item=document.getElementById("item-"+placa);
+  const item = btn.closest(".item");
   if(item) item.classList.add("removendo");
 
   setLoading(true,"⏳ Removendo caminhão...");
 
   setTimeout(()=>{
+    if(item) item.remove(); // remove do DOM imediatamente
     post({acao:"remover",placa:placa,senha:senha.value});
-    setTimeout(atualizarAgora,800);
-    setTimeout(atualizarAgora,2000);
-    setTimeout(()=>setLoading(false,""),2200);
-  },600);
+    setTimeout(atualizarAgora,1500);
+    setTimeout(()=>setLoading(false,""),1800);
+  },500);
 }
 
-/* STATUS TEMPO */
+/* STATUS */
 setInterval(()=>{
   const diff=Math.floor((Date.now()-ultimaAtualizacao)/1000);
-  if(!pausado) statusAtualizacao.textContent="🔄 Atualizado há "+diff+"s";
+  statusAtualizacao.textContent="🔄 Atualizado há "+diff+"s";
 },1000);
-
-/* INTERVALO AUTOMÁTICO */
-function iniciarIntervalo(){
-  intervaloFila=setInterval(carregarFila,30000);
-}
 
 /* INIT */
 carregarCaminhoes();
 carregarFila();
-iniciarIntervalo();
+intervaloFila=setInterval(carregarFila,30000);
 </script>
 
 </body>
