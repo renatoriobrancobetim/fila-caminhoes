@@ -48,11 +48,14 @@ button:disabled{
   justify-content:space-between;
   padding:14px;
   border-bottom:1px solid #ddd;
+  transition:background .3s;
 }
 .item.proximo{
   background:#FFF3CD;
   border-left:6px solid #D71920;
 }
+
+/* TAG PRÓXIMO */
 .tag-proximo{
   font-size:11px;
   font-weight:bold;
@@ -67,6 +70,16 @@ button:disabled{
   100%{transform:scale(1)}
 }
 
+/* ANIMAÇÃO REMOÇÃO */
+.item.removendo{
+  background:#F8D7DA !important;
+  animation:removerItem .6s ease forwards;
+}
+@keyframes removerItem{
+  from{opacity:1; transform:translateX(0);}
+  to{opacity:0; transform:translateX(-40px);}
+}
+
 /* SPINNER */
 .spinner{
   border:4px solid #f3f3f3;
@@ -78,8 +91,8 @@ button:disabled{
   margin:20px auto;
 }
 @keyframes spin{
-  0%{transform:rotate(0deg)}
-  100%{transform:rotate(360deg)}
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
 }
 
 /* MENSAGENS */
@@ -151,13 +164,11 @@ const statusAtualizacao = document.getElementById("statusAtualizacao");
 function showSpinner(){
   lista.innerHTML = '<div class="spinner"></div>';
 }
-
 function setLoading(v,texto){
   btnAdd.disabled = v;
   btnChamar.disabled = v;
   msg.textContent = v ? texto : "";
 }
-
 function post(dados){
   const f=document.createElement("form");
   f.method="POST"; f.action=SCRIPT_URL; f.target="hidden_iframe";
@@ -184,8 +195,6 @@ function retomarAtualizacao(){
     msg.textContent="";
   }
 }
-
-/* INPUT EVENTS */
 ["placa","senha"].forEach(id=>{
   const el=document.getElementById(id);
   el.addEventListener("focus",pausarAtualizacao);
@@ -196,15 +205,14 @@ function retomarAtualizacao(){
 async function carregarCaminhoes(){
   const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
   const t = await r.text();
-  cadastro = {};
+  cadastro={};
   t.split("\n").slice(1).forEach(l=>{
     const c=l.split(",");
-    cadastro[c[0]] = c[1];
+    cadastro[c[0]]=c[1];
   });
 }
-
 function buscarCompartimento(){
-  const p = placa.value.trim().toUpperCase();
+  const p=placa.value.trim().toUpperCase();
   placa.value=p;
   compartimento.value=cadastro[p]||"";
 }
@@ -214,7 +222,7 @@ async function carregarFila(){
   showSpinner();
   const r = await fetch(CSV_FILA+"&t="+Date.now());
   const t = await r.text();
-  const linhas = t.split("\n").slice(1);
+  const linhas=t.split("\n").slice(1);
   lista.innerHTML="";
 
   if(linhas.length===0){
@@ -225,7 +233,7 @@ async function carregarFila(){
   linhas.forEach((l,i)=>{
     const c=l.split(",");
     lista.innerHTML+=`
-      <div class="item ${i===0?"proximo":""}">
+      <div class="item ${i===0?"proximo":""}" id="item-${c[1]}">
         <div>
           ${i===0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
           <b>${c[1]}</b><br>Comp: ${c[2]}
@@ -233,14 +241,11 @@ async function carregarFila(){
         <button class="btn-remover" onclick="remover('${c[1]}')">Excluir</button>
       </div>`;
   });
-
   ultimaAtualizacao=Date.now();
 }
 
 /* AÇÕES */
-function atualizarAgora(){
-  carregarFila();
-}
+function atualizarAgora(){ carregarFila(); }
 
 function adicionarFila(){
   buscarCompartimento();
@@ -249,27 +254,31 @@ function adicionarFila(){
   }
   setLoading(true,"⏳ Adicionando...");
   post({acao:"inserir",placa:placa.value,senha:senha.value});
-  setTimeout(()=>{setLoading(false);atualizarAgora();},500);
+  setTimeout(()=>{setLoading(false,"");atualizarAgora();},500);
 }
 
 function chamarProximo(){
   if(!senha.value){alert("Informe a senha");return;}
   setLoading(true,"🔔 Chamando...");
   post({acao:"chamar",senha:senha.value});
-  setTimeout(()=>{setLoading(false);atualizarAgora();},500);
+  setTimeout(()=>{setLoading(false,"");atualizarAgora();},500);
 }
 
 function remover(placa){
-  if(!confirm("Remover o caminhão " + placa + "?")) return;
-  if(!senha.value){ alert("Informe a senha"); return; }
+  if(!confirm("Remover o caminhão "+placa+"?")) return;
+  if(!senha.value){alert("Informe a senha");return;}
+
+  const item=document.getElementById("item-"+placa);
+  if(item) item.classList.add("removendo");
 
   setLoading(true,"⏳ Removendo caminhão...");
-  post({acao:"remover",placa:placa,senha:senha.value});
 
-  /* dupla atualização para contornar delay do CSV */
-  setTimeout(atualizarAgora, 800);
-  setTimeout(atualizarAgora, 2000);
-  setTimeout(()=>setLoading(false,""), 2200);
+  setTimeout(()=>{
+    post({acao:"remover",placa:placa,senha:senha.value});
+    setTimeout(atualizarAgora,800);
+    setTimeout(atualizarAgora,2000);
+    setTimeout(()=>setLoading(false,""),2200);
+  },600);
 }
 
 /* STATUS TEMPO */
@@ -280,7 +289,7 @@ setInterval(()=>{
 
 /* INTERVALO AUTOMÁTICO */
 function iniciarIntervalo(){
-  intervaloFila=setInterval(carregarFila,30000); // 30 segundos
+  intervaloFila=setInterval(carregarFila,30000);
 }
 
 /* INIT */
