@@ -287,6 +287,49 @@ function remover(placa){
 carregarCaminhoes();
 carregarFila();
 setInterval(carregarFila, 3000);
+
+  <script>
+function adicionarFila(){
+
+  const placa = document.getElementById("placa").value.trim().toUpperCase();
+  const comp  = document.getElementById("compartimento").value.trim();
+  const senha = document.querySelector('input[name="senha"]').value.trim();
+
+  if(!placa){
+    alert("Informe a placa");
+    return;
+  }
+
+  if(!comp){
+    alert("Placa não cadastrada ou compartimento não encontrado");
+    return;
+  }
+
+  if(!senha){
+    alert("Informe a senha");
+    return;
+  }
+
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+  form.target = "hidden_iframe";
+
+  form.innerHTML = `
+    <input name="placa" value="${placa}">
+    <input name="senha" value="${senha}">
+    <input name="acao" value="inserir">
+  `;
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+
+  document.getElementById("placa").value = "";
+  document.getElementById("compartimento").value = "";
+}
+</script>
+
 </script>
 
 </body>
