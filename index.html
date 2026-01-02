@@ -17,9 +17,7 @@ body{
   max-width:480px;
   margin:auto;
 }
-h2{
-  text-align:center;
-}
+h2{text-align:center;}
 
 input,button{
   width:100%;
@@ -34,30 +32,20 @@ button{
   cursor:pointer;
 }
 
-.msg{
-  margin-top:15px;
-  text-align:center;
-  font-weight:bold;
-}
-
-/* LISTA */
 .lista{
   margin-top:25px;
   background:#fff;
   color:#000;
   border-radius:10px;
-  overflow:hidden;
 }
 
 .item{
   display:flex;
   justify-content:space-between;
-  align-items:center;
   padding:14px;
   border-bottom:1px solid #ddd;
 }
 
-/* 🔔 PRÓXIMO DA FILA */
 .item.proximo{
   background:#FFF3CD;
   border-left:6px solid #D71920;
@@ -68,27 +56,14 @@ button{
   font-weight:bold;
   color:#D71920;
   display:flex;
-  align-items:center;
   gap:6px;
-  margin-bottom:4px;
 }
 
-.sino{
-  animation:pulsar 1s infinite;
-}
-
+.sino{animation:pulsar 1s infinite;}
 @keyframes pulsar{
-  0%{transform:scale(1); opacity:1;}
-  50%{transform:scale(1.3); opacity:.6;}
-  100%{transform:scale(1); opacity:1;}
-}
-
-.placa{
-  font-weight:bold;
-  font-size:16px;
-}
-.comp{
-  font-size:14px;
+  0%{transform:scale(1)}
+  50%{transform:scale(1.3)}
+  100%{transform:scale(1)}
 }
 
 .btn-remover{
@@ -96,16 +71,8 @@ button{
   color:#fff;
   border:none;
   padding:6px 10px;
-  cursor:pointer;
 }
-
-/* RODAPÉ */
-footer{
-  margin-top:30px;
-  text-align:center;
-  font-size:12px;
-  opacity:0.8;
-}
+footer{text-align:center;font-size:12px;margin-top:30px;}
 </style>
 </head>
 
@@ -114,249 +81,88 @@ footer{
 <div class="container">
   <h2>Lançamento de Caminhão</h2>
 
-  <!-- FORMULÁRIO -->
-  <form
-    action="https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec"
-    method="POST"
-    target="hidden_iframe"
-  >
-    <input
-      name="placa"
-      id="placa"
-      placeholder="Placa do caminhão"
-      onblur="buscarCompartimento()"
-      required
-    >
+  <input id="placa" placeholder="Placa do caminhão" onblur="buscarCompartimento()">
+  <input id="compartimento" placeholder="Compartimento" readonly>
+  <input id="senha" type="password" placeholder="Senha">
 
- <input
-  id="compartimento"
-  placeholder="Compartimento"
-  readonly
->
+  <button onclick="adicionarFila()">Adicionar à Fila</button>
+  <button onclick="chamarProximo()">🔔 Chamar Próximo</button>
 
-
-    <input
-      name="senha"
-      type="password"
-      placeholder="Senha"
-      required
-    >
-
-    <input type="hidden" name="acao" id="acao">
-
-  <button type="button" onclick="adicionarFila()">
-  Adicionar à Fila
-</button>
-
-
-    <button type="button" onclick="chamarProximo()">
-  🔔 Chamar Próximo
-</button>
-
-  </form>
-
-  <div class="msg">
-    Atualização automática
-  </div>
-
-  <!-- LISTA DA FILA -->
-  <div class="lista" id="lista">
-    <div class="item">Carregando fila...</div>
-  </div>
+  <div class="lista" id="lista">Carregando fila...</div>
 </div>
 
-<footer>
-  Copywriter Renato Monteiro
-</footer>
+<footer>Copywriter Renato Monteiro</footer>
 
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-// 🔗 LINKS CSV
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec";
 const CSV_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 
-let cadastroCaminhoes = {};
+let cadastro = {};
 
-// define ação do formulário
-function setAcao(v){
-  document.getElementById("acao").value = v;
-}
-
-// carrega cadastro de caminhões
 async function carregarCaminhoes(){
-  try{
-    const res = await fetch(CSV_CAMINHOES + "&nocache=" + Date.now());
-    const txt = await res.text();
-    const linhas = txt.trim().split("\n").slice(1);
-
-    linhas.forEach(l=>{
-      const c = l.split(",");
-      const placa = c[0].trim().toUpperCase();
-      const comp  = c[1].trim();
-      cadastroCaminhoes[placa] = comp;
-    });
-  }catch(e){
-    console.error("Erro ao carregar cadastro de caminhões");
-  }
+  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
+  const t = await r.text();
+  t.split("\n").slice(1).forEach(l=>{
+    const c=l.split(",");
+    cadastro[c[0]] = c[1];
+  });
 }
 
-// busca compartimento pela placa
 function buscarCompartimento(){
-  const placaInput = document.getElementById("placa");
-  const compInput  = document.getElementById("compartimento");
-
-  const placa = placaInput.value.trim().toUpperCase();
-  placaInput.value = placa;
-
-  if(cadastroCaminhoes[placa]){
-    compInput.value = cadastroCaminhoes[placa];
-  }else{
-    compInput.value = "";
-    alert("⚠️ Placa não cadastrada. Cadastre o caminhão antes.");
-  }
+  const p = placa.value.trim().toUpperCase();
+  placa.value = p;
+  compartimento.value = cadastro[p] || "";
 }
 
-// carrega fila
 async function carregarFila(){
-  try{
-    const res = await fetch(CSV_FILA + "&nocache=" + Date.now());
-    const txt = await res.text();
-    const linhas = txt.trim().split("\n").slice(1);
+  const r = await fetch(CSV_FILA+"&t="+Date.now());
+  const t = await r.text();
+  const linhas = t.split("\n").slice(1);
+  lista.innerHTML = "";
 
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "";
-
-    if(linhas.length === 0){
-      lista.innerHTML = "<div class='item'>Fila vazia</div>";
-      return;
-    }
-
-    linhas.forEach((l, index)=>{
-      const c = l.split(",");
-      const placa = c[1];
-      const comp = c[2];
-
-      const div = document.createElement("div");
-      div.className = "item" + (index === 0 ? " proximo" : "");
-
-      div.innerHTML = `
+  linhas.forEach((l,i)=>{
+    const c=l.split(",");
+    lista.innerHTML += `
+      <div class="item ${i==0?"proximo":""}">
         <div>
-          ${index === 0 ? `
-            <div class="tag-proximo">
-              <span class="sino">🔔</span> PRÓXIMO DA FILA
-            </div>` : ""}
-          <div class="placa">${placa}</div>
-          <div class="comp">Comp: ${comp}</div>
+          ${i==0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
+          <b>${c[1]}</b><br>Comp: ${c[2]}
         </div>
-        <button class="btn-remover"
-          onclick="remover('${placa}')">Excluir</button>
-      `;
-
-      lista.appendChild(div);
-    });
-
-  }catch(e){
-    console.error("Erro ao carregar fila");
-  }
+        <button class="btn-remover" onclick="remover('${c[1]}')">Excluir</button>
+      </div>`;
+  });
 }
 
-// remover caminhão
-function remover(placa){
-  if(!confirm("Remover o caminhão " + placa + "?")) return;
-
-  const senha = prompt("Informe a senha:");
-  if(!senha) return;
-
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = "https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec";
-  form.target = "hidden_iframe";
-
-  form.innerHTML = `
-    <input name="placa" value="${placa}">
-    <input name="senha" value="${senha}">
-    <input name="acao" value="remover">
-  `;
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
+function post(dados){
+  const f=document.createElement("form");
+  f.method="POST"; f.action=SCRIPT_URL; f.target="hidden_iframe";
+  Object.keys(dados).forEach(k=>{
+    const i=document.createElement("input");
+    i.name=k; i.value=dados[k]; f.appendChild(i);
+  });
+  document.body.appendChild(f); f.submit(); f.remove();
 }
 
-// inicialização
+function adicionarFila(){
+  if(!placa.value||!compartimento.value||!senha.value){alert("Dados inválidos");return;}
+  post({acao:"inserir",placa:placa.value,senha:senha.value});
+}
+
+function chamarProximo(){
+  if(!senha.value){alert("Senha");return;}
+  post({acao:"chamar",senha:senha.value});
+}
+
+function remover(p){
+  if(confirm("Remover "+p+"?")) post({acao:"remover",placa:p,senha:senha.value});
+}
+
 carregarCaminhoes();
 carregarFila();
-setInterval(carregarFila, 3000);
-
-  <script>
-function adicionarFila(){
-
-  const placa = document.getElementById("placa").value.trim().toUpperCase();
-  const comp  = document.getElementById("compartimento").value.trim();
-  const senha = document.querySelector('input[name="senha"]').value.trim();
-
-  if(!placa){
-    alert("Informe a placa");
-    return;
-  }
-
-  if(!comp){
-    alert("Placa não cadastrada ou compartimento não encontrado");
-    return;
-  }
-
-  if(!senha){
-    alert("Informe a senha");
-    return;
-  }
-
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
-  form.target = "hidden_iframe";
-
-  form.innerHTML = `
-    <input name="placa" value="${placa}">
-    <input name="senha" value="${senha}">
-    <input name="acao" value="inserir">
-  `;
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-
-  document.getElementById("placa").value = "";
-  document.getElementById("compartimento").value = "";
-}
-</script>
-  <script>
-function chamarProximo(){
-
-  const senha = document.querySelector('input[name="senha"]').value.trim();
-
-  if(!senha){
-    alert("Informe a senha");
-    return;
-  }
-
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
-  form.target = "hidden_iframe";
-
-  form.innerHTML = `
-    <input name="senha" value="${senha}">
-    <input name="acao" value="chamar">
-  `;
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-}
-</script>
-
-
+setInterval(carregarFila,3000);
 </script>
 
 </body>
