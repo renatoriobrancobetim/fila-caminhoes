@@ -28,13 +28,8 @@ button{
   border:none;
   cursor:pointer;
 }
-button.secondary{
-  background:#555;
-}
-button:disabled{
-  opacity:0.6;
-  cursor:not-allowed;
-}
+button.secondary{background:#555;}
+button:disabled{opacity:0.6;cursor:not-allowed;}
 
 .msg{
   margin-top:15px;
@@ -59,7 +54,6 @@ button:disabled{
   padding:12px;
   border-bottom:1px solid #ddd;
 }
-
 .placa{font-weight:bold;}
 .comp{font-size:14px;}
 
@@ -99,7 +93,7 @@ footer{
 <div class="container">
   <h2>Cadastro de Caminhões</h2>
 
-  <!-- FORM CADASTRO -->
+  <!-- FORM -->
   <form onsubmit="cadastrar(event)">
     <input id="placa" placeholder="Placa do caminhão" required>
     <input id="compartimento" placeholder="Compartimento" required>
@@ -110,24 +104,127 @@ footer{
     </button>
   </form>
 
-  <!-- CONTROLES -->
   <button class="secondary" onclick="ordenarPorCompartimento()">
     Ordenar por Compartimento
   </button>
 
   <div class="msg" id="msg"></div>
 
-  <!-- LISTA CAMINHÕES -->
   <div class="lista" id="lista">
     <div class="spinner"></div>
   </div>
 </div>
 
-<footer>
-  Copywriter Renato Monteiro
-</footer>
+<footer>Copywriter Renato Monteiro</footer>
 
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-const
+/* CONFIGURAÇÕES */
+const CSV_CAMINHOES =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
+
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec";
+
+const lista = document.getElementById("lista");
+const msg = document.getElementById("msg");
+const btn = document.getElementById("btnCadastrar");
+
+let dados = [];
+let ordenado = false;
+
+/* UTIL */
+function showSpinner(){
+  lista.innerHTML = '<div class="spinner"></div>';
+}
+
+function post(d){
+  const f=document.createElement("form");
+  f.method="POST"; f.action=SCRIPT_URL; f.target="hidden_iframe";
+  Object.keys(d).forEach(k=>{
+    const i=document.createElement("input");
+    i.name=k; i.value=d[k]; f.appendChild(i);
+  });
+  document.body.appendChild(f); f.submit(); f.remove();
+}
+
+/* CADASTRAR */
+function cadastrar(e){
+  e.preventDefault();
+  btn.disabled=true;
+  msg.textContent="⏳ Cadastrando...";
+
+  post({
+    acao:"cadastrar",
+    placa:placa.value.toUpperCase(),
+    compartimento:compartimento.value,
+    senha:senha.value
+  });
+
+  setTimeout(()=>{
+    btn.disabled=false;
+    msg.textContent="✅ Cadastro enviado";
+    placa.value="";
+    compartimento.value="";
+    carregarCaminhoes();
+  },1500);
+}
+
+/* CARREGAR */
+async function carregarCaminhoes(){
+  showSpinner();
+  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
+  const t = await r.text();
+  dados = t.trim().split("\n").slice(1).map(l=>{
+    const c=l.split(",");
+    return {placa:c[0], compartimento:c[1]};
+  });
+  render();
+}
+
+/* RENDER */
+function render(){
+  lista.innerHTML="";
+  if(dados.length===0){
+    lista.innerHTML="<div class='item'>Nenhum caminhão cadastrado</div>";
+    return;
+  }
+  dados.forEach(c=>{
+    lista.innerHTML+=`
+      <div class="item">
+        <div>
+          <div class="placa">${c.placa}</div>
+          <div class="comp">Comp: ${c.compartimento}</div>
+        </div>
+        <button class="btn-excluir"
+          onclick="excluir('${c.placa}')">Excluir</button>
+      </div>`;
+  });
+}
+
+/* ORDENAR */
+function ordenarPorCompartimento(){
+  ordenado=!ordenado;
+  ordenado
+    ? dados.sort((a,b)=>a.compartimento.localeCompare(b.compartimento))
+    : carregarCaminhoes();
+  render();
+}
+
+/* EXCLUIR */
+function excluir(p){
+  if(!confirm("Excluir "+p+"?")) return;
+  const s=prompt("Senha:");
+  if(!s) return;
+  post({acao:"excluir-cadastro",placa:p,senha:s});
+  setTimeout(carregarCaminhoes,1500);
+}
+
+/* INIT */
+carregarCaminhoes();
+setInterval(carregarCaminhoes,30000);
+</script>
+
+</body>
+</html>
