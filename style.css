@@ -61,5 +61,21 @@ tr:first-child {
   opacity:0.7;
   padding:15px 0 20px;
 }
+/* ANIMAÇÃO REMOÇÃO */
+.item.removendo{
+  background:#F8D7DA !important;
+  animation:removerItem .6s ease forwards;
+}
+
+@keyframes removerItem{
+  0%{
+    opacity:1;
+    transform:translateX(0);
+  }
+  100%{
+    opacity:0;
+    transform:translateX(-40px);
+  }
+}
 
 
