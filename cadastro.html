@@ -28,6 +28,9 @@ button{
   border:none;
   cursor:pointer;
 }
+button.secondary{
+  background:#555;
+}
 button:disabled{
   opacity:0.6;
   cursor:not-allowed;
@@ -41,7 +44,7 @@ button:disabled{
 
 /* LISTA */
 .lista{
-  margin-top:25px;
+  margin-top:15px;
   background:#fff;
   color:#000;
   border-radius:10px;
@@ -107,6 +110,11 @@ footer{
     </button>
   </form>
 
+  <!-- CONTROLES -->
+  <button class="secondary" onclick="ordenarPorCompartimento()">
+    Ordenar por Compartimento
+  </button>
+
   <div class="msg" id="msg"></div>
 
   <!-- LISTA CAMINHÕES -->
@@ -122,109 +130,4 @@ footer{
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
-const SCRIPT_URL   = "https://script.google.com/macros/s/AKfycbxRxZBE7iMitsL-nKZOInkjCNhWjktEFgpFwz2l1zPLNVZRKWdWzYc1kQ7JzqfI5sjf/exec";
-
-const lista = document.getElementById("lista");
-const msg = document.getElementById("msg");
-const btn = document.getElementById("btnCadastrar");
-
-function showSpinner(){
-  lista.innerHTML = '<div class="spinner"></div>';
-}
-
-function setLoading(v, texto){
-  btn.disabled = v;
-  msg.textContent = v ? texto : "";
-}
-
-function post(dados){
-  const f=document.createElement("form");
-  f.method="POST";
-  f.action=SCRIPT_URL;
-  f.target="hidden_iframe";
-
-  Object.keys(dados).forEach(k=>{
-    const i=document.createElement("input");
-    i.name=k; i.value=dados[k];
-    f.appendChild(i);
-  });
-
-  document.body.appendChild(f);
-  f.submit();
-  f.remove();
-}
-
-function cadastrar(e){
-  e.preventDefault();
-
-  if(!placa.value||!compartimento.value||!senha.value){
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  setLoading(true,"⏳ Cadastrando caminhão...");
-
-  post({
-    acao:"cadastrar",
-    placa:placa.value.toUpperCase(),
-    compartimento:compartimento.value,
-    senha:senha.value
-  });
-
-  setTimeout(()=>{
-    setLoading(false,"✅ Cadastro enviado");
-    placa.value="";
-    compartimento.value="";
-    carregarCaminhoes();
-  },1500);
-}
-
-async function carregarCaminhoes(){
-  showSpinner();
-  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
-  const t = await r.text();
-  const linhas = t.trim().split("\n").slice(1);
-
-  lista.innerHTML="";
-
-  if(linhas.length===0){
-    lista.innerHTML="<div class='item'>Nenhum caminhão cadastrado</div>";
-    return;
-  }
-
-  linhas.forEach(l=>{
-    const c=l.split(",");
-    lista.innerHTML+=`
-      <div class="item">
-        <div>
-          <div class="placa">${c[0]}</div>
-          <div class="comp">Comp: ${c[1]}</div>
-        </div>
-        <button class="btn-excluir"
-          onclick="excluir('${c[0]}')">Excluir</button>
-      </div>`;
-  });
-}
-
-function excluir(p){
-  if(!confirm("Excluir o caminhão "+p+"?")) return;
-  const s = prompt("Informe a senha:");
-  if(!s) return;
-
-  setLoading(true,"⏳ Excluindo caminhão...");
-
-  post({acao:"excluir-cadastro",placa:p,senha:s});
-
-  setTimeout(()=>{
-    setLoading(false,"✅ Caminhão removido");
-    carregarCaminhoes();
-  },1500);
-}
-
-carregarCaminhoes();
-setInterval(carregarCaminhoes,5000);
-</script>
-
-</body>
-</html>
+const
