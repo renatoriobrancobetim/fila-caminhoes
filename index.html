@@ -16,8 +16,9 @@ body{
 .container{
   max-width:480px;
   margin:auto;
+  text-align:center;
 }
-h2{text-align:center;}
+h2{margin-top:10px;}
 
 input,button{
   width:100%;
@@ -38,6 +39,13 @@ button{
   font-weight:bold;
 }
 
+/* IMAGEM TOPO */
+.topo img{
+  width:120px;
+  max-width:100%;
+  margin-bottom:5px;
+}
+
 /* LISTA */
 .lista{
   margin-top:25px;
@@ -45,6 +53,7 @@ button{
   color:#000;
   border-radius:10px;
   overflow:hidden;
+  text-align:left;
 }
 
 /* ITEM PADRÃO */
@@ -66,6 +75,20 @@ button{
   font-size:11px;
   font-weight:bold;
   color:#D71920;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* 🔔 ANIMAÇÃO DO SINO */
+.sino{
+  animation:pulsar 1s infinite;
+}
+
+@keyframes pulsar{
+  0%{transform:scale(1); opacity:1;}
+  50%{transform:scale(1.3); opacity:.6;}
+  100%{transform:scale(1); opacity:1;}
 }
 
 /* INFO */
@@ -93,6 +116,13 @@ footer{
 <body>
 
 <div class="container">
+
+  <!-- TOPO COM IMAGEM -->
+  <div class="topo">
+    <img src="https://cdn-icons-png.flaticon.com/512/809/809957.png"
+         alt="Caminhão tanque de combustível">
+  </div>
+
   <h2>Lançamento de Caminhão</h2>
 
   <!-- FORM PRINCIPAL -->
@@ -163,7 +193,10 @@ async function carregarFila(){
 
       div.innerHTML = `
         <div>
-          ${index === 0 ? "<div class='tag-proximo'>PRÓXIMO DA FILA</div>" : ""}
+          ${index === 0 ? `
+            <div class="tag-proximo">
+              <span class="sino">🔔</span> PRÓXIMO DA FILA
+            </div>` : ""}
           <div class="placa">${placa}</div>
           <div class="comp">Comp: ${comp}</div>
         </div>
@@ -187,7 +220,7 @@ function remover(placa){
 
   const form = document.createElement("form");
   form.method = "POST";
-  form.action = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+  form.action = "https://script.google.com/macros/s/AKfycbxxlLUw1MPgrurxZ-nGpvBtGA-7gop856R8ClmIhZIXDXedkan3WutLEVc81STe0hwf/exec";
   form.target = "hidden_iframe";
 
   form.innerHTML = `
