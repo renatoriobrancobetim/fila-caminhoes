@@ -34,7 +34,6 @@ h1{margin:0;}
   text-align:center;
   font-size:24px;
   font-weight:bold;
-  transition:transform .3s;
 }
 
 .proximo{background:#D71920;}
@@ -43,11 +42,10 @@ h1{margin:0;}
 .flash{
   animation:flash 1s ease;
 }
-
 @keyframes flash{
-  0%   {transform:scale(1); box-shadow:none;}
-  30%  {transform:scale(1.05); box-shadow:0 0 25px rgba(255,255,255,.8);}
-  100% {transform:scale(1); box-shadow:none;}
+  0%{transform:scale(1);}
+  30%{transform:scale(1.05); box-shadow:0 0 25px rgba(255,255,255,.8);}
+  100%{transform:scale(1);}
 }
 
 table{
@@ -72,7 +70,7 @@ tr:first-child{
 
 .status{
   text-align:center;
-  margin-top:10px;
+  margin-top:8px;
   font-size:12px;
   opacity:0.8;
 }
@@ -110,9 +108,22 @@ tr:first-child{
     <tbody id="fila"></tbody>
   </table>
 
-  <div class="status" id="status">Última atualização: --</div>
-    <div class="status" id="status">Copywriter Renato Monteiro 😉</div>
-  
+  <div class="status" id="statusAtualizacao">
+    Última atualização: --
+  </div>
+
+  <div class="status" id="contador">
+    Próxima atualização em: 45s
+  </div>
+
+  <div class="status">
+    🔄 Esta tela atualiza automaticamente a cada 45 segundos
+  </div>
+
+  <div class="status">
+    © <span id="ano"></span> · Copywriter Renato Monteiro 😉
+  </div>
+
 </div>
 
 <script>
@@ -122,23 +133,28 @@ const URL_HIST = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-
 let ultimoProximo = "";
 let ultimoChamado = "";
 
+const INTERVALO = 45;
+let contador = INTERVALO;
+let timerAtualizacao = null;
+let timerContador = null;
+
+/* ANIMAÇÃO */
 function destacar(id){
   const el = document.getElementById(id);
   el.classList.remove("flash");
-  void el.offsetWidth; // força reflow
+  void el.offsetWidth;
   el.classList.add("flash");
 }
 
+/* CARREGAR FILA */
 async function carregarFila(){
   try{
-    const url = URL_FILA + "&nocache=" + Date.now();
-    const res = await fetch(url, { cache:"no-store" });
+    const res = await fetch(URL_FILA + "&nocache=" + Date.now(), { cache:"no-store" });
     const texto = await res.text();
-
     const linhas = texto.trim().split("\n").slice(1);
+
     const tbody = document.getElementById("fila");
     const proximoEl = document.getElementById("proximo");
-
     tbody.innerHTML = "";
 
     if(linhas.length === 0){
@@ -161,10 +177,7 @@ async function carregarFila(){
         tbody.appendChild(tr);
       });
 
-      const atual =
-        linhas[0].split(",")[1] + "-" +
-        linhas[0].split(",")[2];
-
+      const atual = linhas[0].split(",")[1] + "-" + linhas[0].split(",")[2];
       proximoEl.textContent =
         "🔔 Próximo: " +
         linhas[0].split(",")[1] +
@@ -177,56 +190,81 @@ async function carregarFila(){
       }
     }
 
-    document.getElementById("status").textContent =
+    document.getElementById("statusAtualizacao").textContent =
       "Última atualização: " + new Date().toLocaleTimeString();
 
+    contador = INTERVALO;
+
   }catch(e){
-    console.error("Erro fila");
+    console.error("Erro ao carregar fila");
   }
 }
 
+/* ÚLTIMO CHAMADO */
 async function carregarUltimoChamado(){
   try{
-    const url = URL_HIST + "&nocache=" + Date.now();
-    const res = await fetch(url, { cache:"no-store" });
+    const res = await fetch(URL_HIST + "&nocache=" + Date.now(), { cache:"no-store" });
     const texto = await res.text();
-
     const linhas = texto.trim().split("\n").slice(1);
-    const ultimoEl = document.getElementById("ultimo");
-
     if(linhas.length === 0) return;
 
-    const ultimaLinha = linhas[linhas.length - 1].split(",");
-    const atual = ultimaLinha[0] + "-" + ultimaLinha[1];
+    const ultima = linhas[linhas.length - 1].split(",");
+    const atual = ultima[0] + "-" + ultima[1];
+    const ultimoEl = document.getElementById("ultimo");
 
     ultimoEl.textContent =
       "Último chamado: " +
-      ultimaLinha[0] +
+      ultima[0] +
       " • Comp. " +
-      ultimaLinha[1];
+      ultima[1];
 
     if(atual !== ultimoChamado){
       ultimoChamado = atual;
       destacar("ultimo");
     }
-
   }catch(e){
-    console.error("Erro histórico");
+    console.error("Erro ao carregar histórico");
   }
 }
 
-// 🚀 CARGA INICIAL
+/* CONTADOR */
+function iniciarContador(){
+  timerContador = setInterval(()=>{
+    if(document.hidden) return;
+    contador--;
+    document.getElementById("contador").textContent =
+      "Próxima atualização em: " + contador + "s";
+    if(contador <= 0) contador = INTERVALO;
+  },1000);
+}
+
+/* ATUALIZAÇÃO */
+function iniciarAtualizacao(){
+  timerAtualizacao = setInterval(()=>{
+    if(document.hidden) return;
+    carregarFila();
+    carregarUltimoChamado();
+  }, INTERVALO * 1000);
+}
+
+/* VISIBILIDADE DA ABA */
+document.addEventListener("visibilitychange", ()=>{
+  if(document.hidden){
+    // pausa
+  }else{
+    carregarFila();
+    carregarUltimoChamado();
+    contador = INTERVALO;
+  }
+});
+
+/* INIT */
 carregarFila();
 carregarUltimoChamado();
-
-// 🔄 ATUALIZAÇÃO RÁPIDA
-setInterval(()=>{
-  carregarFila();
-  carregarUltimoChamado();
-}, 3000);
+iniciarAtualizacao();
+iniciarContador();
+document.getElementById("ano").textContent = new Date().getFullYear();
 </script>
-
-
 
 </body>
 </html>
