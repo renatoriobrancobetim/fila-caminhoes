@@ -4,27 +4,167 @@
 <meta charset="UTF-8">
 <title>Registrar Comprovante</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0A3D91;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+  background:#ffffff;
+  color:#000;
+  border-radius:14px;
+  padding:24px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+h2{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+p.sub{
+  text-align:center;
+  font-size:14px;
+  opacity:.7;
+  margin-bottom:20px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  margin-bottom:6px;
+  font-weight:bold;
+}
+
+.field input{
+  width:100%;
+  padding:16px;
+  font-size:18px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  outline:none;
+}
+
+.field input:focus{
+  border-color:#0A3D91;
+  box-shadow:0 0 0 2px rgba(10,61,145,.15);
+}
+
+/* BOTÃO */
+button{
+  width:100%;
+  padding:16px;
+  font-size:18px;
+  background:#D71920;
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+button:active{
+  transform:scale(.98);
+}
+
+/* MENSAGEM */
+#msg{
+  text-align:center;
+  margin-top:15px;
+  font-weight:bold;
+}
+
+/* RODAPÉ */
+footer{
+  text-align:center;
+  margin-top:18px;
+  font-size:12px;
+  opacity:.6;
+}
+</style>
 </head>
+
 <body>
 
-<h2>📸 Registrar Comprovante</h2>
+<div class="container">
+  <h2>📸 Registrar Comprovante</h2>
+  <p class="sub">Envio de canhoto de entrega</p>
 
-<input id="nota" placeholder="Nota Fiscal"><br>
-<input id="motorista" placeholder="Motorista"><br>
-<input id="placa" placeholder="Placa"><br>
-<input id="senha" type="password" placeholder="Senha"><br>
-<input id="foto" type="file" accept="image/*" capture="camera"><br><br>
+  <div class="field">
+    <label>🧾 Nota Fiscal</label>
+    <input id="nota"
+           placeholder="Digite o número da NF"
+           inputmode="numeric"
+           pattern="[0-9]*">
+  </div>
 
-<button onclick="enviar()">Enviar</button>
+  <div class="field">
+    <label>👤 Motorista</label>
+    <input id="motorista" placeholder="Nome do motorista">
+  </div>
 
-<p id="msg"></p>
+  <div class="field">
+    <label>🚚 Placa</label>
+    <input id="placa" placeholder="Placa do caminhão">
+  </div>
+
+  <div class="field">
+    <label>🔐 Senha</label>
+    <input id="senha" type="password" placeholder="Senha">
+  </div>
+
+  <div class="field">
+    <label>📷 Foto do canhoto</label>
+    <input id="foto" type="file" accept="image/*" capture="camera">
+  </div>
+
+  <button onclick="enviar()">Enviar comprovante</button>
+
+  <div id="msg"></div>
+
+  <footer>
+    © <span id="ano"></span> · Copywriter Renato Monteiro
+  </footer>
+</div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_xvyg5C6-rPwy1a0HemVTysmSHKywolZiwFaXtwKniq7Aphg8s3Tk_tXDwkV0bXvB/exec";
 
+document.getElementById("ano").textContent = new Date().getFullYear();
+
 function enviar(){
   const file = document.getElementById("foto").files[0];
-  if(!file){ alert("Tire a foto"); return; }
+  const msg = document.getElementById("msg");
+
+  if(!nota.value || !senha.value){
+    msg.textContent = "⚠️ Preencha a nota fiscal e a senha";
+    msg.style.color = "red";
+    return;
+  }
+
+  if(!file){
+    msg.textContent = "⚠️ Tire a foto do canhoto";
+    msg.style.color = "red";
+    return;
+  }
+
+  msg.textContent = "⏳ Enviando comprovante...";
+  msg.style.color = "#333";
 
   const reader = new FileReader();
   reader.onload = () => {
@@ -38,8 +178,26 @@ function enviar(){
         senha:senha.value,
         imagem:reader.result
       })
-    }).then(r=>r.text()).then(t=>msg.textContent=t);
+    })
+    .then(r=>r.text())
+    .then(t=>{
+      msg.textContent = t;
+      msg.style.color = t.startsWith("✅") ? "green" : "red";
+
+      if(t.startsWith("✅")){
+        nota.value="";
+        motorista.value="";
+        placa.value="";
+        senha.value="";
+        foto.value="";
+      }
+    })
+    .catch(()=>{
+      msg.textContent = "❌ Erro de conexão";
+      msg.style.color = "red";
+    });
   };
+
   reader.readAsDataURL(file);
 }
 </script>
