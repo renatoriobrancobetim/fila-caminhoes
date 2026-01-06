@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Registrar Comprovante</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<h2>📸 Registrar Comprovante</h2>
+
+<input id="nota" placeholder="Nota Fiscal"><br>
+<input id="motorista" placeholder="Motorista"><br>
+<input id="placa" placeholder="Placa"><br>
+<input id="senha" type="password" placeholder="Senha"><br>
+<input id="foto" type="file" accept="image/*" capture="camera"><br><br>
+
+<button onclick="enviar()">Enviar</button>
+
+<p id="msg"></p>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_xvyg5C6-rPwy1a0HemVTysmSHKywolZiwFaXtwKniq7Aphg8s3Tk_tXDwkV0bXvB/exec";
+
+function enviar(){
+  const file = document.getElementById("foto").files[0];
+  if(!file){ alert("Tire a foto"); return; }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    fetch(SCRIPT_URL,{
+      method:"POST",
+      body:new URLSearchParams({
+        acao:"enviar",
+        nota:nota.value,
+        motorista:motorista.value,
+        placa:placa.value,
+        senha:senha.value,
+        imagem:reader.result
+      })
+    }).then(r=>r.text()).then(t=>msg.textContent=t);
+  };
+  reader.readAsDataURL(file);
+}
+</script>
+
+</body>
+</html>
