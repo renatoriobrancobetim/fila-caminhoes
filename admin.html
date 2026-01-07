@@ -58,18 +58,21 @@ th{
   cursor:pointer;
 }
 
+/* MODAL */
 #modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,.85);
   display:none;
   align-items:center;
   justify-content:center;
+  z-index:9999;
 }
 #modal img{
   max-width:90%;
   max-height:90%;
   border-radius:12px;
+  background:#fff;
 }
 </style>
 </head>
@@ -98,18 +101,14 @@ th{
   </table>
 </div>
 
-<div id="modal" onclick="fecharModal()"
-     style="position:fixed; inset:0; background:rgba(0,0,0,.85);
-            display:none; align-items:center; justify-content:center; z-index:9999;">
-  <iframe id="iframeModal"
-          style="width:90%; height:90%; border:none; border-radius:12px; background:#fff;">
-  </iframe>
+<!-- MODAL -->
+<div id="modal" onclick="fecharModal()">
+  <img id="imgModal">
 </div>
-
 
 <script>
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbxW6UXPbnaHNlAxKrWUQTKH3gdhBLvlT5wfTrxyBScHOT3_ItS-geIrZWe9OXmkfima/exec";
+"https://script.google.com/macros/s/AKfycbzYbZ25NllA3KrXQYW6_7JxRdQTxjMUZiFPKPCaVJwlj398-xhxqOKcU8vlubVg2Dcx/exec";
 
 function carregar(){
   const senha = document.getElementById("senha").value;
@@ -129,18 +128,18 @@ function carregar(){
   .then(r => r.text())
   .then(t => {
 
-    // ❌ ERRO DE SENHA OU TEXTO
     if(!t.trim().startsWith("[")){
-      tbody.innerHTML = `<tr><td colspan="5" style="color:red">${t}</td></tr>`;
+      tbody.innerHTML =
+        `<tr><td colspan="5" style="color:red">${t}</td></tr>`;
       return;
     }
 
-    // ✅ JSON VÁLIDO
     const dados = JSON.parse(t);
     tbody.innerHTML = "";
 
     if(dados.length === 0){
-      tbody.innerHTML = "<tr><td colspan='5'>Nenhum registro encontrado</td></tr>";
+      tbody.innerHTML =
+        "<tr><td colspan='5'>Nenhum registro encontrado</td></tr>";
       return;
     }
 
@@ -166,18 +165,15 @@ function carregar(){
 }
 
 function ver(url){
-  const iframe = document.getElementById("iframeModal");
-  iframe.src = url;
-  modal.style.display = "flex";
+  document.getElementById("imgModal").src = url;
+  document.getElementById("modal").style.display = "flex";
 }
 
 function fecharModal(){
-  modal.style.display = "none";
-  iframeModal.src = "";
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("imgModal").src = "";
 }
-
 </script>
-
 
 </body>
 </html>
