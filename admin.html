@@ -107,20 +107,40 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbzGaTdnd4TV3y6dkbu-3J4nr7jJq4fh0DskC7tmbVrPdCDxuHwS9bk6vBndAQ7ipeVo/exec";
 
 function carregar(){
+  const senha = document.getElementById("senha").value;
+  const busca = document.getElementById("busca").value;
+  const tbody = document.getElementById("lista");
+
+  tbody.innerHTML = "<tr><td colspan='5'>⏳ Buscando...</td></tr>";
+
   fetch(SCRIPT_URL,{
     method:"POST",
     body:new URLSearchParams({
       acao:"listar",
-      senha:senha.value,
-      busca:busca.value
+      senha:senha,
+      busca:busca
     })
   })
-  .then(r=>r.json())
-  .then(d=>{
-    const tbody=document.getElementById("lista");
-    tbody.innerHTML="";
-    d.forEach(l=>{
-      tbody.innerHTML+=`
+  .then(r => r.text())
+  .then(t => {
+
+    // ❌ ERRO DE SENHA OU TEXTO
+    if(!t.trim().startsWith("[")){
+      tbody.innerHTML = `<tr><td colspan="5" style="color:red">${t}</td></tr>`;
+      return;
+    }
+
+    // ✅ JSON VÁLIDO
+    const dados = JSON.parse(t);
+    tbody.innerHTML = "";
+
+    if(dados.length === 0){
+      tbody.innerHTML = "<tr><td colspan='5'>Nenhum registro encontrado</td></tr>";
+      return;
+    }
+
+    dados.forEach(l=>{
+      tbody.innerHTML += `
         <tr>
           <td>${l.nf}</td>
           <td>${l.motorista}</td>
@@ -133,14 +153,19 @@ function carregar(){
           </td>
         </tr>`;
     });
+  })
+  .catch(()=>{
+    tbody.innerHTML =
+      "<tr><td colspan='5' style='color:red'>Erro de conexão</td></tr>";
   });
 }
 
 function ver(url){
-  imgModal.src=url;
-  modal.style.display="flex";
+  imgModal.src = url;
+  modal.style.display = "flex";
 }
 </script>
+
 
 </body>
 </html>
