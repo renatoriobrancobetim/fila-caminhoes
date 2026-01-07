@@ -85,9 +85,10 @@ th{
   justify-content:center;
   z-index:9999;
 }
-#modal img{
-  max-width:90%;
-  max-height:90%;
+#modal iframe{
+  width:90%;
+  height:90%;
+  border:none;
   border-radius:12px;
   background:#fff;
 }
@@ -133,7 +134,7 @@ th{
 
 <!-- MODAL -->
 <div id="modal" onclick="fecharModal()">
-  <img id="imgModal" onclick="event.stopPropagation()">
+  <iframe id="imgModal" onclick="event.stopPropagation()"></iframe>
 </div>
 
 <script>
@@ -198,13 +199,13 @@ function carregar(){
 }
 
 function ver(url){
-  imgModal.src = url + "&t=" + Date.now();
-  modal.style.display = "flex";
+  document.getElementById("imgModal").src = url;
+  document.getElementById("modal").style.display = "flex";
 }
 
 function fecharModal(){
-  modal.style.display = "none";
-  imgModal.src = "";
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("imgModal").src = "";
 }
 </script>
 
