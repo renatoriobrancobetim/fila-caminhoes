@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel Administrativo | Comprovantes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0A3D91;
+  color:#fff;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+h2{text-align:center;}
+
+input,button{
+  padding:12px;
+  font-size:16px;
+  border-radius:8px;
+  border:none;
+}
+input{width:100%; margin-bottom:10px;}
+button{
+  background:#D71920;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  color:#000;
+  margin-top:20px;
+}
+th,td{
+  padding:10px;
+  border:1px solid #ddd;
+  text-align:center;
+}
+th{
+  background:#0A3D91;
+  color:#fff;
+}
+
+.btn-img{
+  background:#1E90FF;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+#modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+#modal img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>📂 Painel Administrativo</h2>
+
+  <input id="senha" type="password" placeholder="Senha administrativa">
+  <input id="busca" placeholder="Buscar por NF, placa ou motorista">
+
+  <button onclick="carregar()">Buscar</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>NF</th>
+        <th>Motorista</th>
+        <th>Placa</th>
+        <th>Data</th>
+        <th>Imagem</th>
+      </tr>
+    </thead>
+    <tbody id="lista"></tbody>
+  </table>
+</div>
+
+<div id="modal" onclick="this.style.display='none'">
+  <img id="imgModal">
+</div>
+
+<script>
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbzGaTdnd4TV3y6dkbu-3J4nr7jJq4fh0DskC7tmbVrPdCDxuHwS9bk6vBndAQ7ipeVo/exec";
+
+function carregar(){
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      acao:"listar",
+      senha:senha.value,
+      busca:busca.value
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    const tbody=document.getElementById("lista");
+    tbody.innerHTML="";
+    d.forEach(l=>{
+      tbody.innerHTML+=`
+        <tr>
+          <td>${l.nf}</td>
+          <td>${l.motorista}</td>
+          <td>${l.placa}</td>
+          <td>${l.data}</td>
+          <td>
+            <button class="btn-img" onclick="ver('${l.img}')">
+              Ver
+            </button>
+          </td>
+        </tr>`;
+    });
+  });
+}
+
+function ver(url){
+  imgModal.src=url;
+  modal.style.display="flex";
+}
+</script>
+
+</body>
+</html>
