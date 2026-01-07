@@ -57,6 +57,13 @@ th{
   border-radius:6px;
   cursor:pointer;
 }
+.btn-del{
+  background:#555;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  margin-top:6px;
+}
 
 /* MODAL */
 #modal{
@@ -94,7 +101,7 @@ th{
         <th>Motorista</th>
         <th>Placa</th>
         <th>Data</th>
-        <th>Imagem</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody id="lista"></tbody>
@@ -102,20 +109,13 @@ th{
 </div>
 
 <!-- MODAL -->
-<div id="modal" onclick="fecharModal()"
-     style="position:fixed; inset:0; background:rgba(0,0,0,.85);
-            display:none; align-items:center; justify-content:center; z-index:9999;">
-  
-  <img id="imgModal"
-       onclick="event.stopPropagation()"
-       style="max-width:90%; max-height:90%;
-              border-radius:12px; background:#fff;">
+<div id="modal" onclick="fecharModal()">
+  <img id="imgModal" onclick="event.stopPropagation()">
 </div>
-
 
 <script>
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbz5jdjwSQs7sRGiTugVpdfK086GeKfINZFRRniUz5x_CIxaNrjhpqYvWIBDjaO7L3Y6/exec";
+"https://script.google.com/macros/s/AKfycbwALMI3cc_im36Q-Lo4tismu2sXzUmYAMGsf1oZIKoKHDTfIIW6tzNX5tc4j4hCfuMZ/exec";
 
 function carregar(){
   const senha = document.getElementById("senha").value;
@@ -132,9 +132,8 @@ function carregar(){
       busca:busca
     })
   })
-  .then(r => r.text())
-  .then(t => {
-
+  .then(r=>r.text())
+  .then(t=>{
     if(!t.trim().startsWith("[")){
       tbody.innerHTML =
         `<tr><td colspan="5" style="color:red">${t}</td></tr>`;
@@ -158,29 +157,44 @@ function carregar(){
           <td>${l.placa}</td>
           <td>${l.data}</td>
           <td>
-            <button class="btn-img" onclick="ver('${l.img}')">
-              Ver
-            </button>
+            <button class="btn-img" onclick="ver('${l.img}')">Ver</button><br>
+            <button class="btn-del" onclick="excluir('${l.nf}')">Excluir</button>
           </td>
         </tr>`;
     });
-  })
-  .catch(()=>{
-    tbody.innerHTML =
-      "<tr><td colspan='5' style='color:red'>Erro de conexão</td></tr>";
   });
 }
 
 function ver(url){
-  document.getElementById("imgModal").src = url;
-  document.getElementById("modal").style.display = "flex";
+  imgModal.src = url + "&t=" + Date.now();
+  modal.style.display = "flex";
 }
 
 function fecharModal(){
-  document.getElementById("modal").style.display = "none";
-  document.getElementById("imgModal").src = "";
+  modal.style.display = "none";
+  imgModal.src = "";
 }
 
+function excluir(nf){
+  const senha = document.getElementById("senha").value;
+  if(!senha){ alert("Informe a senha administrativa"); return; }
+
+  if(!confirm("Excluir comprovante da NF " + nf + "?")) return;
+
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      acao:"excluir",
+      senha:senha,
+      nota:nf
+    })
+  })
+  .then(r=>r.text())
+  .then(t=>{
+    alert(t);
+    carregar();
+  });
+}
 </script>
 
 </body>
