@@ -98,9 +98,14 @@ th{
   </table>
 </div>
 
-<div id="modal" onclick="this.style.display='none'">
-  <img id="imgModal">
+<div id="modal" onclick="fecharModal()"
+     style="position:fixed; inset:0; background:rgba(0,0,0,.85);
+            display:none; align-items:center; justify-content:center; z-index:9999;">
+  <iframe id="iframeModal"
+          style="width:90%; height:90%; border:none; border-radius:12px; background:#fff;">
+  </iframe>
 </div>
+
 
 <script>
 const SCRIPT_URL =
@@ -161,9 +166,16 @@ function carregar(){
 }
 
 function ver(url){
-  imgModal.src = url;
+  const iframe = document.getElementById("iframeModal");
+  iframe.src = url;
   modal.style.display = "flex";
 }
+
+function fecharModal(){
+  modal.style.display = "none";
+  iframeModal.src = "";
+}
+
 </script>
 
 
