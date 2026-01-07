@@ -13,23 +13,41 @@ body{
   color:#fff;
 }
 .container{
-  max-width:900px;
+  max-width:1000px;
   margin:auto;
   padding:20px;
 }
 h2{text-align:center;}
 
-input,button{
-  padding:12px;
-  font-size:16px;
-  border-radius:8px;
-  border:none;
+.filters{
+  background:#fff;
+  color:#000;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:15px;
 }
-input{width:100%; margin-bottom:10px;}
-button{
+
+.filters label{
+  font-size:13px;
+  font-weight:bold;
+  display:block;
+  margin-top:8px;
+}
+
+.filters input, .filters button{
+  width:100%;
+  padding:10px;
+  font-size:15px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+.filters button{
   background:#D71920;
   color:#fff;
+  border:none;
   font-weight:bold;
+  margin-top:12px;
   cursor:pointer;
 }
 
@@ -38,7 +56,6 @@ table{
   border-collapse:collapse;
   background:#fff;
   color:#000;
-  margin-top:20px;
 }
 th,td{
   padding:10px;
@@ -56,13 +73,6 @@ th{
   padding:6px 10px;
   border-radius:6px;
   cursor:pointer;
-}
-.btn-del{
-  background:#555;
-  color:#fff;
-  padding:6px 10px;
-  border-radius:6px;
-  margin-top:6px;
 }
 
 /* MODAL */
@@ -89,19 +99,32 @@ th{
 <div class="container">
   <h2>📂 Painel Administrativo</h2>
 
-  <input id="senha" type="password" placeholder="Senha administrativa">
-  <input id="busca" placeholder="Buscar por NF, placa ou motorista">
+  <!-- FILTROS -->
+  <div class="filters">
+    <label>🔐 Senha administrativa</label>
+    <input id="senha" type="password" placeholder="Senha">
 
-  <button onclick="carregar()">Buscar</button>
+    <label>🧾 Nota Fiscal</label>
+    <input id="nf" placeholder="Ex: 123456">
 
+    <label>📅 Data inicial</label>
+    <input id="dataIni" type="date">
+
+    <label>📅 Data final</label>
+    <input id="dataFim" type="date">
+
+    <button onclick="carregar()">Buscar</button>
+  </div>
+
+  <!-- TABELA -->
   <table>
     <thead>
       <tr>
+        <th>Data / Hora</th>
         <th>NF</th>
         <th>Motorista</th>
         <th>Placa</th>
-        <th>Data</th>
-        <th>Ações</th>
+        <th>Imagem</th>
       </tr>
     </thead>
     <tbody id="lista"></tbody>
@@ -115,12 +138,14 @@ th{
 
 <script>
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbwALMI3cc_im36Q-Lo4tismu2sXzUmYAMGsf1oZIKoKHDTfIIW6tzNX5tc4j4hCfuMZ/exec";
+"https://script.google.com/macros/s/AKfycbz5jdjwSQs7sRGiTugVpdfK086GeKfINZFRRniUz5x_CIxaNrjhpqYvWIBDjaO7L3Y6/exec";
 
 function carregar(){
-  const senha = document.getElementById("senha").value;
-  const busca = document.getElementById("busca").value;
-  const tbody = document.getElementById("lista");
+  const senha   = document.getElementById("senha").value;
+  const nf      = document.getElementById("nf").value;
+  const dataIni = document.getElementById("dataIni").value;
+  const dataFim = document.getElementById("dataFim").value;
+  const tbody   = document.getElementById("lista");
 
   tbody.innerHTML = "<tr><td colspan='5'>⏳ Buscando...</td></tr>";
 
@@ -129,7 +154,9 @@ function carregar(){
     body:new URLSearchParams({
       acao:"listar",
       senha:senha,
-      busca:busca
+      nf:nf,
+      dataIni:dataIni,
+      dataFim:dataFim
     })
   })
   .then(r=>r.text())
@@ -152,16 +179,21 @@ function carregar(){
     dados.forEach(l=>{
       tbody.innerHTML += `
         <tr>
+          <td>${l.data}</td>
           <td>${l.nf}</td>
           <td>${l.motorista}</td>
           <td>${l.placa}</td>
-          <td>${l.data}</td>
           <td>
-            <button class="btn-img" onclick="ver('${l.img}')">Ver</button><br>
-            <button class="btn-del" onclick="excluir('${l.nf}')">Excluir</button>
+            <button class="btn-img" onclick="ver('${l.img}')">
+              Ver
+            </button>
           </td>
         </tr>`;
     });
+  })
+  .catch(()=>{
+    tbody.innerHTML =
+      "<tr><td colspan='5' style='color:red'>Erro de conexão</td></tr>";
   });
 }
 
@@ -173,27 +205,6 @@ function ver(url){
 function fecharModal(){
   modal.style.display = "none";
   imgModal.src = "";
-}
-
-function excluir(nf){
-  const senha = document.getElementById("senha").value;
-  if(!senha){ alert("Informe a senha administrativa"); return; }
-
-  if(!confirm("Excluir comprovante da NF " + nf + "?")) return;
-
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:new URLSearchParams({
-      acao:"excluir",
-      senha:senha,
-      nota:nf
-    })
-  })
-  .then(r=>r.text())
-  .then(t=>{
-    alert(t);
-    carregar();
-  });
 }
 </script>
 
