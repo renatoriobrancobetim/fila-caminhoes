@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>Registrar Comprovante</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
 
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0A3D91">
 
 <!-- iOS -->
@@ -90,6 +90,32 @@ button:active{transform:scale(.98)}
   font-weight:bold;
 }
 
+/* AVISO ORIENTAÇÃO */
+#avisoOrientacao{
+  display:none;
+  background:#FFF3CD;
+  color:#000;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:12px;
+  text-align:center;
+  font-weight:bold;
+}
+
+/* MOLDURA */
+.moldura{
+  border:3px dashed #0A3D91;
+  border-radius:12px;
+  height:140px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:14px;
+  color:#0A3D91;
+  margin-top:10px;
+}
+
 /* PREVIEW */
 #preview{
   margin-top:10px;
@@ -127,13 +153,18 @@ footer{
   <h2>📸 Registrar Comprovante</h2>
   <div class="sub">Envio de canhoto de entrega</div>
 
+  <!-- AVISO DE ORIENTAÇÃO -->
+  <div id="avisoOrientacao">
+    📱 Gire o celular para <b>HORIZONTAL</b> para melhor enquadrar o canhoto
+  </div>
+
   <div class="field">
     <label>🧾 Nota Fiscal</label>
     <input id="nota"
       placeholder="Somente números"
       inputmode="numeric"
       pattern="[0-9]*"
-      oninput="this.value=this.value.replace(/\\D/g,'')">
+      oninput="this.value=this.value.replace(/\D/g,'')">
   </div>
 
   <div class="field">
@@ -156,6 +187,12 @@ footer{
     <input id="foto" type="file" accept="image/*" capture="camera" onchange="mostrarPreview()">
   </div>
 
+  <!-- MOLDURA DE ENQUADRAMENTO -->
+  <div class="moldura">
+    📄 Enquadre o canhoto dentro desta área<br>
+    (formato horizontal)
+  </div>
+
   <div id="preview">
     <p><b>Pré-visualização:</b></p>
     <img id="imgPreview">
@@ -176,18 +213,20 @@ const SCRIPT_URL =
 
 document.getElementById("ano").textContent = new Date().getFullYear();
 
-let latitude = "";
-let longitude = "";
-
-// 📍 GEOLOCALIZAÇÃO
-if(navigator.geolocation){
-  navigator.geolocation.getCurrentPosition(pos=>{
-    latitude = pos.coords.latitude;
-    longitude = pos.coords.longitude;
-  });
+/* ORIENTAÇÃO */
+function verificarOrientacao(){
+  const aviso = document.getElementById("avisoOrientacao");
+  if(window.innerHeight > window.innerWidth){
+    aviso.style.display = "block";
+  }else{
+    aviso.style.display = "none";
+  }
 }
+window.addEventListener("resize", verificarOrientacao);
+window.addEventListener("orientationchange", verificarOrientacao);
+verificarOrientacao();
 
-// 📸 PREVIEW
+/* PREVIEW */
 function mostrarPreview(){
   const file = foto.files[0];
   if(!file) return;
@@ -229,9 +268,7 @@ function enviar(){
         motorista:motorista.value,
         placa:placa.value,
         senha:senha.value,
-        imagem:reader.result,
-        lat:latitude,
-        lng:longitude
+        imagem:reader.result
       })
     })
     .then(r=>r.text())
