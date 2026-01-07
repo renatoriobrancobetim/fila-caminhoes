@@ -70,27 +70,13 @@ th{
 .btn-img{
   background:#1E90FF;
   color:#fff;
-  padding:6px 10px;
+  padding:6px 12px;
   border-radius:6px;
   cursor:pointer;
-}
-
-/* MODAL */
-#modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-}
-#modal iframe{
-  width:90%;
-  height:90%;
   border:none;
-  border-radius:12px;
-  background:#fff;
+}
+.btn-img:hover{
+  opacity:0.85;
 }
 </style>
 </head>
@@ -125,16 +111,11 @@ th{
         <th>NF</th>
         <th>Motorista</th>
         <th>Placa</th>
-        <th>Imagem</th>
+        <th>Comprovante</th>
       </tr>
     </thead>
     <tbody id="lista"></tbody>
   </table>
-</div>
-
-<!-- MODAL -->
-<div id="modal" onclick="fecharModal()">
-  <iframe id="imgModal" onclick="event.stopPropagation()"></iframe>
 </div>
 
 <script>
@@ -185,8 +166,8 @@ function carregar(){
           <td>${l.motorista}</td>
           <td>${l.placa}</td>
           <td>
-            <button class="btn-img" onclick="ver('${l.img}')">
-              Ver
+            <button class="btn-img" onclick="abrirImagem('${l.img}')">
+              🔍 Ver
             </button>
           </td>
         </tr>`;
@@ -198,14 +179,8 @@ function carregar(){
   });
 }
 
-function ver(url){
-  document.getElementById("imgModal").src = url;
-  document.getElementById("modal").style.display = "flex";
-}
-
-function fecharModal(){
-  document.getElementById("modal").style.display = "none";
-  document.getElementById("imgModal").src = "";
+function abrirImagem(url){
+  window.open(url, "_blank");
 }
 </script>
 
