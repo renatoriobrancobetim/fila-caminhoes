@@ -102,9 +102,16 @@ th{
 </div>
 
 <!-- MODAL -->
-<div id="modal" onclick="fecharModal()">
-  <img id="imgModal">
+<div id="modal" onclick="fecharModal()"
+     style="position:fixed; inset:0; background:rgba(0,0,0,.85);
+            display:none; align-items:center; justify-content:center; z-index:9999;">
+  
+  <img id="imgModal"
+       onclick="event.stopPropagation()"
+       style="max-width:90%; max-height:90%;
+              border-radius:12px; background:#fff;">
 </div>
+
 
 <script>
 const SCRIPT_URL =
@@ -173,6 +180,7 @@ function fecharModal(){
   document.getElementById("modal").style.display = "none";
   document.getElementById("imgModal").src = "";
 }
+
 </script>
 
 </body>
