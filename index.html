@@ -43,10 +43,31 @@ button:disabled{opacity:0.6;cursor:not-allowed;}
   justify-content:space-between;
   padding:14px;
   border-bottom:1px solid #ddd;
+  align-items:center;
 }
+
 .item.proximo{
   background:#FFF3CD;
   border-left:6px solid #D71920;
+}
+
+.status{
+  font-size:11px;
+  font-weight:bold;
+  padding:4px 8px;
+  border-radius:6px;
+  margin-top:4px;
+  display:inline-block;
+}
+
+.status.ok{
+  background:#28a745;
+  color:#fff;
+}
+
+.status.off{
+  background:#dc3545;
+  color:#fff;
 }
 
 .tag-proximo{
@@ -56,20 +77,12 @@ button:disabled{opacity:0.6;cursor:not-allowed;}
   display:flex;
   gap:6px;
 }
+
 .sino{animation:pulsar 1s infinite;}
 @keyframes pulsar{
   0%{transform:scale(1)}
   50%{transform:scale(1.3)}
   100%{transform:scale(1)}
-}
-
-/* REMOÇÃO VISUAL */
-.item.removendo{
-  background:#F8D7DA !important;
-  animation:removerItem .5s ease forwards;
-}
-@keyframes removerItem{
-  to{opacity:0; transform:translateX(-40px);}
 }
 
 .spinner{
@@ -83,13 +96,6 @@ button:disabled{opacity:0.6;cursor:not-allowed;}
 }
 @keyframes spin{
   to{transform:rotate(360deg)}
-}
-
-.msg{
-  text-align:center;
-  margin-top:10px;
-  font-weight:bold;
-  min-height:18px;
 }
 
 .btn-remover{
@@ -113,49 +119,32 @@ footer{
 <div class="container">
   <h2>Lançamento de Caminhão</h2>
 
-  <input id="placa" placeholder="Placa do caminhão">
+  <input id="placa" placeholder="Placa do caminhão"
+         oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
   <input id="compartimento" placeholder="Compartimento" readonly>
   <input id="senha" type="password" placeholder="Senha">
 
   <button id="btnAdd" onclick="adicionarFila()">Adicionar à Fila</button>
   <button id="btnChamar" onclick="chamarProximo()">🔔 Chamar Próximo</button>
 
-  <div class="msg" id="msg"></div>
-  <div class="msg" id="statusAtualizacao"></div>
-
   <div class="lista" id="lista">
     <div class="spinner"></div>
   </div>
 </div>
 
-<footer>Copywriter Renato Monteiro</footer>
-
-<iframe name="hidden_iframe" style="display:none;"></iframe>
+<footer>© Copywriter Renato Monteiro</footer>
 
 <script>
 /* CONFIG */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyUuvIhp63EiaGMHJ0QXkSgiUaOP5ppI05GjCq0L2lhDENuyvoyEpmSiQGziU4lVKt-/exec";
 const CSV_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
+const CSV_DISP = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
-let cadastro={}, intervaloFila=null, pausado=false, ultimaAtualizacao=Date.now();
+let cadastro={}, disponibilidade={};
 const lista=document.getElementById("lista");
-const msg=document.getElementById("msg");
-const statusAtualizacao=document.getElementById("statusAtualizacao");
 
-function showSpinner(){lista.innerHTML='<div class="spinner"></div>';}
-function setLoading(v,t){btnAdd.disabled=v;btnChamar.disabled=v;msg.textContent=v?t:"";}
-function post(d){
-  const f=document.createElement("form");
-  f.method="POST"; f.action=SCRIPT_URL; f.target="hidden_iframe";
-  Object.keys(d).forEach(k=>{
-    const i=document.createElement("input");
-    i.name=k; i.value=d[k]; f.appendChild(i);
-  });
-  document.body.appendChild(f); f.submit(); f.remove();
-}
-
-/* DADOS */
+/* LOAD CAMINHÕES */
 async function carregarCaminhoes(){
   const r=await fetch(CSV_CAMINHOES+"&t="+Date.now());
   const t=await r.text();
@@ -165,6 +154,18 @@ async function carregarCaminhoes(){
     cadastro[c[0]]=c[1];
   });
 }
+
+/* LOAD DISPONIBILIDADE */
+async function carregarDisponibilidade(){
+  const r=await fetch(CSV_DISP+"&t="+Date.now());
+  const t=await r.text();
+  disponibilidade={};
+  t.split("\n").slice(1).forEach(l=>{
+    const c=l.split(",");
+    if(c[0]) disponibilidade[c[0]]=c[1];
+  });
+}
+
 function buscarCompartimento(){
   const p=placa.value.trim().toUpperCase();
   placa.value=p;
@@ -173,75 +174,73 @@ function buscarCompartimento(){
 
 /* FILA */
 async function carregarFila(){
-  showSpinner();
+  lista.innerHTML='<div class="spinner"></div>';
+  await carregarDisponibilidade();
+
   const r=await fetch(CSV_FILA+"&t="+Date.now());
   const t=await r.text();
   const linhas=t.split("\n").slice(1);
   lista.innerHTML="";
+
   if(!linhas.length){
     lista.innerHTML="<div class='item'>Fila vazia</div>";
     return;
   }
+
   linhas.forEach((l,i)=>{
     const c=l.split(",");
+    const status = disponibilidade[c[1]] || "INDISPONÍVEL";
+
     lista.innerHTML+=`
-      <div class="item ${i===0?"proximo":""}" data-placa="${c[1]}">
+      <div class="item ${i===0?"proximo":""}">
         <div>
           ${i===0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
-          <b>${c[1]}</b><br>Comp: ${c[2]}
+          <b>${c[1]}</b><br>
+          Comp: ${c[2]}<br>
+          <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">
+            ${status}
+          </span>
         </div>
         <button class="btn-remover" onclick="remover(this,'${c[1]}')">Excluir</button>
       </div>`;
   });
-  ultimaAtualizacao=Date.now();
 }
 
 /* AÇÕES */
-function atualizarAgora(){carregarFila();}
-
 function adicionarFila(){
   buscarCompartimento();
   if(!placa.value||!compartimento.value||!senha.value){alert("Dados inválidos");return;}
-  setLoading(true,"⏳ Adicionando...");
   post({acao:"inserir",placa:placa.value,senha:senha.value});
-  setTimeout(()=>{setLoading(false,"");atualizarAgora();},500);
+  setTimeout(carregarFila,600);
 }
 
 function chamarProximo(){
   if(!senha.value){alert("Informe a senha");return;}
-  setLoading(true,"🔔 Chamando...");
   post({acao:"chamar",senha:senha.value});
-  setTimeout(()=>{setLoading(false,"");atualizarAgora();},500);
+  setTimeout(carregarFila,600);
 }
 
-/* EXCLUIR — AGORA FUNCIONA */
+function post(d){
+  const f=document.createElement("form");
+  f.method="POST"; f.action=SCRIPT_URL;
+  Object.keys(d).forEach(k=>{
+    const i=document.createElement("input");
+    i.name=k; i.value=d[k]; f.appendChild(i);
+  });
+  document.body.appendChild(f); f.submit(); f.remove();
+}
+
 function remover(btn, placa){
-  if(!confirm("Remover o caminhão "+placa+"?")) return;
+  if(!confirm("Remover "+placa+"?")) return;
   if(!senha.value){alert("Informe a senha");return;}
-
-  const item = btn.closest(".item");
-  if(item) item.classList.add("removendo");
-
-  setLoading(true,"⏳ Removendo caminhão...");
-
-  setTimeout(()=>{
-    if(item) item.remove(); // remove do DOM imediatamente
-    post({acao:"remover",placa:placa,senha:senha.value});
-    setTimeout(atualizarAgora,1500);
-    setTimeout(()=>setLoading(false,""),1800);
-  },500);
+  post({acao:"remover",placa:placa,senha:senha.value});
+  setTimeout(carregarFila,800);
 }
-
-/* STATUS */
-setInterval(()=>{
-  const diff=Math.floor((Date.now()-ultimaAtualizacao)/1000);
-  statusAtualizacao.textContent="🔄 Atualizado há "+diff+"s";
-},1000);
 
 /* INIT */
 carregarCaminhoes();
 carregarFila();
-intervaloFila=setInterval(carregarFila,30000);
+setInterval(carregarFila,30000);
 </script>
 
 </body>
