@@ -53,48 +53,39 @@ button:disabled{
 .btn-ok{background:#28a745;color:#fff;}
 .btn-off{background:#dc3545;color:#fff;}
 
-.msg{
+/* ÁREA CENTRAL (SPINNER / OK / ERRO) */
+.feedback{
+  margin-top:16px;
   text-align:center;
-  margin-top:14px;
-  font-weight:bold;
-  padding:10px;
-  border-radius:8px;
-  display:none;
-}
-
-/* SUCESSO */
-.msg.ok{
-  display:block;
-  background:#d4edda;
-  color:#155724;
-  animation:fadeOk .6s ease;
-}
-
-/* ERRO */
-.msg.erro{
-  display:block;
-  background:#f8d7da;
-  color:#721c24;
+  min-height:40px;
 }
 
 /* SPINNER */
 .spinner{
-  width:28px;
-  height:28px;
+  width:32px;
+  height:32px;
   border:4px solid #ddd;
   border-top:4px solid #0A3D91;
   border-radius:50%;
   animation:spin 1s linear infinite;
-  margin:14px auto;
-  display:none;
+  margin:auto;
 }
+
+/* OK / ERRO */
+.result{
+  font-size:22px;
+  font-weight:bold;
+  animation:pop .4s ease;
+}
+
+.result.ok{color:#28a745;}
+.result.erro{color:#dc3545;}
 
 @keyframes spin{
   to{transform:rotate(360deg)}
 }
-
-@keyframes fadeOk{
-  from{transform:scale(.9);opacity:0}
+@keyframes pop{
+  from{transform:scale(.8);opacity:0}
   to{transform:scale(1);opacity:1}
 }
 </style>
@@ -105,7 +96,6 @@ button:disabled{
 <div class="container">
   <h2>🚚 Disponibilidade</h2>
 
-  <!-- PLACA -->
   <input
     id="placa"
     placeholder="Placa do caminhão"
@@ -122,46 +112,38 @@ button:disabled{
     ❌ Indisponível
   </button>
 
-  <!-- SPINNER -->
-  <div class="spinner" id="spinner"></div>
-
-  <div class="msg" id="msg"></div>
+  <!-- FEEDBACK CENTRAL -->
+  <div class="feedback" id="feedback"></div>
 </div>
 
 <script>
-/* URLs */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwCaUKLrzWf3sBUJTOk7_nV0k3CkzwwU-DbMGLuTlJJETC8Y3EVmZizK2u0lpU18aBl/exec";
 
 const CSV_CAMINHOES =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 
-/* ELEMENTOS */
-const btnOn   = document.getElementById("btnOn");
-const btnOff  = document.getElementById("btnOff");
-const spinner = document.getElementById("spinner");
-const msg     = document.getElementById("msg");
+const btnOn = document.getElementById("btnOn");
+const btnOff = document.getElementById("btnOff");
+const feedback = document.getElementById("feedback");
 
-/* 🔠 FORMATAR PLACA */
+/* FORMATA PLACA */
 function formatarPlaca(el){
-  el.value = el.value
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g,"");
+  el.value = el.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
 }
 
-/* 🚚 CARREGAR PLACAS */
+/* CARREGAR PLACAS */
 async function carregarPlacas(){
   try{
     const r = await fetch(CSV_CAMINHOES + "&t=" + Date.now());
     const t = await r.text();
     const dl = document.getElementById("listaPlacas");
     dl.innerHTML = "";
-
     t.split("\n").slice(1).forEach(l=>{
       const c = l.split(",");
       if(c[0]){
-        const opt = document.createElement("option");
-        opt.value = c[0];
+        const opt=document.createElement("option");
+        opt.value=c[0];
         dl.appendChild(opt);
       }
     });
@@ -169,21 +151,19 @@ async function carregarPlacas(){
 }
 carregarPlacas();
 
-/* 📤 ENVIAR */
+/* ENVIAR */
 function enviar(status){
   const placa = document.getElementById("placa").value.trim();
-
   if(!placa){
-    msg.textContent="⚠️ Informe a placa";
-    msg.className="msg erro";
+    feedback.innerHTML =
+      `<div class="result erro">⚠️ Informe a placa</div>`;
     return;
   }
 
-  // UI loading
   btnOn.disabled = true;
   btnOff.disabled = true;
-  spinner.style.display = "block";
-  msg.style.display = "none";
+
+  feedback.innerHTML = `<div class="spinner"></div>`;
 
   fetch(SCRIPT_URL,{
     method:"POST",
@@ -195,23 +175,24 @@ function enviar(status){
   })
   .then(r=>r.text())
   .then(t=>{
-    spinner.style.display = "none";
-    msg.textContent = t;
-    msg.className = t.startsWith("✅") ? "msg ok" : "msg erro";
-
     btnOn.disabled = false;
     btnOff.disabled = false;
 
     if(t.startsWith("✅")){
-      setTimeout(()=>msg.style.display="none",3000);
+      feedback.innerHTML =
+        `<div class="result ok">✅ OK</div>`;
+    }else{
+      feedback.innerHTML =
+        `<div class="result erro">❌ Erro</div>`;
     }
+
+    setTimeout(()=>feedback.innerHTML="",3000);
   })
   .catch(()=>{
-    spinner.style.display = "none";
-    msg.textContent="❌ Erro de conexão";
-    msg.className="msg erro";
     btnOn.disabled = false;
     btnOff.disabled = false;
+    feedback.innerHTML =
+      `<div class="result erro">❌ Falha</div>`;
   });
 }
 </script>
