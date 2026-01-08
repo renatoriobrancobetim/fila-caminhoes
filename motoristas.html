@@ -96,12 +96,9 @@ button:disabled{
 <div class="container">
   <h2>🚚 Disponibilidade</h2>
 
-  <input
-    id="placa"
-    placeholder="Placa do caminhão"
-    list="listaPlacas"
-    oninput="formatarPlaca(this)"
-  >
+  <input id="placa" placeholder="Placa do caminhão">
+<input id="senha" type="password" placeholder="Senha do motorista">
+
   <datalist id="listaPlacas"></datalist>
 
   <button id="btnOn" class="btn-ok" onclick="enviar('DISPONÍVEL')">
@@ -153,15 +150,15 @@ carregarPlacas();
 
 /* ENVIAR */
 function enviar(status){
-  const placa = document.getElementById("placa").value.trim();
-  if(!placa){
+  const placa = document.getElementById("placa").value.trim().toUpperCase();
+  const senha = document.getElementById("senha").value.trim();
+  const feedback = document.getElementById("msg");
+
+  if(!placa || !senha){
     feedback.innerHTML =
-      `<div class="result erro">⚠️ Informe a placa</div>`;
+      `<div class="result erro">⚠️ Informe placa e senha</div>`;
     return;
   }
-
-  btnOn.disabled = true;
-  btnOff.disabled = true;
 
   feedback.innerHTML = `<div class="spinner"></div>`;
 
@@ -170,33 +167,27 @@ function enviar(status){
     body:new URLSearchParams({
       acao:"disponibilidade",
       placa:placa,
+      senha:senha,
       status:status
     })
   })
   .then(r=>r.text())
-.then(t=>{
-  btnOn.disabled = false;
-  btnOff.disabled = false;
-
-  // ✔️ Sucesso se retornar OK ou começar com ✅
-  if(t.trim() === "OK" || t.startsWith("✅")){
-    feedback.innerHTML =
-      `<div class="result ok">✅ OK</div>`;
-  }else{
-    feedback.innerHTML =
-      `<div class="result erro">❌ Erro</div>`;
-  }
-
-  setTimeout(()=>feedback.innerHTML="",3000);
-})
-
+  .then(t=>{
+    if(t.trim()==="OK"){
+      feedback.innerHTML =
+        `<div class="result ok">✅ OK</div>`;
+    }else{
+      feedback.innerHTML =
+        `<div class="result erro">${t}</div>`;
+    }
+    setTimeout(()=>feedback.innerHTML="",3000);
+  })
   .catch(()=>{
-    btnOn.disabled = false;
-    btnOff.disabled = false;
     feedback.innerHTML =
-      `<div class="result erro">❌ Falha</div>`;
+      `<div class="result erro">❌ Erro de conexão</div>`;
   });
 }
+
 </script>
 
 </body>
