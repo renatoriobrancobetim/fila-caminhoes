@@ -174,20 +174,22 @@ function enviar(status){
     })
   })
   .then(r=>r.text())
-  .then(t=>{
-    btnOn.disabled = false;
-    btnOff.disabled = false;
+.then(t=>{
+  btnOn.disabled = false;
+  btnOff.disabled = false;
 
-    if(t.startsWith("✅")){
-      feedback.innerHTML =
-        `<div class="result ok">✅ OK</div>`;
-    }else{
-      feedback.innerHTML =
-        `<div class="result erro">❌ Erro</div>`;
-    }
+  // ✔️ Sucesso se retornar OK ou começar com ✅
+  if(t.trim() === "OK" || t.startsWith("✅")){
+    feedback.innerHTML =
+      `<div class="result ok">✅ OK</div>`;
+  }else{
+    feedback.innerHTML =
+      `<div class="result erro">❌ Erro</div>`;
+  }
 
-    setTimeout(()=>feedback.innerHTML="",3000);
-  })
+  setTimeout(()=>feedback.innerHTML="",3000);
+})
+
   .catch(()=>{
     btnOn.disabled = false;
     btnOff.disabled = false;
