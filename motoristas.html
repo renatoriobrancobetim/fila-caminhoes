@@ -15,6 +15,7 @@ body{
   align-items:center;
   justify-content:center;
   min-height:100vh;
+  flex-direction:column;
 }
 .container{
   background:#fff;
@@ -87,6 +88,14 @@ button:disabled{
   from{transform:scale(.8);opacity:0}
   to{transform:scale(1);opacity:1}
 }
+
+/* RODAPÉ */
+footer{
+  margin-top:18px;
+  font-size:12px;
+  opacity:.75;
+  text-align:center;
+}
 </style>
 </head>
 
@@ -111,6 +120,10 @@ button:disabled{
   <div class="feedback" id="feedback"></div>
 </div>
 
+<footer>
+  © <span id="ano"></span> · Copywriter Renato Monteiro
+</footer>
+
 <script>
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyUuvIhp63EiaGMHJ0QXkSgiUaOP5ppI05GjCq0L2lhDENuyvoyEpmSiQGziU4lVKt-/exec";
@@ -118,6 +131,8 @@ const SCRIPT_URL =
 const btnOn = document.getElementById("btnOn");
 const btnOff = document.getElementById("btnOff");
 const feedback = document.getElementById("feedback");
+
+document.getElementById("ano").textContent = new Date().getFullYear();
 
 function setLoading(v){
   btnOn.disabled = v;
