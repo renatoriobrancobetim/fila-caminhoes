@@ -28,7 +28,7 @@ button{
   border:none;
   cursor:pointer;
 }
-button:disabled{opacity:0.6;}
+button:disabled{opacity:.6}
 
 .lista{
   margin-top:20px;
@@ -70,11 +70,10 @@ button:disabled{opacity:0.6;}
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-footer{
+.msg{
   text-align:center;
-  font-size:12px;
-  margin-top:30px;
-  opacity:.8;
+  font-size:13px;
+  margin-top:10px;
 }
 </style>
 </head>
@@ -90,8 +89,10 @@ footer{
   <input id="compartimento" placeholder="Compartimento" readonly>
   <input id="senha" type="password" placeholder="Senha">
 
-  <button onclick="adicionarFila()">Adicionar à Fila</button>
-  <button onclick="chamarProximo()">🔔 Chamar Próximo</button>
+  <button id="btnAdd">Adicionar à Fila</button>
+  <button id="btnChamar">🔔 Chamar Próximo</button>
+
+  <div class="msg" id="msg"></div>
 
   <div class="lista" id="listaFila"></div>
 
@@ -99,30 +100,43 @@ footer{
   <div class="lista" id="listaDisp"></div>
 </div>
 
-<footer>© Copywriter Renato Monteiro</footer>
+<footer style="text-align:center;font-size:12px;margin-top:30px;opacity:.8">
+  © Copywriter Renato Monteiro
+</footer>
 
 <script>
+/* ================= CONFIG ================= */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyUuvIhp63EiaGMHJ0QXkSgiUaOP5ppI05GjCq0L2lhDENuyvoyEpmSiQGziU4lVKt-/exec";
 const CSV_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 const CSV_DISP = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
+/* ================= ELEMENTOS ================= */
+const placaEl = document.getElementById("placa");
+const compartimentoEl = document.getElementById("compartimento");
+const senhaEl = document.getElementById("senha");
+const msgEl = document.getElementById("msg");
+const listaFila = document.getElementById("listaFila");
+const listaDisp = document.getElementById("listaDisp");
+const btnAdd = document.getElementById("btnAdd");
+const btnChamar = document.getElementById("btnChamar");
+
+/* ================= DADOS ================= */
 let cadastro={}, disponibilidade={}, filaPlacas={};
 
-const listaFila=document.getElementById("listaFila");
-const listaDisp=document.getElementById("listaDisp");
-
+/* ================= HELPERS ================= */
 async function post(dados){
-  await fetch(SCRIPT_URL,{
+  const r = await fetch(SCRIPT_URL,{
     method:"POST",
     body:new URLSearchParams(dados)
   });
+  return r.text();
 }
 
-/* DADOS */
+/* ================= LOAD ================= */
 async function carregarCaminhoes(){
-  const r=await fetch(CSV_CAMINHOES+"&t="+Date.now());
-  const t=await r.text();
+  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
+  const t = await r.text();
   cadastro={};
   t.split("\n").slice(1).forEach(l=>{
     const c=l.split(",");
@@ -131,8 +145,8 @@ async function carregarCaminhoes(){
 }
 
 async function carregarDisponibilidade(){
-  const r=await fetch(CSV_DISP+"&t="+Date.now());
-  const t=await r.text();
+  const r = await fetch(CSV_DISP+"&t="+Date.now());
+  const t = await r.text();
   disponibilidade={};
   t.split("\n").slice(1).forEach(l=>{
     const c=l.split(",");
@@ -142,8 +156,10 @@ async function carregarDisponibilidade(){
 
 async function carregarFila(){
   filaPlacas={};
-  const r=await fetch(CSV_FILA+"&t="+Date.now());
-  const t=await r.text();
+  listaFila.innerHTML='<div class="spinner"></div>';
+
+  const r = await fetch(CSV_FILA+"&t="+Date.now());
+  const t = await r.text();
   const linhas=t.split("\n").slice(1);
 
   listaFila.innerHTML="";
@@ -173,35 +189,43 @@ function carregarListaDisponibilidade(){
   Object.entries(disponibilidade)
     .filter(([p])=>!filaPlacas[p])
     .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1)
-    .forEach(([placa,status])=>{
+    .forEach(([p,s])=>{
       listaDisp.innerHTML+=`
         <div class="item">
-          <b>${placa}</b>
-          <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">${status}</span>
+          <b>${p}</b>
+          <span class="status ${s==="DISPONÍVEL"?"ok":"off"}">${s}</span>
         </div>`;
     });
 }
 
-function buscarCompartimento(){
-  const p=placa.value.trim().toUpperCase();
-  placa.value=p;
-  compartimento.value=cadastro[p]||"";
-}
+/* ================= AÇÕES ================= */
+btnAdd.onclick = async ()=>{
+  const placa = placaEl.value.trim().toUpperCase();
+  const senha = senhaEl.value.trim();
+  compartimentoEl.value = cadastro[placa] || "";
 
-async function adicionarFila(){
-  buscarCompartimento();
-  if(!placa.value||!compartimento.value||!senha.value){
-    alert("Dados inválidos");
+  if(!placa || !senha || !compartimentoEl.value){
+    msgEl.textContent="⚠️ Dados inválidos";
     return;
   }
-  await post({acao:"inserir",placa:placa.value,senha:senha.value});
-  atualizarTudo();
-}
 
-async function chamarProximo(){
-  await post({acao:"chamar",senha:senha.value});
+  btnAdd.disabled=true;
+  msgEl.textContent="⏳ Adicionando caminhão...";
+
+  const resp = await post({acao:"inserir",placa,senha});
+  msgEl.textContent="✅ Caminhão adicionado";
+  btnAdd.disabled=false;
+
   atualizarTudo();
-}
+};
+
+btnChamar.onclick = async ()=>{
+  const senha = senhaEl.value.trim();
+  if(!senha){alert("Informe a senha");return;}
+
+  await post({acao:"chamar",senha});
+  atualizarTudo();
+};
 
 async function atualizarTudo(){
   await carregarDisponibilidade();
