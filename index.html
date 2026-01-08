@@ -106,7 +106,8 @@ footer{
   <h2>Lançamento de Caminhão</h2>
 
   <input id="placa" placeholder="Placa do caminhão"
-         oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+    oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+
   <input id="compartimento" placeholder="Compartimento" readonly>
   <input id="senha" type="password" placeholder="Senha">
 
@@ -116,6 +117,7 @@ footer{
   <div class="lista" id="listaFila"></div>
 
   <h3>📋 Disponibilidade dos Caminhões</h3>
+  <div id="statusDisp" style="text-align:center;font-size:11px;opacity:.7"></div>
   <div class="lista" id="listaDisp"></div>
 </div>
 
@@ -131,12 +133,13 @@ const CSV_DISP = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-
 let cadastro = {};
 let disponibilidade = {};
 let filaPlacas = {};
+let ultimaAtualizacao = 0;
 
 const listaFila = document.getElementById("listaFila");
 const listaDisp = document.getElementById("listaDisp");
 
 /* ======================
-   DADOS BÁSICOS
+   DADOS
 ====================== */
 async function carregarCaminhoes(){
   const r = await fetch(CSV_CAMINHOES + "&t=" + Date.now());
@@ -162,9 +165,7 @@ async function carregarDisponibilidade(){
    FILA
 ====================== */
 async function carregarFila(){
-  listaFila.innerHTML = '<div class="spinner"></div>';
   filaPlacas = {};
-
   const r = await fetch(CSV_FILA + "&t=" + Date.now());
   const t = await r.text();
   const linhas = t.split("\n").slice(1);
@@ -178,7 +179,8 @@ async function carregarFila(){
 
   linhas.forEach((l,i)=>{
     const c = l.split(",");
-    filaPlacas[c[1]] = true; // 🔴 MARCA COMO JÁ NA FILA
+    filaPlacas[c[1]] = true;
+
     const status = disponibilidade[c[1]] || "INDISPONÍVEL";
 
     listaFila.innerHTML += `
@@ -201,7 +203,7 @@ function carregarListaDisponibilidade(){
   listaDisp.innerHTML = "";
 
   const listaOrdenada = Object.entries(disponibilidade)
-    .filter(([placa]) => !filaPlacas[placa]) // ✅ REMOVE QUEM ESTÁ NA FILA
+    .filter(([placa]) => !filaPlacas[placa])
     .sort((a,b)=> a[1]==="DISPONÍVEL" ? -1 : 1);
 
   if(!listaOrdenada.length){
@@ -267,19 +269,30 @@ function post(d){
    🔄 ATUALIZAÇÃO CENTRAL
 ====================== */
 async function atualizarTudo(){
+  listaFila.innerHTML = '<div class="spinner"></div>';
+  listaDisp.innerHTML = '<div class="spinner"></div>';
+
   await carregarDisponibilidade();
   await carregarFila();
   carregarListaDisponibilidade();
+
+  ultimaAtualizacao = Date.now();
 }
+
+/* STATUS VISUAL */
+setInterval(()=>{
+  const s = Math.floor((Date.now() - ultimaAtualizacao)/1000);
+  const el = document.getElementById("statusDisp");
+  if(el) el.textContent = "🔄 Atualizado há " + s + "s";
+},1000);
 
 /* INIT */
 carregarCaminhoes();
 atualizarTudo();
 
-/* 🔁 ATUALIZAÇÃO AUTOMÁTICA COMPLETA */
+/* AUTO REFRESH */
 setInterval(atualizarTudo, 30000);
 </script>
-
 
 </body>
 </html>
