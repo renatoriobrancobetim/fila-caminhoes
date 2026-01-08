@@ -26,24 +26,55 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 h2{text-align:center;margin-top:0;}
+
 input,button{
   width:100%;
   padding:14px;
   font-size:16px;
   margin-top:12px;
 }
+
+input{
+  text-transform:uppercase;
+}
+
 button{
   border:none;
   border-radius:10px;
   cursor:pointer;
   font-weight:bold;
 }
+
 .btn-ok{background:#28a745;color:#fff;}
 .btn-off{background:#dc3545;color:#fff;}
+
 .msg{
   text-align:center;
-  margin-top:12px;
+  margin-top:14px;
   font-weight:bold;
+  padding:10px;
+  border-radius:8px;
+  display:none;
+}
+
+/* SUCESSO */
+.msg.ok{
+  display:block;
+  background:#d4edda;
+  color:#155724;
+  animation:fadeOk .6s ease;
+}
+
+/* ERRO */
+.msg.erro{
+  display:block;
+  background:#f8d7da;
+  color:#721c24;
+}
+
+@keyframes fadeOk{
+  from{transform:scale(.9);opacity:0}
+  to{transform:scale(1);opacity:1}
 }
 </style>
 </head>
@@ -53,7 +84,14 @@ button{
 <div class="container">
   <h2>🚚 Disponibilidade</h2>
 
-  <input id="placa" placeholder="Placa do caminhão">
+  <!-- PLACA COM AUTOCOMPLETE -->
+  <input
+    id="placa"
+    placeholder="Placa do caminhão"
+    list="listaPlacas"
+    oninput="formatarPlaca(this)"
+  >
+  <datalist id="listaPlacas"></datalist>
 
   <button class="btn-ok" onclick="enviar('DISPONÍVEL')">
     ✅ Estou Disponível
@@ -67,21 +105,53 @@ button{
 </div>
 
 <script>
+/* URLs */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwCaUKLrzWf3sBUJTOk7_nV0k3CkzwwU-DbMGLuTlJJETC8Y3EVmZizK2u0lpU18aBl/exec";
 
+const CSV_CAMINHOES =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
+
+/* 🔠 FORMATAR PLACA */
+function formatarPlaca(el){
+  el.value = el.value
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g,""); // bloqueia inválidos
+}
+
+/* 🚚 CARREGAR PLACAS CADASTRADAS */
+async function carregarPlacas(){
+  try{
+    const r = await fetch(CSV_CAMINHOES + "&t=" + Date.now());
+    const t = await r.text();
+    const dl = document.getElementById("listaPlacas");
+    dl.innerHTML = "";
+
+    t.split("\n").slice(1).forEach(l=>{
+      const c = l.split(",");
+      if(c[0]){
+        const opt = document.createElement("option");
+        opt.value = c[0];
+        dl.appendChild(opt);
+      }
+    });
+  }catch(e){}
+}
+carregarPlacas();
+
+/* 📤 ENVIAR STATUS */
 function enviar(status){
-  const placa = document.getElementById("placa").value.trim().toUpperCase();
+  const placa = document.getElementById("placa").value.trim();
   const msg = document.getElementById("msg");
 
   if(!placa){
-    msg.textContent="Informe a placa";
-    msg.style.color="red";
+    msg.textContent="⚠️ Informe a placa";
+    msg.className="msg erro";
     return;
   }
 
   msg.textContent="⏳ Atualizando...";
-  msg.style.color="#333";
+  msg.className="msg";
 
   fetch(SCRIPT_URL,{
     method:"POST",
@@ -93,12 +163,16 @@ function enviar(status){
   })
   .then(r=>r.text())
   .then(t=>{
-    msg.textContent=t;
-    msg.style.color=t.startsWith("✅")?"green":"red";
+    msg.textContent = t;
+    msg.className = t.startsWith("✅") ? "msg ok" : "msg erro";
+
+    if(t.startsWith("✅")){
+      setTimeout(()=>msg.style.display="none",3000);
+    }
   })
   .catch(()=>{
-    msg.textContent="Erro de conexão";
-    msg.style.color="red";
+    msg.textContent="❌ Erro de conexão";
+    msg.className="msg erro";
   });
 }
 </script>
