@@ -53,7 +53,7 @@ button:disabled{
 .btn-ok{background:#28a745;color:#fff;}
 .btn-off{background:#dc3545;color:#fff;}
 
-/* ÁREA CENTRAL (SPINNER / OK / ERRO) */
+/* FEEDBACK */
 .feedback{
   margin-top:16px;
   text-align:center;
@@ -77,7 +77,6 @@ button:disabled{
   font-weight:bold;
   animation:pop .4s ease;
 }
-
 .result.ok{color:#28a745;}
 .result.erro{color:#dc3545;}
 
@@ -96,10 +95,10 @@ button:disabled{
 <div class="container">
   <h2>🚚 Disponibilidade</h2>
 
-  <input id="placa" placeholder="Placa do caminhão">
-<input id="senha" type="password" placeholder="Senha do motorista">
+  <input id="placa" placeholder="Placa do caminhão"
+         oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
-  <datalist id="listaPlacas"></datalist>
+  <input id="senha" type="password" placeholder="Senha do motorista">
 
   <button id="btnOn" class="btn-ok" onclick="enviar('DISPONÍVEL')">
     ✅ Estou Disponível
@@ -109,7 +108,6 @@ button:disabled{
     ❌ Indisponível
   </button>
 
-  <!-- FEEDBACK CENTRAL -->
   <div class="feedback" id="feedback"></div>
 </div>
 
@@ -117,42 +115,19 @@ button:disabled{
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyASA07Os6URiszfAtZ7US85YGHbd2lUxhTgTHq3EyxS3uGt5Q3gcIVHQHLJkLqOl6P/exec";
 
-const CSV_CAMINHOES =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
-
 const btnOn = document.getElementById("btnOn");
 const btnOff = document.getElementById("btnOff");
 const feedback = document.getElementById("feedback");
 
-/* FORMATA PLACA */
-function formatarPlaca(el){
-  el.value = el.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+function setLoading(v){
+  btnOn.disabled = v;
+  btnOff.disabled = v;
 }
-
-/* CARREGAR PLACAS */
-async function carregarPlacas(){
-  try{
-    const r = await fetch(CSV_CAMINHOES + "&t=" + Date.now());
-    const t = await r.text();
-    const dl = document.getElementById("listaPlacas");
-    dl.innerHTML = "";
-    t.split("\n").slice(1).forEach(l=>{
-      const c = l.split(",");
-      if(c[0]){
-        const opt=document.createElement("option");
-        opt.value=c[0];
-        dl.appendChild(opt);
-      }
-    });
-  }catch(e){}
-}
-carregarPlacas();
 
 /* ENVIAR */
 function enviar(status){
   const placa = document.getElementById("placa").value.trim().toUpperCase();
   const senha = document.getElementById("senha").value.trim();
-  const feedback = document.getElementById("msg");
 
   if(!placa || !senha){
     feedback.innerHTML =
@@ -160,6 +135,7 @@ function enviar(status){
     return;
   }
 
+  setLoading(true);
   feedback.innerHTML = `<div class="spinner"></div>`;
 
   fetch(SCRIPT_URL,{
@@ -180,14 +156,17 @@ function enviar(status){
       feedback.innerHTML =
         `<div class="result erro">${t}</div>`;
     }
-    setTimeout(()=>feedback.innerHTML="",3000);
+    setTimeout(()=>{
+      feedback.innerHTML="";
+      setLoading(false);
+    },2500);
   })
   .catch(()=>{
     feedback.innerHTML =
       `<div class="result erro">❌ Erro de conexão</div>`;
+    setLoading(false);
   });
 }
-
 </script>
 
 </body>
