@@ -59,20 +59,6 @@ button:disabled{opacity:0.6;}
 .status.ok{background:#28a745;color:#fff;}
 .status.off{background:#dc3545;color:#fff;}
 
-.tag-proximo{
-  font-size:11px;
-  font-weight:bold;
-  color:#D71920;
-  display:flex;
-  gap:6px;
-}
-.sino{animation:pulsar 1s infinite;}
-@keyframes pulsar{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.3)}
-  100%{transform:scale(1)}
-}
-
 .spinner{
   border:4px solid #f3f3f3;
   border-top:4px solid #D71920;
@@ -83,13 +69,6 @@ button:disabled{opacity:0.6;}
   margin:20px auto;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.btn-remover{
-  background:#D71920;
-  color:#fff;
-  border:none;
-  padding:6px 10px;
-}
 
 footer{
   text-align:center;
@@ -117,47 +96,30 @@ footer{
   <div class="lista" id="listaFila"></div>
 
   <h3>📋 Disponibilidade dos Caminhões</h3>
-  <div id="statusDisp" style="text-align:center;font-size:11px;opacity:.7"></div>
   <div class="lista" id="listaDisp"></div>
 </div>
 
 <footer>© Copywriter Renato Monteiro</footer>
 
-<!-- 🔒 IFRAME OCULTO (ESSENCIAL) -->
-<iframe name="hidden_iframe" style="display:none;"></iframe>
-
 <script>
-/* CONFIG */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyUuvIhp63EiaGMHJ0QXkSgiUaOP5ppI05GjCq0L2lhDENuyvoyEpmSiQGziU4lVKt-/exec";
 const CSV_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 const CSV_DISP = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
-let cadastro={}, disponibilidade={}, filaPlacas={}, ultimaAtualizacao=0;
+let cadastro={}, disponibilidade={}, filaPlacas={};
 
-const listaFila = document.getElementById("listaFila");
-const listaDisp = document.getElementById("listaDisp");
+const listaFila=document.getElementById("listaFila");
+const listaDisp=document.getElementById("listaDisp");
 
-/* POST SEM REDIRECIONAR */
-function post(d){
-  const f=document.createElement("form");
-  f.method="POST";
-  f.action=SCRIPT_URL;
-  f.target="hidden_iframe";   // ✅ CORREÇÃO CRÍTICA
-
-  Object.keys(d).forEach(k=>{
-    const i=document.createElement("input");
-    i.name=k; i.value=d[k];
-    f.appendChild(i);
+async function post(dados){
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:new URLSearchParams(dados)
   });
-
-  document.body.appendChild(f);
-  f.submit();
-  f.remove();
 }
 
-/* === RESTANTE DO CÓDIGO PERMANECE IGUAL === */
-
+/* DADOS */
 async function carregarCaminhoes(){
   const r=await fetch(CSV_CAMINHOES+"&t="+Date.now());
   const t=await r.text();
@@ -198,29 +160,26 @@ async function carregarFila(){
     listaFila.innerHTML+=`
       <div class="item ${i===0?"proximo":""}">
         <div>
-          ${i===0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
           <b>${c[1]}</b><br>
           Comp: ${c[2]}<br>
           <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">${status}</span>
         </div>
-        <button class="btn-remover" onclick="remover('${c[1]}')">Excluir</button>
       </div>`;
   });
 }
 
 function carregarListaDisponibilidade(){
   listaDisp.innerHTML="";
-  const listaOrdenada=Object.entries(disponibilidade)
+  Object.entries(disponibilidade)
     .filter(([p])=>!filaPlacas[p])
-    .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
-
-  listaOrdenada.forEach(([placa,status])=>{
-    listaDisp.innerHTML+=`
-      <div class="item">
-        <b>${placa}</b>
-        <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">${status}</span>
-      </div>`;
-  });
+    .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1)
+    .forEach(([placa,status])=>{
+      listaDisp.innerHTML+=`
+        <div class="item">
+          <b>${placa}</b>
+          <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">${status}</span>
+        </div>`;
+    });
 }
 
 function buscarCompartimento(){
@@ -229,33 +188,28 @@ function buscarCompartimento(){
   compartimento.value=cadastro[p]||"";
 }
 
-function adicionarFila(){
+async function adicionarFila(){
   buscarCompartimento();
   if(!placa.value||!compartimento.value||!senha.value){
     alert("Dados inválidos");
     return;
   }
-  post({acao:"inserir",placa:placa.value,senha:senha.value});
-  setTimeout(atualizarTudo,600);
+  await post({acao:"inserir",placa:placa.value,senha:senha.value});
+  atualizarTudo();
 }
 
-function chamarProximo(){
-  post({acao:"chamar",senha:senha.value});
-  setTimeout(atualizarTudo,600);
-}
-
-function remover(placa){
-  post({acao:"remover",placa:placa,senha:senha.value});
-  setTimeout(atualizarTudo,800);
+async function chamarProximo(){
+  await post({acao:"chamar",senha:senha.value});
+  atualizarTudo();
 }
 
 async function atualizarTudo(){
   await carregarDisponibilidade();
   await carregarFila();
   carregarListaDisponibilidade();
-  ultimaAtualizacao=Date.now();
 }
 
+/* INIT */
 carregarCaminhoes();
 atualizarTudo();
 setInterval(atualizarTudo,30000);
