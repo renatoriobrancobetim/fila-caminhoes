@@ -14,8 +14,7 @@ body{
   padding:20px;
 }
 .container{max-width:480px;margin:auto;}
-h2{text-align:center;}
-h3{text-align:center;margin-top:30px;}
+h2,h3{text-align:center;}
 
 input,button{
   width:100%;
@@ -29,7 +28,7 @@ button{
   border:none;
   cursor:pointer;
 }
-button:disabled{opacity:0.6;cursor:not-allowed;}
+button:disabled{opacity:0.6;}
 
 .lista{
   margin-top:20px;
@@ -56,8 +55,6 @@ button:disabled{opacity:0.6;cursor:not-allowed;}
   font-weight:bold;
   padding:4px 8px;
   border-radius:6px;
-  margin-top:4px;
-  display:inline-block;
 }
 .status.ok{background:#28a745;color:#fff;}
 .status.off{background:#dc3545;color:#fff;}
@@ -98,7 +95,7 @@ footer{
   text-align:center;
   font-size:12px;
   margin-top:30px;
-  opacity:0.8;
+  opacity:.8;
 }
 </style>
 </head>
@@ -116,16 +113,10 @@ footer{
   <button onclick="adicionarFila()">Adicionar à Fila</button>
   <button onclick="chamarProximo()">🔔 Chamar Próximo</button>
 
-  <!-- FILA -->
-  <div class="lista" id="listaFila">
-    <div class="spinner"></div>
-  </div>
+  <div class="lista" id="listaFila"></div>
 
-  <!-- DISPONIBILIDADE -->
   <h3>📋 Disponibilidade dos Caminhões</h3>
-  <div class="lista" id="listaDisp">
-    <div class="spinner"></div>
-  </div>
+  <div class="lista" id="listaDisp"></div>
 </div>
 
 <footer>© Copywriter Renato Monteiro</footer>
@@ -136,12 +127,12 @@ const CSV_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-
 const CSV_CAMINHOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
 const CSV_DISP = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
-let cadastro={}, disponibilidade={};
+let cadastro={}, disponibilidade={}, filaPlacas={};
 
-const listaFila = document.getElementById("listaFila");
-const listaDisp = document.getElementById("listaDisp");
+const listaFila=document.getElementById("listaFila");
+const listaDisp=document.getElementById("listaDisp");
 
-/* CAMINHÕES */
+/* LOAD CAMINHÕES */
 async function carregarCaminhoes(){
   const r=await fetch(CSV_CAMINHOES+"&t="+Date.now());
   const t=await r.text();
@@ -152,7 +143,7 @@ async function carregarCaminhoes(){
   });
 }
 
-/* DISPONIBILIDADE */
+/* LOAD DISPONIBILIDADE */
 async function carregarDisponibilidade(){
   const r=await fetch(CSV_DISP+"&t="+Date.now());
   const t=await r.text();
@@ -166,7 +157,7 @@ async function carregarDisponibilidade(){
 /* FILA */
 async function carregarFila(){
   listaFila.innerHTML='<div class="spinner"></div>';
-  await carregarDisponibilidade();
+  filaPlacas={};
 
   const r=await fetch(CSV_FILA+"&t="+Date.now());
   const t=await r.text();
@@ -180,6 +171,7 @@ async function carregarFila(){
 
   linhas.forEach((l,i)=>{
     const c=l.split(",");
+    filaPlacas[c[1]] = true; // 🔴 MARCA PLACA NA FILA
     const status = disponibilidade[c[1]] || "INDISPONÍVEL";
 
     listaFila.innerHTML+=`
@@ -195,14 +187,16 @@ async function carregarFila(){
   });
 }
 
-/* LISTA DISPONIBILIDADE */
+/* DISPONIBILIDADE (SEM QUEM JÁ ESTÁ NA FILA) */
 function carregarListaDisponibilidade(){
   listaDisp.innerHTML="";
+
   const ordenado = Object.entries(disponibilidade)
+    .filter(([placa,status]) => !filaPlacas[placa]) // ✅ REMOVE DA LISTA
     .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
 
   if(!ordenado.length){
-    listaDisp.innerHTML="<div class='item'>Nenhum registro</div>";
+    listaDisp.innerHTML="<div class='item'>Nenhum caminhão disponível</div>";
     return;
   }
 
@@ -233,7 +227,6 @@ function chamarProximo(){
 
 function remover(placa){
   if(!confirm("Remover "+placa+"?")) return;
-  if(!senha.value){alert("Informe a senha");return;}
   post({acao:"remover",placa:placa,senha:senha.value});
   setTimeout(atualizarTudo,800);
 }
@@ -256,7 +249,7 @@ function post(d){
 
 async function atualizarTudo(){
   await carregarDisponibilidade();
-  carregarFila();
+  await carregarFila();
   carregarListaDisponibilidade();
 }
 
