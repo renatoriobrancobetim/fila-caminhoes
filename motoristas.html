@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Disponibilidade do Motorista</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0A3D91;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+.container{
+  background:#fff;
+  color:#000;
+  padding:24px;
+  border-radius:16px;
+  width:100%;
+  max-width:360px;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+h2{text-align:center;margin-top:0;}
+input,button{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  margin-top:12px;
+}
+button{
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.btn-ok{background:#28a745;color:#fff;}
+.btn-off{background:#dc3545;color:#fff;}
+.msg{
+  text-align:center;
+  margin-top:12px;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>🚚 Disponibilidade</h2>
+
+  <input id="placa" placeholder="Placa do caminhão">
+
+  <button class="btn-ok" onclick="enviar('DISPONÍVEL')">
+    ✅ Estou Disponível
+  </button>
+
+  <button class="btn-off" onclick="enviar('INDISPONÍVEL')">
+    ❌ Indisponível
+  </button>
+
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbwCaUKLrzWf3sBUJTOk7_nV0k3CkzwwU-DbMGLuTlJJETC8Y3EVmZizK2u0lpU18aBl/exec";
+
+function enviar(status){
+  const placa = document.getElementById("placa").value.trim().toUpperCase();
+  const msg = document.getElementById("msg");
+
+  if(!placa){
+    msg.textContent="Informe a placa";
+    msg.style.color="red";
+    return;
+  }
+
+  msg.textContent="⏳ Atualizando...";
+  msg.style.color="#333";
+
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      acao:"disponibilidade",
+      placa:placa,
+      status:status
+    })
+  })
+  .then(r=>r.text())
+  .then(t=>{
+    msg.textContent=t;
+    msg.style.color=t.startsWith("✅")?"green":"red";
+  })
+  .catch(()=>{
+    msg.textContent="Erro de conexão";
+    msg.style.color="red";
+  });
+}
+</script>
+
+</body>
+</html>
