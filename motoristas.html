@@ -26,7 +26,7 @@ body{
   max-width:360px;
   box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
-h2{text-align:center;margin-top:0;}
+h2,h3{text-align:center;margin-top:0;}
 
 input,button{
   width:100%;
@@ -35,9 +35,7 @@ input,button{
   margin-top:12px;
 }
 
-input{
-  text-transform:uppercase;
-}
+input{ text-transform:uppercase; }
 
 button{
   border:none;
@@ -46,10 +44,7 @@ button{
   font-weight:bold;
 }
 
-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
+button:disabled{ opacity:.6; }
 
 .btn-ok{background:#28a745;color:#fff;}
 .btn-off{background:#dc3545;color:#fff;}
@@ -81,13 +76,33 @@ button:disabled{
 .result.ok{color:#28a745;}
 .result.erro{color:#dc3545;}
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* LISTAS */
+.lista{
+  margin-top:14px;
+  background:#f9f9f9;
+  border-radius:10px;
+  overflow:hidden;
 }
-@keyframes pop{
-  from{transform:scale(.8);opacity:0}
-  to{transform:scale(1);opacity:1}
+
+.item{
+  padding:10px;
+  border-bottom:1px solid #ddd;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
+
+.status{
+  font-size:11px;
+  font-weight:bold;
+  padding:4px 8px;
+  border-radius:6px;
+}
+.status.ok{background:#28a745;color:#fff;}
+.status.off{background:#dc3545;color:#fff;}
 
 /* RODAPÉ */
 footer{
@@ -105,7 +120,7 @@ footer{
   <h2>🚚 Disponibilidade</h2>
 
   <input id="placa" placeholder="Placa do caminhão"
-         oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+    oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
   <input id="senha" type="password" placeholder="Senha do motorista">
 
@@ -118,6 +133,9 @@ footer{
   </button>
 
   <div class="feedback" id="feedback"></div>
+
+  <h3>📋 Caminhões</h3>
+  <div class="lista" id="listaDisp"></div>
 </div>
 
 <footer>
@@ -128,9 +146,13 @@ footer{
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyUuvIhp63EiaGMHJ0QXkSgiUaOP5ppI05GjCq0L2lhDENuyvoyEpmSiQGziU4lVKt-/exec";
 
+const CSV_DISP =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
+
 const btnOn = document.getElementById("btnOn");
 const btnOff = document.getElementById("btnOff");
 const feedback = document.getElementById("feedback");
+const listaDisp = document.getElementById("listaDisp");
 
 document.getElementById("ano").textContent = new Date().getFullYear();
 
@@ -139,7 +161,7 @@ function setLoading(v){
   btnOff.disabled = v;
 }
 
-/* ENVIAR */
+/* ENVIAR STATUS */
 function enviar(status){
   const placa = document.getElementById("placa").value.trim().toUpperCase();
   const senha = document.getElementById("senha").value.trim();
@@ -164,17 +186,16 @@ function enviar(status){
   })
   .then(r=>r.text())
   .then(t=>{
-    if(t.trim()==="OK"){
-      feedback.innerHTML =
-        `<div class="result ok">✅ OK</div>`;
-    }else{
-      feedback.innerHTML =
-        `<div class="result erro">${t}</div>`;
-    }
+    feedback.innerHTML =
+      t.trim()==="OK"
+        ? `<div class="result ok">✅ OK</div>`
+        : `<div class="result erro">${t}</div>`;
+
     setTimeout(()=>{
       feedback.innerHTML="";
       setLoading(false);
-    },2500);
+      carregarDisponibilidade();
+    },2000);
   })
   .catch(()=>{
     feedback.innerHTML =
@@ -182,6 +203,36 @@ function enviar(status){
     setLoading(false);
   });
 }
+
+/* LISTA DISPONIBILIDADE */
+async function carregarDisponibilidade(){
+  listaDisp.innerHTML = `<div class="spinner"></div>`;
+
+  const r = await fetch(CSV_DISP + "&t=" + Date.now());
+  const t = await r.text();
+
+  const dados = t.split("\n").slice(1)
+    .map(l=>l.split(","))
+    .filter(c=>c[0]);
+
+  dados.sort((a,b)=> a[1]==="DISPONÍVEL" ? -1 : 1);
+
+  listaDisp.innerHTML = "";
+
+  dados.forEach(c=>{
+    listaDisp.innerHTML += `
+      <div class="item">
+        <span>${c[0]}</span>
+        <span class="status ${c[1]==="DISPONÍVEL"?"ok":"off"}">${c[1]}</span>
+      </div>`;
+  });
+}
+
+/* INIT */
+carregarDisponibilidade();
+
+/* 🔁 ATUALIZAÇÃO AUTOMÁTICA */
+setInterval(carregarDisponibilidade, 30000);
 </script>
 
 </body>
