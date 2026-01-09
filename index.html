@@ -34,6 +34,12 @@ button{
 }
 button:disabled{opacity:.6}
 
+.btn-call{
+  width:100%;
+  margin-top:10px;
+  font-weight:bold;
+}
+
 .lista{
   margin-top:20px;
   background:#fff;
@@ -96,6 +102,9 @@ footer{
 
   <!-- SENHA ÚNICA -->
   <input id="senha" type="password" placeholder="Senha">
+
+  <!-- BOTÃO CHAMAR PRÓXIMO -->
+  <button class="btn-call" onclick="chamarProximo()">🔔 Chamar Próximo</button>
 
   <!-- FILA -->
   <div class="lista" id="listaFila">
@@ -217,7 +226,7 @@ function carregarListaDisponibilidade(){
   });
 }
 
-/* ================= AÇÃO ================= */
+/* ================= AÇÕES ================= */
 function adicionarFila(placa){
   const senha = document.getElementById("senha").value.trim();
   if(!senha){
@@ -225,6 +234,16 @@ function adicionarFila(placa){
     return;
   }
   post({acao:"inserir", placa:placa, senha:senha});
+  setTimeout(atualizarTudo,800);
+}
+
+function chamarProximo(){
+  const senha = document.getElementById("senha").value.trim();
+  if(!senha){
+    alert("Informe a senha");
+    return;
+  }
+  post({acao:"chamar", senha:senha});
   setTimeout(atualizarTudo,800);
 }
 
