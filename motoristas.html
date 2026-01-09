@@ -43,8 +43,7 @@ button{
   cursor:pointer;
   font-weight:bold;
 }
-
-button:disabled{ opacity:.6; }
+button:disabled{ opacity:.6; cursor:not-allowed; }
 
 .btn-ok{background:#28a745;color:#fff;}
 .btn-off{background:#dc3545;color:#fff;}
@@ -69,7 +68,7 @@ button:disabled{ opacity:.6; }
 
 /* OK / ERRO */
 .result{
-  font-size:22px;
+  font-size:20px;
   font-weight:bold;
   animation:pop .4s ease;
 }
@@ -79,14 +78,13 @@ button:disabled{ opacity:.6; }
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
 
-/* LISTAS */
+/* LISTA */
 .lista{
   margin-top:14px;
-  background:#f9f9f9;
+  background:#f4f4f4;
   border-radius:10px;
   overflow:hidden;
 }
-
 .item{
   padding:10px;
   border-bottom:1px solid #ddd;
@@ -94,7 +92,6 @@ button:disabled{ opacity:.6; }
   justify-content:space-between;
   align-items:center;
 }
-
 .status{
   font-size:11px;
   font-weight:bold;
@@ -143,12 +140,14 @@ footer{
 </footer>
 
 <script>
+/* ========= CONFIG ========= */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyYT5ktdPKmLhiSKG0F26yfCYPVKgCm6ONX6F3GMZhvT76gBSALdpqxvgPs9OtaDq9_/exec";
 
 const CSV_DISP =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
+/* ========= ELEMENTOS ========= */
 const btnOn = document.getElementById("btnOn");
 const btnOff = document.getElementById("btnOff");
 const feedback = document.getElementById("feedback");
@@ -161,7 +160,7 @@ function setLoading(v){
   btnOff.disabled = v;
 }
 
-/* ENVIAR STATUS */
+/* ========= ENVIAR STATUS ========= */
 function enviar(status){
   const placa = document.getElementById("placa").value.trim().toUpperCase();
   const senha = document.getElementById("senha").value.trim();
@@ -186,52 +185,63 @@ function enviar(status){
   })
   .then(r=>r.text())
   .then(t=>{
+    const resp = (t || "").trim();
+
     feedback.innerHTML =
-      t.trim()==="OK"
+      resp === "OK"
         ? `<div class="result ok">✅ OK</div>`
-        : `<div class="result erro">${t}</div>`;
+        : `<div class="result erro">${resp || "Erro desconhecido"}</div>`;
 
     setTimeout(()=>{
       feedback.innerHTML="";
       setLoading(false);
       carregarDisponibilidade();
-    },2000);
+    },2200);
   })
   .catch(()=>{
     feedback.innerHTML =
-      `<div class="result erro">❌ Erro de conexão</div>`;
+      `<div class="result erro">❌ Falha de conexão</div>`;
     setLoading(false);
   });
 }
 
-/* LISTA DISPONIBILIDADE */
+/* ========= LISTA ========= */
 async function carregarDisponibilidade(){
   listaDisp.innerHTML = `<div class="spinner"></div>`;
 
-  const r = await fetch(CSV_DISP + "&t=" + Date.now());
-  const t = await r.text();
+  try{
+    const r = await fetch(CSV_DISP + "&t=" + Date.now());
+    const t = await r.text();
 
-  const dados = t.split("\n").slice(1)
-    .map(l=>l.split(","))
-    .filter(c=>c[0]);
+    const dados = t.split("\n").slice(1)
+      .map(l=>l.split(","))
+      .filter(c=>c[0]);
 
-  dados.sort((a,b)=> a[1]==="DISPONÍVEL" ? -1 : 1);
+    dados.sort((a,b)=> a[1]==="DISPONÍVEL" ? -1 : 1);
 
-  listaDisp.innerHTML = "";
+    listaDisp.innerHTML = "";
 
-  dados.forEach(c=>{
-    listaDisp.innerHTML += `
-      <div class="item">
-        <span>${c[0]}</span>
-        <span class="status ${c[1]==="DISPONÍVEL"?"ok":"off"}">${c[1]}</span>
-      </div>`;
-  });
+    if(!dados.length){
+      listaDisp.innerHTML =
+        `<div class="item">Nenhum caminhão</div>`;
+      return;
+    }
+
+    dados.forEach(c=>{
+      listaDisp.innerHTML += `
+        <div class="item">
+          <span>${c[0]}</span>
+          <span class="status ${c[1]==="DISPONÍVEL"?"ok":"off"}">${c[1]}</span>
+        </div>`;
+    });
+  }catch{
+    listaDisp.innerHTML =
+      `<div class="item">Erro ao carregar</div>`;
+  }
 }
 
-/* INIT */
+/* ========= INIT ========= */
 carregarDisponibilidade();
-
-/* 🔁 ATUALIZAÇÃO AUTOMÁTICA */
 setInterval(carregarDisponibilidade, 30000);
 </script>
 
