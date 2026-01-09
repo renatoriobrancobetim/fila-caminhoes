@@ -149,15 +149,19 @@ const listaDisp = document.getElementById("listaDisp");
 
 /* ================= POST OCULTO ================= */
 function post(d){
-  const f=document.createElement("form");
-  f.method="POST";
-  f.action=SCRIPT_URL;
-  f.target="hidden_iframe";
+  const f = document.createElement("form");
+  f.method = "POST";
+  f.action = SCRIPT_URL;
+  f.target = "hidden_iframe"; // 🔴 ISSO É O QUE ESTAVA FALTANDO
+
   Object.keys(d).forEach(k=>{
-    const i=document.createElement("input");
-    i.name=k; i.value=d[k];
+    const i = document.createElement("input");
+    i.type = "hidden";
+    i.name = k;
+    i.value = d[k];
     f.appendChild(i);
   });
+
   document.body.appendChild(f);
   f.submit();
   f.remove();
@@ -279,6 +283,7 @@ carregarCaminhoes();
 atualizarTudo();
 setInterval(atualizarTudo,30000);
 </script>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
 
 </body>
 </html>
