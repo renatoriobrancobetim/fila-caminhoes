@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Lançamento de Fila | Rio Branco</title>
+<title>Fila de Caminhões | Rio Branco</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -16,19 +16,23 @@ body{
 .container{max-width:480px;margin:auto;}
 h2,h3{text-align:center;}
 
-input,button{
+input{
   width:100%;
   padding:14px;
   font-size:16px;
   margin-top:10px;
 }
+
 button{
   background:#D71920;
   color:#fff;
   border:none;
   cursor:pointer;
+  padding:8px 12px;
+  border-radius:6px;
+  font-size:14px;
 }
-button:disabled{opacity:0.6;}
+button:disabled{opacity:.6}
 
 .lista{
   margin-top:20px;
@@ -55,41 +59,26 @@ button:disabled{opacity:0.6;}
   font-weight:bold;
   padding:4px 8px;
   border-radius:6px;
+  display:inline-block;
+  margin-top:4px;
 }
 .status.ok{background:#28a745;color:#fff;}
 .status.off{background:#dc3545;color:#fff;}
 
-.tag-proximo{
-  font-size:11px;
-  font-weight:bold;
-  color:#D71920;
-  display:flex;
-  gap:6px;
-}
-.sino{animation:pulsar 1s infinite;}
-@keyframes pulsar{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.3)}
-  100%{transform:scale(1)}
+.btn-add{
+  background:#28a745;
 }
 
 .spinner{
   border:4px solid #f3f3f3;
   border-top:4px solid #D71920;
   border-radius:50%;
-  width:28px;
-  height:28px;
+  width:26px;
+  height:26px;
   animation:spin 1s linear infinite;
   margin:20px auto;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.btn-remover{
-  background:#D71920;
-  color:#fff;
-  border:none;
-  padding:6px 10px;
-}
 
 footer{
   text-align:center;
@@ -103,44 +92,38 @@ footer{
 <body>
 
 <div class="container">
-  <h2>🚚 Lançamento de Caminhão</h2>
+  <h2>🚚 Fila de Caminhões</h2>
 
-  <input id="placa" placeholder="Placa do caminhão"
-    oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
-
-  <input id="compartimento" placeholder="Compartimento" readonly>
+  <!-- SENHA ÚNICA -->
   <input id="senha" type="password" placeholder="Senha">
 
-  <button onclick="adicionarFila()">Adicionar à Fila</button>
-  <button onclick="chamarProximo()">🔔 Chamar Próximo</button>
-
+  <!-- FILA -->
   <div class="lista" id="listaFila">
     <div class="spinner"></div>
   </div>
 
   <h3>📋 Disponibilidade dos Caminhões</h3>
-  <div class="lista" id="listaDisp"></div>
+  <div class="lista" id="listaDisp">
+    <div class="spinner"></div>
+  </div>
 </div>
 
 <footer>© Copywriter Renato Monteiro</footer>
 
-<!-- 🔒 IFRAME OCULTO (ESSENCIAL) -->
+<!-- IFRAME OCULTO -->
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
 /* ================= CONFIG ================= */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzLL3mSl_Uh2av-8b_0LdJSQxnfSfo-f-RWnjSIcKI3AM4pCHE1frCoCQHzj7y5hvuf/exec";
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbzLL3mSl_Uh2av-8b_0LdJSQxnfSfo-f-RWnjSIcKI3AM4pCHE1frCoCQHzj7y5hvuf/exec";
 
 const CSV_FILA =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 
-const CSV_CAMINHOES =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=694442282&single=true&output=csv";
-
 const CSV_DISP =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
-let cadastro = {};
 let disponibilidade = {};
 let filaPlacas = {};
 
@@ -152,13 +135,13 @@ function post(d){
   const f = document.createElement("form");
   f.method = "POST";
   f.action = SCRIPT_URL;
-  f.target = "hidden_iframe"; // 🔴 ISSO É O QUE ESTAVA FALTANDO
+  f.target = "hidden_iframe";
 
   Object.keys(d).forEach(k=>{
     const i = document.createElement("input");
-    i.type = "hidden";
-    i.name = k;
-    i.value = d[k];
+    i.type="hidden";
+    i.name=k;
+    i.value=d[k];
     f.appendChild(i);
   });
 
@@ -167,34 +150,14 @@ function post(d){
   f.remove();
 }
 
-/* ================= DADOS ================= */
-async function carregarCaminhoes(){
-  const r = await fetch(CSV_CAMINHOES+"&t="+Date.now());
-  const t = await r.text();
-  cadastro = {};
-  t.split("\n").slice(1).forEach(l=>{
-    const c=l.split(",");
-    if(c[0]) cadastro[c[0]] = c[1];
-  });
-}
-
-async function carregarDisponibilidade(){
-  const r = await fetch(CSV_DISP+"&t="+Date.now());
-  const t = await r.text();
-  disponibilidade = {};
-  t.split("\n").slice(1).forEach(l=>{
-    const c=l.split(",");
-    if(c[0]) disponibilidade[c[0]] = c[1];
-  });
-}
-
 /* ================= FILA ================= */
 async function carregarFila(){
   filaPlacas = {};
   const r = await fetch(CSV_FILA+"&t="+Date.now());
   const t = await r.text();
   const linhas = t.split("\n").slice(1);
-  listaFila.innerHTML = "";
+
+  listaFila.innerHTML="";
 
   if(!linhas.length){
     listaFila.innerHTML="<div class='item'>Fila vazia</div>";
@@ -203,25 +166,32 @@ async function carregarFila(){
 
   linhas.forEach((l,i)=>{
     const c=l.split(",");
-    filaPlacas[c[1]] = true;
-    const status = disponibilidade[c[1]] || "INDISPONÍVEL";
+    filaPlacas[c[1]]=true;
 
     listaFila.innerHTML+=`
       <div class="item ${i===0?"proximo":""}">
         <div>
-          ${i===0?'<div class="tag-proximo"><span class="sino">🔔</span>PRÓXIMO</div>':""}
           <b>${c[1]}</b><br>
-          Comp: ${c[2]}<br>
-          <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">${status}</span>
+          Comp: ${c[2]}
         </div>
-        <button class="btn-remover" onclick="remover('${c[1]}')">Excluir</button>
       </div>`;
   });
 }
 
 /* ================= DISPONIBILIDADE ================= */
+async function carregarDisponibilidade(){
+  const r = await fetch(CSV_DISP+"&t="+Date.now());
+  const t = await r.text();
+  disponibilidade = {};
+  t.split("\n").slice(1).forEach(l=>{
+    const c=l.split(",");
+    if(c[0]) disponibilidade[c[0]]=c[1];
+  });
+}
+
 function carregarListaDisponibilidade(){
   listaDisp.innerHTML="";
+
   const listaOrdenada = Object.entries(disponibilidade)
     .filter(([placa])=>!filaPlacas[placa])
     .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
@@ -238,52 +208,40 @@ function carregarListaDisponibilidade(){
           <b>${placa}</b><br>
           <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">${status}</span>
         </div>
+        ${
+          status==="DISPONÍVEL"
+          ? `<button class="btn-add" onclick="adicionarFila('${placa}')">➕ Fila</button>`
+          : ``
+        }
       </div>`;
   });
 }
 
-/* ================= AÇÕES ================= */
-function buscarCompartimento(){
-  const p=placa.value.trim().toUpperCase();
-  placa.value=p;
-  compartimento.value=cadastro[p]||"";
-}
-
-function adicionarFila(){
-  buscarCompartimento();
-  if(!placa.value||!compartimento.value||!senha.value){
-    alert("Dados inválidos");
+/* ================= AÇÃO ================= */
+function adicionarFila(placa){
+  const senha = document.getElementById("senha").value.trim();
+  if(!senha){
+    alert("Informe a senha");
     return;
   }
-  post({acao:"inserir", placa:placa.value, senha:senha.value});
-  setTimeout(atualizarTudo,800);
-}
-
-function chamarProximo(){
-  if(!senha.value){alert("Informe a senha");return;}
-  post({acao:"chamar", senha:senha.value});
-  setTimeout(atualizarTudo,800);
-}
-
-function remover(placa){
-  if(!confirm("Remover "+placa+"?")) return;
-  post({acao:"remover", placa:placa, senha:senha.value});
+  post({acao:"inserir", placa:placa, senha:senha});
   setTimeout(atualizarTudo,800);
 }
 
 /* ================= ATUALIZAÇÃO ================= */
 async function atualizarTudo(){
+  listaFila.innerHTML='<div class="spinner"></div>';
+  listaDisp.innerHTML='<div class="spinner"></div>';
+
   await carregarDisponibilidade();
   await carregarFila();
   carregarListaDisponibilidade();
 }
 
 /* INIT */
-carregarCaminhoes();
 atualizarTudo();
 setInterval(atualizarTudo,30000);
 </script>
-<iframe name="hidden_iframe" style="display:none;"></iframe>
 
 </body>
 </html>
