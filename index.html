@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Fila de Caminhões | Rio Branco</title>
+<title>Fila de Caminhões | Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -16,13 +16,6 @@ body{
 .container{max-width:480px;margin:auto;}
 h2,h3{text-align:center;}
 
-input{
-  width:100%;
-  padding:14px;
-  font-size:16px;
-  margin-top:10px;
-}
-
 button{
   background:#D71920;
   color:#fff;
@@ -32,17 +25,8 @@ button{
   border-radius:6px;
   font-size:14px;
 }
-button:disabled{opacity:.6}
-
-.btn-call{
-  width:100%;
-  margin-top:10px;
-  font-weight:bold;
-}
-
-.btn-add{
-  background:#28a745;
-}
+.btn-call{width:100%;margin-bottom:10px;}
+.btn-add{background:#28a745;}
 
 .lista{
   margin-top:20px;
@@ -50,7 +34,6 @@ button:disabled{opacity:.6}
   color:#000;
   border-radius:10px;
 }
-
 .item{
   display:flex;
   justify-content:space-between;
@@ -58,19 +41,15 @@ button:disabled{opacity:.6}
   border-bottom:1px solid #ddd;
   align-items:center;
 }
-
 .item.proximo{
   background:#FFF3CD;
   border-left:6px solid #D71920;
 }
-
 .status{
   font-size:11px;
   font-weight:bold;
   padding:4px 8px;
   border-radius:6px;
-  display:inline-block;
-  margin-top:4px;
 }
 .status.ok{background:#28a745;color:#fff;}
 .status.off{background:#dc3545;color:#fff;}
@@ -86,66 +65,40 @@ button:disabled{opacity:.6}
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-footer{
+.logout{
   text-align:center;
+  margin-top:12px;
   font-size:12px;
-  margin-top:30px;
+  cursor:pointer;
   opacity:.8;
 }
-
-/* ================= TOAST ================= */
-.toast{
-  position:fixed;
-  top:16px;
-  left:50%;
-  transform:translateX(-50%) translateY(-10px);
-  background:#333;
-  color:#fff;
-  padding:12px 18px;
-  border-radius:8px;
-  font-weight:bold;
-  font-size:14px;
-  z-index:9999;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .3s, transform .3s;
-}
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-.toast.ok{background:#28a745;}
-.toast.erro{background:#dc3545;}
 </style>
 </head>
 
 <body>
 
-<div id="toast" class="toast"></div>
-
 <div class="container">
   <h2>🚚 Fila de Caminhões</h2>
 
-  <input id="senha" type="password" placeholder="Senha administrativa">
-
   <button class="btn-call" onclick="chamarProximo()">🔔 Chamar Próximo</button>
 
-  <div class="lista" id="listaFila">
-    <div class="spinner"></div>
-  </div>
+  <div class="lista" id="listaFila"><div class="spinner"></div></div>
 
-  <h3>📋 Disponibilidade dos Caminhões</h3>
-  <div class="lista" id="listaDisp">
-    <div class="spinner"></div>
-  </div>
+  <h3>📋 Disponibilidade</h3>
+  <div class="lista" id="listaDisp"><div class="spinner"></div></div>
+
+  <div class="logout" onclick="logout()">🚪 Sair</div>
 </div>
-
-<footer>© Copywriter Renato Monteiro</footer>
 
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-/* ================= CONFIG ================= */
+/* 🔐 PROTEÇÃO */
+if(localStorage.getItem("adminLogado")!=="1"){
+  window.location.href="login.html";
+}
+
+/* CONFIG */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbziQJYvyBVIKSOTsI_QNk61DZOE4JO_3JBkHQp6VR0abFVreuodj8qtkJ__5AL0EFUf/exec";
 
@@ -155,152 +108,107 @@ const CSV_FILA =
 const CSV_DISP =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
-let disponibilidade = {};
-let filaPlacas = {};
-let filaAnterior = {};
+const SENHA_ADMIN = "Rio2026@";
 
-const listaFila = document.getElementById("listaFila");
-const listaDisp = document.getElementById("listaDisp");
+let disponibilidade={}, filaPlacas={};
 
-/* ================= TOAST ================= */
-function showToast(msg, tipo="ok"){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = `toast ${tipo} show`;
-  setTimeout(()=>t.classList.remove("show"),2500);
-}
+const listaFila=document.getElementById("listaFila");
+const listaDisp=document.getElementById("listaDisp");
 
-/* ================= POST REAL (FETCH) ================= */
-async function post(d){
-  const r = await fetch(SCRIPT_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-    body:new URLSearchParams(d)
+/* POST */
+function post(d){
+  const f=document.createElement("form");
+  f.method="POST"; f.action=SCRIPT_URL; f.target="hidden_iframe";
+  Object.keys(d).forEach(k=>{
+    const i=document.createElement("input");
+    i.type="hidden"; i.name=k; i.value=d[k];
+    f.appendChild(i);
   });
-  return (await r.text()).trim();
+  document.body.appendChild(f);
+  f.submit(); f.remove();
 }
 
-/* ================= FILA ================= */
+/* FILA */
 async function carregarFila(){
-  filaAnterior = {...filaPlacas};
-  filaPlacas = {};
-
-  const r = await fetch(CSV_FILA+"&t="+Date.now());
-  const t = await r.text();
-  const linhas = t.split("\n").slice(1);
-
+  filaPlacas={};
+  const r=await fetch(CSV_FILA+"&t="+Date.now());
+  const t=await r.text();
+  const l=t.split("\n").slice(1);
   listaFila.innerHTML="";
 
-  if(!linhas.length){
+  if(!l.length){
     listaFila.innerHTML="<div class='item'>Fila vazia</div>";
-  }else{
-    linhas.forEach((l,i)=>{
-      const c=l.split(",");
-      filaPlacas[c[1]] = true;
-      listaFila.innerHTML+=`
-        <div class="item ${i===0?"proximo":""}">
-          <div>
-            <b>${c[1]}</b><br>
-            Comp: ${c[2]}
-          </div>
-        </div>`;
-    });
+    return;
   }
 
-  /* 🔔 NOTIFICAÇÕES */
-  Object.keys(filaPlacas).forEach(p=>{
-    if(!filaAnterior[p]) showToast(`🚚 ${p} entrou na fila`,"ok");
-  });
-  Object.keys(filaAnterior).forEach(p=>{
-    if(!filaPlacas[p]) showToast(`❌ ${p} saiu da fila`,"erro");
+  l.forEach((x,i)=>{
+    const c=x.split(",");
+    filaPlacas[c[1]]=true;
+    listaFila.innerHTML+=`
+      <div class="item ${i===0?"proximo":""}">
+        <div><b>${c[1]}</b><br>Comp: ${c[2]}</div>
+      </div>`;
   });
 }
 
-/* ================= DISPONIBILIDADE ================= */
+/* DISP */
 async function carregarDisponibilidade(){
-  const r = await fetch(CSV_DISP+"&t="+Date.now());
-  const t = await r.text();
-  disponibilidade = {};
+  const r=await fetch(CSV_DISP+"&t="+Date.now());
+  const t=await r.text();
+  disponibilidade={};
   t.split("\n").slice(1).forEach(l=>{
     const c=l.split(",");
     if(c[0]) disponibilidade[c[0]]=c[1];
   });
 }
 
-function carregarListaDisponibilidade(){
+function renderDisp(){
   listaDisp.innerHTML="";
-
-  const listaOrdenada = Object.entries(disponibilidade)
+  Object.entries(disponibilidade)
     .filter(([p])=>!filaPlacas[p])
-    .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
-
-  if(!listaOrdenada.length){
-    listaDisp.innerHTML="<div class='item'>Nenhum caminhão</div>";
-    return;
-  }
-
-  listaOrdenada.forEach(([placa,status])=>{
-    listaDisp.innerHTML+=`
-      <div class="item">
-        <div>
-          <b>${placa}</b><br>
-          <span class="status ${status==="DISPONÍVEL"?"ok":"off"}">${status}</span>
-        </div>
-        ${
-          status==="DISPONÍVEL"
-          ? `<button class="btn-add" onclick="adicionarFila('${placa}')">➕ Fila</button>`
-          : ``
-        }
-      </div>`;
-  });
+    .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1)
+    .forEach(([p,s])=>{
+      listaDisp.innerHTML+=`
+        <div class="item">
+          <div>
+            <b>${p}</b><br>
+            <span class="status ${s==="DISPONÍVEL"?"ok":"off"}">${s}</span>
+          </div>
+          ${
+            s==="DISPONÍVEL"
+            ? `<button class="btn-add" onclick="addFila('${p}')">➕ Fila</button>`
+            : ""
+          }
+        </div>`;
+    });
 }
 
-/* ================= AÇÕES ================= */
-async function adicionarFila(placa){
-  const senha = document.getElementById("senha").value.trim();
-  if(!senha){
-    alert("Informe a senha");
-    return;
-  }
-
-  const resp = await post({acao:"inserir",placa,senha});
-
-  if(resp==="OK"){
-    showToast(`🚚 ${placa} adicionado à fila`,"ok");
-    atualizarTudo();
-  }else{
-    showToast(resp,"erro");
-  }
+/* AÇÕES */
+function addFila(p){
+  post({acao:"inserir",placa:p,senha:SENHA_ADMIN});
+  setTimeout(atualizar,800);
+}
+function chamarProximo(){
+  post({acao:"chamar",senha:SENHA_ADMIN});
+  setTimeout(atualizar,800);
+}
+function logout(){
+  localStorage.removeItem("adminLogado");
+  location.href="login.html";
 }
 
-async function chamarProximo(){
-  const senha = document.getElementById("senha").value.trim();
-  if(!senha){
-    alert("Informe a senha");
-    return;
-  }
-
-  const resp = await post({acao:"chamar",senha});
-
-  if(resp==="OK"){
-    showToast("🔔 Próximo chamado","ok");
-    atualizarTudo();
-  }else{
-    showToast(resp,"erro");
-  }
-}
-
-/* ================= UPDATE ================= */
-async function atualizarTudo(){
+/* UPDATE */
+async function atualizar(){
   listaFila.innerHTML='<div class="spinner"></div>';
   listaDisp.innerHTML='<div class="spinner"></div>';
-
   await carregarDisponibilidade();
   await carregarFila();
-  carregarListaDisponibilidade();
+  renderDisp();
 }
 
-/* INIT */
-atualizarTudo();
-setInterval(atualizarTudo,30000);
+atualizar();
+setInterval(atualizar,30000);
 </script>
+
+</body>
+</html>
