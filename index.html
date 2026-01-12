@@ -40,6 +40,10 @@ button:disabled{opacity:.6}
   font-weight:bold;
 }
 
+.btn-add{
+  background:#28a745;
+}
+
 .lista{
   margin-top:20px;
   background:#fff;
@@ -71,10 +75,6 @@ button:disabled{opacity:.6}
 .status.ok{background:#28a745;color:#fff;}
 .status.off{background:#dc3545;color:#fff;}
 
-.btn-add{
-  background:#28a745;
-}
-
 .spinner{
   border:4px solid #f3f3f3;
   border-top:4px solid #D71920;
@@ -92,21 +92,44 @@ footer{
   margin-top:30px;
   opacity:.8;
 }
+
+/* ================= TOAST ================= */
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:#333;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:8px;
+  font-weight:bold;
+  font-size:14px;
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s, transform .3s;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.toast.ok{background:#28a745;}
+.toast.erro{background:#dc3545;}
 </style>
 </head>
 
 <body>
 
+<div id="toast" class="toast"></div>
+
 <div class="container">
   <h2>🚚 Fila de Caminhões</h2>
 
-  <!-- SENHA ÚNICA -->
-  <input id="senha" type="password" placeholder="Senha">
+  <input id="senha" type="password" placeholder="Senha administrativa">
 
-  <!-- BOTÃO CHAMAR PRÓXIMO -->
   <button class="btn-call" onclick="chamarProximo()">🔔 Chamar Próximo</button>
 
-  <!-- FILA -->
   <div class="lista" id="listaFila">
     <div class="spinner"></div>
   </div>
@@ -119,7 +142,6 @@ footer{
 
 <footer>© Copywriter Renato Monteiro</footer>
 
-<!-- IFRAME OCULTO -->
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
@@ -135,25 +157,32 @@ const CSV_DISP =
 
 let disponibilidade = {};
 let filaPlacas = {};
+let filaAnterior = {};
 
 const listaFila = document.getElementById("listaFila");
 const listaDisp = document.getElementById("listaDisp");
 
-/* ================= POST OCULTO ================= */
-function post(d){
-  const f = document.createElement("form");
-  f.method = "POST";
-  f.action = SCRIPT_URL;
-  f.target = "hidden_iframe";
+/* ================= TOAST ================= */
+function showToast(msg, tipo="ok"){
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.className = `toast ${tipo} show`;
+  setTimeout(()=>toast.classList.remove("show"),2500);
+}
 
+/* ================= POST ================= */
+function post(d){
+  const f=document.createElement("form");
+  f.method="POST";
+  f.action=SCRIPT_URL;
+  f.target="hidden_iframe";
   Object.keys(d).forEach(k=>{
-    const i = document.createElement("input");
+    const i=document.createElement("input");
     i.type="hidden";
     i.name=k;
     i.value=d[k];
     f.appendChild(i);
   });
-
   document.body.appendChild(f);
   f.submit();
   f.remove();
@@ -161,7 +190,9 @@ function post(d){
 
 /* ================= FILA ================= */
 async function carregarFila(){
+  filaAnterior = {...filaPlacas};
   filaPlacas = {};
+
   const r = await fetch(CSV_FILA+"&t="+Date.now());
   const t = await r.text();
   const linhas = t.split("\n").slice(1);
@@ -170,20 +201,26 @@ async function carregarFila(){
 
   if(!linhas.length){
     listaFila.innerHTML="<div class='item'>Fila vazia</div>";
-    return;
+  }else{
+    linhas.forEach((l,i)=>{
+      const c=l.split(",");
+      filaPlacas[c[1]]=true;
+      listaFila.innerHTML+=`
+        <div class="item ${i===0?"proximo":""}">
+          <div>
+            <b>${c[1]}</b><br>
+            Comp: ${c[2]}
+          </div>
+        </div>`;
+    });
   }
 
-  linhas.forEach((l,i)=>{
-    const c=l.split(",");
-    filaPlacas[c[1]]=true;
-
-    listaFila.innerHTML+=`
-      <div class="item ${i===0?"proximo":""}">
-        <div>
-          <b>${c[1]}</b><br>
-          Comp: ${c[2]}
-        </div>
-      </div>`;
+  /* NOTIFICAÇÕES */
+  Object.keys(filaPlacas).forEach(p=>{
+    if(!filaAnterior[p]) showToast(`🚚 ${p} entrou na fila`,"ok");
+  });
+  Object.keys(filaAnterior).forEach(p=>{
+    if(!filaPlacas[p]) showToast(`❌ ${p} saiu da fila`,"erro");
   });
 }
 
@@ -200,9 +237,8 @@ async function carregarDisponibilidade(){
 
 function carregarListaDisponibilidade(){
   listaDisp.innerHTML="";
-
   const listaOrdenada = Object.entries(disponibilidade)
-    .filter(([placa])=>!filaPlacas[placa])
+    .filter(([p])=>!filaPlacas[p])
     .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
 
   if(!listaOrdenada.length){
@@ -228,30 +264,21 @@ function carregarListaDisponibilidade(){
 
 /* ================= AÇÕES ================= */
 function adicionarFila(placa){
-  const senha = document.getElementById("senha").value.trim();
-  if(!senha){
-    alert("Informe a senha");
-    return;
-  }
-  post({acao:"inserir", placa:placa, senha:senha});
-  setTimeout(atualizarTudo,800);
+  const senha=document.getElementById("senha").value.trim();
+  if(!senha){alert("Informe a senha");return;}
+  post({acao:"inserir",placa:placa,senha:senha});
 }
 
 function chamarProximo(){
-  const senha = document.getElementById("senha").value.trim();
-  if(!senha){
-    alert("Informe a senha");
-    return;
-  }
-  post({acao:"chamar", senha:senha});
-  setTimeout(atualizarTudo,800);
+  const senha=document.getElementById("senha").value.trim();
+  if(!senha){alert("Informe a senha");return;}
+  post({acao:"chamar",senha:senha});
 }
 
-/* ================= ATUALIZAÇÃO ================= */
+/* ================= UPDATE ================= */
 async function atualizarTudo(){
   listaFila.innerHTML='<div class="spinner"></div>';
   listaDisp.innerHTML='<div class="spinner"></div>';
-
   await carregarDisponibilidade();
   await carregarFila();
   carregarListaDisponibilidade();
