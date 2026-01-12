@@ -164,28 +164,20 @@ const listaDisp = document.getElementById("listaDisp");
 
 /* ================= TOAST ================= */
 function showToast(msg, tipo="ok"){
-  const toast = document.getElementById("toast");
-  toast.textContent = msg;
-  toast.className = `toast ${tipo} show`;
-  setTimeout(()=>toast.classList.remove("show"),2500);
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = `toast ${tipo} show`;
+  setTimeout(()=>t.classList.remove("show"),2500);
 }
 
-/* ================= POST ================= */
-function post(d){
-  const f=document.createElement("form");
-  f.method="POST";
-  f.action=SCRIPT_URL;
-  f.target="hidden_iframe";
-  Object.keys(d).forEach(k=>{
-    const i=document.createElement("input");
-    i.type="hidden";
-    i.name=k;
-    i.value=d[k];
-    f.appendChild(i);
+/* ================= POST REAL (FETCH) ================= */
+async function post(d){
+  const r = await fetch(SCRIPT_URL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+    body:new URLSearchParams(d)
   });
-  document.body.appendChild(f);
-  f.submit();
-  f.remove();
+  return (await r.text()).trim();
 }
 
 /* ================= FILA ================= */
@@ -204,7 +196,7 @@ async function carregarFila(){
   }else{
     linhas.forEach((l,i)=>{
       const c=l.split(",");
-      filaPlacas[c[1]]=true;
+      filaPlacas[c[1]] = true;
       listaFila.innerHTML+=`
         <div class="item ${i===0?"proximo":""}">
           <div>
@@ -215,7 +207,7 @@ async function carregarFila(){
     });
   }
 
-  /* NOTIFICAÇÕES */
+  /* 🔔 NOTIFICAÇÕES */
   Object.keys(filaPlacas).forEach(p=>{
     if(!filaAnterior[p]) showToast(`🚚 ${p} entrou na fila`,"ok");
   });
@@ -237,6 +229,7 @@ async function carregarDisponibilidade(){
 
 function carregarListaDisponibilidade(){
   listaDisp.innerHTML="";
+
   const listaOrdenada = Object.entries(disponibilidade)
     .filter(([p])=>!filaPlacas[p])
     .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
@@ -263,22 +256,45 @@ function carregarListaDisponibilidade(){
 }
 
 /* ================= AÇÕES ================= */
-function adicionarFila(placa){
-  const senha=document.getElementById("senha").value.trim();
-  if(!senha){alert("Informe a senha");return;}
-  post({acao:"inserir",placa:placa,senha:senha});
+async function adicionarFila(placa){
+  const senha = document.getElementById("senha").value.trim();
+  if(!senha){
+    alert("Informe a senha");
+    return;
+  }
+
+  const resp = await post({acao:"inserir",placa,senha});
+
+  if(resp==="OK"){
+    showToast(`🚚 ${placa} adicionado à fila`,"ok");
+    atualizarTudo();
+  }else{
+    showToast(resp,"erro");
+  }
 }
 
-function chamarProximo(){
-  const senha=document.getElementById("senha").value.trim();
-  if(!senha){alert("Informe a senha");return;}
-  post({acao:"chamar",senha:senha});
+async function chamarProximo(){
+  const senha = document.getElementById("senha").value.trim();
+  if(!senha){
+    alert("Informe a senha");
+    return;
+  }
+
+  const resp = await post({acao:"chamar",senha});
+
+  if(resp==="OK"){
+    showToast("🔔 Próximo chamado","ok");
+    atualizarTudo();
+  }else{
+    showToast(resp,"erro");
+  }
 }
 
 /* ================= UPDATE ================= */
 async function atualizarTudo(){
   listaFila.innerHTML='<div class="spinner"></div>';
   listaDisp.innerHTML='<div class="spinner"></div>';
+
   await carregarDisponibilidade();
   await carregarFila();
   carregarListaDisponibilidade();
@@ -288,6 +304,3 @@ async function atualizarTudo(){
 atualizarTudo();
 setInterval(atualizarTudo,30000);
 </script>
-
-</body>
-</html>
