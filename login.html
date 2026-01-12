@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Login Administrativo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0A3D91;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+.box{
+  background:#fff;
+  padding:30px;
+  border-radius:14px;
+  width:100%;
+  max-width:320px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  text-align:center;
+}
+h2{margin-top:0;color:#0A3D91;}
+input,button{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  margin-top:14px;
+}
+button{
+  background:#D71920;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.msg{
+  margin-top:12px;
+  font-weight:bold;
+  color:#dc3545;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🔐 Login Admin</h2>
+
+  <input id="senha" type="password" placeholder="Senha administrativa">
+  <button onclick="login()">Entrar</button>
+
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+const SENHA_ADMIN = "Rio2026@"; // 🔐 mesma do App Script
+
+function login(){
+  const senha = document.getElementById("senha").value.trim();
+  const msg = document.getElementById("msg");
+
+  if(!senha){
+    msg.textContent = "Informe a senha";
+    return;
+  }
+
+  if(senha !== SENHA_ADMIN){
+    msg.textContent = "Senha inválida";
+    return;
+  }
+
+  // ✅ SALVA SESSÃO
+  localStorage.setItem("adminLogado","1");
+
+  // ➡ REDIRECIONA
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
