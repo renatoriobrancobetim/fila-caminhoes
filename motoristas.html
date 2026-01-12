@@ -157,6 +157,10 @@ const listaDisp = document.getElementById("listaDisp");
 
 document.getElementById("ano").textContent = new Date().getFullYear();
 
+/* ========= POLLING ========= */
+let ultimoTS = 0;
+
+/* ========= UI ========= */
 function setLoading(v){
   btnOn.disabled = v;
   btnOff.disabled = v;
@@ -198,7 +202,7 @@ function enviar(status){
       feedback.innerHTML="";
       setLoading(false);
       carregarDisponibilidade();
-    },2200);
+    },2000);
   })
   .catch(()=>{
     feedback.innerHTML =
@@ -242,10 +246,25 @@ async function carregarDisponibilidade(){
   }
 }
 
+/* ========= POLLING INTELIGENTE ========= */
+async function verificarAtualizacao(){
+  try{
+    const r = await fetch(SCRIPT_URL + "?acao=verificar");
+    const ts = Number(await r.text());
+
+    if(ts > ultimoTS){
+      ultimoTS = ts;
+      carregarDisponibilidade();
+    }
+  }catch(e){}
+}
+
 /* ========= INIT ========= */
 carregarDisponibilidade();
-setInterval(carregarDisponibilidade, 30000);
+setInterval(carregarDisponibilidade, 30000); // fallback
+setInterval(verificarAtualizacao, 5000);     // polling inteligente
 </script>
+
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
