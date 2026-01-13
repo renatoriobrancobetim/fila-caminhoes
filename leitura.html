@@ -6,21 +6,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+:root{
+  --azul:#0A3D91;
+  --vermelho:#D71920;
+  --verde:#28a745;
+  --amarelo:#FFC107;
+}
+
 body{
   margin:0;
-  font-family:Arial,sans-serif;
-  background:#0A3D91;
+  font-family:Segoe UI, Arial, sans-serif;
+  background:linear-gradient(180deg,#0A3D91,#062b66);
   color:#fff;
 }
+
 header{
   background:#0A3D91;
-  padding:20px;
-  border-bottom:6px solid #D71920;
+  padding:24px;
+  border-bottom:6px solid var(--vermelho);
   text-align:center;
 }
-h1{margin:0;}
-.container{padding:20px;}
 
+.container{
+  padding:24px;
+  max-width:1200px;
+  margin:auto;
+}
+
+/* ===== CARDS ===== */
 .cards{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -29,54 +42,103 @@ h1{margin:0;}
 }
 
 .card{
-  padding:22px;
-  border-radius:12px;
+  padding:26px;
+  border-radius:16px;
   text-align:center;
-  font-size:24px;
-  font-weight:bold;
+  font-size:26px;
+  font-weight:700;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  position:relative;
 }
 
-.proximo{background:#D71920;}
-.ultimo{background:#1E90FF;}
+.card span{
+  display:block;
+  font-size:14px;
+  font-weight:400;
+  opacity:.85;
+  margin-bottom:6px;
+}
 
+.proximo{
+  background:linear-gradient(135deg,var(--vermelho),#ff3b3b);
+}
+
+.ultimo{
+  background:linear-gradient(135deg,#1E90FF,#0b5ed7);
+}
+
+/* ===== PISCAR ===== */
 .flash{
-  animation:flash 1s ease;
+  animation:flash 1.2s ease 2;
 }
 @keyframes flash{
-  0%{transform:scale(1);}
-  30%{transform:scale(1.05); box-shadow:0 0 25px rgba(255,255,255,.8);}
-  100%{transform:scale(1);}
+  0%{transform:scale(1)}
+  30%{transform:scale(1.06); box-shadow:0 0 40px rgba(255,255,255,.9)}
+  100%{transform:scale(1)}
+}
+
+/* ===== CONTADOR FILA ===== */
+.contador-fila{
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:14px;
+  background:rgba(0,0,0,.25);
+  padding:10px;
+  border-radius:10px;
+}
+
+/* ===== TABELA ===== */
+.table-wrap{
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  background:#fff;
   color:#000;
 }
+
 th,td{
-  padding:12px;
-  border:1px solid #ddd;
+  padding:14px;
+  border-bottom:1px solid #ddd;
   text-align:center;
+  font-size:16px;
 }
+
 th{
-  background:#0A3D91;
+  background:var(--azul);
   color:#fff;
 }
-tr:first-child{
+
+tbody tr:nth-child(even){
+  background:#f9f9f9;
+}
+
+tbody tr:first-child{
   background:#FFF3CD;
   font-weight:bold;
 }
 
+/* ===== CORES POR COMPARTIMENTO ===== */
+.comp-1{background:#E3F2FD;}
+.comp-2{background:#E8F5E9;}
+.comp-3{background:#FFFDE7;}
+.comp-4{background:#FCE4EC;}
+
+/* ===== STATUS ===== */
 .status{
   text-align:center;
-  margin-top:8px;
-  font-size:12px;
-  opacity:0.8;
+  margin-top:14px;
+  font-size:14px;
+  opacity:.85;
 }
 
 @media(max-width:768px){
-  .cards{grid-template-columns:1fr;}
+  .cards{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -84,186 +146,158 @@ tr:first-child{
 <body>
 
 <header>
-  <h1>Rio Branco Distribuidora de Combustíveis</h1>
+  <h1>🚛 Rio Branco Distribuidora de Combustíveis</h1>
   <p>Fila de Espera de Caminhões</p>
 </header>
 
 <div class="container">
 
   <div class="cards">
-    <div class="card proximo" id="proximo">Carregando...</div>
-    <div class="card ultimo" id="ultimo">Último chamado: --</div>
+    <div class="card proximo" id="proximo">
+      <span>🔔 PRÓXIMO CAMINHÃO</span>
+      Carregando...
+    </div>
+
+    <div class="card ultimo" id="ultimo">
+      <span>⏱ ÚLTIMO CHAMADO</span>
+      --
+    </div>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Ordem</th>
-        <th>Placa</th>
-        <th>Compartimento</th>
-        <th>Data</th>
-        <th>Hora</th>
-      </tr>
-    </thead>
-    <tbody id="fila"></tbody>
-  </table>
-
-  <div class="status" id="statusAtualizacao">
-    Última atualização: --
+  <div class="contador-fila" id="contadorFila">
+    🚚 Caminhões na fila: 0
   </div>
 
-  <div class="status" id="contador">
-    Próxima atualização em: 45s
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ordem</th>
+          <th>Placa</th>
+          <th>Compartimento</th>
+          <th>Data</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody id="fila"></tbody>
+    </table>
   </div>
 
-  <div class="status">
-    🔄 Esta tela atualiza automaticamente a cada 45 segundos
-  </div>
-
-  <div class="status">
-    © <span id="ano"></span> · Copywriter Renato Monteiro 😉
-  </div>
+  <div class="status" id="statusAtualizacao">Última atualização: --</div>
+  <div class="status" id="contador">Próxima atualização em: 45s</div>
+  <div class="status">🔄 Atualização automática a cada 45 segundos</div>
+  <div class="status">© <span id="ano"></span> · Copywriter Renato Monteiro 😉</div>
 
 </div>
+
+<!-- 🔊 SOM -->
+<audio id="somChamada">
+  <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+</audio>
 
 <script>
 const URL_FILA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
 const URL_HIST = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=864994074&single=true&output=csv";
 
+const INTERVALO = 45;
+let contador = INTERVALO;
 let ultimoProximo = "";
 let ultimoChamado = "";
 
-const INTERVALO = 45;
-let contador = INTERVALO;
-let timerAtualizacao = null;
-let timerContador = null;
-
-/* ANIMAÇÃO */
+/* ===== UTIL ===== */
 function destacar(id){
-  const el = document.getElementById(id);
+  const el=document.getElementById(id);
   el.classList.remove("flash");
   void el.offsetWidth;
   el.classList.add("flash");
 }
+function tocarSom(){
+  document.getElementById("somChamada").play().catch(()=>{});
+}
 
-/* CARREGAR FILA */
+/* ===== FILA ===== */
 async function carregarFila(){
-  try{
-    const res = await fetch(URL_FILA + "&nocache=" + Date.now(), { cache:"no-store" });
-    const texto = await res.text();
-    const linhas = texto.trim().split("\n").slice(1);
+  const r=await fetch(URL_FILA+"&t="+Date.now(),{cache:"no-store"});
+  const t=await r.text();
+  const linhas=t.trim().split("\n").slice(1);
 
-    const tbody = document.getElementById("fila");
-    const proximoEl = document.getElementById("proximo");
-    tbody.innerHTML = "";
+  const tbody=document.getElementById("fila");
+  tbody.innerHTML="";
+  document.getElementById("contadorFila").textContent =
+    "🚚 Caminhões na fila: "+linhas.length;
 
-    if(linhas.length === 0){
-      if(ultimoProximo !== "vazio"){
-        ultimoProximo = "vazio";
-        proximoEl.textContent = "Fila vazia";
-        destacar("proximo");
-      }
-    } else {
-      linhas.forEach(l=>{
-        const c = l.split(",");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${c[0]}</td>
-          <td>${c[1]}</td>
-          <td>${c[2]}</td>
-          <td>${c[3]}</td>
-          <td>${c[4]}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      const atual = linhas[0].split(",")[1] + "-" + linhas[0].split(",")[2];
-      proximoEl.textContent =
-        "🔔 Próximo: " +
-        linhas[0].split(",")[1] +
-        " • Comp. " +
-        linhas[0].split(",")[2];
-
-      if(atual !== ultimoProximo){
-        ultimoProximo = atual;
-        destacar("proximo");
-      }
-    }
-
-    document.getElementById("statusAtualizacao").textContent =
-      "Última atualização: " + new Date().toLocaleTimeString();
-
-    contador = INTERVALO;
-
-  }catch(e){
-    console.error("Erro ao carregar fila");
+  if(!linhas.length){
+    document.getElementById("proximo").innerHTML="<span>🔔 PRÓXIMO</span>Fila vazia";
+    return;
   }
+
+  linhas.forEach(l=>{
+    const c=l.split(",");
+    const classe="comp-"+(c[2]||"").replace(/\D/g,"");
+    tbody.innerHTML+=`
+      <tr class="${classe}">
+        <td>${c[0]}</td>
+        <td>${c[1]}</td>
+        <td>${c[2]}</td>
+        <td>${c[3]}</td>
+        <td>${c[4]}</td>
+      </tr>`;
+  });
+
+  const atual = linhas[0].split(",")[1]+"-"+linhas[0].split(",")[2];
+  document.getElementById("proximo").innerHTML =
+    `<span>🔔 PRÓXIMO CAMINHÃO</span>${linhas[0].split(",")[1]} • Comp. ${linhas[0].split(",")[2]}`;
+
+  if(atual!==ultimoProximo){
+    ultimoProximo=atual;
+    destacar("proximo");
+    tocarSom();
+  }
+
+  document.getElementById("statusAtualizacao").textContent =
+    "Última atualização: "+new Date().toLocaleTimeString();
+
+  contador=INTERVALO;
 }
 
-/* ÚLTIMO CHAMADO */
+/* ===== ÚLTIMO ===== */
 async function carregarUltimoChamado(){
-  try{
-    const res = await fetch(URL_HIST + "&nocache=" + Date.now(), { cache:"no-store" });
-    const texto = await res.text();
-    const linhas = texto.trim().split("\n").slice(1);
-    if(linhas.length === 0) return;
+  const r=await fetch(URL_HIST+"&t="+Date.now(),{cache:"no-store"});
+  const t=await r.text();
+  const l=t.trim().split("\n").slice(1);
+  if(!l.length) return;
 
-    const ultima = linhas[linhas.length - 1].split(",");
-    const atual = ultima[0] + "-" + ultima[1];
-    const ultimoEl = document.getElementById("ultimo");
+  const u=l[l.length-1].split(",");
+  const atual=u[0]+"-"+u[1];
+  document.getElementById("ultimo").innerHTML =
+    `<span>⏱ ÚLTIMO CHAMADO</span>${u[0]} • Comp. ${u[1]}`;
 
-    ultimoEl.textContent =
-      "Último chamado: " +
-      ultima[0] +
-      " • Comp. " +
-      ultima[1];
-
-    if(atual !== ultimoChamado){
-      ultimoChamado = atual;
-      destacar("ultimo");
-    }
-  }catch(e){
-    console.error("Erro ao carregar histórico");
+  if(atual!==ultimoChamado){
+    ultimoChamado=atual;
+    destacar("ultimo");
   }
 }
 
-/* CONTADOR */
-function iniciarContador(){
-  timerContador = setInterval(()=>{
-    if(document.hidden) return;
-    contador--;
-    document.getElementById("contador").textContent =
-      "Próxima atualização em: " + contador + "s";
-    if(contador <= 0) contador = INTERVALO;
-  },1000);
-}
+/* ===== CONTADOR ===== */
+setInterval(()=>{
+  if(document.hidden) return;
+  contador--;
+  document.getElementById("contador").textContent =
+    "Próxima atualização em: "+contador+"s";
+  if(contador<=0) contador=INTERVALO;
+},1000);
 
-/* ATUALIZAÇÃO */
-function iniciarAtualizacao(){
-  timerAtualizacao = setInterval(()=>{
-    if(document.hidden) return;
-    carregarFila();
-    carregarUltimoChamado();
-  }, INTERVALO * 1000);
-}
-
-/* VISIBILIDADE DA ABA */
-document.addEventListener("visibilitychange", ()=>{
-  if(document.hidden){
-    // pausa
-  }else{
-    carregarFila();
-    carregarUltimoChamado();
-    contador = INTERVALO;
-  }
-});
+/* ===== LOOP ===== */
+setInterval(()=>{
+  if(document.hidden) return;
+  carregarFila();
+  carregarUltimoChamado();
+},INTERVALO*1000);
 
 /* INIT */
 carregarFila();
 carregarUltimoChamado();
-iniciarAtualizacao();
-iniciarContador();
-document.getElementById("ano").textContent = new Date().getFullYear();
+document.getElementById("ano").textContent=new Date().getFullYear();
 </script>
 
 </body>
