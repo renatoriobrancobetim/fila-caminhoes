@@ -36,8 +36,7 @@ input,button{
   font-size:16px;
   margin-top:12px;
 }
-
-input{ text-transform:uppercase; }
+input{text-transform:uppercase;}
 
 button{
   border:none;
@@ -45,19 +44,17 @@ button{
   cursor:pointer;
   font-weight:bold;
 }
-button:disabled{ opacity:.6; cursor:not-allowed; }
+button:disabled{opacity:.6;cursor:not-allowed;}
 
 .btn-ok{background:#28a745;color:#fff;}
 .btn-off{background:#dc3545;color:#fff;}
 
-/* FEEDBACK */
 .feedback{
   margin-top:16px;
   text-align:center;
   min-height:40px;
 }
 
-/* SPINNER */
 .spinner{
   width:32px;
   height:32px;
@@ -68,19 +65,18 @@ button:disabled{ opacity:.6; cursor:not-allowed; }
   margin:auto;
 }
 
-/* OK / ERRO */
 .result{
-  font-size:20px;
+  font-size:16px;
   font-weight:bold;
   animation:pop .4s ease;
 }
 .result.ok{color:#28a745;}
 .result.erro{color:#dc3545;}
+.result.info{color:#0A3D91;}
 
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
 
-/* LISTA */
 .lista{
   margin-top:14px;
   background:#f4f4f4;
@@ -103,7 +99,6 @@ button:disabled{ opacity:.6; cursor:not-allowed; }
 .status.ok{background:#28a745;color:#fff;}
 .status.off{background:#dc3545;color:#fff;}
 
-/* RODAPÉ */
 footer{
   margin-top:18px;
   font-size:12px;
@@ -123,13 +118,8 @@ footer{
 
   <input id="senha" type="password" placeholder="Senha do motorista">
 
-  <button id="btnOn" class="btn-ok" onclick="enviar('DISPONÍVEL')">
-    ✅ Estou Disponível
-  </button>
-
-  <button id="btnOff" class="btn-off" onclick="enviar('INDISPONÍVEL')">
-    ❌ Indisponível
-  </button>
+  <button class="btn-ok" onclick="enviar('DISPONÍVEL')">✅ Estou Disponível</button>
+  <button class="btn-off" onclick="enviar('INDISPONÍVEL')">❌ Indisponível</button>
 
   <div class="feedback" id="feedback"></div>
 
@@ -142,131 +132,146 @@ footer{
 </footer>
 
 <script>
-/* ========= CONFIG ========= */
+/* ================= CONFIG ================= */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbxSR_bB4R1bO91DvlYuyGsolLA907lltv1phcjw9boqFpqdFAMPScN0OEVnliqoXH3e/exec";
 
 const CSV_DISP =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
 
-/* ========= ELEMENTOS ========= */
-const btnOn = document.getElementById("btnOn");
-const btnOff = document.getElementById("btnOff");
+/* 📍 LOCAL DA EMPRESA */
+const EMPRESA_LAT = -19.959843;   // ⬅️ AJUSTE
+const EMPRESA_LNG = -44.089041;   // ⬅️ AJUSTE
+const RAIO_MAX_METROS = 15000;     // ⬅️ AJUSTE (1 km)
+
+/* ================= UTIL ================= */
 const feedback = document.getElementById("feedback");
 const listaDisp = document.getElementById("listaDisp");
-
 document.getElementById("ano").textContent = new Date().getFullYear();
 
-/* ========= POLLING ========= */
-let ultimoTS = 0;
-
-/* ========= UI ========= */
 function setLoading(v){
-  btnOn.disabled = v;
-  btnOff.disabled = v;
+  document.querySelectorAll("button").forEach(b=>b.disabled=v);
 }
 
-/* ========= ENVIAR STATUS ========= */
-function enviar(status){
-  const placa = document.getElementById("placa").value.trim().toUpperCase();
-  const senha = document.getElementById("senha").value.trim();
+/* 🌍 DISTÂNCIA (HAVERSINE) */
+function distanciaMetros(lat1, lon1, lat2, lon2){
+  const R = 6371000;
+  const toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2-lat1);
+  const dLon = toRad(lon2-lon1);
+  const a =
+    Math.sin(dLat/2)**2 +
+    Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
+    Math.sin(dLon/2)**2;
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+/* 📡 GEOLOCALIZAÇÃO */
+function obterLocalizacao(){
+  return new Promise((resolve,reject)=>{
+    if(!navigator.geolocation)
+      reject("Geolocalização não suportada");
+
+    navigator.geolocation.getCurrentPosition(
+      p => resolve({lat:p.coords.latitude,lng:p.coords.longitude}),
+      () => reject("Permita o acesso à localização"),
+      {enableHighAccuracy:true,timeout:10000}
+    );
+  });
+}
+
+/* ================= ENVIAR ================= */
+async function enviar(status){
+  const placa = placaEl.value.trim().toUpperCase();
+  const senha = senhaEl.value.trim();
 
   if(!placa || !senha){
-    feedback.innerHTML =
-      `<div class="result erro">⚠️ Informe placa e senha</div>`;
+    feedback.innerHTML=`<div class="result erro">⚠️ Informe placa e senha</div>`;
     return;
   }
 
   setLoading(true);
-  feedback.innerHTML = `<div class="spinner"></div>`;
-
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:new URLSearchParams({
-      acao:"disponibilidade",
-      placa:placa,
-      senha:senha,
-      status:status
-    })
-  })
-  .then(r=>r.text())
-  .then(t=>{
-    const resp = (t || "").trim();
-
-    feedback.innerHTML =
-      resp === "OK"
-        ? `<div class="result ok">✅ OK</div>`
-        : `<div class="result erro">${resp || "Erro desconhecido"}</div>`;
-
-    setTimeout(()=>{
-      feedback.innerHTML="";
-      setLoading(false);
-      carregarDisponibilidade();
-    },2000);
-  })
-  .catch(()=>{
-    feedback.innerHTML =
-      `<div class="result erro">❌ Falha de conexão</div>`;
-    setLoading(false);
-  });
-}
-
-/* ========= LISTA ========= */
-async function carregarDisponibilidade(){
-  listaDisp.innerHTML = `<div class="spinner"></div>`;
+  feedback.innerHTML=`<div class="spinner"></div>`;
 
   try{
-    const r = await fetch(CSV_DISP + "&t=" + Date.now());
-    const t = await r.text();
+    const pos = await obterLocalizacao();
+    const dist = distanciaMetros(pos.lat,pos.lng,EMPRESA_LAT,EMPRESA_LNG);
 
-    const dados = t.split("\n").slice(1)
-      .map(l=>l.split(","))
-      .filter(c=>c[0]);
+    feedback.innerHTML =
+      `<div class="result info">
+        📍 Localização detectada com sucesso<br>
+        📏 Distância: ${(dist/1000).toFixed(2)} km
+      </div>`;
 
-    dados.sort((a,b)=> a[1]==="DISPONÍVEL" ? -1 : 1);
-
-    listaDisp.innerHTML = "";
-
-    if(!dados.length){
-      listaDisp.innerHTML =
-        `<div class="item">Nenhum caminhão</div>`;
+    if(status==="DISPONÍVEL" && dist > RAIO_MAX_METROS){
+      setTimeout(()=>{
+        feedback.innerHTML =
+          `<div class="result erro">
+            ❌ Fora do raio permitido (${RAIO_MAX_METROS/1000} km)
+          </div>`;
+        setLoading(false);
+      },1200);
       return;
     }
 
-    dados.forEach(c=>{
-      listaDisp.innerHTML += `
-        <div class="item">
-          <span>${c[0]}</span>
-          <span class="status ${c[1]==="DISPONÍVEL"?"ok":"off"}">${c[1]}</span>
-        </div>`;
+    fetch(SCRIPT_URL,{
+      method:"POST",
+      body:new URLSearchParams({
+        acao:"disponibilidade",
+        placa, senha, status,
+        lat:pos.lat, lng:pos.lng
+      })
+    })
+    .then(r=>r.text())
+    .then(t=>{
+      feedback.innerHTML =
+        t.trim()==="OK"
+          ? `<div class="result ok">✅ OK</div>`
+          : `<div class="result erro">${t}</div>`;
+
+      setTimeout(()=>{
+        feedback.innerHTML="";
+        setLoading(false);
+        carregarDisponibilidade();
+      },2000);
     });
-  }catch{
-    listaDisp.innerHTML =
-      `<div class="item">Erro ao carregar</div>`;
+
+  }catch(e){
+    feedback.innerHTML=`<div class="result erro">❌ ${e}</div>`;
+    setLoading(false);
   }
 }
 
-/* ========= POLLING INTELIGENTE ========= */
-async function verificarAtualizacao(){
+/* ================= LISTA ================= */
+async function carregarDisponibilidade(){
+  listaDisp.innerHTML=`<div class="spinner"></div>`;
   try{
-    const r = await fetch(SCRIPT_URL + "?acao=verificar");
-    const ts = Number(await r.text());
+    const r = await fetch(CSV_DISP+"&t="+Date.now());
+    const t = await r.text();
+    const dados = t.split("\n").slice(1).map(l=>l.split(",")).filter(c=>c[0]);
 
-    if(ts > ultimoTS){
-      ultimoTS = ts;
-      carregarDisponibilidade();
-    }
-  }catch(e){}
+    dados.sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
+    listaDisp.innerHTML = dados.length
+      ? dados.map(c=>`
+        <div class="item">
+          <span>${c[0]}</span>
+          <span class="status ${c[1]==="DISPONÍVEL"?"ok":"off"}">${c[1]}</span>
+        </div>`).join("")
+      : `<div class="item">Nenhum caminhão</div>`;
+  }catch{
+    listaDisp.innerHTML=`<div class="item">Erro ao carregar</div>`;
+  }
 }
 
-/* ========= INIT ========= */
+/* INIT */
+const placaEl = document.getElementById("placa");
+const senhaEl = document.getElementById("senha");
 carregarDisponibilidade();
-setInterval(carregarDisponibilidade, 30000); // fallback
-setInterval(verificarAtualizacao, 5000);     // polling inteligente
+setInterval(carregarDisponibilidade,30000);
 </script>
 
 <script>
-if ("serviceWorker" in navigator) {
+if("serviceWorker" in navigator){
   navigator.serviceWorker.register("sw.js");
 }
 </script>
