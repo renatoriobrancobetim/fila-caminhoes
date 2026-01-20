@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Cálculo de Frete por Compartimento</title>
+<title>Cálculo de Frete por Cliente</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -17,7 +17,7 @@ body{
   padding:20px;
 }
 .container{
-  max-width:800px;
+  max-width:1000px;
   margin:auto;
   background:#fff;
   border-radius:14px;
@@ -34,9 +34,8 @@ body{
 label{ font-weight:600; }
 select,input{
   width:100%;
-  padding:10px;
-  margin:6px 0 15px;
-  border-radius:8px;
+  padding:8px;
+  border-radius:6px;
   border:1px solid #ccc;
 }
 table{
@@ -47,17 +46,18 @@ table{
 th,td{
   border:1px solid #ddd;
   padding:8px;
+  font-size:13px;
   text-align:center;
-  font-size:14px;
 }
 th{ background:#e3f2fd; }
 .total{
-  font-weight:bold;
   color:var(--vermelho);
+  font-weight:bold;
 }
 button{
   width:100%;
   padding:14px;
+  margin-top:20px;
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
   color:#fff;
   border:none;
@@ -65,6 +65,7 @@ button{
   font-size:16px;
   cursor:pointer;
 }
+h3{ margin-top:30px; }
 </style>
 </head>
 
@@ -72,12 +73,12 @@ button{
 
 <div class="container">
   <div class="header">
-    <h2>Cálculo de Frete por Repartição</h2>
+    <h2>Cálculo de Frete por Repartição e Cliente</h2>
   </div>
 
   <div class="content">
     <label>Tipo de Caminhão</label>
-    <select id="tipo" onchange="gerarReparticoes()">
+    <select id="tipo" onchange="gerarTabela()">
       <option value="">Selecione</option>
       <option value="TOCO">Toco</option>
       <option value="TRUCK">Truck</option>
@@ -87,9 +88,11 @@ button{
 
     <div id="tabela"></div>
 
-    <button onclick="calcular()">Calcular Frete Total</button>
+    <button onclick="calcular()">Calcular Frete</button>
 
-    <h3>Total Geral: R$ <span id="total">0,00</span></h3>
+    <h3>Total Geral: R$ <span id="totalGeral">0,00</span></h3>
+
+    <div id="resumo"></div>
   </div>
 </div>
 
@@ -108,48 +111,94 @@ const compartimentos = {
   CARRETA: [5000,5000,5000,5000,5000,5000]
 };
 
-function gerarReparticoes(){
+function gerarTabela(){
   const tipo = document.getElementById("tipo").value;
   if(!tipo) return;
 
   let html = `
   <table>
     <tr>
-      <th>Repartição</th>
+      <th>Rep.</th>
+      <th>Cliente</th>
       <th>Litros</th>
-      <th>KM Rodado</th>
+      <th>KM</th>
       <th>Frete (R$)</th>
+      <th>R$/L</th>
     </tr>`;
 
   compartimentos[tipo].forEach((litros,i)=>{
     html += `
     <tr>
       <td>${i+1}</td>
+      <td><input id="cliente${i}" placeholder="Cliente"></td>
       <td>${litros}</td>
       <td><input type="number" id="km${i}" placeholder="KM"></td>
       <td id="frete${i}">-</td>
+      <td id="unit${i}">-</td>
     </tr>`;
   });
 
   html += "</table>";
   document.getElementById("tabela").innerHTML = html;
+  document.getElementById("resumo").innerHTML = "";
+  document.getElementById("totalGeral").innerText = "0,00";
 }
 
 function calcular(){
   const tipo = document.getElementById("tipo").value;
   const indice = indices[tipo];
-  let total = 0;
+  let totalGeral = 0;
+  let clientes = {};
 
-  compartimentos[tipo].forEach((_,i)=>{
+  compartimentos[tipo].forEach((litros,i)=>{
     const km = parseFloat(document.getElementById(`km${i}`).value);
-    if(!isNaN(km) && km > 0){
+    const cliente = document.getElementById(`cliente${i}`).value.trim();
+
+    if(!isNaN(km) && km > 0 && cliente){
       const frete = km * indice;
+      const unit = frete / litros;
+
       document.getElementById(`frete${i}`).innerText = frete.toFixed(2);
-      total += frete;
+      document.getElementById(`unit${i}`).innerText = unit.toFixed(4);
+
+      totalGeral += frete;
+
+      if(!clientes[cliente]){
+        clientes[cliente] = { litros:0, frete:0 };
+      }
+      clientes[cliente].litros += litros;
+      clientes[cliente].frete += frete;
     }
   });
 
-  document.getElementById("total").innerText = total.toFixed(2);
+  document.getElementById("totalGeral").innerText = totalGeral.toFixed(2);
+  gerarResumo(clientes);
+}
+
+function gerarResumo(clientes){
+  let html = `
+  <h3>Resumo por Cliente</h3>
+  <table>
+    <tr>
+      <th>Cliente</th>
+      <th>Total Litros</th>
+      <th>Total Frete (R$)</th>
+      <th>Frete Unit. Médio (R$/L)</th>
+    </tr>`;
+
+  for(let c in clientes){
+    const unit = clientes[c].frete / clientes[c].litros;
+    html += `
+    <tr>
+      <td>${c}</td>
+      <td>${clientes[c].litros}</td>
+      <td class="total">${clientes[c].frete.toFixed(2)}</td>
+      <td>${unit.toFixed(4)}</td>
+    </tr>`;
+  }
+
+  html += "</table>";
+  document.getElementById("resumo").innerHTML = html;
 }
 </script>
 
