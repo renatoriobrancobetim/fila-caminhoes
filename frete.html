@@ -260,36 +260,78 @@ function gerarTabela(){
 
 /* ================= OTIMIZAR ROTA ================= */
 async function otimizarRota(){
-  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
-  let cidades=rows
-    .map(r=>r.querySelector(".cidade").value)
-    .filter(v=>v);
-
-  if(cidades.length<2){
-    alert("Informe ao menos 2 cidades para otimizar a rota.");
+  const tabela = document.getElementById("freteTable");
+  if(!tabela){
+    alert("Selecione o tipo de caminhão antes.");
     return;
   }
 
-  let rota=[], atual=BASE;
+  const rows = [...tabela.querySelectorAll("tr[data-row]")];
 
-  while(cidades.length){
-    let menor=Infinity, prox=null;
-    for(const c of cidades){
-      const d=await distancia(atual,c);
-      if(d<menor){menor=d;prox=c;}
-    }
-    rota.push(prox);
-    cidades=cidades.filter(c=>c!==prox);
-    atual=prox;
+  // coleta cidades válidas
+  let cidades = rows
+    .map(r => r.querySelector(".cidade").value.trim())
+    .filter(v => v);
+
+  if(cidades.length < 2){
+    alert("Informe pelo menos 2 cidades válidas para otimizar a rota.");
+    return;
   }
 
-  rota.forEach(c=>{
-    const r=rows.find(tr=>tr.querySelector(".cidade").value===c);
-    document.querySelector("#freteTable").appendChild(r);
+  // valida existência no JSON
+  for(const c of cidades){
+    if(!cidadesCoords[c]){
+      alert("Cidade inválida ou não encontrada: " + c);
+      return;
+    }
+  }
+
+  // feedback visual
+  const kmInput = document.getElementById("kmTotal");
+  const kmAnterior = kmInput.value;
+  kmInput.value = "Otimizando rota...";
+
+  let rota = [];
+  let atual = BASE;
+  let restantes = [...cidades];
+
+  // algoritmo Nearest Neighbor
+  while(restantes.length){
+    let menor = Infinity;
+    let proxima = null;
+
+    for(const c of restantes){
+      const d = await distancia(atual, c);
+      if(d < menor){
+        menor = d;
+        proxima = c;
+      }
+    }
+
+    rota.push(proxima);
+    restantes = restantes.filter(c => c !== proxima);
+    atual = proxima;
+  }
+
+  // reorganiza visualmente as linhas
+  rota.forEach(cidade => {
+    const linha = rows.find(
+      r => r.querySelector(".cidade").value.trim() === cidade
+    );
+    if(linha){
+      tabela.appendChild(linha);
+    }
   });
 
-  recalcularKM();
+  // recalcula KM com nova ordem
+  await recalcularKM();
+
+  // confirmação visual
+  if(kmAnterior){
+    alert("Rota otimizada com sucesso!");
+  }
 }
+
 
 /* ================= CALCULAR FRETE ================= */
 function calcular(){
