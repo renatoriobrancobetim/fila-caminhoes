@@ -1,238 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Cálculo de Frete de Combustível</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Cálculo de Frete por Compartimento</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root {
-      --azul: #0d47a1;
-      --azul-claro: #e3f2fd;
-      --vermelho: #c62828;
-      --cinza: #f5f7fa;
-      --texto: #333;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, var(--azul), var(--vermelho));
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 520px;
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-      overflow: hidden;
-    }
-
-    .header {
-      background: linear-gradient(90deg, var(--azul), var(--vermelho));
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    .content {
-      padding: 25px;
-    }
-
-    label {
-      font-weight: 600;
-      color: var(--texto);
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-      margin-bottom: 18px;
-    }
-
-    select:focus, input:focus {
-      outline: none;
-      border-color: var(--azul);
-      box-shadow: 0 0 0 2px rgba(13,71,161,0.15);
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(90deg, var(--azul), var(--vermelho));
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    }
-
-    .resultado {
-      margin-top: 25px;
-      background: var(--cinza);
-      border-radius: 10px;
-      padding: 20px;
-      display: none;
-    }
-
-    .resultado h3 {
-      margin-top: 0;
-      color: var(--azul);
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .linha {
-      display: flex;
-      justify-content: space-between;
-      padding: 6px 0;
-      border-bottom: 1px solid #ddd;
-      font-size: 14.5px;
-    }
-
-    .linha:last-child {
-      border-bottom: none;
-    }
-
-    .destaque {
-      color: var(--vermelho);
-      font-weight: bold;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: #777;
-      padding: 15px;
-    }
-  </style>
+<style>
+:root{
+  --azul:#0d47a1;
+  --vermelho:#c62828;
+  --cinza:#f4f6f8;
+}
+body{
+  font-family:Segoe UI, Arial;
+  background:linear-gradient(135deg,var(--azul),var(--vermelho));
+  padding:20px;
+}
+.container{
+  max-width:800px;
+  margin:auto;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
+  overflow:hidden;
+}
+.header{
+  background:linear-gradient(90deg,var(--azul),var(--vermelho));
+  color:#fff;
+  text-align:center;
+  padding:20px;
+}
+.content{ padding:25px; }
+label{ font-weight:600; }
+select,input{
+  width:100%;
+  padding:10px;
+  margin:6px 0 15px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+th,td{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:center;
+  font-size:14px;
+}
+th{ background:#e3f2fd; }
+.total{
+  font-weight:bold;
+  color:var(--vermelho);
+}
+button{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(90deg,var(--azul),var(--vermelho));
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
-
   <div class="header">
-    <h1>Cálculo de Frete por Rota</h1>
+    <h2>Cálculo de Frete por Repartição</h2>
   </div>
 
   <div class="content">
-
     <label>Tipo de Caminhão</label>
-    <select id="tipo">
+    <select id="tipo" onchange="gerarReparticoes()">
       <option value="">Selecione</option>
-      <option value="FROTA">Frota</option>
-      <option value="BITRUCK">Bi-Truck</option>
-      <option value="TRUCK">Truck</option>
       <option value="TOCO">Toco</option>
+      <option value="TRUCK">Truck</option>
+      <option value="BITRUCK">Bi-Truck</option>
       <option value="CARRETA">Carreta</option>
     </select>
 
-    <label>KM Rodado</label>
-    <input type="number" id="km" placeholder="Ex: 100">
+    <div id="tabela"></div>
 
-    <button onclick="calcularFrete()">Calcular Frete</button>
+    <button onclick="calcular()">Calcular Frete Total</button>
 
-    <div class="resultado" id="resultado">
-      <h3>Resultado do Cálculo</h3>
-
-      <div class="linha">
-        <span>Índice</span>
-        <span id="indice"></span>
-      </div>
-
-      <div class="linha">
-        <span>Taxa Calculada</span>
-        <span>R$ <span id="taxaCalc"></span></span>
-      </div>
-
-      <div class="linha">
-        <span>Taxa Base</span>
-        <span>R$ <span id="taxaBase"></span></span>
-      </div>
-
-      <div class="linha destaque">
-        <span>Total do Frete</span>
-        <span>R$ <span id="totalFrete"></span></span>
-      </div>
-
-      <div class="linha">
-        <span>Litragem</span>
-        <span><span id="litragem"></span> L</span>
-      </div>
-
-      <div class="linha destaque">
-        <span>Frete Unitário Médio</span>
-        <span>R$ <span id="freteUnit"></span></span>
-      </div>
-    </div>
-
+    <h3>Total Geral: R$ <span id="total">0,00</span></h3>
   </div>
-
-  <footer>
-    Sistema simples de cálculo de frete
-  </footer>
-
 </div>
 
 <script>
-const tabela = {
-  FROTA:    { indice: 5.8402, taxa: 669.32, litragem: 22500 },
-  BITRUCK: { indice: 3.5686, taxa: 364.71, litragem: 10000 },
-  TRUCK:   { indice: 4.4266, taxa: 412.57, litragem: 15000 },
-  TOCO:    { indice: 4.9381, taxa: 414.93, litragem: 20000 },
-  CARRETA: { indice: 5.6203, taxa: 460.29, litragem: 30000 }
+const indices = {
+  TOCO: 4.9381,
+  TRUCK: 4.4266,
+  BITRUCK: 3.5686,
+  CARRETA: 5.6203
 };
 
-function calcularFrete() {
+const compartimentos = {
+  TOCO: [5000,3000,2000],
+  TRUCK: [5000,5000,5000,3000,2000,3000,2000],
+  BITRUCK: [5000,5000,5000,5000,2500,2500,2500],
+  CARRETA: [5000,5000,5000,5000,5000,5000]
+};
+
+function gerarReparticoes(){
   const tipo = document.getElementById("tipo").value;
-  const km = parseFloat(document.getElementById("km").value);
+  if(!tipo) return;
 
-  if (!tipo || isNaN(km) || km <= 0) {
-    alert("Informe o tipo de caminhão e o KM corretamente.");
-    return;
-  }
+  let html = `
+  <table>
+    <tr>
+      <th>Repartição</th>
+      <th>Litros</th>
+      <th>KM Rodado</th>
+      <th>Frete (R$)</th>
+    </tr>`;
 
-  const d = tabela[tipo];
-  const taxaCalc = km * d.indice;
-  const total = taxaCalc + d.taxa;
-  const unit = total / d.litragem;
+  compartimentos[tipo].forEach((litros,i)=>{
+    html += `
+    <tr>
+      <td>${i+1}</td>
+      <td>${litros}</td>
+      <td><input type="number" id="km${i}" placeholder="KM"></td>
+      <td id="frete${i}">-</td>
+    </tr>`;
+  });
 
-  document.getElementById("indice").innerText = d.indice.toFixed(4);
-  document.getElementById("taxaCalc").innerText = taxaCalc.toFixed(2);
-  document.getElementById("taxaBase").innerText = d.taxa.toFixed(2);
-  document.getElementById("totalFrete").innerText = total.toFixed(2);
-  document.getElementById("litragem").innerText = d.litragem;
-  document.getElementById("freteUnit").innerText = unit.toFixed(4);
+  html += "</table>";
+  document.getElementById("tabela").innerHTML = html;
+}
 
-  document.getElementById("resultado").style.display = "block";
+function calcular(){
+  const tipo = document.getElementById("tipo").value;
+  const indice = indices[tipo];
+  let total = 0;
+
+  compartimentos[tipo].forEach((_,i)=>{
+    const km = parseFloat(document.getElementById(`km${i}`).value);
+    if(!isNaN(km) && km > 0){
+      const frete = km * indice;
+      document.getElementById(`frete${i}`).innerText = frete.toFixed(2);
+      total += frete;
+    }
+  });
+
+  document.getElementById("total").innerText = total.toFixed(2);
 }
 </script>
 
