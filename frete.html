@@ -38,6 +38,10 @@ input,select{
   border-radius:5px;
   font-size:13px;
 }
+input:disabled, select:disabled{
+  background:#eee;
+  cursor:not-allowed;
+}
 .grid{
   display:grid;
   grid-template-columns:2fr 1fr;
@@ -68,12 +72,35 @@ button{
   font-size:16px;
   cursor:pointer;
 }
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+/* ===== DESTAQUE DO RESUMO ===== */
+.resumo-box{
+  margin-top:30px;
+  border:3px solid var(--azul);
+  padding:20px;
+  border-radius:10px;
+  background:#f9fbff;
+}
+.resumo-box h3{
+  margin-top:0;
+  text-align:center;
+  color:var(--azul);
+}
 
 /* ===== IMPRESSÃO ===== */
 @media print{
   body{ background:#fff; padding:0; }
   .container{ box-shadow:none; border-radius:0; }
-  .header, button, .grid{ display:none; }
+  .header, .actions, .grid{ display:none; }
+  .resumo-box{
+    border:2px solid #000;
+    background:#fff;
+  }
   th{
     background:#eee !important;
     -webkit-print-color-adjust: exact;
@@ -101,19 +128,23 @@ button{
           <option value="TRUCK_555">Truck 555</option>
           <option value="TRUCK_5532">Truck 5532</option>
           <option value="TRUCK_53232">Truck 53232</option>
-          <option value="BITRUCK">Bi-Truck</option>
+          <option value="BITRUCK">Bitruck</option>
+          <option value="FROTA">Frota</option>
           <option value="CARRETA">Carreta</option>
         </select>
       </div>
       <div>
         <label>KM TOTAL DA ROTA</label>
-        <input type="number" id="kmTotal" placeholder="Ex: 183">
+        <input type="number" id="kmTotal">
       </div>
     </div>
 
     <div id="tabela"></div>
 
-    <button onclick="calcular()">Calcular Frete</button>
+    <div class="actions">
+      <button onclick="calcular()">Calcular Frete</button>
+      <button onclick="novoCalculo()" style="background:#555">Novo Cálculo</button>
+    </div>
 
     <div id="resumo"></div>
 
@@ -121,125 +152,115 @@ button{
 </div>
 
 <script>
-const indicePadrao = 4.4266;
+const indices = {
+  TOCO: 4.9381,
+  TRUCK_555: 4.4266,
+  TRUCK_5532: 4.4266,
+  TRUCK_53232: 4.4266,
+  BITRUCK: 3.5686,
+  FROTA: 5.8402,
+  CARRETA: 5.6203
+};
 
 const compartimentos = {
   TOCO: [5000,3000,2000],
   TRUCK_555: [5000,5000,5000],
   TRUCK_5532: [5000,5000,3000,2000],
   TRUCK_53232: [5000,3000,2000,3000,2000],
-  BITRUCK: [5000,5000,5000,5000,2500,2500,2500],
+  BITRUCK: [5000,5000,5000],
+  FROTA: [5000,5000,5000,2500,2500,2500],
   CARRETA: [5000,5000,5000,5000,5000,5000]
 };
 
+function moeda(v){
+  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+}
+function numero(v){
+  return v.toLocaleString("pt-BR");
+}
+
 function gerarTabela(){
   const tipo = document.getElementById("tipo").value;
-  if(!tipo){
-    document.getElementById("tabela").innerHTML = "";
-    return;
-  }
+  if(!tipo){ document.getElementById("tabela").innerHTML=""; return; }
 
   let html = `
   <table>
     <tr>
-      <th>CLIENTE</th>
-      <th>CIDADE</th>
-      <th>HORÁRIO</th>
-      <th>QUANTIDADE (L)</th>
-      <th>FRETE (R$/L)</th>
-      <th>TOTAL (R$)</th>
-      <th>VENDEDOR</th>
+      <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+      <th>QUANTIDADE (L)</th><th>FRETE (R$/L)</th><th>TOTAL (R$)</th><th>VENDEDOR</th>
     </tr>`;
 
   compartimentos[tipo].forEach((litros,i)=>{
-    html += `
+    html+=`
     <tr>
-      <td><input id="cliente${i}" placeholder="Cliente"></td>
-      <td><input id="cidade${i}" placeholder="Cidade"></td>
-      <td><input id="horario${i}" placeholder="Horário"></td>
-      <td>${litros}</td>
+      <td><input id="cliente${i}"></td>
+      <td><input id="cidade${i}"></td>
+      <td><input id="horario${i}"></td>
+      <td>${numero(litros)}</td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
-      <td><input id="vendedor${i}" placeholder="Vendedor"></td>
+      <td><input id="vendedor${i}"></td>
     </tr>`;
   });
 
-  html += "</table>";
-  document.getElementById("tabela").innerHTML = html;
+  html+="</table>";
+  document.getElementById("tabela").innerHTML=html;
 }
 
 function calcular(){
-  const tipo = document.getElementById("tipo").value;
-  const km = parseFloat(document.getElementById("kmTotal").value);
+  const tipo=document.getElementById("tipo").value;
+  const km=parseFloat(document.getElementById("kmTotal").value);
+  if(!tipo||!km) return alert("Informe tipo e KM.");
 
-  if(!tipo || isNaN(km) || km <= 0){
-    alert("Informe o tipo de caminhão e a KM total.");
-    return;
-  }
+  const litrosArr=compartimentos[tipo];
+  const indice=indices[tipo];
+  const totalLitros=litrosArr.reduce((a,b)=>a+b,0);
+  const freteTotal=km*indice;
+  const unit=freteTotal/totalLitros;
 
-  const litrosArray = compartimentos[tipo];
-  const freteTotal = km * indicePadrao;
-  const totalLitros = litrosArray.reduce((a,b)=>a+b,0);
-  const unit = freteTotal / totalLitros;
-
-  let resumo = `
+  let html=`<div class="resumo-box">
   <h3>Resumo de Frete por Rota</h3>
   <table>
-    <tr>
-      <th>CLIENTE</th>
-      <th>CIDADE</th>
-      <th>HORÁRIO</th>
-      <th>FRETE</th>
-      <th>QUANTIDADE</th>
-      <th>TOTAL</th>
-      <th>VENDEDOR</th>
-    </tr>`;
+  <tr><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>FRETE</th><th>QUANTIDADE</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
 
-  litrosArray.forEach((l,i)=>{
-    const total = l * unit;
+  litrosArr.forEach((l,i)=>{
+    const total=l*unit;
+    document.getElementById("unit"+i).innerText=moeda(unit);
+    document.getElementById("frete"+i).innerText=moeda(total);
 
-    document.getElementById("unit"+i).innerText = unit.toFixed(4);
-    document.getElementById("frete"+i).innerText = total.toFixed(2);
-
-    resumo += `
+    html+=`
     <tr>
       <td>${document.getElementById("cliente"+i).value}</td>
       <td>${document.getElementById("cidade"+i).value}</td>
       <td>${document.getElementById("horario"+i).value}</td>
-      <td>${unit.toFixed(4)}</td>
-      <td>${l}</td>
-      <td>${total.toFixed(2)}</td>
+      <td>${moeda(unit)}</td>
+      <td>${numero(l)}</td>
+      <td>${moeda(total)}</td>
       <td>${document.getElementById("vendedor"+i).value}</td>
     </tr>`;
   });
 
-  resumo += `
-  <tr class="total">
-    <td colspan="4"></td>
-    <td>${totalLitros}</td>
-    <td>${freteTotal.toFixed(2)}</td>
-    <td></td>
-  </tr>
+  html+=`
+  <tr class="total"><td colspan="4"></td><td>${numero(totalLitros)}</td><td>${moeda(freteTotal)}</td><td></td></tr>
   </table>
 
   <table style="margin-top:15px">
-    <tr>
-      <th>KM RODADO</th>
-      <th>ÍNDICE</th>
-      <th>TOTAL FRETE</th>
-      <th>M³</th>
-      <th>FRETE UNIT MÉDIO</th>
-    </tr>
-    <tr>
-      <td>${km.toFixed(1)}</td>
-      <td>${indicePadrao.toFixed(4)}</td>
-      <td>${freteTotal.toFixed(2)}</td>
-      <td>${(totalLitros/1000).toFixed(1)}</td>
-      <td>${unit.toFixed(4)}</td>
-    </tr>
-  </table>`;
+  <tr><th>KM RODADO</th><th>ÍNDICE</th><th>TOTAL FRETE</th><th>M³</th><th>FRETE UNIT MÉDIO</th></tr>
+  <tr><td>${numero(km)}</td><td>${indice.toFixed(4)}</td><td>${moeda(freteTotal)}</td><td>${numero(totalLitros/1000)}</td><td>${moeda(unit)}</td></tr>
+  </table></div>`;
 
-  document.getElementById("resumo").innerHTML = resumo;
+  document.getElementById("resumo").innerHTML=html;
+  travarEdicao(true);
+}
+
+function travarEdicao(travar){
+  document.querySelectorAll("input, select").forEach(el=>{
+    if(el.id!=="kmTotal"||travar) el.disabled=travar;
+  });
+}
+
+function novoCalculo(){
+  location.reload();
 }
 </script>
 
