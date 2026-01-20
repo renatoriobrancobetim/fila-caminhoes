@@ -77,6 +77,18 @@ button.secondary{
   text-align:center;
   color:var(--azul);
 }
+
+.alerta-parcial{
+  margin-top:10px;
+  padding:10px;
+  border:2px solid #f57c00;
+  background:#fff3e0;
+  color:#e65100;
+  font-weight:bold;
+  text-align:center;
+  border-radius:6px;
+}
+
 .footer{
   margin-top:30px;
   text-align:center;
@@ -227,11 +239,15 @@ function calcular(){
     return;
   }
 
+  const capacidadeTotal = litrosArr.reduce((a,b)=>a+b,0);
+  const cargaParcial = litrosUsados < capacidadeTotal;
+
   const freteTotal=(km*d.indice)+d.taxa;
   const unit=freteTotal/litrosUsados;
 
   let html=`<div class="resumo-box">
     <h3>Resumo de Frete por Rota</h3>
+    ${cargaParcial ? `<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>` : ``}
 
     <table>
       <tr>
