@@ -26,7 +26,7 @@ input,select{
   width:100%; padding:8px; border:1px solid #ccc;
   border-radius:5px; font-size:13px;
 }
-input:disabled,select:disabled{ background:#eee; }
+input:disabled,select:disabled{ background:#eee; cursor:not-allowed; }
 .grid{
   display:grid; grid-template-columns:2fr 1fr;
   gap:15px; margin-bottom:20px;
@@ -46,8 +46,6 @@ button{
   color:#fff; border:none; border-radius:8px;
   font-size:16px; cursor:pointer;
 }
-.actions{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-
 .resumo-box{
   margin-top:30px; border:3px solid var(--azul);
   padding:20px; border-radius:10px; background:#f9fbff;
@@ -56,7 +54,7 @@ button{
 
 @media print{
   body{ background:#fff; padding:0; }
-  .header,.actions,.grid{ display:none; }
+  .header,.grid,button{ display:none; }
   .container{ box-shadow:none; }
 }
 </style>
@@ -93,10 +91,7 @@ button{
 
     <div id="tabela"></div>
 
-    <div class="actions">
-      <button onclick="calcular()">Calcular Frete</button>
-      <button onclick="location.reload()" style="background:#555">Novo Cálculo</button>
-    </div>
+    <button onclick="calcular()">Calcular Frete</button>
 
     <div id="resumo"></div>
 
@@ -115,24 +110,25 @@ const base = {
 
 /* ===== COMPARTIMENTOS ===== */
 const compartimentos = {
-  FROTA:   [5000,5000,5000,2500,2500,2500],
+  FROTA: [5000,5000,5000,2500,2500,2500],
   BITRUCK: [5000,5000,5000],
-  TRUCK_555:   [5000,5000,5000],
-  TRUCK_5532:  [5000,5000,3000,2000],
+  TRUCK_555: [5000,5000,5000],
+  TRUCK_5532: [5000,5000,3000,2000],
   TRUCK_53232: [5000,3000,2000,3000,2000],
-  TOCO:    [5000,3000,2000],
+  TOCO: [5000,3000,2000],
   CARRETA: [5000,5000,5000,5000,5000,5000]
 };
 
-/* ===== MAPEAMENTO DE ÍNDICE/TAXA ===== */
 function dadosCaminhao(tipo){
   if(tipo.startsWith("TRUCK")) return base.TRUCK;
   return base[tipo];
 }
 
-/* ===== FORMATAÇÃO ===== */
 function moeda(v){
-  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2});
+}
+function moeda6(v){
+  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:6});
 }
 function numero(v){
   return v.toLocaleString("pt-BR");
@@ -172,11 +168,24 @@ function calcular(){
 
   const d=dadosCaminhao(tipo);
   const litrosArr=compartimentos[tipo];
-  const totalLitros=litrosArr.reduce((a,b)=>a+b,0);
 
-  /* ===== CÁLCULO CORRETO ===== */
+  let litrosUsados=0;
+  let indicesUsados=[];
+
+  litrosArr.forEach((l,i)=>{
+    if(document.getElementById("cliente"+i).value.trim()){
+      litrosUsados+=l;
+      indicesUsados.push(i);
+    }
+  });
+
+  if(litrosUsados===0){
+    alert("Informe pelo menos um cliente.");
+    return;
+  }
+
   const freteTotal=(km*d.indice)+d.taxa;
-  const unit=freteTotal/totalLitros;
+  const unit=freteTotal/litrosUsados;
 
   let html=`<div class="resumo-box">
   <h3>Resumo de Frete por Rota</h3>
@@ -186,9 +195,10 @@ function calcular(){
     <th>FRETE</th><th>QUANTIDADE</th><th>TOTAL</th><th>VENDEDOR</th>
   </tr>`;
 
-  litrosArr.forEach((l,i)=>{
+  indicesUsados.forEach(i=>{
+    const l=litrosArr[i];
     const total=l*unit;
-    document.getElementById("unit"+i).innerText=moeda(unit);
+    document.getElementById("unit"+i).innerText=moeda6(unit);
     document.getElementById("frete"+i).innerText=moeda(total);
 
     html+=`
@@ -196,7 +206,7 @@ function calcular(){
       <td>${document.getElementById("cliente"+i).value}</td>
       <td>${document.getElementById("cidade"+i).value}</td>
       <td>${document.getElementById("horario"+i).value}</td>
-      <td>${moeda(unit)}</td>
+      <td>${moeda6(unit)}</td>
       <td>${numero(l)}</td>
       <td>${moeda(total)}</td>
       <td>${document.getElementById("vendedor"+i).value}</td>
@@ -206,7 +216,7 @@ function calcular(){
   html+=`
   <tr class="total">
     <td colspan="4"></td>
-    <td>${numero(totalLitros)}</td>
+    <td>${numero(litrosUsados)}</td>
     <td>${moeda(freteTotal)}</td>
     <td></td>
   </tr>
@@ -222,12 +232,15 @@ function calcular(){
     <td>${d.indice.toFixed(4)}</td>
     <td>${moeda(d.taxa)}</td>
     <td>${moeda(freteTotal)}</td>
-    <td>${numero(totalLitros/1000)}</td>
-    <td>${moeda(unit)}</td>
+    <td>${numero(litrosUsados/1000)}</td>
+    <td>${moeda6(unit)}</td>
   </tr>
   </table></div>`;
 
   document.getElementById("resumo").innerHTML=html;
+
+  /* ===== TRAVA DEFINITIVA ===== */
+  document.querySelectorAll("input,select").forEach(el=>el.disabled=true);
 }
 </script>
 
