@@ -6,105 +6,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root{
-  --azul:#0d47a1;
-  --vermelho:#c62828;
-}
+:root{ --azul:#0d47a1; --vermelho:#c62828; }
 body{
-  margin:0;
-  padding:20px;
+  margin:0; padding:20px;
   font-family:Arial, Helvetica, sans-serif;
   background:linear-gradient(135deg,var(--azul),var(--vermelho));
 }
 .container{
-  max-width:1200px;
-  margin:auto;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 20px 40px rgba(0,0,0,.35);
+  max-width:1200px; margin:auto; background:#fff;
+  border-radius:12px; box-shadow:0 20px 40px rgba(0,0,0,.35);
 }
 .header{
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;
-  padding:18px;
-  text-align:center;
+  color:#fff; padding:18px; text-align:center;
 }
 .content{ padding:25px; }
 label{ font-weight:bold; font-size:13px; }
 input,select{
-  width:100%;
-  padding:8px;
-  border:1px solid #ccc;
-  border-radius:5px;
-  font-size:13px;
+  width:100%; padding:8px; border:1px solid #ccc;
+  border-radius:5px; font-size:13px;
 }
-input:disabled, select:disabled{
-  background:#eee;
-  cursor:not-allowed;
-}
+input:disabled,select:disabled{ background:#eee; }
 .grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:15px;
-  margin-bottom:20px;
+  display:grid; grid-template-columns:2fr 1fr;
+  gap:15px; margin-bottom:20px;
 }
 table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:15px;
+  width:100%; border-collapse:collapse; margin-top:15px;
 }
 th,td{
-  border:1px solid #999;
-  padding:6px;
-  font-size:12.5px;
-  text-align:center;
+  border:1px solid #999; padding:6px;
+  font-size:12.5px; text-align:center;
 }
 th{ background:#e3f2fd; }
 .total{ font-weight:bold; }
 button{
-  width:100%;
-  padding:14px;
-  margin-top:20px;
+  width:100%; padding:14px; margin-top:20px;
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
+  color:#fff; border:none; border-radius:8px;
+  font-size:16px; cursor:pointer;
 }
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
+.actions{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
-/* ===== DESTAQUE DO RESUMO ===== */
 .resumo-box{
-  margin-top:30px;
-  border:3px solid var(--azul);
-  padding:20px;
-  border-radius:10px;
-  background:#f9fbff;
+  margin-top:30px; border:3px solid var(--azul);
+  padding:20px; border-radius:10px; background:#f9fbff;
 }
-.resumo-box h3{
-  margin-top:0;
-  text-align:center;
-  color:var(--azul);
-}
+.resumo-box h3{ margin-top:0; text-align:center; color:var(--azul); }
 
-/* ===== IMPRESSÃO ===== */
 @media print{
   body{ background:#fff; padding:0; }
-  .container{ box-shadow:none; border-radius:0; }
-  .header, .actions, .grid{ display:none; }
-  .resumo-box{
-    border:2px solid #000;
-    background:#fff;
-  }
-  th{
-    background:#eee !important;
-    -webkit-print-color-adjust: exact;
-  }
+  .header,.actions,.grid{ display:none; }
+  .container{ box-shadow:none; }
 }
 </style>
 </head>
@@ -112,7 +65,6 @@ button{
 <body>
 
 <div class="container">
-
   <div class="header">
     <h2>CÁLCULO DE FRETE POR ROTA</h2>
   </div>
@@ -124,12 +76,12 @@ button{
         <label>Tipo de Caminhão</label>
         <select id="tipo" onchange="gerarTabela()">
           <option value="">Selecione</option>
-          <option value="TOCO">Toco</option>
+          <option value="FROTA">Frota</option>
+          <option value="BITRUCK">Bitruck</option>
           <option value="TRUCK_555">Truck 555</option>
           <option value="TRUCK_5532">Truck 5532</option>
           <option value="TRUCK_53232">Truck 53232</option>
-          <option value="BITRUCK">Bitruck</option>
-          <option value="FROTA">Frota</option>
+          <option value="TOCO">Toco</option>
           <option value="CARRETA">Carreta</option>
         </select>
       </div>
@@ -143,7 +95,7 @@ button{
 
     <div class="actions">
       <button onclick="calcular()">Calcular Frete</button>
-      <button onclick="novoCalculo()" style="background:#555">Novo Cálculo</button>
+      <button onclick="location.reload()" style="background:#555">Novo Cálculo</button>
     </div>
 
     <div id="resumo"></div>
@@ -152,26 +104,33 @@ button{
 </div>
 
 <script>
-const indices = {
-  TOCO: 4.9381,
-  TRUCK_555: 4.4266,
-  TRUCK_5532: 4.4266,
-  TRUCK_53232: 4.4266,
-  BITRUCK: 3.5686,
-  FROTA: 5.8402,
-  CARRETA: 5.6203
+/* ===== DADOS BASE ===== */
+const base = {
+  FROTA:   { indice:5.8402, taxa:669.32 },
+  BITRUCK: { indice:3.5686, taxa:364.71 },
+  TRUCK:   { indice:4.4266, taxa:412.57 },
+  TOCO:    { indice:4.9381, taxa:414.93 },
+  CARRETA: { indice:5.6203, taxa:460.29 }
 };
 
+/* ===== COMPARTIMENTOS ===== */
 const compartimentos = {
-  TOCO: [5000,3000,2000],
-  TRUCK_555: [5000,5000,5000],
-  TRUCK_5532: [5000,5000,3000,2000],
-  TRUCK_53232: [5000,3000,2000,3000,2000],
+  FROTA:   [5000,5000,5000,2500,2500,2500],
   BITRUCK: [5000,5000,5000],
-  FROTA: [5000,5000,5000,2500,2500,2500],
+  TRUCK_555:   [5000,5000,5000],
+  TRUCK_5532:  [5000,5000,3000,2000],
+  TRUCK_53232: [5000,3000,2000,3000,2000],
+  TOCO:    [5000,3000,2000],
   CARRETA: [5000,5000,5000,5000,5000,5000]
 };
 
+/* ===== MAPEAMENTO DE ÍNDICE/TAXA ===== */
+function dadosCaminhao(tipo){
+  if(tipo.startsWith("TRUCK")) return base.TRUCK;
+  return base[tipo];
+}
+
+/* ===== FORMATAÇÃO ===== */
 function moeda(v){
   return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 }
@@ -180,23 +139,22 @@ function numero(v){
 }
 
 function gerarTabela(){
-  const tipo = document.getElementById("tipo").value;
+  const tipo=document.getElementById("tipo").value;
   if(!tipo){ document.getElementById("tabela").innerHTML=""; return; }
 
-  let html = `
-  <table>
-    <tr>
-      <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-      <th>QUANTIDADE (L)</th><th>FRETE (R$/L)</th><th>TOTAL (R$)</th><th>VENDEDOR</th>
-    </tr>`;
+  let html=`<table>
+  <tr>
+    <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+    <th>QUANTIDADE (L)</th><th>FRETE (R$/L)</th><th>TOTAL (R$)</th><th>VENDEDOR</th>
+  </tr>`;
 
-  compartimentos[tipo].forEach((litros,i)=>{
+  compartimentos[tipo].forEach((l,i)=>{
     html+=`
     <tr>
       <td><input id="cliente${i}"></td>
       <td><input id="cidade${i}"></td>
       <td><input id="horario${i}"></td>
-      <td>${numero(litros)}</td>
+      <td>${numero(l)}</td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
       <td><input id="vendedor${i}"></td>
@@ -212,16 +170,21 @@ function calcular(){
   const km=parseFloat(document.getElementById("kmTotal").value);
   if(!tipo||!km) return alert("Informe tipo e KM.");
 
+  const d=dadosCaminhao(tipo);
   const litrosArr=compartimentos[tipo];
-  const indice=indices[tipo];
   const totalLitros=litrosArr.reduce((a,b)=>a+b,0);
-  const freteTotal=km*indice;
+
+  /* ===== CÁLCULO CORRETO ===== */
+  const freteTotal=(km*d.indice)+d.taxa;
   const unit=freteTotal/totalLitros;
 
   let html=`<div class="resumo-box">
   <h3>Resumo de Frete por Rota</h3>
   <table>
-  <tr><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>FRETE</th><th>QUANTIDADE</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
+  <tr>
+    <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+    <th>FRETE</th><th>QUANTIDADE</th><th>TOTAL</th><th>VENDEDOR</th>
+  </tr>`;
 
   litrosArr.forEach((l,i)=>{
     const total=l*unit;
@@ -241,26 +204,30 @@ function calcular(){
   });
 
   html+=`
-  <tr class="total"><td colspan="4"></td><td>${numero(totalLitros)}</td><td>${moeda(freteTotal)}</td><td></td></tr>
+  <tr class="total">
+    <td colspan="4"></td>
+    <td>${numero(totalLitros)}</td>
+    <td>${moeda(freteTotal)}</td>
+    <td></td>
+  </tr>
   </table>
 
   <table style="margin-top:15px">
-  <tr><th>KM RODADO</th><th>ÍNDICE</th><th>TOTAL FRETE</th><th>M³</th><th>FRETE UNIT MÉDIO</th></tr>
-  <tr><td>${numero(km)}</td><td>${indice.toFixed(4)}</td><td>${moeda(freteTotal)}</td><td>${numero(totalLitros/1000)}</td><td>${moeda(unit)}</td></tr>
+  <tr>
+    <th>KM RODADO</th><th>ÍNDICE</th><th>TAXA</th>
+    <th>TOTAL FRETE</th><th>M³</th><th>FRETE UNIT MÉDIO</th>
+  </tr>
+  <tr>
+    <td>${numero(km)}</td>
+    <td>${d.indice.toFixed(4)}</td>
+    <td>${moeda(d.taxa)}</td>
+    <td>${moeda(freteTotal)}</td>
+    <td>${numero(totalLitros/1000)}</td>
+    <td>${moeda(unit)}</td>
+  </tr>
   </table></div>`;
 
   document.getElementById("resumo").innerHTML=html;
-  travarEdicao(true);
-}
-
-function travarEdicao(travar){
-  document.querySelectorAll("input, select").forEach(el=>{
-    if(el.id!=="kmTotal"||travar) el.disabled=travar;
-  });
-}
-
-function novoCalculo(){
-  location.reload();
 }
 </script>
 
