@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cálculo de Frete de Combustível</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 15px;
+    }
+    button {
+      background: #1e88e5;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #1565c0;
+    }
+    .resultado {
+      background: #f1f8ff;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .resultado p {
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Cálculo de Frete por Rota</h2>
+
+  <label>Tipo de Caminhão</label>
+  <select id="tipo">
+    <option value="">Selecione</option>
+    <option value="FROTA">Frota</option>
+    <option value="BITRUCK">Bi-Truck</option>
+    <option value="TRUCK">Truck</option>
+    <option value="TOCO">Toco</option>
+    <option value="CARRETA">Carreta</option>
+  </select>
+
+  <label>KM Rodado</label>
+  <input type="number" id="km" placeholder="Ex: 100">
+
+  <button onclick="calcularFrete()">Calcular Frete</button>
+
+  <div class="resultado" id="resultado" style="display:none;">
+    <h3>Resultado</h3>
+    <p><strong>Índice:</strong> <span id="indice"></span></p>
+    <p><strong>Taxa Calculada:</strong> R$ <span id="taxaCalc"></span></p>
+    <p><strong>Taxa Base:</strong> R$ <span id="taxaBase"></span></p>
+    <p><strong>Total do Frete:</strong> R$ <span id="totalFrete"></span></p>
+    <p><strong>Litragem:</strong> <span id="litragem"></span> L</p>
+    <p><strong>Frete Unitário Médio:</strong> R$ <span id="freteUnit"></span></p>
+  </div>
+</div>
+
+<script>
+const tabela = {
+  FROTA:    { indice: 5.8402, taxa: 669.32, litragem: 22500 },
+  BITRUCK: { indice: 3.5686, taxa: 364.71, litragem: 10000 },
+  TRUCK:   { indice: 4.4266, taxa: 412.57, litragem: 15000 },
+  TOCO:    { indice: 4.9381, taxa: 414.93, litragem: 20000 },
+  CARRETA: { indice: 5.6203, taxa: 460.29, litragem: 30000 }
+};
+
+function calcularFrete() {
+  const tipo = document.getElementById("tipo").value;
+  const km = parseFloat(document.getElementById("km").value);
+
+  if (!tipo || isNaN(km) || km <= 0) {
+    alert("Informe o tipo de caminhão e o KM corretamente.");
+    return;
+  }
+
+  const dados = tabela[tipo];
+  const taxaCalculada = km * dados.indice;
+  const totalFrete = taxaCalculada + dados.taxa;
+  const freteUnitario = totalFrete / dados.litragem;
+
+  document.getElementById("indice").innerText = dados.indice.toFixed(4);
+  document.getElementById("taxaCalc").innerText = taxaCalculada.toFixed(2);
+  document.getElementById("taxaBase").innerText = dados.taxa.toFixed(2);
+  document.getElementById("totalFrete").innerText = totalFrete.toFixed(2);
+  document.getElementById("litragem").innerText = dados.litragem;
+  document.getElementById("freteUnit").innerText = freteUnitario.toFixed(4);
+
+  document.getElementById("resultado").style.display = "block";
+}
+</script>
+
+</body>
+</html>
