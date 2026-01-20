@@ -7,295 +7,166 @@
 
 <style>
 :root{--azul:#0d47a1;--vermelho:#c62828}
-body{
-  margin:0;padding:20px;
-  font-family:Arial,Helvetica,sans-serif;
-  background:linear-gradient(135deg,var(--azul),var(--vermelho))
-}
-.container{
-  max-width:1200px;margin:auto;background:#fff;
-  border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.35)
-}
-.header{
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;padding:18px;text-align:center
-}
+body{margin:0;padding:20px;font-family:Arial;background:linear-gradient(135deg,var(--azul),var(--vermelho))}
+.container{max-width:1200px;margin:auto;background:#fff;border-radius:12px}
+.header{background:linear-gradient(90deg,var(--azul),var(--vermelho));color:#fff;padding:18px;text-align:center}
 .content{padding:25px}
-input,select{
-  width:100%;padding:8px;
-  border:1px solid #ccc;border-radius:5px
-}
+input,select{width:100%;padding:8px;border:1px solid #ccc;border-radius:5px}
 input:disabled,select:disabled{background:#eee}
 .uppercase{text-transform:uppercase}
-.invalid{border:2px solid #d32f2f;background:#fdecea}
-.grid{
-  display:grid;grid-template-columns:2fr 1fr;
-  gap:15px;margin-bottom:20px
-}
-table{
-  width:100%;border-collapse:collapse;margin-top:15px
-}
-th,td{
-  border:1px solid #999;padding:6px;
-  font-size:12.5px;text-align:center
-}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #999;padding:6px;font-size:12.5px;text-align:center}
 th{background:#e3f2fd}
-.actions{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:12px;margin-top:20px
-}
-button{
-  padding:14px;
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;border:none;border-radius:8px;
-  font-size:16px;cursor:pointer
-}
-button.secondary{background:#555}
-.resumo-box{
-  margin-top:30px;border:3px solid var(--azul);
-  padding:20px;border-radius:10px;background:#f9fbff
-}
-.alerta-parcial{
-  margin-top:10px;padding:10px;
-  border:2px solid #f57c00;
-  background:#fff3e0;color:#e65100;
-  font-weight:bold;text-align:center;border-radius:6px
-}
-.footer{
-  margin-top:30px;text-align:center;
-  font-size:12px;color:#555
-}
+button{padding:12px;background:linear-gradient(90deg,var(--azul),var(--vermelho));color:#fff;border:none;border-radius:6px;cursor:pointer}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.resumo-box{margin-top:30px;border:3px solid var(--azul);padding:20px;border-radius:10px;background:#f9fbff}
+.drag{cursor:move;background:#f5f5f5}
+.footer{text-align:center;margin-top:25px;font-size:12px;color:#555}
+.history{margin-top:10px;font-size:13px}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-  <div class="header">
-    <h2>CÁLCULO DE FRETE POR ROTA</h2>
+<div class="header"><h2>CÁLCULO DE FRETE POR ROTA</h2></div>
+<div class="content">
+
+<div class="grid">
+  <div>
+    <label>Tipo de Caminhão</label>
+    <select id="tipo" onchange="gerarTabela()">
+      <option value="">Selecione</option>
+      <option value="FROTA">FROTA</option>
+      <option value="BITRUCK">BITRUCK</option>
+      <option value="TRUCK_555">TRUCK 555</option>
+      <option value="TRUCK_5532">TRUCK 5532</option>
+      <option value="TRUCK_53232">TRUCK 53232</option>
+      <option value="TOCO">TOCO</option>
+      <option value="CARRETA">CARRETA</option>
+    </select>
   </div>
-
-  <div class="content">
-
-    <div class="grid">
-      <div>
-        <label>Tipo de Caminhão</label>
-        <select id="tipo" onchange="gerarTabela()">
-          <option value="">Selecione</option>
-          <option value="FROTA">FROTA</option>
-          <option value="BITRUCK">BITRUCK</option>
-          <option value="TRUCK_555">TRUCK 555</option>
-          <option value="TRUCK_5532">TRUCK 5532</option>
-          <option value="TRUCK_53232">TRUCK 53232</option>
-          <option value="TOCO">TOCO</option>
-          <option value="CARRETA">CARRETA</option>
-        </select>
-      </div>
-      <div>
-        <label>KM TOTAL DA ROTA (automático)</label>
-        <input id="kmTotal" readonly>
-      </div>
-    </div>
-
-    <div id="tabela"></div>
-
-    <div class="actions">
-      <button onclick="calcular()">Calcular Frete</button>
-      <button class="secondary" onclick="location.reload()">Novo Cálculo</button>
-    </div>
-
-    <div id="resumo"></div>
-    <div class="footer">© Renato Monteiro</div>
+  <div>
+    <label>KM TOTAL DA ROTA</label>
+    <input id="kmTotal" readonly>
   </div>
+</div>
+
+<div id="tabela"></div>
+
+<div class="actions">
+  <button onclick="calcular()">Calcular Frete</button>
+  <button onclick="location.reload()">Novo Cálculo</button>
+</div>
+
+<div id="resumo"></div>
+<div class="footer">© Renato Monteiro</div>
+
+</div>
 </div>
 
 <datalist id="cidadesMG"></datalist>
 
 <script>
 /* ================= BASE ================= */
-const BASE_NOME = "BETIM";
+const BASE="BETIM";
+let cidadesCoords={}, kmAntes=null, kmDepois=null;
 
-/* ================= DADOS FRETE ================= */
-const baseFrete={
-  FROTA:{indice:5.8402,taxa:669.32},
-  BITRUCK:{indice:3.5686,taxa:364.71},
-  TRUCK:{indice:4.4266,taxa:412.57},
-  TOCO:{indice:4.9381,taxa:414.93},
-  CARRETA:{indice:5.6203,taxa:460.29}
-};
-
-const compartimentos={
-  FROTA:[5000,5000,5000,2500,2500,2500],
-  BITRUCK:[5000,5000,5000],
-  TRUCK_555:[5000,5000,5000],
-  TRUCK_5532:[5000,5000,3000,2000],
-  TRUCK_53232:[5000,3000,2000,3000,2000],
-  TOCO:[5000,3000,2000],
-  CARRETA:[5000,5000,5000,5000,5000,5000]
-};
-
+/* ================= FRETE ================= */
+const baseFrete={FROTA:{indice:5.8402,taxa:669.32},BITRUCK:{indice:3.5686,taxa:364.71},TRUCK:{indice:4.4266,taxa:412.57},TOCO:{indice:4.9381,taxa:414.93},CARRETA:{indice:5.6203,taxa:460.29}};
+const compartimentos={FROTA:[5000,5000,5000,2500,2500,2500],BITRUCK:[5000,5000,5000],TRUCK_555:[5000,5000,5000],TRUCK_5532:[5000,5000,3000,2000],TRUCK_53232:[5000,3000,2000,3000,2000],TOCO:[5000,3000,2000],CARRETA:[5000,5000,5000,5000,5000,5000]};
 const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
-const numero=v=>v.toLocaleString("pt-BR");
 
 /* ================= CIDADES ================= */
-let cidadesCoords={};
-
-fetch("cidades-mg.json")
-.then(r=>r.json())
-.then(d=>{
+fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
   Object.keys(d).forEach(c=>{
-    const o=document.createElement("option");
-    o.value=c;
-    dl.appendChild(o);
+    const o=document.createElement("option");o.value=c;dl.appendChild(o);
   });
 });
 
 /* ================= DISTÂNCIA ================= */
-async function distanciaEntre(origem, destino){
-  const [lat1,lon1]=origem;
-  const [lat2,lon2]=destino;
-  const url=`https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=false`;
-  const r=await fetch(url);
+async function trecho(a,b){
+  const [la,lo]=cidadesCoords[a], [lb,lblo]=cidadesCoords[b];
+  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${lo},${la};${lblo},${lb}?overview=false`);
   const j=await r.json();
   return j.routes[0].distance/1000;
 }
 
-/* ================= KM SEQUENCIAL + RETORNO ================= */
-async function calcularKmSequencial(){
-  const kmInput=document.getElementById("kmTotal");
-  kmInput.value="Calculando...";
+/* ================= KM SEQUENCIAL ================= */
+async function recalcularKM(){
+  const campos=[...document.querySelectorAll(".cidade")].map(c=>c.value).filter(v=>v);
+  if(!campos.length) return;
 
-  const cidades=[];
-  for(let i=0;i<20;i++){
-    const el=document.getElementById("cidade"+i);
-    if(el && el.value.trim()){
-      cidades.push(el.value.trim());
-    }
+  let km=0, origem=BASE;
+  for(const c of campos){
+    km+=await trecho(origem,c);
+    origem=c;
   }
+  km+=await trecho(origem,BASE);
 
-  if(cidades.length===0){
-    kmInput.value="";
-    return;
-  }
-
-  let kmTotal=0;
-  let origem=cidadesCoords[BASE_NOME];
-
-  for(const cidade of cidades){
-    const destino=cidadesCoords[cidade];
-    if(!destino){
-      alert("Cidade não encontrada: "+cidade);
-      kmInput.value="";
-      return;
-    }
-    kmTotal+=await distanciaEntre(origem,destino);
-    origem=destino;
-  }
-
-  // retorno à base
-  kmTotal+=await distanciaEntre(origem,cidadesCoords[BASE_NOME]);
-
-  kmInput.value=kmTotal.toFixed(2);
+  if(kmAntes===null) kmAntes=km;
+  kmDepois=km;
+  document.getElementById("kmTotal").value=km.toFixed(2);
 }
 
 /* ================= TABELA ================= */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
-  if(!tipo){document.getElementById("tabela").innerHTML="";return;}
+  if(!tipo) return;
 
-  let html=`<table>
-  <tr>
-    <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-    <th>QUANTIDADE (L)</th><th>FRETE</th><th>TOTAL</th><th>VENDEDOR</th>
-  </tr>`;
-
-  compartimentos[tipo].forEach((l,i)=>{
+  let html=`<table id="rota"><tr><th></th><th>CIDADE (arraste)</th></tr>`;
+  compartimentos[tipo].forEach((_,i)=>{
     html+=`
-    <tr>
-      <td><input id="cliente${i}" class="uppercase"></td>
-      <td><input id="cidade${i}" list="cidadesMG" class="uppercase"
-          oninput="this.value=this.value.toUpperCase();calcularKmSequencial()"></td>
-      <td><input id="horario${i}" type="time"></td>
-      <td>${numero(l)}</td>
-      <td id="unit${i}">-</td>
-      <td id="frete${i}">-</td>
-      <td><input id="vendedor${i}" class="uppercase"></td>
+    <tr draggable="true">
+      <td class="drag">☰</td>
+      <td><input class="cidade uppercase" onblur="validarCidade(this);recalcularKM()"></td>
     </tr>`;
   });
-
-  html+="</table>";
+  html+=`</table>`;
   document.getElementById("tabela").innerHTML=html;
+  ativarDrag();
+}
+
+/* ================= DRAG & DROP ================= */
+function ativarDrag(){
+  let drag;
+  document.querySelectorAll("#rota tr").forEach(r=>{
+    r.addEventListener("dragstart",()=>drag=r);
+    r.addEventListener("dragover",e=>e.preventDefault());
+    r.addEventListener("drop",()=>{
+      if(drag!==r){
+        r.parentNode.insertBefore(drag,r.nextSibling);
+        recalcularKM();
+      }
+    });
+  });
+}
+
+/* ================= VALIDAÇÃO SUAVE ================= */
+function validarCidade(el){
+  if(el.value && !cidadesCoords[el.value]){
+    alert("Cidade não encontrada: "+el.value);
+    el.value="";
+  }
 }
 
 /* ================= CALCULAR FRETE ================= */
 function calcular(){
-  const tipo=document.getElementById("tipo").value;
   const km=parseFloat(document.getElementById("kmTotal").value);
-  if(!tipo||!km){alert("KM da rota não calculado.");return;}
+  if(!km) return alert("KM não calculado");
 
-  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
-  const litrosArr=compartimentos[tipo];
-
-  let litrosUsados=0,usados=[];
-  litrosArr.forEach((l,i)=>{
-    if(document.getElementById("cliente"+i).value.trim()){
-      litrosUsados+=l;usados.push(i);
-    }
-  });
-
-  const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
-  const cargaParcial=litrosUsados<capacidadeTotal;
-
-  const freteTotal=(km*dados.indice)+dados.taxa;
-  const unit=freteTotal/litrosUsados;
-
-  let html=`<div class="resumo-box">
-    <h3>Resumo de Frete por Rota</h3>
-    ${cargaParcial?'<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>':''}
-
-    <table>
-      <tr>
-        <th>CLIENTE</th><th>CIDADE</th><th>FRETE (R$/L)</th><th>QTDE</th><th>TOTAL</th>
-      </tr>`;
-
-  usados.forEach(i=>{
-    const l=litrosArr[i],t=l*unit;
-    document.getElementById("unit"+i).innerText=moeda4(unit);
-    document.getElementById("frete"+i).innerText=moeda(t);
-    html+=`
-      <tr>
-        <td>${document.getElementById("cliente"+i).value}</td>
-        <td>${document.getElementById("cidade"+i).value}</td>
-        <td>${moeda4(unit)}</td>
-        <td>${numero(l)}</td>
-        <td>${moeda(t)}</td>
-      </tr>`;
-  });
-
-  html+=`
-    </table>
-
-    <table style="margin-top:15px">
-      <tr>
-        <th>KM TOTAL</th><th>ÍNDICE</th><th>TAXA</th>
-        <th>TOTAL FRETE</th><th>M³</th><th>FRETE UNIT MÉDIO</th>
-      </tr>
-      <tr>
-        <td>${numero(km)}</td>
-        <td>${dados.indice.toFixed(4)}</td>
-        <td>${moeda(dados.taxa)}</td>
-        <td>${moeda(freteTotal)}</td>
-        <td>${numero(litrosUsados/1000)}</td>
-        <td>${moeda4(unit)}</td>
-      </tr>
-    </table>
+  document.getElementById("resumo").innerHTML=`
+  <div class="resumo-box">
+    <h3>Resumo da Rota</h3>
+    <div class="history">
+      KM ORIGINAL: ${kmAntes?.toFixed(2)} km<br>
+      KM APÓS REORDENAÇÃO: ${kmDepois?.toFixed(2)} km
+    </div>
   </div>`;
-
-  document.getElementById("resumo").innerHTML=html;
-  document.querySelectorAll("input,select").forEach(e=>e.disabled=true);
 }
 </script>
 
