@@ -4,126 +4,48 @@
 <meta charset="UTF-8">
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-:root{ --azul:#0d47a1; --vermelho:#c62828; }
-body{
-  margin:0; padding:20px;
-  font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(135deg,var(--azul),var(--vermelho));
-}
-.container{
-  max-width:1200px; margin:auto; background:#fff;
-  border-radius:12px; box-shadow:0 20px 40px rgba(0,0,0,.35);
-}
-.header{
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff; padding:18px; text-align:center;
-}
-.content{ padding:25px; }
-input,select{
-  width:100%; padding:8px;
-  border:1px solid #ccc; border-radius:5px;
-}
-input:disabled,select:disabled{ background:#eee; }
-.uppercase{ text-transform:uppercase; }
-.invalid{
-  border:2px solid #d32f2f !important;
-  background:#fdecea !important;
-}
-.grid{
-  display:grid; grid-template-columns:2fr 1fr;
-  gap:15px; margin-bottom:20px;
-}
-table{
-  width:100%; border-collapse:collapse; margin-top:15px;
-}
-th,td{
-  border:1px solid #999; padding:6px;
-  font-size:12.5px; text-align:center;
-}
-th{ background:#e3f2fd; }
-.actions{
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:12px; margin-top:20px;
-}
-button{
-  padding:14px;
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
-}
-button.secondary{ background:#555; }
-.resumo-box{
-  margin-top:30px;
-  border:3px solid var(--azul);
-  padding:20px;
-  border-radius:10px;
-  background:#f9fbff;
-}
-.alerta-parcial{
-  margin-top:10px;
-  padding:10px;
-  border:2px solid #f57c00;
-  background:#fff3e0;
-  color:#e65100;
-  font-weight:bold;
-  text-align:center;
-  border-radius:6px;
-}
-.footer{
-  margin-top:30px;
-  text-align:center;
-  font-size:12px;
-  color:#555;
-}
+body{font-family:Arial;background:#f4f6f9;padding:20px}
+.container{max-width:1200px;margin:auto;background:#fff;padding:20px;border-radius:10px}
+label{font-weight:bold}
+input,select{width:100%;padding:8px;margin-top:5px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #ccc;padding:6px;text-align:center}
+th{background:#e3f2fd}
+.actions{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{padding:12px;font-size:15px;cursor:pointer}
+.alerta{margin-top:10px;padding:10px;background:#e3f2fd;border:1px solid #2196f3}
+.footer{text-align:center;margin-top:20px;font-size:12px;color:#666}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-  <div class="header">
-    <h2>CÁLCULO DE FRETE POR ROTA</h2>
-  </div>
+<h2>CÁLCULO DE FRETE – DISTÂNCIA AUTOMÁTICA</h2>
 
-  <div class="content">
-    <div class="grid">
-      <div>
-        <label>Tipo de Caminhão</label>
-        <select id="tipo" onchange="gerarTabela()">
-          <option value="">Selecione</option>
-          <option value="FROTA">FROTA</option>
-          <option value="BITRUCK">BITRUCK</option>
-          <option value="TRUCK_555">TRUCK 555</option>
-          <option value="TRUCK_5532">TRUCK 5532</option>
-          <option value="TRUCK_53232">TRUCK 53232</option>
-          <option value="TOCO">TOCO</option>
-          <option value="CARRETA">CARRETA</option>
-        </select>
-      </div>
-      <div>
-        <label>KM TOTAL DA ROTA</label>
-        <input type="number" id="kmTotal">
-      </div>
-    </div>
+<label>Destino (Cidade)</label>
+<input id="cidadeDestino" list="cidadesMG" oninput="this.value=this.value.toUpperCase();buscarDistancia()">
 
-    <div id="tabela"></div>
+<label>KM TOTAL DA ROTA</label>
+<input id="kmTotal" readonly>
 
-    <div class="actions">
-      <button onclick="calcular()">Calcular Frete</button>
-      <button class="secondary" onclick="location.reload()">Novo Cálculo</button>
-    </div>
-
-    <div id="resumo"></div>
-
-    <div class="footer">© Renato Monteiro</div>
-  </div>
+<div class="alerta">
+📍 Distância calculada automaticamente (OpenStreetMap)
 </div>
 
-<!-- ================= LISTA COMPLETA – 853 CIDADES DE MG ================= -->
+<div class="actions">
+<button onclick="calcular()">Calcular Frete</button>
+<button onclick="location.reload()">Novo Cálculo</button>
+</div>
+
+<div id="resultado"></div>
+
+<div class="footer">© Renato Monteiro</div>
+</div>
+
+<!-- ===================== DATAlIST CIDADES MG ===================== -->
 <datalist id="cidadesMG">
 <option value="ABADIA DOS DOURADOS">
 <option value="ABAETÉ">
@@ -970,193 +892,77 @@ button.secondary{ background:#555; }
 <option value="VISCONDE DO RIO BRANCO">
 <option value="VOLTA GRANDE">
 <option value="WENCESLAU BRAZ">
+
+<!-- (use aqui a lista completa das 853 cidades que você já tem) -->
 </datalist>
 
+  <script>
+let cidadesCoords = {};
+
+fetch("cidades-mg.json")
+  .then(r=>r.json())
+  .then(d=>cidadesCoords = d);
+</script>
+
 <script>
-/* ================= DADOS BASE ================= */
-const base = {
-  FROTA:   { indice:5.8402, taxa:669.32 },
-  BITRUCK: { indice:3.5686, taxa:364.71 },
-  TRUCK:   { indice:4.4266, taxa:412.57 },
-  TOCO:    { indice:4.9381, taxa:414.93 },
-  CARRETA: { indice:5.6203, taxa:460.29 }
+/* ================= CONFIGURAÇÃO BASE ================= */
+const BASE_COORD = {
+  nome: "BETIM",
+  lat: -19.9678,
+  lon: -44.1986
 };
 
-const compartimentos = {
-  FROTA:[5000,5000,5000,2500,2500,2500],
-  BITRUCK:[5000,5000,5000],
-  TRUCK_555:[5000,5000,5000],
-  TRUCK_5532:[5000,5000,3000,2000],
-  TRUCK_53232:[5000,3000,2000,3000,2000],
-  TOCO:[5000,3000,2000],
-  CARRETA:[5000,5000,5000,5000,5000,5000]
+/* Coordenadas aproximadas das cidades (exemplo – pode expandir) */
+const cidadesCoords = {
+  "BETIM": [-19.9678, -44.1986],
+  "BELO HORIZONTE": [-19.9167, -43.9345],
+  "UBERLÂNDIA": [-18.9186, -48.2772],
+  "UBERABA": [-19.7472, -47.9381],
+  "CONTAGEM": [-19.9319, -44.0539],
+  "SETE LAGOAS": [-19.4569, -44.2413]
 };
 
-function dadosCaminhao(tipo){
-  if(tipo.startsWith("TRUCK")) return base.TRUCK;
-  return base[tipo];
-}
+/* ================= BUSCAR DISTÂNCIA ================= */
+async function buscarDistancia(){
+  const cidade = document.getElementById("cidadeDestino").value.trim();
+  if(!cidadesCoords[cidade]) return;
 
-/* ================= FORMATADORES ================= */
-function moeda(v){
-  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2});
-}
-function moeda4(v){
-  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
-}
-function numero(v){
-  return v.toLocaleString("pt-BR");
-}
+  const [lat,lon] = cidadesCoords[cidade];
 
-/* ================= GERAR TABELA ================= */
-function gerarTabela(){
-  const tipo = document.getElementById("tipo").value;
-  if(!tipo){
-    document.getElementById("tabela").innerHTML = "";
-    return;
+  const url = `https://router.project-osrm.org/route/v1/driving/${BASE_COORD.lon},${BASE_COORD.lat};${lon},${lat}?overview=false`;
+
+  try{
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const km = data.routes[0].distance / 1000;
+    document.getElementById("kmTotal").value = km.toFixed(2);
+  }catch{
+    alert("Erro ao calcular distância.");
   }
-
-  let html = `
-  <table>
-    <tr>
-      <th>CLIENTE</th>
-      <th>CIDADE</th>
-      <th>HORÁRIO</th>
-      <th>QUANTIDADE (L)</th>
-      <th>FRETE (R$/L)</th>
-      <th>TOTAL (R$)</th>
-      <th>VENDEDOR</th>
-    </tr>`;
-
-  compartimentos[tipo].forEach((l,i)=>{
-    html += `
-    <tr>
-      <td><input id="cliente${i}" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><input id="cidade${i}" list="cidadesMG" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><input id="horario${i}" type="time"></td>
-      <td>${numero(l)}</td>
-      <td id="unit${i}">-</td>
-      <td id="frete${i}">-</td>
-      <td><input id="vendedor${i}" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-    </tr>`;
-  });
-
-  html += "</table>";
-  document.getElementById("tabela").innerHTML = html;
 }
 
-/* ================= CALCULAR FRETE ================= */
+/* ================= CALCULAR FRETE (EXEMPLO) ================= */
 function calcular(){
-  const tipo = document.getElementById("tipo").value;
   const km = parseFloat(document.getElementById("kmTotal").value);
-
-  if(!tipo || !km){
-    alert("Informe o tipo de caminhão e o KM total.");
+  if(!km){
+    alert("Distância não calculada.");
     return;
   }
 
-  const dados = dadosCaminhao(tipo);
-  const litrosArr = compartimentos[tipo];
+  const indice = 4.4266;
+  const taxa = 412.57;
+  const frete = (km * indice) + taxa;
 
-  let litrosUsados = 0;
-  let usados = [];
-
-  for(let i=0;i<litrosArr.length;i++){
-    const cliente  = document.getElementById("cliente"+i);
-    const cidade   = document.getElementById("cidade"+i);
-    const horario  = document.getElementById("horario"+i);
-    const vendedor = document.getElementById("vendedor"+i);
-
-    if(cliente.value.trim()){
-      if(!cidade.value || !horario.value || !vendedor.value){
-        alert("Preencha CIDADE, HORÁRIO e VENDEDOR para todos os clientes.");
-        return;
-      }
-      litrosUsados += litrosArr[i];
-      usados.push(i);
-    }
-  }
-
-  if(litrosUsados === 0){
-    alert("Informe ao menos um cliente.");
-    return;
-  }
-
-  const capacidadeTotal = litrosArr.reduce((a,b)=>a+b,0);
-  const cargaParcial = litrosUsados < capacidadeTotal;
-
-  const freteTotal = (km * dados.indice) + dados.taxa;
-  const unit = freteTotal / litrosUsados;
-
-  let html = `
-  <div class="resumo-box">
-    <h3>Resumo de Frete por Rota</h3>
-    ${cargaParcial ? '<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>' : ''}
-
-    <table>
-      <tr>
-        <th>CLIENTE</th>
-        <th>CIDADE</th>
-        <th>HORÁRIO</th>
-        <th>FRETE (R$/L)</th>
-        <th>QUANTIDADE</th>
-        <th>TOTAL (R$)</th>
-        <th>VENDEDOR</th>
-      </tr>`;
-
-  usados.forEach(i=>{
-    const l = litrosArr[i];
-    const total = l * unit;
-
-    document.getElementById("unit"+i).innerText = moeda4(unit);
-    document.getElementById("frete"+i).innerText = moeda(total);
-
-    html += `
-      <tr>
-        <td>${document.getElementById("cliente"+i).value}</td>
-        <td>${document.getElementById("cidade"+i).value}</td>
-        <td>${document.getElementById("horario"+i).value}</td>
-        <td>${moeda4(unit)}</td>
-        <td>${numero(l)}</td>
-        <td>${moeda(total)}</td>
-        <td>${document.getElementById("vendedor"+i).value}</td>
-      </tr>`;
-  });
-
-  html += `
-      <tr class="total">
-        <td colspan="4"></td>
-        <td>${numero(litrosUsados)}</td>
-        <td>${moeda(freteTotal)}</td>
-        <td></td>
-      </tr>
-    </table>
-
-    <table style="margin-top:15px">
-      <tr>
-        <th>KM RODADO</th>
-        <th>ÍNDICE</th>
-        <th>TAXA</th>
-        <th>TOTAL FRETE</th>
-        <th>M³</th>
-        <th>FRETE UNIT MÉDIO</th>
-      </tr>
-      <tr>
-        <td>${numero(km)}</td>
-        <td>${dados.indice.toFixed(4)}</td>
-        <td>${moeda(dados.taxa)}</td>
-        <td>${moeda(freteTotal)}</td>
-        <td>${numero(litrosUsados/1000)}</td>
-        <td>${moeda4(unit)}</td>
-      </tr>
-    </table>
-  </div>`;
-
-  document.getElementById("resumo").innerHTML = html;
-  document.querySelectorAll("input,select").forEach(e=>e.disabled=true);
-}
-
-function novoCalculo(){
-  location.reload();
+  document.getElementById("resultado").innerHTML = `
+    <h3>Resumo</h3>
+    <p><b>KM:</b> ${km.toLocaleString("pt-BR")}</p>
+    <p><b>Índice:</b> ${indice}</p>
+    <p><b>Taxa:</b> R$ ${taxa.toLocaleString("pt-BR")}</p>
+    <p><b>Total Frete:</b> R$ ${frete.toLocaleString("pt-BR",{minimumFractionDigits:2})}</p>
+  `;
 }
 </script>
+
+</body>
+</html>
