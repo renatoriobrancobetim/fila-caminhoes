@@ -973,44 +973,190 @@ button.secondary{ background:#555; }
 </datalist>
 
 <script>
-/* JS de cálculo permanece o mesmo da versão anterior */
+/* ================= DADOS BASE ================= */
+const base = {
+  FROTA:   { indice:5.8402, taxa:669.32 },
+  BITRUCK: { indice:3.5686, taxa:364.71 },
+  TRUCK:   { indice:4.4266, taxa:412.57 },
+  TOCO:    { indice:4.9381, taxa:414.93 },
+  CARRETA: { indice:5.6203, taxa:460.29 }
+};
+
+const compartimentos = {
+  FROTA:[5000,5000,5000,2500,2500,2500],
+  BITRUCK:[5000,5000,5000],
+  TRUCK_555:[5000,5000,5000],
+  TRUCK_5532:[5000,5000,3000,2000],
+  TRUCK_53232:[5000,3000,2000,3000,2000],
+  TOCO:[5000,3000,2000],
+  CARRETA:[5000,5000,5000,5000,5000,5000]
+};
+
+function dadosCaminhao(tipo){
+  if(tipo.startsWith("TRUCK")) return base.TRUCK;
+  return base[tipo];
+}
+
+/* ================= FORMATADORES ================= */
+function moeda(v){
+  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2});
+}
+function moeda4(v){
+  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
+}
+function numero(v){
+  return v.toLocaleString("pt-BR");
+}
+
+/* ================= GERAR TABELA ================= */
 function gerarTabela(){
-  const tipo=document.getElementById("tipo").value;
-  if(!tipo){ document.getElementById("tabela").innerHTML=""; return; }
+  const tipo = document.getElementById("tipo").value;
+  if(!tipo){
+    document.getElementById("tabela").innerHTML = "";
+    return;
+  }
 
-  const compartimentos={
-    FROTA:[5000,5000,5000,2500,2500,2500],
-    BITRUCK:[5000,5000,5000],
-    TRUCK_555:[5000,5000,5000],
-    TRUCK_5532:[5000,5000,3000,2000],
-    TRUCK_53232:[5000,3000,2000,3000,2000],
-    TOCO:[5000,3000,2000],
-    CARRETA:[5000,5000,5000,5000,5000,5000]
-  };
-
-  let html=`<table>
+  let html = `
+  <table>
     <tr>
-      <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-      <th>QUANTIDADE (L)</th><th>FRETE</th><th>TOTAL</th><th>VENDEDOR</th>
+      <th>CLIENTE</th>
+      <th>CIDADE</th>
+      <th>HORÁRIO</th>
+      <th>QUANTIDADE (L)</th>
+      <th>FRETE (R$/L)</th>
+      <th>TOTAL (R$)</th>
+      <th>VENDEDOR</th>
     </tr>`;
 
   compartimentos[tipo].forEach((l,i)=>{
-    html+=`
+    html += `
     <tr>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><input list="cidadesMG" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
-      <td><input type="time"></td>
-      <td>${l.toLocaleString("pt-BR")}</td>
-      <td>-</td>
-      <td>-</td>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
+      <td><input id="cliente${i}" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
+      <td><input id="cidade${i}" list="cidadesMG" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
+      <td><input id="horario${i}" type="time"></td>
+      <td>${numero(l)}</td>
+      <td id="unit${i}">-</td>
+      <td id="frete${i}">-</td>
+      <td><input id="vendedor${i}" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
     </tr>`;
   });
 
-  html+="</table>";
-  document.getElementById("tabela").innerHTML=html;
+  html += "</table>";
+  document.getElementById("tabela").innerHTML = html;
+}
+
+/* ================= CALCULAR FRETE ================= */
+function calcular(){
+  const tipo = document.getElementById("tipo").value;
+  const km = parseFloat(document.getElementById("kmTotal").value);
+
+  if(!tipo || !km){
+    alert("Informe o tipo de caminhão e o KM total.");
+    return;
+  }
+
+  const dados = dadosCaminhao(tipo);
+  const litrosArr = compartimentos[tipo];
+
+  let litrosUsados = 0;
+  let usados = [];
+
+  for(let i=0;i<litrosArr.length;i++){
+    const cliente  = document.getElementById("cliente"+i);
+    const cidade   = document.getElementById("cidade"+i);
+    const horario  = document.getElementById("horario"+i);
+    const vendedor = document.getElementById("vendedor"+i);
+
+    if(cliente.value.trim()){
+      if(!cidade.value || !horario.value || !vendedor.value){
+        alert("Preencha CIDADE, HORÁRIO e VENDEDOR para todos os clientes.");
+        return;
+      }
+      litrosUsados += litrosArr[i];
+      usados.push(i);
+    }
+  }
+
+  if(litrosUsados === 0){
+    alert("Informe ao menos um cliente.");
+    return;
+  }
+
+  const capacidadeTotal = litrosArr.reduce((a,b)=>a+b,0);
+  const cargaParcial = litrosUsados < capacidadeTotal;
+
+  const freteTotal = (km * dados.indice) + dados.taxa;
+  const unit = freteTotal / litrosUsados;
+
+  let html = `
+  <div class="resumo-box">
+    <h3>Resumo de Frete por Rota</h3>
+    ${cargaParcial ? '<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>' : ''}
+
+    <table>
+      <tr>
+        <th>CLIENTE</th>
+        <th>CIDADE</th>
+        <th>HORÁRIO</th>
+        <th>FRETE (R$/L)</th>
+        <th>QUANTIDADE</th>
+        <th>TOTAL (R$)</th>
+        <th>VENDEDOR</th>
+      </tr>`;
+
+  usados.forEach(i=>{
+    const l = litrosArr[i];
+    const total = l * unit;
+
+    document.getElementById("unit"+i).innerText = moeda4(unit);
+    document.getElementById("frete"+i).innerText = moeda(total);
+
+    html += `
+      <tr>
+        <td>${document.getElementById("cliente"+i).value}</td>
+        <td>${document.getElementById("cidade"+i).value}</td>
+        <td>${document.getElementById("horario"+i).value}</td>
+        <td>${moeda4(unit)}</td>
+        <td>${numero(l)}</td>
+        <td>${moeda(total)}</td>
+        <td>${document.getElementById("vendedor"+i).value}</td>
+      </tr>`;
+  });
+
+  html += `
+      <tr class="total">
+        <td colspan="4"></td>
+        <td>${numero(litrosUsados)}</td>
+        <td>${moeda(freteTotal)}</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <table style="margin-top:15px">
+      <tr>
+        <th>KM RODADO</th>
+        <th>ÍNDICE</th>
+        <th>TAXA</th>
+        <th>TOTAL FRETE</th>
+        <th>M³</th>
+        <th>FRETE UNIT MÉDIO</th>
+      </tr>
+      <tr>
+        <td>${numero(km)}</td>
+        <td>${dados.indice.toFixed(4)}</td>
+        <td>${moeda(dados.taxa)}</td>
+        <td>${moeda(freteTotal)}</td>
+        <td>${numero(litrosUsados/1000)}</td>
+        <td>${moeda4(unit)}</td>
+      </tr>
+    </table>
+  </div>`;
+
+  document.getElementById("resumo").innerHTML = html;
+  document.querySelectorAll("input,select").forEach(e=>e.disabled=true);
+}
+
+function novoCalculo(){
+  location.reload();
 }
 </script>
-
-</body>
-</html>
