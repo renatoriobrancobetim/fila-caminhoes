@@ -331,19 +331,28 @@ function calcular(){
 
   const litrosArr = compartimentos[tipo];
 
-  // pega as linhas NA ORDEM ATUAL DA TABELA (rota otimizada)
+  // pega as linhas NA ORDEM VISUAL ATUAL (rota otimizada)
   const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
   let litrosUsados = 0;
-  let usados = [];
+  let itensResumo = [];
 
-  rows.forEach((row, ordem)=>{
-    const idx = ordem;
-    const cliente = row.querySelector(`#cliente${idx}`)?.value.trim();
-    if(cliente){
-      litrosUsados += litrosArr[idx];
-      usados.push(idx);
-    }
+  rows.forEach(row=>{
+    const clienteInput = row.querySelector("input[id^='cliente']");
+    if(!clienteInput || !clienteInput.value.trim()) return;
+
+    // extrai o índice real do ID (cliente3 → 3)
+    const idx = parseInt(clienteInput.id.replace("cliente",""),10);
+
+    const litros = litrosArr[idx];
+    litrosUsados += litros;
+
+    itensResumo.push({
+      cliente: clienteInput.value.toUpperCase(),
+      cidade: document.getElementById("cidade"+idx).value,
+      horario: document.getElementById("horario"+idx).value || "-",
+      litros
+    });
   });
 
   if(litrosUsados === 0){
@@ -370,24 +379,21 @@ function calcular(){
       </tr>
   `;
 
-  usados.forEach(i=>{
-    const litros = litrosArr[i];
-    const totalCliente = litros * freteUnit;
+  itensResumo.forEach(item=>{
+    const totalCliente = item.litros * freteUnit;
 
-    const cliente = document.getElementById("cliente"+i).value.toUpperCase();
-    const cidade = document.getElementById("cidade"+i).value;
-    const horario = document.getElementById("horario"+i).value || "-";
-
-    document.getElementById("unit"+i).innerText = moeda4(freteUnit);
-    document.getElementById("frete"+i).innerText = moeda(totalCliente);
+    // atualiza a tabela principal
+    const idx = litrosArr.indexOf(item.litros);
+    document.getElementById("unit"+idx).innerText = moeda4(freteUnit);
+    document.getElementById("frete"+idx).innerText = moeda(totalCliente);
 
     html += `
       <tr>
-        <td>${cliente}</td>
-        <td>${cidade}</td>
-        <td>${horario}</td>
+        <td>${item.cliente}</td>
+        <td>${item.cidade}</td>
+        <td>${item.horario}</td>
         <td>${moeda4(freteUnit)}</td>
-        <td>${numero(litros)}</td>
+        <td>${numero(item.litros)}</td>
         <td>${moeda(totalCliente)}</td>
       </tr>
     `;
