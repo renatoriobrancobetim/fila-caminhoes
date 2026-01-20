@@ -331,13 +331,18 @@ function calcular(){
 
   const litrosArr = compartimentos[tipo];
 
+  // pega as linhas NA ORDEM ATUAL DA TABELA (rota otimizada)
+  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
+
   let litrosUsados = 0;
   let usados = [];
 
-  litrosArr.forEach((l,i)=>{
-    if(document.getElementById("cliente"+i).value.trim()){
-      litrosUsados += l;
-      usados.push(i);
+  rows.forEach((row, ordem)=>{
+    const idx = ordem;
+    const cliente = row.querySelector(`#cliente${idx}`)?.value.trim();
+    if(cliente){
+      litrosUsados += litrosArr[idx];
+      usados.push(idx);
     }
   });
 
@@ -358,6 +363,7 @@ function calcular(){
       <tr>
         <th>CLIENTE</th>
         <th>CIDADE</th>
+        <th>HORÁRIO</th>
         <th>FRETE (R$/L)</th>
         <th>QTDE (L)</th>
         <th>TOTAL (R$)</th>
@@ -368,13 +374,18 @@ function calcular(){
     const litros = litrosArr[i];
     const totalCliente = litros * freteUnit;
 
+    const cliente = document.getElementById("cliente"+i).value.toUpperCase();
+    const cidade = document.getElementById("cidade"+i).value;
+    const horario = document.getElementById("horario"+i).value || "-";
+
     document.getElementById("unit"+i).innerText = moeda4(freteUnit);
     document.getElementById("frete"+i).innerText = moeda(totalCliente);
 
     html += `
       <tr>
-        <td>${document.getElementById("cliente"+i).value}</td>
-        <td>${document.getElementById("cidade"+i).value}</td>
+        <td>${cliente}</td>
+        <td>${cidade}</td>
+        <td>${horario}</td>
         <td>${moeda4(freteUnit)}</td>
         <td>${numero(litros)}</td>
         <td>${moeda(totalCliente)}</td>
@@ -384,7 +395,7 @@ function calcular(){
 
   html += `
       <tr class="total-row">
-        <td colspan="2">TOTAIS</td>
+        <td colspan="3">TOTAIS</td>
         <td>${moeda4(freteUnit)}</td>
         <td>${numero(litrosUsados)}</td>
         <td>${moeda(freteTotal)}</td>
@@ -417,6 +428,7 @@ function calcular(){
     el.disabled = true;
   });
 }
+
 
 </script>
 
