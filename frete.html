@@ -60,22 +60,16 @@ button.secondary{background:#555}
   margin-top:30px;border:3px solid var(--azul);
   padding:20px;border-radius:10px;background:#f9fbff
 }
-.alerta-parcial{
-  margin-top:10px;padding:10px;
-  border:2px solid #f57c00;
-  background:#fff3e0;color:#e65100;
-  font-weight:bold;text-align:center;border-radius:6px
-}
-.footer{
-  margin-top:30px;text-align:center;
-  font-size:12px;color:#555
-}
 .history{
   margin-top:10px;
   font-size:13px;
   background:#eef3ff;
   padding:10px;
   border-radius:6px
+}
+.footer{
+  margin-top:30px;text-align:center;
+  font-size:12px;color:#555
 }
 </style>
 </head>
@@ -126,14 +120,14 @@ button.secondary{background:#555}
 <datalist id="cidadesMG"></datalist>
 
 <script>
-/* ================= CONFIG ================= */
+/* ================= CONFIGURAÇÃO ================= */
 const BASE = "BETIM";
 let cidadesCoords = {};
 let kmAntes = null;
 let kmDepois = null;
 
-/* ================= FRETE ================= */
-const baseFrete={
+/* ================= DADOS DE FRETE ================= */
+const baseFrete = {
   FROTA:{indice:5.8402,taxa:669.32},
   BITRUCK:{indice:3.5686,taxa:364.71},
   TRUCK:{indice:4.4266,taxa:412.57},
@@ -141,7 +135,7 @@ const baseFrete={
   CARRETA:{indice:5.6203,taxa:460.29}
 };
 
-const compartimentos={
+const compartimentos = {
   FROTA:[5000,5000,5000,2500,2500,2500],
   BITRUCK:[5000,5000,5000],
   TRUCK_555:[5000,5000,5000],
@@ -151,11 +145,11 @@ const compartimentos={
   CARRETA:[5000,5000,5000,5000,5000,5000]
 };
 
-const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
-const numero=v=>v.toLocaleString("pt-BR");
+const moeda  = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const moeda4 = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
+const numero = v => v.toLocaleString("pt-BR");
 
-/* ================= CIDADES ================= */
+/* ================= CARREGAR CIDADES ================= */
 fetch("cidades-mg.json")
 .then(r=>r.json())
 .then(d=>{
@@ -179,7 +173,7 @@ async function distanciaEntre(a,b){
   return j.routes[0].distance/1000;
 }
 
-/* ================= KM SEQUENCIAL ================= */
+/* ================= KM SEQUENCIAL + RETORNO ================= */
 async function recalcularKM(){
   const cidades=[...document.querySelectorAll(".cidade")]
     .map(i=>i.value.trim())
@@ -206,20 +200,19 @@ async function recalcularKM(){
 /* ================= DRAG & DROP ================= */
 function ativarDrag(){
   let drag;
-  document.querySelectorAll("#freteTable tr[data-row]")
-    .forEach(tr=>{
-      tr.addEventListener("dragstart",()=>drag=tr);
-      tr.addEventListener("dragover",e=>e.preventDefault());
-      tr.addEventListener("drop",()=>{
-        if(drag!==tr){
-          tr.parentNode.insertBefore(drag,tr.nextSibling);
-          recalcularKM();
-        }
-      });
+  document.querySelectorAll("#freteTable tr[data-row]").forEach(tr=>{
+    tr.addEventListener("dragstart",()=>drag=tr);
+    tr.addEventListener("dragover",e=>e.preventDefault());
+    tr.addEventListener("drop",()=>{
+      if(drag!==tr){
+        tr.parentNode.insertBefore(drag,tr.nextSibling);
+        recalcularKM();
+      }
     });
+  });
 }
 
-/* ================= TABELA ================= */
+/* ================= GERAR TABELA ================= */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
@@ -243,7 +236,7 @@ function gerarTabela(){
       <td><input id="cliente${i}" class="uppercase"></td>
       <td>
         <input id="cidade${i}" class="cidade uppercase" list="cidadesMG"
-          onblur="validarCidade(this);recalcularKM()">
+          onblur="if(this.value) recalcularKM()">
       </td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
@@ -258,24 +251,16 @@ function gerarTabela(){
   ativarDrag();
 }
 
-/* ================= VALIDAÇÃO ================= */
-function validarCidade(el){
-  if(el.value && !cidadesCoords[el.value]){
-    alert("Cidade não encontrada: "+el.value);
-    el.value="";
-  }
-}
-
 /* ================= CALCULAR FRETE ================= */
 function calcular(){
   const tipo=document.getElementById("tipo").value;
   const km=parseFloat(document.getElementById("kmTotal").value);
   if(!tipo||!km){alert("KM da rota não calculado.");return;}
 
-  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
-  const litrosArr=compartimentos[tipo];
+  const dados = tipo.startsWith("TRUCK") ? baseFrete.TRUCK : baseFrete[tipo];
+  const litrosArr = compartimentos[tipo];
 
-  let litrosUsados=0,usados=[];
+  let litrosUsados=0, usados=[];
   litrosArr.forEach((l,i)=>{
     if(document.getElementById("cliente"+i).value.trim()){
       litrosUsados+=l;
@@ -283,32 +268,59 @@ function calcular(){
     }
   });
 
-  const freteTotal=(km*dados.indice)+dados.taxa;
-  const unit=freteTotal/litrosUsados;
+  if(litrosUsados===0){alert("Informe ao menos um cliente.");return;}
 
-  let html=`<div class="resumo-box">
+  const freteTotal=(km*dados.indice)+dados.taxa;
+  const freteUnit=freteTotal/litrosUsados;
+  const volumeM3=litrosUsados/1000;
+
+  let html=`
+  <div class="resumo-box">
     <h3>Resumo de Frete por Rota</h3>
 
     <div class="history">
-      <b>KM original:</b> ${kmAntes?.toFixed(2)} km<br>
+      <b>KM original da rota:</b> ${kmAntes?.toFixed(2)} km<br>
       <b>KM após reordenação:</b> ${kmDepois?.toFixed(2)} km
     </div>
 
-    <table>
+    <table style="margin-top:15px">
       <tr>
-        <th>CLIENTE</th><th>CIDADE</th>
-        <th>FRETE R$/L</th><th>QTDE</th><th>TOTAL</th>
+        <th>KM TOTAL</th>
+        <th>ÍNDICE</th>
+        <th>TAXA</th>
+        <th>TOTAL DO FRETE</th>
+        <th>M³</th>
+        <th>FRETE UNIT MÉDIO</th>
+      </tr>
+      <tr>
+        <td>${numero(km)}</td>
+        <td>${dados.indice.toFixed(4)}</td>
+        <td>${moeda(dados.taxa)}</td>
+        <td><b>${moeda(freteTotal)}</b></td>
+        <td>${volumeM3.toLocaleString("pt-BR",{minimumFractionDigits:1})}</td>
+        <td>${moeda4(freteUnit)}</td>
+      </tr>
+    </table>
+
+    <table style="margin-top:20px">
+      <tr>
+        <th>CLIENTE</th>
+        <th>CIDADE</th>
+        <th>FRETE (R$/L)</th>
+        <th>QTDE (L)</th>
+        <th>TOTAL (R$)</th>
       </tr>`;
 
   usados.forEach(i=>{
-    const l=litrosArr[i],t=l*unit;
-    document.getElementById("unit"+i).innerText=moeda4(unit);
+    const l=litrosArr[i];
+    const t=l*freteUnit;
+    document.getElementById("unit"+i).innerText=moeda4(freteUnit);
     document.getElementById("frete"+i).innerText=moeda(t);
     html+=`
       <tr>
         <td>${document.getElementById("cliente"+i).value}</td>
         <td>${document.getElementById("cidade"+i).value}</td>
-        <td>${moeda4(unit)}</td>
+        <td>${moeda4(freteUnit)}</td>
         <td>${numero(l)}</td>
         <td>${moeda(t)}</td>
       </tr>`;
@@ -316,7 +328,6 @@ function calcular(){
 
   html+=`
     </table>
-    <p><b>Total Frete:</b> ${moeda(freteTotal)}</p>
   </div>`;
 
   document.getElementById("resumo").innerHTML=html;
