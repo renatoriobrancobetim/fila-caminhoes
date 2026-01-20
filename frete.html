@@ -23,7 +23,6 @@ body{
   background:#fff;
   border-radius:14px;
   box-shadow:0 20px 40px rgba(0,0,0,.35);
-  overflow:hidden;
 }
 .header{
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
@@ -31,18 +30,19 @@ body{
   padding:20px;
   text-align:center;
 }
-.content{
-  padding:25px;
-}
-label{
-  font-weight:600;
-}
-select,input{
+.content{ padding:25px; }
+label{ font-weight:600; }
+input,select{
   width:100%;
   padding:8px;
   border-radius:6px;
   border:1px solid #ccc;
-  font-size:13px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:15px;
+  margin-bottom:20px;
 }
 table{
   width:100%;
@@ -55,13 +55,8 @@ th,td{
   font-size:12.5px;
   text-align:center;
 }
-th{
-  background:#e3f2fd;
-}
-.total{
-  font-weight:bold;
-  color:var(--vermelho);
-}
+th{ background:#e3f2fd; }
+.total{ font-weight:bold; color:var(--vermelho); }
 button{
   width:100%;
   padding:14px;
@@ -73,15 +68,7 @@ button{
   font-size:16px;
   cursor:pointer;
 }
-h3{
-  margin-top:30px;
-}
-.footer{
-  text-align:center;
-  font-size:12px;
-  color:#777;
-  padding:15px;
-}
+h3{ margin-top:30px; }
 </style>
 </head>
 
@@ -95,29 +82,31 @@ h3{
 
   <div class="content">
 
-    <label>Tipo de Caminhão</label>
-    <select id="tipo" onchange="gerarTabela()">
-      <option value="">Selecione</option>
-      <option value="TOCO">Toco</option>
-      <option value="TRUCK">Truck</option>
-      <option value="BITRUCK">Bi-Truck</option>
-      <option value="CARRETA">Carreta</option>
-    </select>
+    <div class="grid">
+      <div>
+        <label>Tipo de Caminhão</label>
+        <select id="tipo" onchange="gerarTabela()">
+          <option value="">Selecione</option>
+          <option value="TOCO">Toco</option>
+          <option value="TRUCK">Truck</option>
+          <option value="BITRUCK">Bi-Truck</option>
+          <option value="CARRETA">Carreta</option>
+        </select>
+      </div>
+
+      <div>
+        <label>KM TOTAL DA ROTA</label>
+        <input type="number" id="kmTotal" placeholder="Ex: 183">
+      </div>
+    </div>
 
     <div id="tabela"></div>
 
     <button onclick="calcular()">Calcular Frete</button>
 
-    <h3>Total Geral: R$ <span id="totalGeral">0,00</span></h3>
-
     <div id="resumo"></div>
 
   </div>
-
-  <div class="footer">
-    Sistema simples de cálculo de frete
-  </div>
-
 </div>
 
 <script>
@@ -126,13 +115,6 @@ const indices = {
   TRUCK: 4.4266,
   BITRUCK: 3.5686,
   CARRETA: 5.6203
-};
-
-const taxasBase = {
-  TOCO: 414.93,
-  TRUCK: 412.57,
-  BITRUCK: 364.71,
-  CARRETA: 460.29
 };
 
 const compartimentos = {
@@ -152,7 +134,6 @@ function gerarTabela(){
       <th>CLIENTE</th>
       <th>CIDADE</th>
       <th>HORÁRIO</th>
-      <th>KM</th>
       <th>QUANTIDADE (L)</th>
       <th>FRETE (R$/L)</th>
       <th>TOTAL (R$)</th>
@@ -165,7 +146,6 @@ function gerarTabela(){
       <td><input id="cliente${i}" placeholder="Cliente"></td>
       <td><input id="cidade${i}" placeholder="Cidade"></td>
       <td><input id="horario${i}" placeholder="Horário"></td>
-      <td><input type="number" id="km${i}" placeholder="KM"></td>
       <td>${litros}</td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
@@ -175,53 +155,38 @@ function gerarTabela(){
 
   html += "</table>";
   document.getElementById("tabela").innerHTML = html;
-  document.getElementById("resumo").innerHTML = "";
-  document.getElementById("totalGeral").innerText = "0,00";
 }
 
 function calcular(){
   const tipo = document.getElementById("tipo").value;
+  const kmTotal = parseFloat(document.getElementById("kmTotal").value);
+  if(!tipo || isNaN(kmTotal) || kmTotal <= 0){
+    alert("Informe o tipo de caminhão e a KM total.");
+    return;
+  }
+
   const indice = indices[tipo];
-  const taxaBase = taxasBase[tipo];
+  const freteTotal = kmTotal * indice;
 
   let linhas = [];
   let totalLitros = 0;
-  let totalFrete = 0;
-  let kmMax = 0;
 
   compartimentos[tipo].forEach((litros,i)=>{
-    const km = parseFloat(document.getElementById(`km${i}`).value);
     const cliente = document.getElementById(`cliente${i}`).value.trim();
-
-    if(cliente && !isNaN(km) && km > 0){
-      const frete = km * indice;
-      const unit = frete / litros;
-
-      document.getElementById(`frete${i}`).innerText = frete.toFixed(2);
-      document.getElementById(`unit${i}`).innerText = unit.toFixed(4);
-
+    if(cliente){
+      totalLitros += litros;
       linhas.push({
         cliente,
         cidade: document.getElementById(`cidade${i}`).value,
         horario: document.getElementById(`horario${i}`).value,
         vendedor: document.getElementById(`vendedor${i}`).value,
-        litros,
-        frete,
-        unit,
-        km
+        litros
       });
-
-      totalLitros += litros;
-      totalFrete += frete;
-      kmMax = Math.max(kmMax, km);
     }
   });
 
-  document.getElementById("totalGeral").innerText = totalFrete.toFixed(2);
-  gerarResumo(linhas, totalLitros, totalFrete, kmMax, indice, taxaBase);
-}
+  const unitMedio = freteTotal / totalLitros;
 
-function gerarResumo(linhas, litros, frete, km, indice, taxa){
   let html = `
   <h3>Resumo de Frete por Rota</h3>
   <table>
@@ -236,14 +201,15 @@ function gerarResumo(linhas, litros, frete, km, indice, taxa){
     </tr>`;
 
   linhas.forEach(l=>{
+    const frete = l.litros * unitMedio;
     html += `
     <tr>
       <td>${l.cliente}</td>
       <td>${l.cidade}</td>
       <td>${l.horario}</td>
-      <td>${l.unit.toFixed(4)}</td>
+      <td>${unitMedio.toFixed(4)}</td>
       <td>${l.litros}</td>
-      <td>${l.frete.toFixed(2)}</td>
+      <td>${frete.toFixed(2)}</td>
       <td>${l.vendedor}</td>
     </tr>`;
   });
@@ -251,8 +217,8 @@ function gerarResumo(linhas, litros, frete, km, indice, taxa){
   html += `
   <tr class="total">
     <td colspan="4"></td>
-    <td>${litros}</td>
-    <td>R$ ${frete.toFixed(2)}</td>
+    <td>${totalLitros}</td>
+    <td>R$ ${freteTotal.toFixed(2)}</td>
     <td></td>
   </tr>
   </table>
@@ -261,18 +227,16 @@ function gerarResumo(linhas, litros, frete, km, indice, taxa){
     <tr>
       <th>KM RODADO</th>
       <th>ÍNDICE</th>
-      <th>TAXA</th>
       <th>TOTAL FRETE</th>
       <th>M³</th>
       <th>FRETE UNIT MÉDIO</th>
     </tr>
     <tr>
-      <td>${km.toFixed(1)}</td>
+      <td>${kmTotal.toFixed(1)}</td>
       <td>${indice.toFixed(4)}</td>
-      <td>R$ ${taxa.toFixed(2)}</td>
-      <td>R$ ${frete.toFixed(2)}</td>
-      <td>${(litros/1000).toFixed(1)}</td>
-      <td>R$ ${(frete/litros).toFixed(4)}</td>
+      <td>R$ ${freteTotal.toFixed(2)}</td>
+      <td>${(totalLitros/1000).toFixed(1)}</td>
+      <td>R$ ${unitMedio.toFixed(4)}</td>
     </tr>
   </table>
   `;
