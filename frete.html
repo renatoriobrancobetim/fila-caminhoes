@@ -27,6 +27,9 @@ input,select{
   border-radius:5px; font-size:13px;
 }
 input:disabled,select:disabled{ background:#eee; cursor:not-allowed; }
+.uppercase{
+  text-transform:uppercase;
+}
 .grid{
   display:grid; grid-template-columns:2fr 1fr;
   gap:15px; margin-bottom:20px;
@@ -74,13 +77,13 @@ button{
         <label>Tipo de Caminhão</label>
         <select id="tipo" onchange="gerarTabela()">
           <option value="">Selecione</option>
-          <option value="FROTA">Frota</option>
-          <option value="BITRUCK">Bitruck</option>
-          <option value="TRUCK_555">Truck 555</option>
-          <option value="TRUCK_5532">Truck 5532</option>
-          <option value="TRUCK_53232">Truck 53232</option>
-          <option value="TOCO">Toco</option>
-          <option value="CARRETA">Carreta</option>
+          <option value="FROTA">FROTA</option>
+          <option value="BITRUCK">BITRUCK</option>
+          <option value="TRUCK_555">TRUCK 555</option>
+          <option value="TRUCK_5532">TRUCK 5532</option>
+          <option value="TRUCK_53232">TRUCK 53232</option>
+          <option value="TOCO">TOCO</option>
+          <option value="CARRETA">CARRETA</option>
         </select>
       </div>
       <div>
@@ -124,11 +127,12 @@ function dadosCaminhao(tipo){
   return base[tipo];
 }
 
+/* ===== FORMATAÇÃO ===== */
 function moeda(v){
   return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2});
 }
-function moeda6(v){
-  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:6});
+function moeda4(v){
+  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
 }
 function numero(v){
   return v.toLocaleString("pt-BR");
@@ -147,13 +151,13 @@ function gerarTabela(){
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
     <tr>
-      <td><input id="cliente${i}"></td>
-      <td><input id="cidade${i}"></td>
-      <td><input id="horario${i}"></td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="cliente${i}"></td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="cidade${i}"></td>
+      <td><input type="time" id="horario${i}"></td>
       <td>${numero(l)}</td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
-      <td><input id="vendedor${i}"></td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="vendedor${i}"></td>
     </tr>`;
   });
 
@@ -170,12 +174,12 @@ function calcular(){
   const litrosArr=compartimentos[tipo];
 
   let litrosUsados=0;
-  let indicesUsados=[];
+  let usados=[];
 
   litrosArr.forEach((l,i)=>{
     if(document.getElementById("cliente"+i).value.trim()){
       litrosUsados+=l;
-      indicesUsados.push(i);
+      usados.push(i);
     }
   });
 
@@ -195,10 +199,10 @@ function calcular(){
     <th>FRETE</th><th>QUANTIDADE</th><th>TOTAL</th><th>VENDEDOR</th>
   </tr>`;
 
-  indicesUsados.forEach(i=>{
+  usados.forEach(i=>{
     const l=litrosArr[i];
     const total=l*unit;
-    document.getElementById("unit"+i).innerText=moeda6(unit);
+    document.getElementById("unit"+i).innerText=moeda4(unit);
     document.getElementById("frete"+i).innerText=moeda(total);
 
     html+=`
@@ -206,7 +210,7 @@ function calcular(){
       <td>${document.getElementById("cliente"+i).value}</td>
       <td>${document.getElementById("cidade"+i).value}</td>
       <td>${document.getElementById("horario"+i).value}</td>
-      <td>${moeda6(unit)}</td>
+      <td>${moeda4(unit)}</td>
       <td>${numero(l)}</td>
       <td>${moeda(total)}</td>
       <td>${document.getElementById("vendedor"+i).value}</td>
@@ -233,7 +237,7 @@ function calcular(){
     <td>${moeda(d.taxa)}</td>
     <td>${moeda(freteTotal)}</td>
     <td>${numero(litrosUsados/1000)}</td>
-    <td>${moeda6(unit)}</td>
+    <td>${moeda4(unit)}</td>
   </tr>
   </table></div>`;
 
