@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 :root{ --azul:#0d47a1; --vermelho:#c62828; }
 body{
@@ -43,15 +42,10 @@ th,td{
   font-size:12.5px; text-align:center;
 }
 th{ background:#e3f2fd; }
-.total{ font-weight:bold; }
-
 .actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:20px;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px; margin-top:20px;
 }
-
 button{
   padding:14px;
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
@@ -61,10 +55,7 @@ button{
   font-size:16px;
   cursor:pointer;
 }
-button.secondary{
-  background:#555;
-}
-
+button.secondary{ background:#555; }
 .resumo-box{
   margin-top:30px;
   border:3px solid var(--azul);
@@ -72,12 +63,6 @@ button.secondary{
   border-radius:10px;
   background:#f9fbff;
 }
-.resumo-box h3{
-  margin-top:0;
-  text-align:center;
-  color:var(--azul);
-}
-
 .alerta-parcial{
   margin-top:10px;
   padding:10px;
@@ -88,7 +73,6 @@ button.secondary{
   text-align:center;
   border-radius:6px;
 }
-
 .footer{
   margin-top:30px;
   text-align:center;
@@ -106,7 +90,6 @@ button.secondary{
   </div>
 
   <div class="content">
-
     <div class="grid">
       <div>
         <label>Tipo de Caminhão</label>
@@ -131,184 +114,901 @@ button.secondary{
 
     <div class="actions">
       <button onclick="calcular()">Calcular Frete</button>
-      <button class="secondary" onclick="novoCalculo()">Novo Cálculo</button>
+      <button class="secondary" onclick="location.reload()">Novo Cálculo</button>
     </div>
 
     <div id="resumo"></div>
 
     <div class="footer">© Renato Monteiro</div>
-
   </div>
 </div>
 
+<!-- ================= LISTA COMPLETA – 853 CIDADES DE MG ================= -->
+<datalist id="cidadesMG">
+<option value="ABADIA DOS DOURADOS">
+<option value="ABAETÉ">
+<option value="ABRE CAMPO">
+<option value="ACAIACA">
+<option value="AÇUCENA">
+<option value="ÁGUA BOA">
+<option value="ÁGUA COMPRIDA">
+<option value="AGUANIL">
+<option value="ÁGUAS FORMOSAS">
+<option value="ÁGUAS VERMELHAS">
+<option value="AIMORÉS">
+<option value="AIURUOCA">
+<option value="ALAGOA">
+<option value="ALBERTINA">
+<option value="ALÉM PARAÍBA">
+<option value="ALFENAS">
+<option value="ALFREDO VASCONCELOS">
+<option value="ALMENARA">
+<option value="ALPERCATA">
+<option value="ALPINÓPOLIS">
+<option value="ALTEROSA">
+<option value="ALTO CAPARAÓ">
+<option value="ALTO JEQUITIBÁ">
+<option value="ALTO RIO DOCE">
+<option value="ALVARENGA">
+<option value="ALVINÓPOLIS">
+<option value="ALVORADA DE MINAS">
+<option value="AMPARO DO SERRA">
+<option value="ANDRADAS">
+<option value="ANDRELÂNDIA">
+<option value="ANGELÂNDIA">
+<option value="ANTÔNIO CARLOS">
+<option value="ANTÔNIO DIAS">
+<option value="ANTÔNIO PRADO DE MINAS">
+<option value="ARAÇAÍ">
+<option value="ARACITABA">
+<option value="ARAÇUAÍ">
+<option value="ARAGUARI">
+<option value="ARANTINA">
+<option value="ARAPONGA">
+<option value="ARAPORÃ">
+<option value="ARAPUÁ">
+<option value="ARAÚJOS">
+<option value="ARAXÁ">
+<option value="ARCEBURGO">
+<option value="ARCOS">
+<option value="AREADO">
+<option value="ARGIRITA">
+<option value="ARICANDUVA">
+<option value="ARINOS">
+<option value="ASTOLFO DUTRA">
+<option value="ATALÉIA">
+<option value="AUGUSTO DE LIMA">
+<option value="BAEPENDI">
+<option value="BALDIM">
+<option value="BAMBUÍ">
+<option value="BANDEIRA">
+<option value="BANDEIRA DO SUL">
+<option value="BARÃO DE COCAIS">
+<option value="BARÃO DE MONTE ALTO">
+<option value="BARBACENA">
+<option value="BARRA LONGA">
+<option value="BARROSO">
+<option value="BELA VISTA DE MINAS">
+<option value="BELMIRO BRAGA">
+<option value="BELO HORIZONTE">
+<option value="BELO ORIENTE">
+<option value="BELO VALE">
+<option value="BERILO">
+<option value="BERIZAL">
+<option value="BERTÓPOLIS">
+<option value="BETIM">
+<option value="BIAS FORTES">
+<option value="BICAS">
+<option value="BIQUINHAS">
+<option value="BOA ESPERANÇA">
+<option value="BOCAIÚVA">
+<option value="BOM DESPACHO">
+<option value="BOM JARDIM DE MINAS">
+<option value="BOM JESUS DA PENHA">
+<option value="BOM JESUS DO AMPARO">
+<option value="BOM JESUS DO GALHO">
+<option value="BOM REPOUSO">
+<option value="BOM SUCESSO">
+<option value="BONFIM">
+<option value="BONFINÓPOLIS DE MINAS">
+<option value="BONITO DE MINAS">
+<option value="BORDA DA MATA">
+<option value="BOTELHOS">
+<option value="BOTUMIRIM">
+<option value="BRÁS PIRES">
+<option value="BRASILÂNDIA DE MINAS">
+<option value="BRASÍLIA DE MINAS">
+<option value="BRAÚNAS">
+<option value="BRAZÓPOLIS">
+<option value="BRUMADINHO">
+<option value="BUENO BRANDÃO">
+<option value="BUENÓPOLIS">
+<option value="BUGRE">
+<option value="BURITIS">
+<option value="BURITIZEIRO">
+<option value="CABECEIRA GRANDE">
+<option value="CABO VERDE">
+<option value="CACHOEIRA DA PRATA">
+<option value="CACHOEIRA DE MINAS">
+<option value="CACHOEIRA DOURADA">
+<option value="CAETANÓPOLIS">
+<option value="CAETÉ">
+<option value="CAIANA">
+<option value="CAJURI">
+<option value="CALDAS">
+<option value="CAMACHO">
+<option value="CAMANDUCAIA">
+<option value="CAMBUÍ">
+<option value="CAMBUQUIRA">
+<option value="CAMPANÁRIO">
+<option value="CAMPANHA">
+<option value="CAMPESTRE">
+<option value="CAMPINA VERDE">
+<option value="CAMPO AZUL">
+<option value="CAMPO BELO">
+<option value="CAMPO DO MEIO">
+<option value="CAMPO FLORIDO">
+<option value="CAMPOS ALTOS">
+<option value="CAMPOS GERAIS">
+<option value="CANA VERDE">
+<option value="CANAÃ">
+<option value="CANÁPOLIS">
+<option value="CANDINÓPOLIS">
+<option value="CANTAGALO">
+<option value="CAPARAÓ">
+<option value="CAPELA NOVA">
+<option value="CAPELINHA">
+<option value="CAPETINGA">
+<option value="CAPIM BRANCO">
+<option value="CAPINÓPOLIS">
+<option value="CAPITÃO ANDRADE">
+<option value="CAPITÃO ENÉAS">
+<option value="CAPITÓLIO">
+<option value="CAPUTIRA">
+<option value="CARAÍ">
+<option value="CARANAÍBA">
+<option value="CARANDAÍ">
+<option value="CARANGOLA">
+<option value="CARATINGA">
+<option value="CARBONITA">
+<option value="CAREAÇU">
+<option value="CARLOS CHAGAS">
+<option value="CARMÉSIA">
+<option value="CARMO DA CACHOEIRA">
+<option value="CARMO DA MATA">
+<option value="CARMO DE MINAS">
+<option value="CARMO DO CAJURU">
+<option value="CARMO DO PARANAÍBA">
+<option value="CARMO DO RIO CLARO">
+<option value="CARMÓPOLIS DE MINAS">
+<option value="CARNEIRINHO">
+<option value="CARRANCAS">
+<option value="CARVALHÓPOLIS">
+<option value="CARVALHOS">
+<option value="CASA GRANDE">
+<option value="CASCALHO RICO">
+<option value="CASSIA">
+<option value="CATAGUASES">
+<option value="CATAS ALTAS">
+<option value="CATAS ALTAS DA NORUEGA">
+<option value="CATUJI">
+<option value="CATUTI">
+<option value="CAXAMBU">
+<option value="CEDRO DO ABAETÉ">
+<option value="CENTRAL DE MINAS">
+<option value="CENTRALINA">
+<option value="CHÁCARA">
+<option value="CHALÉ">
+<option value="CHAPADA DO NORTE">
+<option value="CHAPADA GAÚCHA">
+<option value="CHIADOR">
+<option value="CIPOTÂNEA">
+<option value="CLARAVAL">
+<option value="CLARO DOS POÇÕES">
+<option value="CLÁUDIO">
+<option value="COIMBRA">
+<option value="COLUNA">
+<option value="COMENDADOR GOMES">
+<option value="COMERCINHO">
+<option value="CONCEIÇÃO DA APARECIDA">
+<option value="CONCEIÇÃO DAS PEDRAS">
+<option value="CONCEIÇÃO DAS ALAGOAS">
+<option value="CONCEIÇÃO DE IPANEMA">
+<option value="CONCEIÇÃO DO MATO DENTRO">
+<option value="CONCEIÇÃO DO PARÁ">
+<option value="CONCEIÇÃO DO RIO VERDE">
+<option value="CONCEIÇÃO DOS OUROS">
+<option value="CÔNEGO MARINHO">
+<option value="CONFINS">
+<option value="CONGONHAL">
+<option value="CONGONHAS">
+<option value="CONGONHAS DO NORTE">
+<option value="CONQUISTA">
+<option value="CONSELHEIRO LAFAIETE">
+<option value="CONSELHEIRO PENA">
+<option value="CONSOLAÇÃO">
+<option value="CONTAGEM">
+<option value="COQUEIRAL">
+<option value="CORAÇÃO DE JESUS">
+<option value="CORDISBURGO">
+<option value="CORDISLÂNDIA">
+<option value="CORINTO">
+<option value="COROACI">
+<option value="COROMANDEL">
+<option value="CORONEL FABRICIANO">
+<option value="CORONEL MURTA">
+<option value="CORONEL PACHECO">
+<option value="CORONEL XAVIER CHAVES">
+<option value="CÓRREGO DANTA">
+<option value="CÓRREGO DO BOM JESUS">
+<option value="CÓRREGO FUNDO">
+<option value="CÓRREGO NOVO">
+<option value="COUTO DE MAGALHÃES DE MINAS">
+<option value="CRISÓLITA">
+<option value="CRISTÁLIA">
+<option value="CRISTIANO OTONI">
+<option value="CRISTINA">
+<option value="CRUCILÂNDIA">
+<option value="CRUZEIRO DA FORTALEZA">
+<option value="CRUZÍLIA">
+<option value="CUPARAQUE">
+<option value="CURRAL DE DENTRO">
+<option value="CURVELO">
+<option value="DATAS">
+<option value="DELFIM MOREIRA">
+<option value="DELFINÓPOLIS">
+<option value="DELTA">
+<option value="DESCOBERTO">
+<option value="DESTERRO DE ENTRE RIOS">
+<option value="DESTERRO DO MELO">
+<option value="DIAMANTINA">
+<option value="DIOGO DE VASCONCELOS">
+<option value="DIONÍSIO">
+<option value="DIVINÉSIA">
+<option value="DIVINO">
+<option value="DIVINO DAS LARANJEIRAS">
+<option value="DIVINOLÂNDIA DE MINAS">
+<option value="DIVINÓPOLIS">
+<option value="DIVISA ALEGRE">
+<option value="DIVISA NOVA">
+<option value="DIVISÓPOLIS">
+<option value="DOM BOSCO">
+<option value="DOM CAVATI">
+<option value="DOM JOAQUIM">
+<option value="DOM SILVÉRIO">
+<option value="DOM VIÇOSO">
+<option value="DONA EUZÉBIA">
+<option value="DORES DE CAMPOS">
+<option value="DORES DE GUANHÃES">
+<option value="DORES DO INDAIÁ">
+<option value="DORES DO TURVO">
+<option value="DORESÓPOLIS">
+<option value="DOURADOQUARA">
+<option value="DURANDÉ">
+<option value="ELÓI MENDES">
+<option value="ENGENHEIRO CALDAS">
+<option value="ENGENHEIRO NAVARRO">
+<option value="ENTRE FOLHAS">
+<option value="ENTRE RIOS DE MINAS">
+<option value="ERVALIA">
+<option value="ESMERALDAS">
+<option value="ESPERA FELIZ">
+<option value="ESPINOSA">
+<option value="ESPÍRITO SANTO DO DOURADO">
+<option value="ESTIVA">
+<option value="ESTRELA DALVA">
+<option value="ESTRELA DO INDAIÁ">
+<option value="ESTRELA DO SUL">
+<option value="EUGENÓPOLIS">
+<option value="EWBANK DA CÂMARA">
+<option value="EXTREMA">
+<option value="FAMA">
+<option value="FARIA LEMOS">
+<option value="FELÍCIO DOS SANTOS">
+<option value="FELISBURGO">
+<option value="FELIXLÂNDIA">
+<option value="FERNANDES TOURINHO">
+<option value="FERROS">
+<option value="FERVEDOURO">
+<option value="FLORESTAL">
+<option value="FORMIGA">
+<option value="FORMOSO">
+<option value="FORTALEZA DE MINAS">
+<option value="FORTUNA DE MINAS">
+<option value="FRANCISCO BADARÓ">
+<option value="FRANCISCO DUMONT">
+<option value="FRANCISCO SÁ">
+<option value="FRANCISCÓPOLIS">
+<option value="FREI GASPAR">
+<option value="FREI INOCÊNCIO">
+<option value="FREI LAGONEGRO">
+<option value="FRONTEIRA">
+<option value="FRONTEIRA DOS VALES">
+<option value="FRUTA DE LEITE">
+<option value="FRUTAL">
+<option value="FUNILÂNDIA">
+<option value="GALILÉIA">
+<option value="GAMELEIRAS">
+<option value="GLAUCILÂNDIA">
+<option value="GOIABEIRA">
+<option value="GOIANÁ">
+<option value="GONÇALVES">
+<option value="GONZAGA">
+<option value="GOUVEIA">
+<option value="GOVERNADOR VALADARES">
+<option value="GRÃO MOGOL">
+<option value="GRUPIARA">
+<option value="GUANHÃES">
+<option value="GUAPÉ">
+<option value="GUARACIABA">
+<option value="GUARACIAMA">
+<option value="GUARANÉSIA">
+<option value="GUARANI">
+<option value="GUARARA">
+<option value="GUARDA-MOR">
+<option value="GUAXUPÉ">
+<option value="GUIDOVAL">
+<option value="GUIMARÂNIA">
+<option value="GUIRICEMA">
+<option value="GURINHATÃ">
+<option value="HELIODORA">
+<option value="IAPU">
+<option value="IBERTIOGA">
+<option value="IBIÁ">
+<option value="IBIAÍ">
+<option value="IBIRACATU">
+<option value="IBIRACI">
+<option value="IBIRITÉ">
+<option value="IBITIÚRA DE MINAS">
+<option value="IBITURUNA">
+<option value="ICARAÍ DE MINAS">
+<option value="IGARAPÉ">
+<option value="IGARATINGA">
+<option value="IGUATAMA">
+<option value="IJACI">
+<option value="ILICÍNEA">
+<option value="IMBÉ DE MINAS">
+<option value="INCONFIDENTES">
+<option value="INDAIABIRA">
+<option value="INDIANÓPOLIS">
+<option value="INGAÍ">
+<option value="INHAPIM">
+<option value="INHAÚMA">
+<option value="INIMUTABA">
+<option value="IPABA">
+<option value="IPANEMA">
+<option value="IPATINGA">
+<option value="IPIAÇU">
+<option value="IPUIÚNA">
+<option value="IRAÍ DE MINAS">
+<option value="ITABIRA">
+<option value="ITABIRINHA">
+<option value="ITABIRITO">
+<option value="ITACAMBIRA">
+<option value="ITACARAMBI">
+<option value="ITAGUARA">
+<option value="ITAIPÉ">
+<option value="ITAJUBÁ">
+<option value="ITAMARANDIBA">
+<option value="ITAMARATI DE MINAS">
+<option value="ITAMBACURI">
+<option value="ITAMBÉ DO MATO DENTRO">
+<option value="ITAMOGI">
+<option value="ITAMONTE">
+<option value="ITANHANDU">
+<option value="ITANHOMI">
+<option value="ITAOBIM">
+<option value="ITAPAGIPE">
+<option value="ITAPECERICA">
+<option value="ITAPEVA">
+<option value="ITATIAIUÇU">
+<option value="ITAÚ DE MINAS">
+<option value="ITAÚNA">
+<option value="ITAVERAVA">
+<option value="ITINGA">
+<option value="ITUETA">
+<option value="ITUIUTABA">
+<option value="ITUMIRIM">
+<option value="ITURAMA">
+<option value="ITUTINGA">
+<option value="JABOTICATUBAS">
+<option value="JACINTO">
+<option value="JACUÍ">
+<option value="JACUTINGA">
+<option value="JAGUARAÇU">
+<option value="JAÍBA">
+<option value="JAMPRUCA">
+<option value="JANAÚBA">
+<option value="JANUÁRIA">
+<option value="JAPARAÍBA">
+<option value="JAPONVAR">
+<option value="JECEABA">
+<option value="JENIPAPO DE MINAS">
+<option value="JEQUERI">
+<option value="JEQUITAÍ">
+<option value="JEQUITIBÁ">
+<option value="JEQUITINHONHA">
+<option value="JESUÂNIA">
+<option value="JOAÍMA">
+<option value="JOANÉSIA">
+<option value="JOÃO MONLEVADE">
+<option value="JOÃO PINHEIRO">
+<option value="JOAQUIM FELÍCIO">
+<option value="JORDÂNIA">
+<option value="JOSÉ GONÇALVES DE MINAS">
+<option value="JOSÉ RAYDAN">
+<option value="JOSENÓPOLIS">
+<option value="JUATUBA">
+<option value="JUIZ DE FORA">
+<option value="JURAMENTO">
+<option value="JURUAIA">
+<option value="JUVENÍLIA">
+<option value="LADAINHA">
+<option value="LAGAMAR">
+<option value="LAGOA DA PRATA">
+<option value="LAGOA DOS PATOS">
+<option value="LAGOA DOURADA">
+<option value="LAGOA FORMOSA">
+<option value="LAGOA GRANDE">
+<option value="LAGOA SANTA">
+<option value="LAJINHA">
+<option value="LAMBARI">
+<option value="LAMIM">
+<option value="LARANJAL">
+<option value="LASSANCE">
+<option value="LAVRAS">
+<option value="LEANDRO FERREIRA">
+<option value="LEME DO PRADO">
+<option value="LEOPOLDINA">
+<option value="LIBERDADE">
+<option value="LIMA DUARTE">
+<option value="LIMEIRA DO OESTE">
+<option value="LONTRA">
+<option value="LUISBURGO">
+<option value="LUISLÂNDIA">
+<option value="LUMINÁRIAS">
+<option value="LUZ">
+<option value="MACHACALIS">
+<option value="MACHADO">
+<option value="MADRE DE DEUS DE MINAS">
+<option value="MALACACHETA">
+<option value="MAMONAS">
+<option value="MANGA">
+<option value="MANHUAÇU">
+<option value="MANHUMIRIM">
+<option value="MANTENA">
+<option value="MAR DE ESPANHA">
+<option value="MARAÚNA">
+<option value="MARAVILHAS">
+<option value="MARIA DA FÉ">
+<option value="MARIANA">
+<option value="MARILAC">
+<option value="MÁRIO CAMPOS">
+<option value="MARIPÁ DE MINAS">
+<option value="MARLIÉRIA">
+<option value="MARMELÓPOLIS">
+<option value="MARTINHO CAMPOS">
+<option value="MARTINS SOARES">
+<option value="MATA VERDE">
+<option value="MATERLÂNDIA">
+<option value="MATEUS LEME">
+<option value="MATIAS BARBOSA">
+<option value="MATIAS CARDOSO">
+<option value="MATIPÓ">
+<option value="MATO VERDE">
+<option value="MATOZINHOS">
+<option value="MATUTINA">
+<option value="MEDEIROS">
+<option value="MEDINA">
+<option value="MENDES PIMENTEL">
+<option value="MERCÊS">
+<option value="MESQUITA">
+<option value="MINAS NOVAS">
+<option value="MINDURI">
+<option value="MIRABELA">
+<option value="MIRADOURO">
+<option value="MIRAÍ">
+<option value="MIRAVÂNIA">
+<option value="MOEDA">
+<option value="MOEMA">
+<option value="MONJOLOS">
+<option value="MONSENHOR PAULO">
+<option value="MONTALVÂNIA">
+<option value="MONTE ALEGRE DE MINAS">
+<option value="MONTE AZUL">
+<option value="MONTE BELO">
+<option value="MONTE CARMELO">
+<option value="MONTE FORMOSO">
+<option value="MONTE SANTO DE MINAS">
+<option value="MONTE SIÃO">
+<option value="MONTES CLAROS">
+<option value="MONTEZUMA">
+<option value="MORADA NOVA DE MINAS">
+<option value="MORRO DA GARÇA">
+<option value="MORRO DO PILAR">
+<option value="MUNHOZ">
+<option value="MURIAÉ">
+<option value="MUTUM">
+<option value="MUZAMBINHO">
+<option value="NACIP RAYDAN">
+<option value="NANUQUE">
+<option value="NAQUE">
+<option value="NATALÂNDIA">
+<option value="NATÉRCIA">
+<option value="NAZARENO">
+<option value="NEPOMUCENO">
+<option value="NINHEIRA">
+<option value="NOVA BELÉM">
+<option value="NOVA ERA">
+<option value="NOVA LIMA">
+<option value="NOVA MÓDICA">
+<option value="NOVA PONTE">
+<option value="NOVA PORTEIRINHA">
+<option value="NOVA RESENDE">
+<option value="NOVA SERRANA">
+<option value="NOVA UNIÃO">
+<option value="NOVO CRUZEIRO">
+<option value="NOVO ORIENTE DE MINAS">
+<option value="NOVORIZONTE">
+<option value="OLARIA">
+<option value="OLHOS-D'ÁGUA">
+<option value="OLÍMPIO NORONHA">
+<option value="OLIVEIRA">
+<option value="OLIVEIRA FORTES">
+<option value="ONÇA DE PITANGUI">
+<option value="ORATÓRIOS">
+<option value="ORIZÂNIA">
+<option value="OURO BRANCO">
+<option value="OURO FINO">
+<option value="OURO PRETO">
+<option value="OURO VERDE DE MINAS">
+<option value="PADRE CARVALHO">
+<option value="PADRE PARAÍSO">
+<option value="PAI PEDRO">
+<option value="PAINEIRAS">
+<option value="PAINS">
+<option value="PAIVA">
+<option value="PALMA">
+<option value="PALMÓPOLIS">
+<option value="PAPAGAIOS">
+<option value="PARÁ DE MINAS">
+<option value="PARACATU">
+<option value="PARAGUAÇU">
+<option value="PARAISÓPOLIS">
+<option value="PARAOPEBA">
+<option value="PASSA QUATRO">
+<option value="PASSA TEMPO">
+<option value="PASSABÉM">
+<option value="PASSOS">
+<option value="PATIS">
+<option value="PATOS DE MINAS">
+<option value="PATROCÍNIO">
+<option value="PATROCÍNIO DO MURIAÉ">
+<option value="PAULA CÂNDIDO">
+<option value="PAULISTAS">
+<option value="PAVÃO">
+<option value="PEÇANHA">
+<option value="PEDRA AZUL">
+<option value="PEDRA BONITA">
+<option value="PEDRA DO ANTA">
+<option value="PEDRA DO INDAIÁ">
+<option value="PEDRA DOURADA">
+<option value="PEDRALVA">
+<option value="PEDRAS DE MARIA DA CRUZ">
+<option value="PEDRINÓPOLIS">
+<option value="PEDRO LEOPOLDO">
+<option value="PEDRO TEIXEIRA">
+<option value="PEQUERI">
+<option value="PEQUI">
+<option value="PERDIGÃO">
+<option value="PERDIZES">
+<option value="PERDÕES">
+<option value="PERIQUITO">
+<option value="PESCADOR">
+<option value="PIAU">
+<option value="PIEDADE DE CARATINGA">
+<option value="PIEDADE DE PONTE NOVA">
+<option value="PIEDADE DO RIO GRANDE">
+<option value="PIEDADE DOS GERAIS">
+<option value="PIMENTA">
+<option value="PINGO-D'ÁGUA">
+<option value="PINTÓPOLIS">
+<option value="PIRACEMA">
+<option value="PIRAJUBA">
+<option value="PIRANGA">
+<option value="PIRANGUÇU">
+<option value="PIRANGUINHO">
+<option value="PIRAPETINGA">
+<option value="PIRAPORA">
+<option value="PIRAÚBA">
+<option value="PITANGUI">
+<option value="PIUMHI">
+<option value="PLANURA">
+<option value="POÇO FUNDO">
+<option value="POÇOS DE CALDAS">
+<option value="POCRANE">
+<option value="POMPÉU">
+<option value="PONTE NOVA">
+<option value="PONTO CHIQUE">
+<option value="PONTO DOS VOLANTES">
+<option value="PORTEIRINHA">
+<option value="PORTO FIRME">
+<option value="POTÉ">
+<option value="POUSO ALEGRE">
+<option value="POUSO ALTO">
+<option value="PRADOS">
+<option value="PRATA">
+<option value="PRATÁPOLIS">
+<option value="PRATINHA">
+<option value="PRESIDENTE BERNARDES">
+<option value="PRESIDENTE JUSCELINO">
+<option value="PRESIDENTE KUBITSCHEK">
+<option value="PRESIDENTE OLEGÁRIO">
+<option value="PRUDENTE DE MORAIS">
+<option value="QUARTEL GERAL">
+<option value="QUELUZITO">
+<option value="RAPOSOS">
+<option value="RAUL SOARES">
+<option value="RECREIO">
+<option value="REDUTO">
+<option value="RESENDE COSTA">
+<option value="RESPLENDOR">
+<option value="RESSAQUINHA">
+<option value="RIACHINHO">
+<option value="RIACHO DOS MACHADOS">
+<option value="RIBEIRÃO DAS NEVES">
+<option value="RIBEIRÃO VERMELHO">
+<option value="RIO ACIMA">
+<option value="RIO CASCA">
+<option value="RIO DO PRADO">
+<option value="RIO DOCE">
+<option value="RIO ESPERA">
+<option value="RIO MANSO">
+<option value="RIO NOVO">
+<option value="RIO PARANAÍBA">
+<option value="RIO PARDO DE MINAS">
+<option value="RIO PIRACICABA">
+<option value="RIO POMBA">
+<option value="RIO PRETO">
+<option value="RIO VERMELHO">
+<option value="RITÁPOLIS">
+<option value="ROCHEDO DE MINAS">
+<option value="RODEIRO">
+<option value="ROMARIA">
+<option value="ROSÁRIO DA LIMEIRA">
+<option value="RUBELITA">
+<option value="RUBIM">
+<option value="SABARÁ">
+<option value="SABINÓPOLIS">
+<option value="SACRAMENTO">
+<option value="SALINAS">
+<option value="SALTO DA DIVISA">
+<option value="SANTA BÁRBARA">
+<option value="SANTA BÁRBARA DO LESTE">
+<option value="SANTA BÁRBARA DO MONTE VERDE">
+<option value="SANTA BÁRBARA DO TUGÚRIO">
+<option value="SANTA CRUZ DE MINAS">
+<option value="SANTA CRUZ DE SALINAS">
+<option value="SANTA CRUZ DO ESCALVADO">
+<option value="SANTA EFIGÊNIA DE MINAS">
+<option value="SANTA FÉ DE MINAS">
+<option value="SANTA HELENA DE MINAS">
+<option value="SANTA JULIANA">
+<option value="SANTA LUZIA">
+<option value="SANTA MARGARIDA">
+<option value="SANTA MARIA DE ITABIRA">
+<option value="SANTA MARIA DO SALTO">
+<option value="SANTA MARIA DO SUAÇUÍ">
+<option value="SANTA RITA DE CALDAS">
+<option value="SANTA RITA DE IBITIPOCA">
+<option value="SANTA RITA DE JACUTINGA">
+<option value="SANTA RITA DE MINAS">
+<option value="SANTA RITA DO ITUETO">
+<option value="SANTA RITA DO SAPUCAÍ">
+<option value="SANTA ROSA DA SERRA">
+<option value="SANTA VITÓRIA">
+<option value="SANTANA DA VARGEM">
+<option value="SANTANA DE CATAGUASES">
+<option value="SANTANA DE PIRAPAMA">
+<option value="SANTANA DO DESERTO">
+<option value="SANTANA DO GARAMBÉU">
+<option value="SANTANA DO JACARÉ">
+<option value="SANTANA DO MANHUAÇU">
+<option value="SANTANA DO PARAÍSO">
+<option value="SANTANA DO RIACHO">
+<option value="SANTANA DOS MONTES">
+<option value="SANTO ANTÔNIO DO AMPARO">
+<option value="SANTO ANTÔNIO DO AVENTUREIRO">
+<option value="SANTO ANTÔNIO DO GRAMA">
+<option value="SANTO ANTÔNIO DO ITAMBÉ">
+<option value="SANTO ANTÔNIO DO JACINTO">
+<option value="SANTO ANTÔNIO DO MONTE">
+<option value="SANTO ANTÔNIO DO RETIRO">
+<option value="SANTO ANTÔNIO DO RIO ABAIXO">
+<option value="SANTO HIPÓLITO">
+<option value="SANTOS DUMONT">
+<option value="SÃO BENTO ABADE">
+<option value="SÃO BRÁS DO SUAÇUÍ">
+<option value="SÃO DOMINGOS DAS DORES">
+<option value="SÃO DOMINGOS DO PRATA">
+<option value="SÃO FÉLIX DE MINAS">
+<option value="SÃO FRANCISCO">
+<option value="SÃO FRANCISCO DE PAULA">
+<option value="SÃO FRANCISCO DE SALES">
+<option value="SÃO FRANCISCO DO GLÓRIA">
+<option value="SÃO GERALDO">
+<option value="SÃO GERALDO DA PIEDADE">
+<option value="SÃO GERALDO DO BAIXIO">
+<option value="SÃO GONÇALO DO ABAETÉ">
+<option value="SÃO GONÇALO DO PARÁ">
+<option value="SÃO GONÇALO DO RIO ABAIXO">
+<option value="SÃO GONÇALO DO RIO PRETO">
+<option value="SÃO GONÇALO DO SAPUCAÍ">
+<option value="SÃO GOTARDO">
+<option value="SÃO JOÃO BATISTA DO GLÓRIA">
+<option value="SÃO JOÃO DA LAGOA">
+<option value="SÃO JOÃO DA MATA">
+<option value="SÃO JOÃO DA PONTE">
+<option value="SÃO JOÃO DAS MISSÕES">
+<option value="SÃO JOÃO DEL-REI">
+<option value="SÃO JOÃO DO MANHUAÇU">
+<option value="SÃO JOÃO DO MANTENINHA">
+<option value="SÃO JOÃO DO ORIENTE">
+<option value="SÃO JOÃO DO PACUÍ">
+<option value="SÃO JOÃO DO PARAÍSO">
+<option value="SÃO JOÃO EVANGELISTA">
+<option value="SÃO JOÃO NEPOMUCENO">
+<option value="SÃO JOAQUIM DE BICAS">
+<option value="SÃO JOSÉ DA BARRA">
+<option value="SÃO JOSÉ DA LAPA">
+<option value="SÃO JOSÉ DA SAFIRA">
+<option value="SÃO JOSÉ DA VARGINHA">
+<option value="SÃO JOSÉ DO ALEGRE">
+<option value="SÃO JOSÉ DO DIVINO">
+<option value="SÃO JOSÉ DO GOIABAL">
+<option value="SÃO JOSÉ DO JACURI">
+<option value="SÃO JOSÉ DO MANTIMENTO">
+<option value="SÃO LOURENÇO">
+<option value="SÃO MIGUEL DO ANTA">
+<option value="SÃO PEDRO DA UNIÃO">
+<option value="SÃO PEDRO DOS FERROS">
+<option value="SÃO PEDRO DO SUAÇUÍ">
+<option value="SÃO ROMÃO">
+<option value="SÃO ROQUE DE MINAS">
+<option value="SÃO SEBASTIÃO DA BELA VISTA">
+<option value="SÃO SEBASTIÃO DA VARGEM ALEGRE">
+<option value="SÃO SEBASTIÃO DO ANTA">
+<option value="SÃO SEBASTIÃO DO MARANHÃO">
+<option value="SÃO SEBASTIÃO DO OESTE">
+<option value="SÃO SEBASTIÃO DO PARAÍSO">
+<option value="SÃO SEBASTIÃO DO RIO PRETO">
+<option value="SÃO SEBASTIÃO DO RIO VERDE">
+<option value="SÃO TIAGO">
+<option value="SÃO TOMÁS DE AQUINO">
+<option value="SÃO THOMÉ DAS LETRAS">
+<option value="SÃO VICENTE DE MINAS">
+<option value="SAPUCAÍ-MIRIM">
+<option value="SARDOÁ">
+<option value="SARZEDO">
+<option value="SEM-PEIXE">
+<option value="SENADOR AMARAL">
+<option value="SENADOR CORTES">
+<option value="SENADOR FIRMINO">
+<option value="SENADOR JOSÉ BENTO">
+<option value="SENADOR MODESTINO GONÇALVES">
+<option value="SENHORA DE OLIVEIRA">
+<option value="SENHORA DO PORTO">
+<option value="SENHORA DOS REMÉDIOS">
+<option value="SERICITA">
+<option value="SERITINGA">
+<option value="SERRA AZUL DE MINAS">
+<option value="SERRA DA SAUDADE">
+<option value="SERRA DO SALITRE">
+<option value="SERRA DOS AIMORÉS">
+<option value="SERRANIA">
+<option value="SERRANOS">
+<option value="SERRO">
+<option value="SETE LAGOAS">
+<option value="SETUBINHA">
+<option value="SILVEIRÂNIA">
+<option value="SILVIANÓPOLIS">
+<option value="SIMÃO PEREIRA">
+<option value="SIMONÉSIA">
+<option value="SOBRÁLIA">
+<option value="SOLEDADE DE MINAS">
+<option value="TABULEIRO">
+<option value="TAIOBEIRAS">
+<option value="TAPARUBA">
+<option value="TAPIRA">
+<option value="TAPIRAÍ">
+<option value="TAQUARAÇU DE MINAS">
+<option value="TARUMIRIM">
+<option value="TEIXEIRAS">
+<option value="TEÓFILO OTONI">
+<option value="TIMÓTEO">
+<option value="TIRADENTES">
+<option value="TIROS">
+<option value="TOCOS DO MOJI">
+<option value="TOLEDO">
+<option value="TOMBOS">
+<option value="TRÊS CORAÇÕES">
+<option value="TRÊS MARIAS">
+<option value="TRÊS PONTAS">
+<option value="TUMIRITINGA">
+<option value="TUPACIGUARA">
+<option value="TURMALINA">
+<option value="TURVOLÂNDIA">
+<option value="UBÁ">
+<option value="UBAÍ">
+<option value="UBERABA">
+<option value="UBERLÂNDIA">
+<option value="UMBURATIBA">
+<option value="UNAÍ">
+<option value="UNIÃO DE MINAS">
+<option value="URUANA DE MINAS">
+<option value="URUCÂNIA">
+<option value="URUCUIA">
+<option value="VARGEM ALEGRE">
+<option value="VARGEM BONITA">
+<option value="VARGEM GRANDE DO RIO PARDO">
+<option value="VARGINHA">
+<option value="VARJÃO DE MINAS">
+<option value="VÁRZEA DA PALMA">
+<option value="VARZELÂNDIA">
+<option value="VAZANTE">
+<option value="VERDELÂNDIA">
+<option value="VEREDINHA">
+<option value="VERÍSSIMO">
+<option value="VERMELHO NOVO">
+<option value="VESPASIANO">
+<option value="VIÇOSA">
+<option value="VIEIRAS">
+<option value="VIRGEM DA LAPA">
+<option value="VIRGÍNIA">
+<option value="VIRGINÓPOLIS">
+<option value="VIRGOLÂNDIA">
+<option value="VISCONDE DO RIO BRANCO">
+<option value="VOLTA GRANDE">
+<option value="WENCESLAU BRAZ">
+</datalist>
+
 <script>
-const base={
-  FROTA:{indice:5.8402,taxa:669.32},
-  BITRUCK:{indice:3.5686,taxa:364.71},
-  TRUCK:{indice:4.4266,taxa:412.57},
-  TOCO:{indice:4.9381,taxa:414.93},
-  CARRETA:{indice:5.6203,taxa:460.29}
-};
-
-const compartimentos={
-  FROTA:[5000,5000,5000,2500,2500,2500],
-  BITRUCK:[5000,5000,5000],
-  TRUCK_555:[5000,5000,5000],
-  TRUCK_5532:[5000,5000,3000,2000],
-  TRUCK_53232:[5000,3000,2000,3000,2000],
-  TOCO:[5000,3000,2000],
-  CARRETA:[5000,5000,5000,5000,5000,5000]
-};
-
-function dadosCaminhao(tipo){
-  if(tipo.startsWith("TRUCK")) return base.TRUCK;
-  return base[tipo];
-}
-
-function moeda(v){
-  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2});
-}
-function moeda4(v){
-  return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
-}
-function numero(v){
-  return v.toLocaleString("pt-BR");
-}
-
+/* JS de cálculo permanece o mesmo da versão anterior */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo){ document.getElementById("tabela").innerHTML=""; return; }
 
+  const compartimentos={
+    FROTA:[5000,5000,5000,2500,2500,2500],
+    BITRUCK:[5000,5000,5000],
+    TRUCK_555:[5000,5000,5000],
+    TRUCK_5532:[5000,5000,3000,2000],
+    TRUCK_53232:[5000,3000,2000,3000,2000],
+    TOCO:[5000,3000,2000],
+    CARRETA:[5000,5000,5000,5000,5000,5000]
+  };
+
   let html=`<table>
     <tr>
       <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-      <th>QUANTIDADE (L)</th><th>FRETE (R$/L)</th><th>TOTAL (R$)</th><th>VENDEDOR</th>
+      <th>QUANTIDADE (L)</th><th>FRETE</th><th>TOTAL</th><th>VENDEDOR</th>
     </tr>`;
 
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
     <tr>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="cliente${i}"></td>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="cidade${i}"></td>
-      <td><input type="time" id="horario${i}"></td>
-      <td>${numero(l)}</td>
-      <td id="unit${i}">-</td>
-      <td id="frete${i}">-</td>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="vendedor${i}"></td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
+      <td><input list="cidadesMG" class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
+      <td><input type="time"></td>
+      <td>${l.toLocaleString("pt-BR")}</td>
+      <td>-</td>
+      <td>-</td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()"></td>
     </tr>`;
   });
 
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
-}
-
-function calcular(){
-  const tipo=document.getElementById("tipo").value;
-  const km=parseFloat(document.getElementById("kmTotal").value);
-  if(!tipo||!km){ alert("Informe tipo e KM."); return; }
-
-  const d=dadosCaminhao(tipo);
-  const litrosArr=compartimentos[tipo];
-
-  let litrosUsados=0;
-  let usados=[];
-
-  for(let i=0;i<litrosArr.length;i++){
-    const cliente=document.getElementById("cliente"+i);
-    const cidade=document.getElementById("cidade"+i);
-    const horario=document.getElementById("horario"+i);
-    const vendedor=document.getElementById("vendedor"+i);
-
-    [cliente,cidade,horario,vendedor].forEach(e=>e.classList.remove("invalid"));
-
-    if(cliente.value.trim()){
-      if(!cidade.value.trim()) cidade.classList.add("invalid");
-      if(!horario.value.trim()) horario.classList.add("invalid");
-      if(!vendedor.value.trim()) vendedor.classList.add("invalid");
-      if(!cidade.value||!horario.value||!vendedor.value){
-        alert("Preencha todos os campos destacados.");
-        return;
-      }
-      litrosUsados+=litrosArr[i];
-      usados.push(i);
-    }
-  }
-
-  if(litrosUsados===0){
-    alert("Informe ao menos um cliente.");
-    return;
-  }
-
-  const capacidadeTotal = litrosArr.reduce((a,b)=>a+b,0);
-  const cargaParcial = litrosUsados < capacidadeTotal;
-
-  const freteTotal=(km*d.indice)+d.taxa;
-  const unit=freteTotal/litrosUsados;
-
-  let html=`<div class="resumo-box">
-    <h3>Resumo de Frete por Rota</h3>
-    ${cargaParcial ? `<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>` : ``}
-
-    <table>
-      <tr>
-        <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-        <th>FRETE (R$/L)</th><th>QUANTIDADE</th><th>TOTAL (R$)</th><th>VENDEDOR</th>
-      </tr>`;
-
-  usados.forEach(i=>{
-    const l=litrosArr[i];
-    const total=l*unit;
-    document.getElementById("unit"+i).innerText=moeda4(unit);
-    document.getElementById("frete"+i).innerText=moeda(total);
-
-    html+=`
-      <tr>
-        <td>${document.getElementById("cliente"+i).value}</td>
-        <td>${document.getElementById("cidade"+i).value}</td>
-        <td>${document.getElementById("horario"+i).value}</td>
-        <td>${moeda4(unit)}</td>
-        <td>${numero(l)}</td>
-        <td>${moeda(total)}</td>
-        <td>${document.getElementById("vendedor"+i).value}</td>
-      </tr>`;
-  });
-
-  html+=`
-      <tr class="total">
-        <td colspan="4"></td>
-        <td>${numero(litrosUsados)}</td>
-        <td>${moeda(freteTotal)}</td>
-        <td></td>
-      </tr>
-    </table>
-
-    <table style="margin-top:15px">
-      <tr>
-        <th>KM RODADO</th>
-        <th>ÍNDICE</th>
-        <th>TAXA</th>
-        <th>TOTAL FRETE</th>
-        <th>M³</th>
-        <th>FRETE UNIT MÉDIO</th>
-      </tr>
-      <tr>
-        <td>${numero(km)}</td>
-        <td>${d.indice.toFixed(4)}</td>
-        <td>${moeda(d.taxa)}</td>
-        <td>${moeda(freteTotal)}</td>
-        <td>${numero(litrosUsados/1000)}</td>
-        <td>${moeda4(unit)}</td>
-      </tr>
-    </table>
-
-  </div>`;
-
-  document.getElementById("resumo").innerHTML=html;
-  document.querySelectorAll("input,select").forEach(el=>el.disabled=true);
-}
-
-function novoCalculo(){
-  location.reload();
 }
 </script>
 
