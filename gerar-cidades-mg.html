@@ -2,40 +2,69 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Gerar Cidades MG JSON</title>
+<title>Gerar cidades MG JSON</title>
+<style>
+body{font-family:Arial;padding:20px}
+button{padding:10px 20px;font-size:16px}
+pre{white-space:pre-wrap;max-height:70vh;overflow:auto;background:#f4f4f4;padding:10px}
+.status{margin-top:10px;font-weight:bold}
+</style>
 </head>
 <body>
 
-<h3>Gerando cidades de Minas Gerais...</h3>
+<h2>Gerar JSON – Cidades de Minas Gerais</h2>
+
+<button onclick="gerar()">Gerar JSON</button>
+<div class="status" id="status">Aguardando iniciar...</div>
 <pre id="output"></pre>
 
 <script>
-async function gerarJSON(){
-  // 853 cidades de MG (API oficial do IBGE)
+const delay = ms => new Promise(r => setTimeout(r, ms));
+
+async function gerar(){
+  const status = document.getElementById("status");
+  status.textContent = "Buscando lista do IBGE...";
+
+  // 1️⃣ Buscar cidades do IBGE
   const ibgeURL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/31/municipios";
+  const cidades = await fetch(ibgeURL).then(r => r.json());
 
-  const cidades = await fetch(ibgeURL).then(r=>r.json());
   const resultado = {};
+  let contador = 0;
 
+  // 2️⃣ Buscar coordenadas no OpenStreetMap (Nominatim)
   for(const c of cidades){
-    const nome = c.nome.toUpperCase();
+    contador++;
+    status.textContent = `Processando ${contador} / ${cidades.length}: ${c.nome}`;
 
-    // Busca coordenadas no OpenStreetMap (Nominatim)
-    const geoURL = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(c.nome)}&state=Minas Gerais&country=Brazil&format=json&limit=1`;
+    const url = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(c.nome)}&state=Minas Gerais&country=Brazil&format=json&limit=1`;
 
     try{
-      const geo = await fetch(geoURL,{headers:{'User-Agent':'frete-mg'}}).then(r=>r.json());
+      const resp = await fetch(url,{
+        headers:{
+          "User-Agent":"frete-mg/1.0 (contato@exemplo.com)"
+        }
+      });
+      const geo = await resp.json();
+
       if(geo.length){
-        resultado[nome] = [parseFloat(geo[0].lat), parseFloat(geo[0].lon)];
+        resultado[c.nome.toUpperCase()] = [
+          parseFloat(geo[0].lat),
+          parseFloat(geo[0].lon)
+        ];
       }
-    }catch(e){}
+    }catch(e){
+      console.error("Erro em:", c.nome);
+    }
+
+    // ⏱️ delay obrigatório para não ser bloqueado
+    await delay(1200);
   }
 
+  status.textContent = "Finalizado ✔ Copie o JSON abaixo";
   document.getElementById("output").textContent =
     JSON.stringify(resultado, null, 2);
 }
-
-gerarJSON();
 </script>
 
 </body>
