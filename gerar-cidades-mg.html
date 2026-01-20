@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Gerar Cidades MG JSON</title>
+</head>
+<body>
+
+<h3>Gerando cidades de Minas Gerais...</h3>
+<pre id="output"></pre>
+
+<script>
+async function gerarJSON(){
+  // 853 cidades de MG (API oficial do IBGE)
+  const ibgeURL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/31/municipios";
+
+  const cidades = await fetch(ibgeURL).then(r=>r.json());
+  const resultado = {};
+
+  for(const c of cidades){
+    const nome = c.nome.toUpperCase();
+
+    // Busca coordenadas no OpenStreetMap (Nominatim)
+    const geoURL = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(c.nome)}&state=Minas Gerais&country=Brazil&format=json&limit=1`;
+
+    try{
+      const geo = await fetch(geoURL,{headers:{'User-Agent':'frete-mg'}}).then(r=>r.json());
+      if(geo.length){
+        resultado[nome] = [parseFloat(geo[0].lat), parseFloat(geo[0].lon)];
+      }
+    }catch(e){}
+  }
+
+  document.getElementById("output").textContent =
+    JSON.stringify(resultado, null, 2);
+}
+
+gerarJSON();
+</script>
+
+</body>
+</html>
