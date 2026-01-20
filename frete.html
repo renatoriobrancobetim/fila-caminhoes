@@ -23,13 +23,21 @@ body{
 .content{ padding:25px; }
 label{ font-weight:bold; font-size:13px; }
 input,select{
-  width:100%; padding:8px; border:1px solid #ccc;
-  border-radius:5px; font-size:13px;
+  width:100%; padding:8px;
+  border:1px solid #ccc; border-radius:5px;
+  font-size:13px;
 }
-input:disabled,select:disabled{ background:#eee; cursor:not-allowed; }
-.uppercase{
-  text-transform:uppercase;
+input:disabled,select:disabled{
+  background:#eee; cursor:not-allowed;
 }
+.uppercase{ text-transform:uppercase; }
+
+/* 🔴 CAMPO INVÁLIDO */
+.invalid{
+  border:2px solid #d32f2f !important;
+  background:#fdecea !important;
+}
+
 .grid{
   display:grid; grid-template-columns:2fr 1fr;
   gap:15px; margin-bottom:20px;
@@ -51,9 +59,19 @@ button{
 }
 .resumo-box{
   margin-top:30px; border:3px solid var(--azul);
-  padding:20px; border-radius:10px; background:#f9fbff;
+  padding:20px; border-radius:10px;
+  background:#f9fbff;
 }
-.resumo-box h3{ margin-top:0; text-align:center; color:var(--azul); }
+.resumo-box h3{
+  margin-top:0; text-align:center; color:var(--azul);
+}
+
+.footer{
+  margin-top:30px;
+  text-align:center;
+  font-size:12px;
+  color:#555;
+}
 
 @media print{
   body{ background:#fff; padding:0; }
@@ -98,28 +116,30 @@ button{
 
     <div id="resumo"></div>
 
+    <div class="footer">
+      © Renato Monteiro
+    </div>
+
   </div>
 </div>
 
 <script>
-/* ===== DADOS BASE ===== */
-const base = {
-  FROTA:   { indice:5.8402, taxa:669.32 },
-  BITRUCK: { indice:3.5686, taxa:364.71 },
-  TRUCK:   { indice:4.4266, taxa:412.57 },
-  TOCO:    { indice:4.9381, taxa:414.93 },
-  CARRETA: { indice:5.6203, taxa:460.29 }
+const base={
+  FROTA:{indice:5.8402,taxa:669.32},
+  BITRUCK:{indice:3.5686,taxa:364.71},
+  TRUCK:{indice:4.4266,taxa:412.57},
+  TOCO:{indice:4.9381,taxa:414.93},
+  CARRETA:{indice:5.6203,taxa:460.29}
 };
 
-/* ===== COMPARTIMENTOS ===== */
-const compartimentos = {
-  FROTA: [5000,5000,5000,2500,2500,2500],
-  BITRUCK: [5000,5000,5000],
-  TRUCK_555: [5000,5000,5000],
-  TRUCK_5532: [5000,5000,3000,2000],
-  TRUCK_53232: [5000,3000,2000,3000,2000],
-  TOCO: [5000,3000,2000],
-  CARRETA: [5000,5000,5000,5000,5000,5000]
+const compartimentos={
+  FROTA:[5000,5000,5000,2500,2500,2500],
+  BITRUCK:[5000,5000,5000],
+  TRUCK_555:[5000,5000,5000],
+  TRUCK_5532:[5000,5000,3000,2000],
+  TRUCK_53232:[5000,3000,2000,3000,2000],
+  TOCO:[5000,3000,2000],
+  CARRETA:[5000,5000,5000,5000,5000,5000]
 };
 
 function dadosCaminhao(tipo){
@@ -127,7 +147,6 @@ function dadosCaminhao(tipo){
   return base[tipo];
 }
 
-/* ===== FORMATAÇÃO ===== */
 function moeda(v){
   return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2});
 }
@@ -151,13 +170,13 @@ function gerarTabela(){
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
     <tr>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="cliente${i}"></td>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="cidade${i}"></td>
-      <td><input type="time" id="horario${i}"></td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase();this.classList.remove('invalid')" id="cliente${i}"></td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase();this.classList.remove('invalid')" id="cidade${i}"></td>
+      <td><input type="time" onchange="this.classList.remove('invalid')" id="horario${i}"></td>
       <td>${numero(l)}</td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
-      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase()" id="vendedor${i}"></td>
+      <td><input class="uppercase" oninput="this.value=this.value.toUpperCase();this.classList.remove('invalid')" id="vendedor${i}"></td>
     </tr>`;
   });
 
@@ -176,12 +195,28 @@ function calcular(){
   let litrosUsados=0;
   let usados=[];
 
-  litrosArr.forEach((l,i)=>{
-    if(document.getElementById("cliente"+i).value.trim()){
-      litrosUsados+=l;
+  for(let i=0;i<litrosArr.length;i++){
+    const cliente=document.getElementById("cliente"+i);
+    const cidade=document.getElementById("cidade"+i);
+    const horario=document.getElementById("horario"+i);
+    const vendedor=document.getElementById("vendedor"+i);
+
+    [cliente,cidade,horario,vendedor].forEach(el=>el.classList.remove("invalid"));
+
+    if(cliente.value.trim()){
+      if(!cidade.value.trim()) cidade.classList.add("invalid");
+      if(!horario.value.trim()) horario.classList.add("invalid");
+      if(!vendedor.value.trim()) vendedor.classList.add("invalid");
+
+      if(!cidade.value.trim()||!horario.value.trim()||!vendedor.value.trim()){
+        alert("Campos obrigatórios em destaque.");
+        return;
+      }
+
+      litrosUsados+=litrosArr[i];
       usados.push(i);
     }
-  });
+  }
 
   if(litrosUsados===0){
     alert("Informe pelo menos um cliente.");
@@ -207,13 +242,13 @@ function calcular(){
 
     html+=`
     <tr>
-      <td>${document.getElementById("cliente"+i).value}</td>
-      <td>${document.getElementById("cidade"+i).value}</td>
-      <td>${document.getElementById("horario"+i).value}</td>
+      <td>${cliente${i}.value}</td>
+      <td>${cidade${i}.value}</td>
+      <td>${horario${i}.value}</td>
       <td>${moeda4(unit)}</td>
       <td>${numero(l)}</td>
       <td>${moeda(total)}</td>
-      <td>${document.getElementById("vendedor"+i).value}</td>
+      <td>${vendedor${i}.value}</td>
     </tr>`;
   });
 
@@ -242,8 +277,6 @@ function calcular(){
   </table></div>`;
 
   document.getElementById("resumo").innerHTML=html;
-
-  /* ===== TRAVA DEFINITIVA ===== */
   document.querySelectorAll("input,select").forEach(el=>el.disabled=true);
 }
 </script>
