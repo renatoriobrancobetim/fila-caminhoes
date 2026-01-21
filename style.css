@@ -45,8 +45,9 @@ th {
   background: #e9ecef;
 }
 
+/* linha destacada (ex: próximo da vez) */
 tr:first-child {
-  background: #fff3cd; /* próximo da vez */
+  background: #fff3cd;
   font-weight: bold;
 }
 
@@ -55,12 +56,14 @@ tr:first-child {
   color: white;
   border: none;
 }
+
 .creditos{
   text-align:center;
   font-size:12px;
   opacity:0.7;
   padding:15px 0 20px;
 }
+
 /* ANIMAÇÃO REMOÇÃO */
 .item.removendo{
   background:#F8D7DA !important;
@@ -76,6 +79,7 @@ tr:first-child {
     opacity:0;
     transform:translateX(-40px);
   }
+}
 
 /* ALERTA CARGA PARCIAL */
 .alerta-parcial{
@@ -91,5 +95,3 @@ tr:first-child {
   font-size:16px;
   box-shadow:0 4px 10px rgba(0,0,0,0.15);
 }
-
-
