@@ -295,6 +295,8 @@ async function desenharMapa(rota){
 
 /* ===== CALCULAR FRETE ===== */
 function calcular(){
+  const capacidadeTotal = compartimentos[tipo].reduce((a,b)=>a+b,0);
+  const cargaParcial = litrosUsados < capacidadeTotal;
   const tipo=document.getElementById("tipo").value;
   const km=parseFloat(document.getElementById("kmTotal").value);
   if(!km){alert("KM não calculado");return;}
@@ -325,7 +327,11 @@ function calcular(){
   const unit=freteTotal/litrosUsados;
 
   let html=`<div class="resumo-box">
-  <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>
+  <h3>
+  RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
+  ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
+</h3>
+
 
   <table>
   <tr>
