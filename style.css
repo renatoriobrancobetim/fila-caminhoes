@@ -95,3 +95,98 @@ tr:first-child {
   font-size:16px;
   box-shadow:0 4px 10px rgba(0,0,0,0.15);
 }
+/* ===============================
+   AJUSTES VISUAIS — ETAPA 1 a 3
+   NÃO ALTERA LÓGICA
+================================ */
+
+/* 1️⃣ ÁREA SUPERIOR COMO "ETAPA 1" */
+.grid {
+  background: #f4f7fb;
+  padding: 18px;
+  border-radius: 10px;
+  border: 2px solid #e3f2fd;
+}
+
+/* 2️⃣ TABELA MAIS LEGÍVEL */
+#freteTable {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#freteTable th {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+#freteTable tr:hover {
+  background: #f1f8ff;
+}
+
+/* INPUTS DENTRO DA TABELA */
+#freteTable input {
+  background: #fdfdfd;
+  transition: border .2s, box-shadow .2s;
+}
+
+#freteTable input:focus {
+  border-color: #0d47a1;
+  box-shadow: 0 0 0 2px rgba(13,71,161,.15);
+  outline: none;
+}
+
+/* 3️⃣ BOTÕES — FEEDBACK VISUAL */
+.actions button {
+  transition: transform .2s ease, box-shadow .2s ease, opacity .2s;
+}
+
+.actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+}
+
+/* BOTÃO CALCULAR MAIS DESTACADO QUANDO ATIVO */
+#btnCalcular:not([disabled]) {
+  background: linear-gradient(90deg, #1b5e20, #2e7d32);
+}
+
+#btnCalcular:not([disabled]):hover {
+  box-shadow: 0 10px 22px rgba(46,125,50,.35);
+}
+
+/* 4️⃣ RESUMO COM ANIMAÇÃO SUAVE */
+.resumo-box {
+  animation: fadeUp .5s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 5️⃣ MAPA APARECE COM TRANSIÇÃO */
+#mapaRota {
+  transition: opacity .4s ease, transform .4s ease;
+}
+
+#mapaRota[style*="display: block"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 6️⃣ MELHOR DESTAQUE DOS TOTAIS */
+.total-row td {
+  font-size: 13px;
+}
+
+/* 7️⃣ RODAPÉ MAIS DISCRETO */
+.footer {
+  opacity: .6;
+}
