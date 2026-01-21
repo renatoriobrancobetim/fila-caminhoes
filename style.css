@@ -190,3 +190,74 @@ tr:first-child {
 .footer {
   opacity: .6;
 }
+/* ===== MELHORIAS VISUAIS SEM MEXER NA LÓGICA ===== */
+
+/* Transição geral */
+*{
+  transition: all .25s ease;
+}
+
+/* Container com sensação de profundidade */
+.container{
+  animation: fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* Destaque visual da área de seleção */
+.grid{
+  background:#f4f8ff;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid #d6e2ff;
+}
+
+/* Inputs mais confortáveis */
+input, select{
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.08);
+}
+
+input:focus, select:focus{
+  outline:none;
+  border-color:#0d47a1;
+  box-shadow:0 0 0 2px rgba(13,71,161,.15);
+}
+
+/* Tabela mais legível */
+table tr:hover{
+  background:#f1f6ff;
+}
+
+/* Botões com feedback real */
+.actions button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 15px rgba(0,0,0,.25);
+}
+
+.actions button:active{
+  transform:scale(.98);
+}
+
+/* Botão calcular mais chamativo */
+#btnCalcular.btn-destaque{
+  background:linear-gradient(90deg,#2e7d32,#66bb6a);
+}
+
+/* Resumo com entrada animada */
+.resumo-box{
+  animation: slideUp .4s ease;
+}
+
+@keyframes slideUp{
+  from{opacity:0; transform:translateY(15px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* Mapa com sombra profissional */
+#mapaRota{
+  box-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+
