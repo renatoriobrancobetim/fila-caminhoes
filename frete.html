@@ -308,34 +308,30 @@ function calcular(){
 
   let litrosUsados=0;
   let itens=[];
-  let cargaParcial=false;
+  let cargaParcial = false;
+let compartimentosUsados = 0;
 
-  rows.forEach(r=>{
-    const c=r.querySelector("input[id^='cliente']");
-    const cidadeInput=r.querySelector("input[id^='cidade']");
+rows.forEach(r=>{
+  const c = r.querySelector("input[id^='cliente']");
+  if(!c || !c.value.trim()) return;
 
-    if(
-      (c && c.value.trim()) ||
-      (cidadeInput && cidadeInput.value.trim())
-    ){
-      if(!c.value.trim() || !cidadeInput.value.trim()){
-        cargaParcial=true;
-      }
-    }
+  const idx = parseInt(c.id.replace("cliente",""));
+  compartimentosUsados++;
+  litrosUsados += litrosArr[idx];
 
-    if(!c || !c.value.trim()) return;
-
-    const idx=parseInt(c.id.replace("cliente",""));
-    litrosUsados+=litrosArr[idx];
-
-    itens.push({
-      cliente:c.value.toUpperCase(),
-      cidade:document.getElementById("cidade"+idx).value,
-      horario:document.getElementById("horario"+idx).value||"-",
-      litros:litrosArr[idx],
-      idx
-    });
+  itens.push({
+    cliente: c.value.toUpperCase(),
+    cidade: document.getElementById("cidade"+idx).value,
+    horario: document.getElementById("horario"+idx).value || "-",
+    litros: litrosArr[idx],
+    idx
   });
+});
+
+// REGRA FINAL DE CARGA PARCIAL
+if(compartimentosUsados < litrosArr.length){
+  cargaParcial = true;
+}
 
   if(litrosUsados===0){
     alert("Informe ao menos um cliente para calcular o frete.");
