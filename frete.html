@@ -295,8 +295,6 @@ async function desenharMapa(rota){
 
 /* ===== CALCULAR FRETE ===== */
 function calcular(){
-  const capacidadeTotal = compartimentos[tipo].reduce((a,b)=>a+b,0);
-  const cargaParcial = litrosUsados < capacidadeTotal;
   const tipo=document.getElementById("tipo").value;
   const km=parseFloat(document.getElementById("kmTotal").value);
   if(!km){alert("KM não calculado");return;}
@@ -306,6 +304,7 @@ function calcular(){
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
 
   let itens=[], litrosUsados=0;
+
 
   rows.forEach(r=>{
     const c=r.querySelector("input[id^='cliente']");
