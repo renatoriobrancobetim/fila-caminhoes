@@ -5,7 +5,7 @@
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- LEAFLET (MAPA) -->
+<!-- LEAFLET -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -44,7 +44,6 @@ th,td{
   font-size:12px;text-align:center
 }
 th{background:#e3f2fd}
-.drag{cursor:move;font-weight:bold;background:#f4f4f4}
 
 .actions{
   display:flex;
@@ -68,25 +67,6 @@ button.secondary{background:#555}
   70%{box-shadow:0 0 0 14px rgba(13,71,161,0)}
   100%{box-shadow:0 0 0 0 rgba(13,71,161,0)}
 }
-
-.spinner-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(255,255,255,.85);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-  flex-direction:column;
-}
-.spinner{
-  width:70px;height:70px;
-  border:8px solid #ddd;
-  border-top:8px solid var(--azul);
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
 
 .alerta-sucesso{
   margin-top:20px;
@@ -139,11 +119,6 @@ button.secondary{background:#555}
 
 <body>
 
-<div class="spinner-overlay" id="spinner">
-  <div class="spinner"></div>
-  <div style="margin-top:10px;font-weight:bold">Otimizando rota...</div>
-</div>
-
 <div class="container">
 <div class="header"><h2>CÁLCULO DE FRETE POR ROTA</h2></div>
 <div class="content">
@@ -193,7 +168,30 @@ button.secondary{background:#555}
 const BASE="BETIM";
 let cidadesCoords={}, mapa, rotaLayer;
 
-/* carregar cidades */
+/* FRETE */
+const baseFrete={
+  FROTA:{indice:5.8402,taxa:669.32},
+  BITRUCK:{indice:3.5686,taxa:364.71},
+  TRUCK:{indice:4.4266,taxa:412.57},
+  TOCO:{indice:4.9381,taxa:414.93},
+  CARRETA:{indice:5.6203,taxa:460.29}
+};
+
+const compartimentos={
+  FROTA:[5000,5000,5000,2500,2500,2500],
+  BITRUCK:[5000,5000,5000],
+  TRUCK_555:[5000,5000,5000],
+  TRUCK_5532:[5000,5000,3000,2000],
+  TRUCK_53232:[5000,3000,2000,3000,2000],
+  TOCO:[5000,3000,2000],
+  CARRETA:[5000,5000,5000,5000,5000,5000]
+};
+
+const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
+const numero=v=>v.toLocaleString("pt-BR");
+
+/* CIDADES */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
@@ -204,7 +202,7 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   });
 });
 
-/* distância */
+/* DISTÂNCIA */
 async function distancia(a,b){
   const [la,lo]=cidadesCoords[a];
   const [lb,lblo]=cidadesCoords[b];
@@ -213,12 +211,12 @@ async function distancia(a,b){
   return j.routes[0].distance/1000;
 }
 
-/* mapa */
+/* MAPA */
 async function desenharMapaRota(cidades){
   document.getElementById("mapaRota").style.display="block";
   if(!mapa){
     mapa=L.map("mapaRota");
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(mapa);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapa);
   }
   if(rotaLayer) mapa.removeLayer(rotaLayer);
 
@@ -234,38 +232,23 @@ async function desenharMapaRota(cidades){
   const j=await r.json();
 
   rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
-  pontos.forEach((p,i)=>{
-    L.marker(p).addTo(mapa).bindPopup(i===0||i===pontos.length-1?"BASE":"Parada "+i);
-  });
 }
 
-/* tabela */
-const compartimentos={
-  FROTA:[5000,5000,5000,2500,2500,2500],
-  BITRUCK:[5000,5000,5000],
-  TRUCK_555:[5000,5000,5000],
-  TRUCK_5532:[5000,5000,3000,2000],
-  TRUCK_53232:[5000,3000,2000,3000,2000],
-  TOCO:[5000,3000,2000],
-  CARRETA:[5000,5000,5000,5000,5000,5000]
-};
-
+/* TABELA */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
   let html=`<table id="freteTable"><tr>
-  <th></th><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-  <th>QTDE</th><th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
+  <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+  <th>QTDE</th><th>R$/L</th><th>TOTAL</th></tr>`;
   compartimentos[tipo].forEach((l,i)=>{
     html+=`<tr data-row>
-      <td class="drag">☰</td>
       <td><input id="cliente${i}" class="uppercase"></td>
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG" onblur="recalcularKM()"></td>
       <td><input id="horario${i}" type="time"></td>
-      <td>${l.toLocaleString("pt-BR")}</td>
+      <td>${numero(l)}</td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
-      <td><input id="vendedor${i}" class="uppercase"></td>
     </tr>`;
   });
   html+="</table>";
@@ -281,35 +264,53 @@ async function recalcularKM(){
   document.getElementById("kmTotal").value=km.toFixed(2);
 }
 
-/* otimizar */
+/* OTIMIZAR */
 async function otimizarRota(){
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
-  let cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
+  const cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
   if(cidades.length<2){alert("Informe ao menos 2 cidades.");return;}
 
-  spinner.style.display="flex";
-  let rota=[],atual=BASE,rest=[...cidades];
-  while(rest.length){
-    let prox=rest.reduce((a,b)=>distancia(atual,a)<distancia(atual,b)?a:b);
-    rota.push(prox);
-    rest=rest.filter(c=>c!==prox);
-    atual=prox;
-  }
+  await desenharMapaRota(cidades);
+  document.getElementById("btnOtimizar").style.display="none";
+  document.getElementById("btnCalcular").classList.add("btn-destaque");
+}
 
-  rota.forEach(c=>{
-    const r=rows.find(tr=>tr.querySelector(".cidade").value===c);
-    document.querySelector("#freteTable").appendChild(r);
+/* CALCULAR */
+function calcular(){
+  const tipo=document.getElementById("tipo").value;
+  const km=parseFloat(document.getElementById("kmTotal").value);
+  if(!tipo||!km){alert("KM não calculado");return;}
+
+  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
+  const litrosArr=compartimentos[tipo];
+  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
+
+  let litrosUsados=0,itens=[],usados=0;
+
+  rows.forEach((r,i)=>{
+    const c=r.querySelector("input[id^='cliente']");
+    if(!c||!c.value.trim()) return;
+    usados++; litrosUsados+=litrosArr[i];
+    itens.push({cliente:c.value.toUpperCase(),cidade:document.getElementById("cidade"+i).value,horario:document.getElementById("horario"+i).value||"-",litros:litrosArr[i],idx:i});
   });
 
-  await recalcularKM();
-  await desenharMapaRota(rota);
+  const cargaParcial=usados<litrosArr.length;
+  const total=(km*dados.indice)+dados.taxa;
+  const unit=total/litrosUsados;
 
-  spinner.style.display="none";
-  mensagemSucesso.style.display="block";
-  setTimeout(()=>mensagemSucesso.style.display="none",4000);
+  let html=`<div class="resumo-box"><h3>RESUMO DE FRETE – ${tipo.replace("_"," ")}</h3>`;
+  if(cargaParcial) html+=`<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>`;
+  html+=`<table><tr><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>R$/L</th><th>QTDE</th><th>TOTAL</th></tr>`;
 
-  btnOtimizar.style.display="none";
-  btnCalcular.classList.add("btn-destaque");
+  itens.forEach(i=>{
+    const t=i.litros*unit;
+    document.getElementById("unit"+i.idx).innerText=moeda4(unit);
+    document.getElementById("frete"+i.idx).innerText=moeda(t);
+    html+=`<tr><td>${i.cliente}</td><td>${i.cidade}</td><td>${i.horario}</td><td>${moeda4(unit)}</td><td>${numero(i.litros)}</td><td>${moeda(t)}</td></tr>`;
+  });
+
+  html+=`</table></div>`;
+  document.getElementById("resumo").innerHTML=html;
 }
 </script>
 
