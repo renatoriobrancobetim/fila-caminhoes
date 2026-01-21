@@ -340,11 +340,18 @@ function calcular(){
 
   const freteTotal=(km*dados.indice)+dados.taxa;
   const unit=freteTotal/litrosUsados;
+  const capacidadeTotal = compartimentos[tipo].reduce((a,b)=>a+b,0);
+const cargaParcial = litrosUsados < capacidadeTotal;
+
 
   let html=`<div class="resumo-box">
   <h3>
     RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
-    ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
+    ${
+      cargaParcial
+        ? '<span class="badge-parcial">⚠ CARGA PARCIAL</span>'
+        : '<span class="badge-completa">✔ CARGA COMPLETA</span>'
+    }
   </h3>
 `;
 
