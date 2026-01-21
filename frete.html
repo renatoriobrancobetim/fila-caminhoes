@@ -11,77 +11,49 @@
 
 <style>
 :root{--azul:#0d47a1;--vermelho:#c62828}
-body{
-  margin:0;padding:20px;font-family:Arial,Helvetica,sans-serif;
-  background:linear-gradient(135deg,var(--azul),var(--vermelho))
-}
-.container{
-  max-width:1300px;margin:auto;background:#fff;
-  border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.35)
-}
-.header{
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;padding:18px;text-align:center
-}
+body{margin:0;padding:20px;font-family:Arial,Helvetica,sans-serif;
+background:linear-gradient(135deg,var(--azul),var(--vermelho))}
+.container{max-width:1300px;margin:auto;background:#fff;border-radius:12px;
+box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.header{background:linear-gradient(90deg,var(--azul),var(--vermelho));
+color:#fff;padding:18px;text-align:center}
 .content{padding:25px}
-input,select{
-  width:100%;padding:7px;border:1px solid #ccc;
-  border-radius:5px;font-size:13px
-}
+input,select{width:100%;padding:7px;border:1px solid #ccc;border-radius:5px;font-size:13px}
+input:disabled,select:disabled{background:#eee}
 .uppercase{text-transform:uppercase}
-.grid{
-  display:grid;grid-template-columns:2fr 1fr;
-  gap:15px;margin-bottom:20px
-}
-table{
-  width:100%;border-collapse:collapse;margin-top:15px
-}
-th,td{
-  border:1px solid #999;padding:6px;
-  font-size:12px;text-align:center
-}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #999;padding:6px;font-size:12px;text-align:center}
 th{background:#e3f2fd}
 
-.actions{
-  display:flex;gap:12px;margin-top:20px
-}
-.actions button{
-  flex:1;padding:14px;
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;border:none;border-radius:8px;
-  font-size:15px;cursor:pointer
-}
+.actions{display:flex;gap:12px;margin-top:20px}
+.actions button{flex:1;padding:14px;
+background:linear-gradient(90deg,var(--azul),var(--vermelho));
+color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
 button.secondary{background:#555}
 
-/* SPINNER */
 .spinner-overlay{
-  position:fixed;inset:0;
-  background:rgba(255,255,255,.85);
-  display:none;align-items:center;
-  justify-content:center;z-index:9999;
-  flex-direction:column
+  position:fixed;inset:0;background:rgba(255,255,255,.85);
+  display:none;align-items:center;justify-content:center;
+  z-index:9999;flex-direction:column
 }
 .spinner{
-  width:70px;height:70px;
-  border:8px solid #ddd;
-  border-top:8px solid var(--azul);
-  border-radius:50%;
+  width:70px;height:70px;border:8px solid #ddd;
+  border-top:8px solid var(--azul);border-radius:50%;
   animation:spin 1s linear infinite
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .alerta-parcial{
-  margin:15px auto;padding:15px;
+  margin:15px auto;padding:15px;border-radius:8px;
   background:#fff3e0;border:3px solid #f57c00;
-  color:#e65100;font-weight:bold;
-  text-align:center;border-radius:8px
+  color:#e65100;font-weight:bold;text-align:center
 }
 
 .resumo-box{
   margin:30px auto;max-width:1100px;
-  border:3px solid var(--azul);
-  padding:20px;border-radius:10px;
-  background:#f9fbff;text-align:center
+  border:3px solid var(--azul);padding:20px;
+  border-radius:10px;background:#f9fbff;text-align:center
 }
 .total-row{background:#e3f2fd;font-weight:bold}
 
@@ -90,7 +62,6 @@ button.secondary{background:#555}
   border-radius:10px;border:3px solid var(--azul);
   display:none
 }
-
 .footer{text-align:center;margin-top:30px;font-size:12px;color:#555}
 </style>
 </head>
@@ -130,7 +101,7 @@ button.secondary{background:#555}
 <div id="mapaRota"></div>
 
 <div class="actions">
-  <button onclick="calcular()">Calcular Frete</button>
+  <button id="btnCalcular" onclick="calcular()">Calcular Frete</button>
   <button id="btnOtimizar" onclick="otimizarRota()">Otimizar Rota</button>
   <button class="secondary" onclick="location.reload()">Novo Cálculo</button>
 </div>
@@ -147,7 +118,7 @@ button.secondary{background:#555}
 const BASE="BETIM";
 let cidadesCoords={}, mapa, rotaLayer;
 
-/* DADOS FRETE */
+/* BASE FRETE */
 const baseFrete={
   FROTA:{indice:5.8402,taxa:669.32},
   BITRUCK:{indice:3.5686,taxa:364.71},
@@ -211,7 +182,6 @@ function gerarTabela(){
     </tr>`;
   });
 
-  html+="</table>";
   document.getElementById("tabela").innerHTML=html;
 }
 
@@ -225,10 +195,11 @@ async function recalcularKM(){
   document.getElementById("kmTotal").value=km.toFixed(2);
 }
 
-/* OTIMIZAR ROTA REAL */
+/* OTIMIZAR */
 async function otimizarRota(){
-  const spinner=document.getElementById("spinner");
-  spinner.style.display="flex";
+  document.getElementById("spinner").style.display="flex";
+
+  document.querySelectorAll("input,select").forEach(e=>e.disabled=true);
 
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
   let cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
@@ -253,7 +224,7 @@ async function otimizarRota(){
   await recalcularKM();
   await desenharMapa(rota);
 
-  spinner.style.display="none";
+  document.getElementById("spinner").style.display="none";
   document.getElementById("btnOtimizar").style.display="none";
 }
 
@@ -268,15 +239,24 @@ async function desenharMapa(cidades){
 
   const pontos=[BASE,...cidades,BASE].map(c=>{
     const [lat,lng]=cidadesCoords[c];
-    return [lat,lng];
+    return {cidade:c,coord:[lat,lng]};
   });
-  mapa.fitBounds(pontos);
 
-  const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
+  mapa.fitBounds(pontos.map(p=>p.coord));
+
+  const osrm=pontos.map(p=>`${p.coord[1]},${p.coord[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
   const j=await r.json();
 
   rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
+
+  pontos.forEach((p,i)=>{
+    const nome = i===0||i===pontos.length-1
+      ? "BASE – BETIM"
+      : document.querySelectorAll("#freteTable tr[data-row]")[i-1]
+          ?.querySelector("input[id^='cliente']").value || p.cidade;
+    L.marker(p.coord).addTo(mapa).bindPopup(nome);
+  });
 }
 
 /* CALCULAR */
@@ -302,6 +282,8 @@ function calcular(){
       qtde:litrosArr[i], idx:i
     });
   });
+
+  if(!itens.length){alert("Informe ao menos um cliente.");return;}
 
   const cargaParcial=usados<litrosArr.length;
   const total=(km*dados.indice)+dados.taxa;
@@ -338,8 +320,7 @@ function calcular(){
       <td>${moeda(dados.taxa)}</td>
       <td><b>${moeda(total)}</b></td>
     </tr>
-  </table>
-  </div>`;
+  </table></div>`;
 
   document.getElementById("resumo").innerHTML=html;
 }
