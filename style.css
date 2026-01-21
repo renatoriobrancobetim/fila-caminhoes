@@ -1,262 +1,139 @@
-/* ===== BASE ===== */
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  padding: 20px;
-}
-
-h1 { margin-bottom: 10px; }
-
-input, select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-input:disabled, select:disabled {
-  background: #eee;
-}
-
-.uppercase { text-transform: uppercase; }
-
-/* ===== GRID SUPERIOR ===== */
-.grid {
-  background: #f4f8ff;
-  padding: 18px;
-  border-radius: 10px;
-  border: 1px solid #d6e2ff;
-  margin-bottom: 20px;
-}
-
-/* ===== TABELAS ===== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-  font-size: 12px;
-}
-
-th {
-  background: #e9ecef;
-  font-weight: bold;
-}
-
-#freteTable tr:hover {
-  background: #f1f8ff;
-}
-
-/* ===== INPUTS NA TABELA ===== */
-#freteTable input {
-  background: #fdfdfd;
-}
-
-#freteTable input:focus {
-  border-color: #0d47a1;
-  box-shadow: 0 0 0 2px rgba(13,71,161,.15);
-  outline: none;
-}
-
-/* ===== BOTÕES ===== */
-.actions button {
-  padding: 14px;
-  cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-
-.actions button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,.18);
-}
-
-.actions button:active {
-  transform: scale(.98);
-}
-
-/* Botão Calcular */
-#btnCalcular:not([disabled]) {
-  background: linear-gradient(90deg, #2e7d32, #66bb6a);
-}
-
-/* ===== SPINNER ===== */
-.spinner-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,.85);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-/* ===== ALERTA CARGA PARCIAL ===== */
-.alerta-parcial {
-  margin: 20px auto;
-  padding: 16px;
-  max-width: 900px;
-  border-radius: 10px;
-  background: #fff3e0;
-  border: 3px solid #f57c00;
-  color: #e65100;
-  font-weight: bold;
-  text-align: center;
-}
-
-/* ===== RESUMO ===== */
-.resumo-box {
-  margin: 30px auto;
-  max-width: 1100px;
-  border: 3px solid #0d47a1;
-  padding: 20px;
-  border-radius: 12px;
-  background: #f9fbff;
-  text-align: center;
-  animation: fadeUp .4s ease;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.total-row {
-  background: #e3f2fd;
-  font-weight: bold;
-}
-
-/* ===== MAPA ===== */
-#mapaRota {
-  margin-top: 25px;
-  height: 420px;
-  border-radius: 12px;
-  border: 3px solid #0d47a1;
-  box-shadow: 0 15px 35px rgba(0,0,0,.25);
-  display: none;
-}
-
-/* ===== RODAPÉ ===== */
-.footer {
-  text-align: center;
-  font-size: 12px;
-  opacity: .6;
-  margin-top: 30px;
-}
-/* ===== ETAPAS DE PROCESSO ===== */
-.etapas{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:20px;
-  gap:10px;
-}
-
-.etapa{
-  flex:1;
-  padding:10px;
-  border-radius:8px;
-  background:#e0e0e0;
-  text-align:center;
-  font-size:13px;
-  font-weight:bold;
-  color:#666;
-  position:relative;
-  overflow:hidden;
-}
-
-.etapa::after{
-  content:"";
-  position:absolute;
-  left:-100%;
-  top:0;
-  width:100%;
-  height:100%;
-  background:rgba(255,255,255,.3);
-}
-
-.etapa.ativa{
-  background:linear-gradient(90deg,#0d47a1,#c62828);
-  color:#fff;
-}
-
-.etapa.ativa::after{
-  animation:carregar 1.2s linear infinite;
-}
-
-.etapa.concluida{
-  background:#2e7d32;
-  color:#fff;
-}
-
-@keyframes carregar{
-  from{left:-100%}
-  to{left:100%}
-}
-
-/* ===== BADGE CARGA PARCIAL ===== */
-.badge-completa{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin-left:12px;
-  padding:5px 12px;
-  font-size:12px;
-  font-weight:700;
-  color:#1b5e20 !important;
-  background:#e8f5e9 !important;
-  border:2px solid #2e7d32 !important;
-  border-radius:20px;
-  box-shadow:0 2px 6px rgba(46,125,50,.35);
-}
 /* =====================================================
-   PACOTE VISUAL FINAL — NÃO ALTERA LÓGICA
-   ===================================================== */
-
-/* Transição geral suave */
-*{
-  transition: all .25s ease;
+   VARIÁVEIS GLOBAIS
+===================================================== */
+:root{
+  --azul:#0d47a1;
+  --vermelho:#c62828;
+  --verde:#2e7d32;
+  --laranja:#f57c00;
 }
 
-/* Cabeçalho mais elegante */
-.header h2{
-  margin-bottom:6px;
+/* =====================================================
+   BASE
+===================================================== */
+body{
+  margin:0;
+  padding:20px;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,var(--azul),var(--vermelho));
 }
 
-.header .subtitulo{
+.uppercase{ text-transform:uppercase; }
+
+input, select{
+  width:100%;
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
   font-size:13px;
-  opacity:.9;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.08);
 }
 
-/* Área de configuração (primeiro passo) */
+input:disabled, select:disabled{
+  background:#eee;
+}
+
+input:focus, select:focus{
+  outline:none;
+  border-color:var(--azul);
+  box-shadow:0 0 0 2px rgba(13,71,161,.15);
+}
+
+/* =====================================================
+   CONTAINER / HEADER
+===================================================== */
+.container{
+  max-width:1300px;
+  margin:auto;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
+  animation:fadeIn .5s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+.header{
+  background:linear-gradient(90deg,var(--azul),var(--vermelho));
+  color:#fff;
+  padding:18px;
+  text-align:center;
+  border-radius:14px 14px 0 0;
+}
+
+.content{ padding:25px; }
+
+/* =====================================================
+   GRID SUPERIOR
+===================================================== */
 .grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:15px;
+  margin-bottom:20px;
   background:#f4f8ff;
   padding:18px;
   border-radius:12px;
   border:2px solid #dbe7ff;
 }
 
-/* Inputs mais confortáveis */
-input, select{
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
+/* =====================================================
+   TABELAS
+===================================================== */
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  margin-top:15px;
 }
 
-input:focus, select:focus{
-  outline:none;
-  border-color:#0d47a1;
-  box-shadow:0 0 0 2px rgba(13,71,161,.15);
+th, td{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:center;
+  font-size:12px;
 }
 
-/* Tabela mais legível */
+th{
+  background:#e9ecef;
+  font-weight:bold;
+}
+
 #freteTable tr:hover{
   background:#f1f6ff;
 }
 
-/* Botões com feedback */
+.total-row{
+  background:#e3f2fd;
+  font-weight:bold;
+}
+
+.total-row td{
+  font-size:13px;
+}
+
+/* =====================================================
+   BOTÕES
+===================================================== */
+.actions{
+  display:flex;
+  gap:12px;
+  margin-top:20px;
+}
+
 .actions button{
-  transition: transform .2s ease, box-shadow .2s ease;
+  flex:1;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  font-size:15px;
+  color:#fff;
+  cursor:pointer;
+  background:linear-gradient(90deg,var(--azul),var(--vermelho));
+  transition:transform .2s ease, box-shadow .2s ease;
 }
 
 .actions button:hover{
@@ -268,14 +145,66 @@ input:focus, select:focus{
   transform:scale(.97);
 }
 
-/* Botão Calcular em destaque */
 #btnCalcular.btn-destaque{
-  background:linear-gradient(90deg,#2e7d32,#66bb6a);
+  background:linear-gradient(90deg,var(--verde),#66bb6a);
+  animation:pulse 1.5s infinite;
 }
 
-/* Resumo com entrada animada */
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(46,125,50,.6)}
+  70%{box-shadow:0 0 0 14px rgba(46,125,50,0)}
+  100%{box-shadow:0 0 0 0 rgba(46,125,50,0)}
+}
+
+/* =====================================================
+   SPINNER
+===================================================== */
+.spinner-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  flex-direction:column;
+}
+
+.spinner{
+  width:70px;
+  height:70px;
+  border:8px solid #ddd;
+  border-top:8px solid var(--azul);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{ to{transform:rotate(360deg)} }
+
+/* =====================================================
+   MAPA
+===================================================== */
+#mapaRota{
+  margin-top:25px;
+  height:420px;
+  border-radius:12px;
+  border:3px solid var(--azul);
+  box-shadow:0 15px 35px rgba(0,0,0,.25);
+  display:none;
+}
+
+/* =====================================================
+   RESUMO
+===================================================== */
 .resumo-box{
-  animation: fadeUp .4s ease both;
+  margin:30px auto;
+  max-width:1100px;
+  border:3px solid var(--azul);
+  padding:22px;
+  border-radius:14px;
+  background:#f9fbff;
+  text-align:center;
+  animation:fadeUp .4s ease;
 }
 
 @keyframes fadeUp{
@@ -283,39 +212,51 @@ input:focus, select:focus{
   to{opacity:1; transform:translateY(0)}
 }
 
-/* Destaque dos totais */
-.total-row td{
-  font-size:13px;
-  font-weight:bold;
-}
-
-/* Mapa mais profissional */
-#mapaRota{
-  box-shadow:0 15px 35px rgba(0,0,0,.25);
-}
-
-/* Rodapé discreto */
-.footer{
-  opacity:.6;
-}
-
-/* ===== BADGE CARGA PARCIAL ===== */
+/* =====================================================
+   BADGES
+===================================================== */
 .badge-parcial{
   display:inline-block;
-  margin-left:10px;
-  padding:6px 12px;
+  margin-left:12px;
+  padding:6px 14px;
   background:#fff3e0;
   color:#e65100;
-  border:2px solid #f57c00;
+  border:2px solid var(--laranja);
   border-radius:20px;
   font-size:12px;
   font-weight:bold;
   box-shadow:0 4px 10px rgba(245,124,0,.35);
 }
+
+.badge-completa{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-left:12px;
+  padding:6px 14px;
+  font-size:12px;
+  font-weight:bold;
+  color:#1b5e20;
+  background:#e8f5e9;
+  border:2px solid var(--verde);
+  border-radius:20px;
+  box-shadow:0 2px 6px rgba(46,125,50,.35);
+}
+
+/* =====================================================
+   RODAPÉ
+===================================================== */
+.footer{
+  text-align:center;
+  font-size:12px;
+  opacity:.6;
+  margin-top:30px;
+}
+
 /* =====================================================
    MODO PRINT — RESUMO LIMPO
-   ===================================================== */
-@media print {
+===================================================== */
+@media print{
 
   body{
     background:#fff;
@@ -343,9 +284,7 @@ input:focus, select:focus{
     animation:none;
   }
 
-  table{
-    font-size:12px;
-  }
+  table{ font-size:12px; }
 
   th{
     background:#eee !important;
@@ -359,7 +298,7 @@ input:focus, select:focus{
   .badge-parcial{
     background:#fff3e0 !important;
     color:#000 !important;
-    border:2px solid #f57c00 !important;
+    border:2px solid var(--laranja) !important;
     box-shadow:none;
   }
 }
