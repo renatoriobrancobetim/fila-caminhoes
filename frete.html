@@ -11,108 +11,41 @@
 
 <style>
 :root{--azul:#0d47a1;--vermelho:#c62828}
-body{
-  margin:0;padding:20px;
-  font-family:Arial,Helvetica,sans-serif;
-  background:linear-gradient(135deg,var(--azul),var(--vermelho))
-}
-.container{
-  max-width:1300px;margin:auto;background:#fff;
-  border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.35)
-}
-.header{
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;padding:18px;text-align:center
-}
+body{margin:0;padding:20px;font-family:Arial,Helvetica,sans-serif;
+background:linear-gradient(135deg,var(--azul),var(--vermelho))}
+.container{max-width:1300px;margin:auto;background:#fff;border-radius:12px;
+box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.header{background:linear-gradient(90deg,var(--azul),var(--vermelho));
+color:#fff;padding:18px;text-align:center}
 .content{padding:25px}
-input,select{
-  width:100%;padding:7px;
-  border:1px solid #ccc;border-radius:5px;
-  font-size:13px
-}
-input:disabled,select:disabled{background:#eee}
+input,select{width:100%;padding:7px;border:1px solid #ccc;border-radius:5px;font-size:13px}
 .uppercase{text-transform:uppercase}
-.grid{
-  display:grid;grid-template-columns:2fr 1fr;
-  gap:15px;margin-bottom:20px
-}
-table{
-  width:100%;border-collapse:collapse;margin-top:15px
-}
-th,td{
-  border:1px solid #999;padding:6px;
-  font-size:12px;text-align:center
-}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #999;padding:6px;font-size:12px;text-align:center}
 th{background:#e3f2fd}
 
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top:20px
-}
-.actions button{
-  flex:1;
-  padding:14px;
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;border:none;border-radius:8px;
-  font-size:15px;cursor:pointer
-}
+.actions{display:flex;gap:12px;margin-top:20px}
+.actions button{flex:1;padding:14px;
+background:linear-gradient(90deg,var(--azul),var(--vermelho));
+color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
 button.secondary{background:#555}
 
-.btn-destaque{
-  animation:pulse 1.5s infinite
-}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(13,71,161,.7)}
-  70%{box-shadow:0 0 0 14px rgba(13,71,161,0)}
-  100%{box-shadow:0 0 0 0 rgba(13,71,161,0)}
-}
-
-.alerta-sucesso{
-  margin-top:20px;
-  padding:15px;
-  border-radius:8px;
-  background:#e8f5e9;
-  border:2px solid #2e7d32;
-  color:#1b5e20;
-  font-weight:bold;
-  text-align:center;
-  display:none
-}
-
 .alerta-parcial{
-  margin:15px auto;
-  padding:15px;
-  border-radius:8px;
-  background:#fff3e0;
-  border:3px solid #f57c00;
-  color:#e65100;
-  font-weight:bold;
-  text-align:center
+  margin:15px auto;padding:15px;border-radius:8px;
+  background:#fff3e0;border:3px solid #f57c00;
+  color:#e65100;font-weight:bold;text-align:center
 }
 
 .resumo-box{
-  margin:30px auto;
-  max-width:1100px;
-  border:3px solid var(--azul);
-  padding:20px;
-  border-radius:10px;
-  background:#f9fbff;
-  text-align:center
-}
-.total-row{
-  background:#e3f2fd;
-  font-weight:bold
+  margin:30px auto;max-width:1100px;border:3px solid var(--azul);
+  padding:20px;border-radius:10px;background:#f9fbff;text-align:center
 }
 
 #mapaRota{
-  margin-top:25px;
-  height:420px;
-  border-radius:10px;
-  border:3px solid var(--azul);
-  display:none;
+  margin-top:25px;height:420px;border-radius:10px;
+  border:3px solid var(--azul);display:none
 }
-
 .footer{text-align:center;margin-top:30px;font-size:12px;color:#555}
 </style>
 </head>
@@ -147,13 +80,9 @@ button.secondary{background:#555}
 <div id="mapaRota"></div>
 
 <div class="actions">
-  <button id="btnCalcular" onclick="calcular()">Calcular Frete</button>
+  <button onclick="calcular()">Calcular Frete</button>
   <button id="btnOtimizar" onclick="otimizarRota()">Otimizar Rota</button>
   <button class="secondary" onclick="location.reload()">Novo Cálculo</button>
-</div>
-
-<div id="mensagemSucesso" class="alerta-sucesso">
-  ✅ Rota otimizada com sucesso!
 </div>
 
 <div id="resumo"></div>
@@ -168,7 +97,6 @@ button.secondary{background:#555}
 const BASE="BETIM";
 let cidadesCoords={}, mapa, rotaLayer;
 
-/* FRETE */
 const baseFrete={
   FROTA:{indice:5.8402,taxa:669.32},
   BITRUCK:{indice:3.5686,taxa:364.71},
@@ -202,7 +130,6 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   });
 });
 
-/* DISTÂNCIA */
 async function distancia(a,b){
   const [la,lo]=cidadesCoords[a];
   const [lb,lblo]=cidadesCoords[b];
@@ -211,46 +138,34 @@ async function distancia(a,b){
   return j.routes[0].distance/1000;
 }
 
-/* MAPA */
-async function desenharMapaRota(cidades){
-  document.getElementById("mapaRota").style.display="block";
-  if(!mapa){
-    mapa=L.map("mapaRota");
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapa);
-  }
-  if(rotaLayer) mapa.removeLayer(rotaLayer);
-
-  const pontos=[BASE,...cidades,BASE].map(c=>{
-    const [lat,lng]=cidadesCoords[c];
-    return [lat,lng];
-  });
-
-  mapa.fitBounds(pontos);
-
-  const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
-  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
-  const j=await r.json();
-
-  rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
-}
-
-/* TABELA */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
-  let html=`<table id="freteTable"><tr>
-  <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-  <th>QTDE</th><th>R$/L</th><th>TOTAL</th></tr>`;
+
+  let html=`<table id="freteTable">
+  <tr>
+    <th>CLIENTE</th>
+    <th>CIDADE</th>
+    <th>HORÁRIO</th>
+    <th>VENDEDOR</th>
+    <th>QTDE</th>
+    <th>R$/L</th>
+    <th>TOTAL</th>
+  </tr>`;
+
   compartimentos[tipo].forEach((l,i)=>{
-    html+=`<tr data-row>
+    html+=`
+    <tr data-row>
       <td><input id="cliente${i}" class="uppercase"></td>
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG" onblur="recalcularKM()"></td>
       <td><input id="horario${i}" type="time"></td>
+      <td><input id="vendedor${i}" class="uppercase"></td>
       <td>${numero(l)}</td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
     </tr>`;
   });
+
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
 }
@@ -264,18 +179,32 @@ async function recalcularKM(){
   document.getElementById("kmTotal").value=km.toFixed(2);
 }
 
-/* OTIMIZAR */
 async function otimizarRota(){
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
   const cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
   if(cidades.length<2){alert("Informe ao menos 2 cidades.");return;}
 
-  await desenharMapaRota(cidades);
+  document.getElementById("mapaRota").style.display="block";
+  if(!mapa){
+    mapa=L.map("mapaRota");
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapa);
+  }
+  if(rotaLayer) mapa.removeLayer(rotaLayer);
+
+  const pontos=[BASE,...cidades,BASE].map(c=>{
+    const [lat,lng]=cidadesCoords[c];
+    return [lat,lng];
+  });
+  mapa.fitBounds(pontos);
+
+  const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
+  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
+  const j=await r.json();
+
+  rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
   document.getElementById("btnOtimizar").style.display="none";
-  document.getElementById("btnCalcular").classList.add("btn-destaque");
 }
 
-/* CALCULAR */
 function calcular(){
   const tipo=document.getElementById("tipo").value;
   const km=parseFloat(document.getElementById("kmTotal").value);
@@ -285,28 +214,42 @@ function calcular(){
   const litrosArr=compartimentos[tipo];
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  let litrosUsados=0,itens=[],usados=0;
-
+  let usados=0,litros=0,itens=[];
   rows.forEach((r,i)=>{
-    const c=r.querySelector("input[id^='cliente']");
-    if(!c||!c.value.trim()) return;
-    usados++; litrosUsados+=litrosArr[i];
-    itens.push({cliente:c.value.toUpperCase(),cidade:document.getElementById("cidade"+i).value,horario:document.getElementById("horario"+i).value||"-",litros:litrosArr[i],idx:i});
+    const c=r.querySelector(`#cliente${i}`);
+    if(!c.value.trim()) return;
+    usados++; litros+=litrosArr[i];
+    itens.push({
+      cliente:c.value.toUpperCase(),
+      cidade:document.getElementById("cidade"+i).value,
+      horario:document.getElementById("horario"+i).value||"-",
+      vendedor:document.getElementById("vendedor"+i).value.toUpperCase(),
+      qtde:litrosArr[i],
+      idx:i
+    });
   });
 
   const cargaParcial=usados<litrosArr.length;
   const total=(km*dados.indice)+dados.taxa;
-  const unit=total/litrosUsados;
+  const unit=total/litros;
 
   let html=`<div class="resumo-box"><h3>RESUMO DE FRETE – ${tipo.replace("_"," ")}</h3>`;
   if(cargaParcial) html+=`<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>`;
-  html+=`<table><tr><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>R$/L</th><th>QTDE</th><th>TOTAL</th></tr>`;
+  html+=`<table>
+    <tr>
+      <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+      <th>VENDEDOR</th><th>QTDE</th><th>R$/L</th><th>TOTAL</th>
+    </tr>`;
 
   itens.forEach(i=>{
-    const t=i.litros*unit;
+    const t=i.qtde*unit;
     document.getElementById("unit"+i.idx).innerText=moeda4(unit);
     document.getElementById("frete"+i.idx).innerText=moeda(t);
-    html+=`<tr><td>${i.cliente}</td><td>${i.cidade}</td><td>${i.horario}</td><td>${moeda4(unit)}</td><td>${numero(i.litros)}</td><td>${moeda(t)}</td></tr>`;
+    html+=`<tr>
+      <td>${i.cliente}</td><td>${i.cidade}</td><td>${i.horario}</td>
+      <td>${i.vendedor}</td><td>${numero(i.qtde)}</td>
+      <td>${moeda4(unit)}</td><td>${moeda(t)}</td>
+    </tr>`;
   });
 
   html+=`</table></div>`;
