@@ -342,16 +342,12 @@ function calcular(){
   const unit=freteTotal/litrosUsados;
 
   let html=`<div class="resumo-box">
-    <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>
-  `;
+  <h3>
+    RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
+    ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
+  </h3>
+`;
 
-  if(cargaParcial){
-    html+=`
-      <div class="alerta-parcial">
-        ⚠️ CARGA PARCIAL – NEM TODOS OS COMPARTIMENTOS FORAM UTILIZADOS
-      </div>
-    `;
-  }
 
   html+=`
   <table>
