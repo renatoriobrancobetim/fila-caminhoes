@@ -196,3 +196,15 @@ th {
   to{left:100%}
 }
 
+.badge-parcial{
+  display:inline-block;
+  margin-left:10px;
+  padding:4px 10px;
+  font-size:12px;
+  font-weight:bold;
+  color:#e65100;
+  background:#fff3e0;
+  border:2px solid #f57c00;
+  border-radius:20px;
+  vertical-align:middle;
+}
