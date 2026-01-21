@@ -100,39 +100,82 @@ th{background:#e3f2fd}
 <div class="header"><h2>CÁLCULO DE FRETE POR ROTA</h2></div>
 <div class="content">
 
-<div class="grid">
-  <div>
-    <label>Tipo de Caminhão</label>
-    <select id="tipo" onchange="gerarTabela()">
-      <option value="">Selecione</option>
-      <option value="FROTA">FROTA</option>
-      <option value="BITRUCK">BITRUCK</option>
-      <option value="TRUCK_555">TRUCK 555</option>
-      <option value="TRUCK_5532">TRUCK 5532</option>
-      <option value="TRUCK_53232">TRUCK 53232</option>
-      <option value="TOCO">TOCO</option>
-      <option value="CARRETA">CARRETA</option>
-    </select>
+<!-- ETAPA 1 -->
+<div class="etapa etapa-ativa">
+  <div class="etapa-titulo">
+    <span class="etapa-numero">1</span>
+    <h3>Configuração do Frete</h3>
   </div>
-  <div>
-    <label>KM TOTAL DA ROTA</label>
-    <input id="kmTotal" readonly>
+
+  <div class="grid">
+    <div>
+      <label>Tipo de Caminhão</label>
+      <select id="tipo" onchange="gerarTabela()">
+        <option value="">Selecione</option>
+        <option value="FROTA">FROTA</option>
+        <option value="BITRUCK">BITRUCK</option>
+        <option value="TRUCK_555">TRUCK 555</option>
+        <option value="TRUCK_5532">TRUCK 5532</option>
+        <option value="TRUCK_53232">TRUCK 53232</option>
+        <option value="TOCO">TOCO</option>
+        <option value="CARRETA">CARRETA</option>
+      </select>
+    </div>
+    <div>
+      <label>KM TOTAL DA ROTA</label>
+      <input id="kmTotal" readonly>
+    </div>
   </div>
 </div>
 
-<div id="tabela"></div>
-<div id="mapaRota"></div>
+<!-- ETAPA 2 -->
+<div class="etapa">
+  <div class="etapa-titulo">
+    <span class="etapa-numero">2</span>
+    <h3>Clientes e Destinos</h3>
+  </div>
 
-<div class="actions">
-  <button id="btnCalcular" onclick="calcular()" disabled>Calcular Frete</button>
-  <button id="btnOtimizar" onclick="otimizarRota()">Otimizar Rota</button>
-  <button onclick="location.reload()">Novo Cálculo</button>
+  <div id="tabela"></div>
 </div>
 
-<div id="resumo"></div>
+<!-- ETAPA 3 -->
+<div class="etapa">
+  <div class="etapa-titulo">
+    <span class="etapa-numero">3</span>
+    <h3>Otimização da Rota</h3>
+  </div>
+
+  <div id="mapaRota"></div>
+</div>
+
+<!-- ETAPA 4 -->
+<div class="etapa">
+  <div class="etapa-titulo">
+    <span class="etapa-numero">4</span>
+    <h3>Ações</h3>
+  </div>
+
+  <div class="actions">
+    <button id="btnCalcular" onclick="calcular()" disabled>Calcular Frete</button>
+    <button id="btnOtimizar" onclick="otimizarRota()">Otimizar Rota</button>
+    <button onclick="location.reload()">Novo Cálculo</button>
+  </div>
+</div>
+
+<!-- ETAPA 5 -->
+<div class="etapa">
+  <div class="etapa-titulo">
+    <span class="etapa-numero">5</span>
+    <h3>Resumo Final</h3>
+  </div>
+
+  <div id="resumo"></div>
+</div>
+
 <div class="footer">© Renato Monteiro</div>
 
 </div>
+
 </div>
 
 <datalist id="cidadesMG"></datalist>
