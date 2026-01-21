@@ -76,19 +76,6 @@ tr:first-child {
     opacity:0;
     transform:translateX(-40px);
   }
-}
-.alerta-parcial{
-  margin:15px auto;
-  padding:14px;
-  max-width:900px;
-  border-radius:8px;
-  background:#fff3e0;
-  border:3px solid #f57c00;
-  color:#e65100;
-  font-weight:bold;
-  text-align:center;
-  font-size:15px;
-}
 
 /* ALERTA CARGA PARCIAL */
 .alerta-parcial{
@@ -104,4 +91,5 @@ tr:first-child {
   font-size:16px;
   box-shadow:0 4px 10px rgba(0,0,0,0.15);
 }
+
 
