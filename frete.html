@@ -308,6 +308,7 @@ async function desenharMapa(rota){
 /* ===== CALCULAR FRETE ===== */
 function calcular(){
   ativarEtapa(3);
+
   const tipo=document.getElementById("tipo").value;
   const km=parseFloat(document.getElementById("kmTotal").value);
   if(!km){alert("KM não calculado");return;}
@@ -317,6 +318,8 @@ function calcular(){
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
 
   let itens=[], litrosUsados=0;
+  const litrosTotalCaminhao = litrosArr.reduce((a,b)=>a+b,0);
+
   rows.forEach(r=>{
     const c=r.querySelector("input[id^='cliente']");
     if(!c.value) return;
@@ -333,26 +336,86 @@ function calcular(){
     });
   });
 
+  const cargaParcial = litrosUsados < litrosTotalCaminhao;
+
   const freteTotal=(km*dados.indice)+dados.taxa;
   const unit=freteTotal/litrosUsados;
 
-  let html=`<div class="resumo-box"><h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3><table>
-  <tr><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>FRETE (R$/L)</th><th>QUANTIDADE</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
+  let html=`<div class="resumo-box">
+    <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>
+  `;
+
+  if(cargaParcial){
+    html+=`
+      <div class="alerta-parcial">
+        ⚠️ CARGA PARCIAL – NEM TODOS OS COMPARTIMENTOS FORAM UTILIZADOS
+      </div>
+    `;
+  }
+
+  html+=`
+  <table>
+    <tr>
+      <th>CLIENTE</th>
+      <th>CIDADE</th>
+      <th>HORÁRIO</th>
+      <th>FRETE (R$/L)</th>
+      <th>QUANTIDADE</th>
+      <th>TOTAL</th>
+      <th>VENDEDOR</th>
+    </tr>
+  `;
 
   itens.forEach(i=>{
     const total=i.litros*unit;
     document.getElementById("unit"+i.idx).innerText=moeda4(unit);
     document.getElementById("frete"+i.idx).innerText=moeda(total);
-    html+=`<tr>
-      <td>${i.cliente}</td><td>${i.cidade}</td><td>${i.horario}</td>
-      <td>${moeda4(unit)}</td><td>${numero(i.litros)}</td><td>${moeda(total)}</td><td>${i.vendedor}</td>
-    </tr>`;
+
+    html+=`
+      <tr>
+        <td>${i.cliente}</td>
+        <td>${i.cidade}</td>
+        <td>${i.horario}</td>
+        <td>${moeda4(unit)}</td>
+        <td>${numero(i.litros)}</td>
+        <td>${moeda(total)}</td>
+        <td>${i.vendedor}</td>
+      </tr>
+    `;
   });
 
-  html+=`</table></div>`;
+  html+=`
+    <tr class="total-row">
+      <td colspan="4">TOTAIS</td>
+      <td>${numero(litrosUsados)}</td>
+      <td>${moeda(freteTotal)}</td>
+      <td>-</td>
+    </tr>
+  </table>
+
+  <table style="margin-top:18px">
+    <tr class="total-row">
+      <td>KM TOTAL</td>
+      <td>ÍNDICE</td>
+      <td>TAXA</td>
+      <td>M³ TOTAL</td>
+      <td>FRETE UNIT. MÉDIO</td>
+      <td>FRETE TOTAL</td>
+    </tr>
+    <tr>
+      <td>${numero(km)}</td>
+      <td>${dados.indice.toFixed(4)}</td>
+      <td>${moeda(dados.taxa)}</td>
+      <td>${(litrosUsados/1000).toFixed(1)}</td>
+      <td>${moeda4(unit)}</td>
+      <td><b>${moeda(freteTotal)}</b></td>
+    </tr>
+  </table>
+  </div>
+  `;
+
   document.getElementById("resumo").innerHTML=html;
-}
-</script>
+}</script>
 
 </body>
 </html>
