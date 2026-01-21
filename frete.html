@@ -279,30 +279,80 @@ function calcular(){
   const freteTotal=(km*dados.indice)+dados.taxa;
   const unit=freteTotal/litrosUsados;
 
-  let html=`<div class="resumo-box">
-    <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>`;
+let html = `
+<div class="resumo-box">
+  <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>
+`;
 
-  if(usados.length<litrosArr.length){
-    html+=`<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>`;
-  }
+if(cargaParcial){
+  html += `
+    <div class="alerta-parcial">
+      ⚠️ CARGA PARCIAL – NEM TODOS OS COMPARTIMENTOS FORAM UTILIZADOS
+    </div>
+  `;
+}
 
-  html+=`<table><tr>
-    <th>CLIENTE</th><th>R$/L</th><th>QTDE</th><th>TOTAL</th></tr>`;
+html += `
+<table>
+  <tr>
+    <th>CLIENTE</th>
+    <th>CIDADE</th>
+    <th>HORÁRIO</th>
+    <th>FRETE (R$)</th>
+    <th>QUANTIDADE (L)</th>
+    <th>TOTAL (R$)</th>
+    <th>VENDEDOR</th>
+  </tr>
+`;
 
-  usados.forEach(u=>{
-    const t=litrosArr[u.idx]*unit;
-    html+=`<tr>
-      <td>${u.cliente.toUpperCase()}</td>
-      <td>${moeda4(unit)}</td>
-      <td>${numero(litrosArr[u.idx])}</td>
-      <td>${moeda(t)}</td></tr>`;
-  });
+itens.forEach(i=>{
+  const totalCliente = i.litros * unit;
 
-  html+=`</table>
-    <p><b>KM:</b> ${km} | <b>ÍNDICE:</b> ${dados.indice} | <b>TAXA:</b> ${moeda(dados.taxa)}</p>
-    <h3>${moeda(freteTotal)}</h3></div>`;
+  html += `
+  <tr>
+    <td>${i.cliente}</td>
+    <td>${i.cidade}</td>
+    <td>${i.horario}</td>
+    <td>${moeda(totalCliente)}</td>
+    <td>${numero(i.litros)}</td>
+    <td>${moeda(totalCliente)}</td>
+    <td>${document.getElementById("vendedor"+i.idx).value || "-"}</td>
+  </tr>
+  `;
+});
 
-  document.getElementById("resumo").innerHTML=html;
+html += `
+  <tr class="total-row">
+    <td colspan="4">TOTAIS</td>
+    <td>${numero(litrosUsados)}</td>
+    <td>${moeda(freteTotal)}</td>
+    <td>-</td>
+  </tr>
+</table>
+
+<table style="margin-top:18px">
+  <tr class="total-row">
+    <td>KM TOTAL</td>
+    <td>ÍNDICE</td>
+    <td>TAXA</td>
+    <td>M³ TOTAL</td>
+    <td>FRETE UNIT. MÉDIO (R$/L)</td>
+    <td>FRETE TOTAL</td>
+  </tr>
+  <tr>
+    <td>${numero(km)}</td>
+    <td>${dados.indice.toFixed(4)}</td>
+    <td>${moeda(dados.taxa)}</td>
+    <td>${(litrosUsados/1000).toFixed(1)}</td>
+    <td>${moeda4(unit)}</td>
+    <td><b>${moeda(freteTotal)}</b></td>
+  </tr>
+</table>
+</div>
+`;
+
+document.getElementById("resumo").innerHTML = html;
+
 }
 </script>
 
