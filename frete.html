@@ -31,8 +31,6 @@ th{background:#e3f2fd}
 .spinner{width:70px;height:70px;border:8px solid #ddd;border-top:8px solid var(--azul);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.alerta-parcial{margin:15px auto;padding:15px;border-radius:8px;background:#fff3e0;border:3px solid #f57c00;color:#e65100;font-weight:bold;text-align:center}
-
 .resumo-box{margin:30px auto;max-width:1100px;border:3px solid var(--azul);padding:20px;border-radius:10px;background:#f9fbff;text-align:center}
 .total-row{background:#e3f2fd;font-weight:bold}
 
@@ -119,7 +117,7 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
   Object.keys(d).forEach(c=>{
-    const o=document.createElement("option"); o.value=c; dl.appendChild(o);
+    const o=document.createElement("option");o.value=c;dl.appendChild(o);
   });
 });
 
@@ -135,8 +133,8 @@ function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
   let html=`<table id="freteTable"><tr>
-  <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-  <th>QTDE</th><th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
+  <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>QTDE</th>
+  <th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
   compartimentos[tipo].forEach((l,i)=>{
     html+=`<tr data-row>
       <td><input id="cliente${i}" class="uppercase"></td>
@@ -160,58 +158,57 @@ async function recalcularKM(){
   document.getElementById("kmTotal").value=km.toFixed(2);
 }
 
-async function calcular(){
-  await recalcularKM(); // 🔥 GARANTE KM ANTES DO CÁLCULO
+async function otimizarRota(){
+  const spinner=document.getElementById("spinner");
+  spinner.style.display="flex";
 
-  const tipo=document.getElementById("tipo").value;
-  const km=parseFloat(document.getElementById("kmTotal").value);
-  if(!tipo || !km){alert("Informe a rota corretamente.");return;}
-
-  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
-  const litrosArr=compartimentos[tipo];
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
+  let cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
 
-  let litros=0,itens=[];
-  rows.forEach((r,i)=>{
-    const c=r.querySelector(`#cliente${i}`);
-    if(!c.value.trim()) return;
-    litros+=litrosArr[i];
-    itens.push({
-      cliente:c.value.toUpperCase(),
-      cidade:document.getElementById("cidade"+i).value,
-      horario:document.getElementById("horario"+i).value||"-",
-      vendedor:document.getElementById("vendedor"+i).value.toUpperCase(),
-      qtde:litrosArr[i]
-    });
+  let rota=[], atual=BASE, restantes=[...cidades];
+
+  while(restantes.length){
+    let menor=Infinity, prox=null;
+    for(const c of restantes){
+      const d=await distancia(atual,c);
+      if(d<menor){menor=d;prox=c;}
+    }
+    rota.push(prox);
+    restantes=restantes.filter(c=>c!==prox);
+    atual=prox;
+  }
+
+  rota.forEach(c=>{
+    const r=rows.find(tr=>tr.querySelector(".cidade").value===c);
+    document.querySelector("#freteTable").appendChild(r);
   });
 
-  if(!itens.length){alert("Informe ao menos um cliente.");return;}
+  await recalcularKM();
+  await desenharMapa(rota);
 
-  const total=(km*dados.indice)+dados.taxa;
-  const unit=total/litros;
+  spinner.style.display="none";
+  document.getElementById("btnOtimizar").style.display="none";
+}
 
-  let html=`<div class="resumo-box">
-  <h3>RESUMO DE FRETE</h3>
-  <table>
-  <tr><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>QTDE</th><th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
+async function desenharMapa(cidades){
+  document.getElementById("mapaRota").style.display="block";
+  if(!mapa){
+    mapa=L.map("mapaRota");
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapa);
+  }
+  if(rotaLayer) mapa.removeLayer(rotaLayer);
 
-  itens.forEach(i=>{
-    const t=i.qtde*unit;
-    html+=`<tr>
-      <td>${i.cliente}</td><td>${i.cidade}</td><td>${i.horario}</td>
-      <td>${numero(i.qtde)}</td><td>${moeda4(unit)}</td>
-      <td>${moeda(t)}</td><td>${i.vendedor}</td>
-    </tr>`;
+  const pontos=[BASE,...cidades,BASE].map(c=>{
+    const [lat,lng]=cidadesCoords[c];
+    return [lat,lng];
   });
 
-  html+=`</table>
-  <table style="margin-top:15px">
-  <tr class="total-row"><td>KM</td><td>ÍNDICE</td><td>TAXA</td><td>FRETE TOTAL</td></tr>
-  <tr><td>${numero(km)}</td><td>${dados.indice.toFixed(4)}</td>
-  <td>${moeda(dados.taxa)}</td><td><b>${moeda(total)}</b></td></tr>
-  </table></div>`;
+  mapa.fitBounds(pontos);
+  const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
+  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
+  const j=await r.json();
 
-  document.getElementById("resumo").innerHTML=html;
+  rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
 }
 </script>
 
