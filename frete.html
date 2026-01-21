@@ -91,14 +91,8 @@ button.secondary{background:#555}
   animation:spin 1s linear infinite;
   margin-bottom:15px
 }
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-.spinner-text{
-  font-size:16px;
-  font-weight:bold;
-  color:#0d47a1
-}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-text{font-weight:bold;color:#0d47a1}
 
 /* ALERTA SUCESSO */
 .alerta-sucesso{
@@ -126,28 +120,19 @@ button.secondary{background:#555}
   background:#e3f2fd;
   font-weight:bold
 }
-.footer{
-  margin-top:30px;
-  text-align:center;
-  font-size:12px;
-  color:#555
-}
+.footer{text-align:center;margin-top:30px;font-size:12px;color:#555}
 </style>
 </head>
 
 <body>
 
-<!-- SPINNER -->
 <div class="spinner-overlay" id="spinner">
   <div class="spinner"></div>
   <div class="spinner-text">Otimizando rota...</div>
 </div>
 
 <div class="container">
-<div class="header">
-  <h2>CÁLCULO DE FRETE POR ROTA</h2>
-</div>
-
+<div class="header"><h2>CÁLCULO DE FRETE POR ROTA</h2></div>
 <div class="content">
 
 <div class="grid">
@@ -256,7 +241,7 @@ function gerarTabela(){
 
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
-    <tr draggable="true" data-row>
+    <tr data-row>
       <td class="drag">☰</td>
       <td><input id="cliente${i}" class="uppercase"></td>
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG" onblur="recalcularKM()"></td>
@@ -283,8 +268,6 @@ async function otimizarRota(){
   let cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
 
   if(cidades.length<2){alert("Informe ao menos 2 cidades.");return;}
-  for(const c of cidades){if(!cidadesCoords[c]){alert("Cidade inválida: "+c);return;}}
-
   spinner.style.display="flex";
 
   let rota=[],atual=BASE,rest=[...cidades];
@@ -305,137 +288,82 @@ async function otimizarRota(){
   });
 
   await recalcularKM();
-
   spinner.style.display="none";
   msg.style.display="block";
   setTimeout(()=>msg.style.display="none",4000);
 
   btnOtimizar.disabled=true;
-  btnOtimizar.style.opacity="0.6";
   btnCalcular.classList.add("btn-destaque");
 }
 
 /* CALCULAR */
 function calcular(){
-  const tipo = document.getElementById("tipo").value;
-  const km = parseFloat(document.getElementById("kmTotal").value);
+  const tipo=document.getElementById("tipo").value;
+  const km=parseFloat(document.getElementById("kmTotal").value);
+  if(!tipo||!km){alert("KM não calculado");return;}
 
-  if(!tipo || !km){
-    alert("KM da rota não calculado.");
-    return;
-  }
+  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
+  const litrosArr=compartimentos[tipo];
+  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  const dados = tipo.startsWith("TRUCK")
-    ? baseFrete.TRUCK
-    : baseFrete[tipo];
+  let litrosUsados=0,itens=[];
 
-  const litrosArr = compartimentos[tipo];
-
-  // pega as linhas NA ORDEM VISUAL ATUAL (rota otimizada)
-  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
-
-  let litrosUsados = 0;
-  let itensResumo = [];
-
-  rows.forEach(row=>{
-    const clienteInput = row.querySelector("input[id^='cliente']");
-    if(!clienteInput || !clienteInput.value.trim()) return;
-
-    // extrai o índice real do ID (cliente3 → 3)
-    const idx = parseInt(clienteInput.id.replace("cliente",""),10);
-
-    const litros = litrosArr[idx];
-    litrosUsados += litros;
-
-    itensResumo.push({
-      cliente: clienteInput.value.toUpperCase(),
-      cidade: document.getElementById("cidade"+idx).value,
-      horario: document.getElementById("horario"+idx).value || "-",
-      litros
+  rows.forEach(r=>{
+    const c=r.querySelector("input[id^='cliente']");
+    if(!c||!c.value.trim())return;
+    const idx=parseInt(c.id.replace("cliente",""));
+    litrosUsados+=litrosArr[idx];
+    itens.push({
+      cliente:c.value.toUpperCase(),
+      cidade:document.getElementById("cidade"+idx).value,
+      horario:document.getElementById("horario"+idx).value||"-",
+      litros:litrosArr[idx],
+      idx
     });
   });
 
-  if(litrosUsados === 0){
-    alert("Informe ao menos um cliente para calcular o frete.");
-    return;
-  }
+  const freteTotal=(km*dados.indice)+dados.taxa;
+  const unit=freteTotal/litrosUsados;
 
-  const freteTotal = (km * dados.indice) + dados.taxa;
-  const freteUnit = freteTotal / litrosUsados;
-  const m3 = litrosUsados / 1000;
+  let html=`<div class="resumo-box">
+  <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>
+  <table>
+  <tr><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>R$/L</th><th>QTDE</th><th>TOTAL</th></tr>`;
 
-  let html = `
-  <div class="resumo-box">
-    <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>
-
-    <table>
-      <tr>
-        <th>CLIENTE</th>
-        <th>CIDADE</th>
-        <th>HORÁRIO</th>
-        <th>FRETE (R$/L)</th>
-        <th>QTDE (L)</th>
-        <th>TOTAL (R$)</th>
-      </tr>
-  `;
-
-  itensResumo.forEach(item=>{
-    const totalCliente = item.litros * freteUnit;
-
-    // atualiza a tabela principal
-    const idx = litrosArr.indexOf(item.litros);
-    document.getElementById("unit"+idx).innerText = moeda4(freteUnit);
-    document.getElementById("frete"+idx).innerText = moeda(totalCliente);
-
-    html += `
-      <tr>
-        <td>${item.cliente}</td>
-        <td>${item.cidade}</td>
-        <td>${item.horario}</td>
-        <td>${moeda4(freteUnit)}</td>
-        <td>${numero(item.litros)}</td>
-        <td>${moeda(totalCliente)}</td>
-      </tr>
-    `;
+  itens.forEach(i=>{
+    const t=i.litros*unit;
+    document.getElementById("unit"+i.idx).innerText=moeda4(unit);
+    document.getElementById("frete"+i.idx).innerText=moeda(t);
+    html+=`<tr>
+      <td>${i.cliente}</td>
+      <td>${i.cidade}</td>
+      <td>${i.horario}</td>
+      <td>${moeda4(unit)}</td>
+      <td>${numero(i.litros)}</td>
+      <td>${moeda(t)}</td>
+    </tr>`;
   });
 
-  html += `
-      <tr class="total-row">
-        <td colspan="3">TOTAIS</td>
-        <td>${moeda4(freteUnit)}</td>
-        <td>${numero(litrosUsados)}</td>
-        <td>${moeda(freteTotal)}</td>
-      </tr>
-    </table>
+  html+=`<tr class="total-row">
+    <td colspan="3">TOTAIS</td>
+    <td>${moeda4(unit)}</td>
+    <td>${numero(litrosUsados)}</td>
+    <td>${moeda(freteTotal)}</td>
+  </tr></table>
 
-    <table style="margin-top:15px">
-      <tr class="total-row">
-        <td>KM TOTAL</td>
-        <td>ÍNDICE</td>
-        <td>TAXA</td>
-        <td>M³</td>
-        <td>FRETE TOTAL</td>
-      </tr>
-      <tr>
-        <td>${numero(km)}</td>
-        <td>${dados.indice.toFixed(4)}</td>
-        <td>${moeda(dados.taxa)}</td>
-        <td>${m3.toLocaleString("pt-BR",{minimumFractionDigits:1})}</td>
-        <td><b>${moeda(freteTotal)}</b></td>
-      </tr>
-    </table>
-  </div>
-  `;
+  <table style="margin-top:15px">
+  <tr class="total-row"><td>KM</td><td>ÍNDICE</td><td>TAXA</td><td>M³</td><td>FRETE</td></tr>
+  <tr><td>${numero(km)}</td><td>${dados.indice.toFixed(4)}</td>
+  <td>${moeda(dados.taxa)}</td><td>${(litrosUsados/1000).toFixed(1)}</td>
+  <td><b>${moeda(freteTotal)}</b></td></tr>
+  </table></div>`;
 
-  document.getElementById("resumo").innerHTML = html;
+  document.getElementById("resumo").innerHTML=html;
 
-  // trava definitiva após cálculo
-  document.querySelectorAll("input, select, button").forEach(el=>{
-    el.disabled = true;
-  });
+  document.querySelectorAll("input,select").forEach(e=>e.disabled=true);
+  document.getElementById("btnCalcular").disabled=true;
+  document.getElementById("btnOtimizar").disabled=true;
 }
-
-
 </script>
 
 </body>
