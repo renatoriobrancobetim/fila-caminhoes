@@ -146,3 +146,53 @@ th {
   opacity: .6;
   margin-top: 30px;
 }
+/* ===== ETAPAS DE PROCESSO ===== */
+.etapas{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+  gap:10px;
+}
+
+.etapa{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  background:#e0e0e0;
+  text-align:center;
+  font-size:13px;
+  font-weight:bold;
+  color:#666;
+  position:relative;
+  overflow:hidden;
+}
+
+.etapa::after{
+  content:"";
+  position:absolute;
+  left:-100%;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(255,255,255,.3);
+}
+
+.etapa.ativa{
+  background:linear-gradient(90deg,#0d47a1,#c62828);
+  color:#fff;
+}
+
+.etapa.ativa::after{
+  animation:carregar 1.2s linear infinite;
+}
+
+.etapa.concluida{
+  background:#2e7d32;
+  color:#fff;
+}
+
+@keyframes carregar{
+  from{left:-100%}
+  to{left:100%}
+}
+
