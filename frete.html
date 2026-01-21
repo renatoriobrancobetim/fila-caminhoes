@@ -321,6 +321,8 @@ function calcular(){
       litros
     });
   });
+  const capacidadeTotal = litrosArr.reduce((a,b)=>a+b,0);
+const cargaParcial = litrosUsados < capacidadeTotal;
 
   const freteTotal=(km*dados.indice)+dados.taxa;
   const unit=freteTotal/litrosUsados;
