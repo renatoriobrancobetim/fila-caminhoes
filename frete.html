@@ -15,14 +15,23 @@ body{margin:0;padding:20px;font-family:Arial;background:linear-gradient(135deg,v
 .header{background:linear-gradient(90deg,var(--azul),var(--vermelho));color:#fff;padding:18px;text-align:center}
 .content{padding:25px}
 input,select{width:100%;padding:7px;border:1px solid #ccc;border-radius:5px;font-size:13px}
+input:disabled,select:disabled{background:#eee}
 .uppercase{text-transform:uppercase}
 .grid{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-bottom:20px}
+
 table{width:100%;border-collapse:collapse;margin-top:15px}
 th,td{border:1px solid #999;padding:6px;font-size:12px;text-align:center}
 th{background:#e3f2fd}
 
 .actions{display:flex;gap:12px;margin-top:20px}
 .actions button{flex:1;padding:14px;background:linear-gradient(90deg,var(--azul),var(--vermelho));color:#fff;border:none;border-radius:8px;font-size:15px}
+
+.btn-destaque{animation:pulse 1.5s infinite}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(13,71,161,.7)}
+  70%{box-shadow:0 0 0 14px rgba(13,71,161,0)}
+  100%{box-shadow:0 0 0 0 rgba(13,71,161,0)}
+}
 
 .spinner-overlay{
   position:fixed;inset:0;background:rgba(255,255,255,.85);
@@ -31,10 +40,23 @@ th{background:#e3f2fd}
 .spinner{width:70px;height:70px;border:8px solid #ddd;border-top:8px solid var(--azul);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.resumo-box{margin:30px auto;max-width:1100px;border:3px solid var(--azul);padding:20px;border-radius:10px;background:#f9fbff;text-align:center}
+.alerta-parcial{
+  margin:15px auto;padding:15px;border-radius:8px;
+  background:#fff3e0;border:3px solid #f57c00;
+  color:#e65100;font-weight:bold;text-align:center
+}
+
+.resumo-box{
+  margin:30px auto;max-width:1100px;border:3px solid var(--azul);
+  padding:20px;border-radius:10px;background:#f9fbff;text-align:center
+}
 .total-row{background:#e3f2fd;font-weight:bold}
 
-#mapaRota{margin-top:25px;height:420px;border-radius:10px;border:3px solid var(--azul);display:none}
+#mapaRota{
+  margin-top:25px;height:420px;border-radius:10px;
+  border:3px solid var(--azul);display:none
+}
+
 .footer{text-align:center;margin-top:30px;font-size:12px;color:#555}
 </style>
 </head>
@@ -74,7 +96,7 @@ th{background:#e3f2fd}
 <div id="mapaRota"></div>
 
 <div class="actions">
-  <button onclick="calcular()">Calcular Frete</button>
+  <button id="btnCalcular" onclick="calcular()" disabled>Calcular Frete</button>
   <button id="btnOtimizar" onclick="otimizarRota()">Otimizar Rota</button>
   <button onclick="location.reload()">Novo Cálculo</button>
 </div>
@@ -91,6 +113,7 @@ th{background:#e3f2fd}
 const BASE="BETIM";
 let cidadesCoords={}, mapa, rotaLayer;
 
+/* ===== DADOS ===== */
 const baseFrete={
   FROTA:{indice:5.8402,taxa:669.32},
   BITRUCK:{indice:3.5686,taxa:364.71},
@@ -113,14 +136,17 @@ const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
 const numero=v=>v.toLocaleString("pt-BR");
 
+/* ===== CIDADES ===== */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
   Object.keys(d).forEach(c=>{
-    const o=document.createElement("option");o.value=c;dl.appendChild(o);
+    const o=document.createElement("option");
+    o.value=c; dl.appendChild(o);
   });
 });
 
+/* ===== DISTÂNCIA ===== */
 async function distancia(a,b){
   const [la,lo]=cidadesCoords[a];
   const [lb,lblo]=cidadesCoords[b];
@@ -129,16 +155,21 @@ async function distancia(a,b){
   return j.routes[0].distance/1000;
 }
 
+/* ===== TABELA ===== */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
+
   let html=`<table id="freteTable"><tr>
-  <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th><th>QTDE</th>
-  <th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
+    <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+    <th>QTDE</th><th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th>
+  </tr>`;
+
   compartimentos[tipo].forEach((l,i)=>{
-    html+=`<tr data-row>
+    html+=`
+    <tr data-row>
       <td><input id="cliente${i}" class="uppercase"></td>
-      <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG" onblur="recalcularKM()"></td>
+      <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
       <td id="unit${i}">-</td>
@@ -146,51 +177,60 @@ function gerarTabela(){
       <td><input id="vendedor${i}" class="uppercase"></td>
     </tr>`;
   });
+
+  html+="</table>";
   document.getElementById("tabela").innerHTML=html;
 }
 
+/* ===== OTIMIZAR ROTA ===== */
+async function otimizarRota(){
+  const spinner=document.getElementById("spinner");
+  spinner.style.display="flex";
+
+  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
+  let paradas=rows.map(r=>({
+    row:r,
+    cidade:r.querySelector(".cidade").value,
+    cliente:r.querySelector("input[id^='cliente']").value
+  })).filter(p=>p.cidade);
+
+  let rota=[], atual=BASE, restantes=[...paradas];
+
+  while(restantes.length){
+    let menor=Infinity, escolhido=null;
+    for(const p of restantes){
+      const d=await distancia(atual,p.cidade);
+      if(d<menor){menor=d;escolhido=p;}
+    }
+    rota.push(escolhido);
+    restantes=restantes.filter(p=>p!==escolhido);
+    atual=escolhido.cidade;
+  }
+
+  rota.forEach(p=>document.querySelector("#freteTable").appendChild(p.row));
+
+  await recalcularKM();
+  await desenharMapa(rota);
+
+  spinner.style.display="none";
+
+  document.querySelectorAll("input").forEach(i=>i.disabled=true);
+  document.getElementById("btnOtimizar").style.display="none";
+  document.getElementById("btnCalcular").disabled=false;
+  document.getElementById("btnCalcular").classList.add("btn-destaque");
+}
+
+/* ===== KM ===== */
 async function recalcularKM(){
   const cidades=[...document.querySelectorAll(".cidade")].map(i=>i.value).filter(v=>v);
-  if(!cidades.length) return;
   let km=0,origem=BASE;
   for(const c of cidades){km+=await distancia(origem,c);origem=c;}
   km+=await distancia(origem,BASE);
   document.getElementById("kmTotal").value=km.toFixed(2);
 }
 
-async function otimizarRota(){
-  const spinner=document.getElementById("spinner");
-  spinner.style.display="flex";
-
-  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
-  let cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
-
-  let rota=[], atual=BASE, restantes=[...cidades];
-
-  while(restantes.length){
-    let menor=Infinity, prox=null;
-    for(const c of restantes){
-      const d=await distancia(atual,c);
-      if(d<menor){menor=d;prox=c;}
-    }
-    rota.push(prox);
-    restantes=restantes.filter(c=>c!==prox);
-    atual=prox;
-  }
-
-  rota.forEach(c=>{
-    const r=rows.find(tr=>tr.querySelector(".cidade").value===c);
-    document.querySelector("#freteTable").appendChild(r);
-  });
-
-  await recalcularKM();
-  await desenharMapa(rota);
-
-  spinner.style.display="none";
-  document.getElementById("btnOtimizar").style.display="none";
-}
-
-async function desenharMapa(cidades){
+/* ===== MAPA ===== */
+async function desenharMapa(rota){
   document.getElementById("mapaRota").style.display="block";
   if(!mapa){
     mapa=L.map("mapaRota");
@@ -198,17 +238,71 @@ async function desenharMapa(cidades){
   }
   if(rotaLayer) mapa.removeLayer(rotaLayer);
 
-  const pontos=[BASE,...cidades,BASE].map(c=>{
+  const pontos=[BASE,...rota.map(r=>r.cidade),BASE].map(c=>{
     const [lat,lng]=cidadesCoords[c];
     return [lat,lng];
   });
 
   mapa.fitBounds(pontos);
+
+  pontos.forEach((p,i)=>{
+    let label = i===0||i===pontos.length-1 ? "BASE - BETIM" : rota[i-1].cliente || rota[i-1].cidade;
+    L.marker(p).addTo(mapa).bindPopup(label);
+  });
+
   const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
   const j=await r.json();
 
   rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
+}
+
+/* ===== CALCULAR FRETE ===== */
+function calcular(){
+  const tipo=document.getElementById("tipo").value;
+  const km=parseFloat(document.getElementById("kmTotal").value);
+  if(!km){alert("KM não calculado");return;}
+
+  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
+  const litrosArr=compartimentos[tipo];
+  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
+
+  let usados=[], litrosUsados=0;
+  rows.forEach(r=>{
+    const c=r.querySelector("input[id^='cliente']");
+    if(!c.value) return;
+    const idx=parseInt(c.id.replace("cliente",""));
+    litrosUsados+=litrosArr[idx];
+    usados.push({idx, cliente:c.value});
+  });
+
+  const freteTotal=(km*dados.indice)+dados.taxa;
+  const unit=freteTotal/litrosUsados;
+
+  let html=`<div class="resumo-box">
+    <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>`;
+
+  if(usados.length<litrosArr.length){
+    html+=`<div class="alerta-parcial">⚠️ CARGA PARCIAL</div>`;
+  }
+
+  html+=`<table><tr>
+    <th>CLIENTE</th><th>R$/L</th><th>QTDE</th><th>TOTAL</th></tr>`;
+
+  usados.forEach(u=>{
+    const t=litrosArr[u.idx]*unit;
+    html+=`<tr>
+      <td>${u.cliente.toUpperCase()}</td>
+      <td>${moeda4(unit)}</td>
+      <td>${numero(litrosArr[u.idx])}</td>
+      <td>${moeda(t)}</td></tr>`;
+  });
+
+  html+=`</table>
+    <p><b>KM:</b> ${km} | <b>ÍNDICE:</b> ${dados.indice} | <b>TAXA:</b> ${moeda(dados.taxa)}</p>
+    <h3>${moeda(freteTotal)}</h3></div>`;
+
+  document.getElementById("resumo").innerHTML=html;
 }
 </script>
 
