@@ -318,7 +318,9 @@ function calcular(){
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
 
   let itens=[], litrosUsados=0;
-  const litrosTotalCaminhao = litrosArr.reduce((a,b)=>a+b,0);
+
+const capacidadeTotal = compartimentos[tipo].reduce((a,b)=>a+b,0);
+const cargaParcial = litrosUsados < capacidadeTotal;
 
   rows.forEach(r=>{
     const c=r.querySelector("input[id^='cliente']");
@@ -336,7 +338,7 @@ function calcular(){
     });
   });
 
-  const cargaParcial = litrosUsados < litrosTotalCaminhao;
+  
 
   const freteTotal=(km*dados.indice)+dados.taxa;
   const unit=freteTotal/litrosUsados;
