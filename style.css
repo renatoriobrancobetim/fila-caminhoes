@@ -1,34 +1,34 @@
+/* ===== BASE ===== */
 body {
   font-family: Arial, sans-serif;
   background: #f4f6f8;
   padding: 20px;
 }
 
-h1 {
-  margin-bottom: 10px;
-}
+h1 { margin-bottom: 10px; }
 
-.form {
-  margin-bottom: 15px;
-}
-
-input {
+input, select {
   padding: 8px;
-  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-button {
-  padding: 8px 12px;
-  cursor: pointer;
+input:disabled, select:disabled {
+  background: #eee;
 }
 
-.chamar {
-  background: #0d6efd;
-  color: white;
-  border: none;
-  margin-bottom: 15px;
+.uppercase { text-transform: uppercase; }
+
+/* ===== GRID SUPERIOR ===== */
+.grid {
+  background: #f4f8ff;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid #d6e2ff;
+  margin-bottom: 20px;
 }
 
+/* ===== TABELAS ===== */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -39,95 +39,21 @@ th, td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
+  font-size: 12px;
 }
 
 th {
   background: #e9ecef;
-}
-
-/* linha destacada (ex: próximo da vez) */
-tr:first-child {
-  background: #fff3cd;
   font-weight: bold;
-}
-
-.remover {
-  background: #dc3545;
-  color: white;
-  border: none;
-}
-
-.creditos{
-  text-align:center;
-  font-size:12px;
-  opacity:0.7;
-  padding:15px 0 20px;
-}
-
-/* ANIMAÇÃO REMOÇÃO */
-.item.removendo{
-  background:#F8D7DA !important;
-  animation:removerItem .6s ease forwards;
-}
-
-@keyframes removerItem{
-  0%{
-    opacity:1;
-    transform:translateX(0);
-  }
-  100%{
-    opacity:0;
-    transform:translateX(-40px);
-  }
-}
-
-/* ALERTA CARGA PARCIAL */
-.alerta-parcial{
-  margin:20px auto;
-  padding:16px;
-  max-width:900px;
-  border-radius:10px;
-  background:#fff3e0;
-  border:3px solid #f57c00;
-  color:#e65100;
-  font-weight:bold;
-  text-align:center;
-  font-size:16px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.15);
-}
-/* ===============================
-   AJUSTES VISUAIS — ETAPA 1 a 3
-   NÃO ALTERA LÓGICA
-================================ */
-
-/* 1️⃣ ÁREA SUPERIOR COMO "ETAPA 1" */
-.grid {
-  background: #f4f7fb;
-  padding: 18px;
-  border-radius: 10px;
-  border: 2px solid #e3f2fd;
-}
-
-/* 2️⃣ TABELA MAIS LEGÍVEL */
-#freteTable {
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-#freteTable th {
-  font-size: 12px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
 }
 
 #freteTable tr:hover {
   background: #f1f8ff;
 }
 
-/* INPUTS DENTRO DA TABELA */
+/* ===== INPUTS NA TABELA ===== */
 #freteTable input {
   background: #fdfdfd;
-  transition: border .2s, box-shadow .2s;
 }
 
 #freteTable input:focus {
@@ -136,9 +62,11 @@ tr:first-child {
   outline: none;
 }
 
-/* 3️⃣ BOTÕES — FEEDBACK VISUAL */
+/* ===== BOTÕES ===== */
 .actions button {
-  transition: transform .2s ease, box-shadow .2s ease, opacity .2s;
+  padding: 14px;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .actions button:hover {
@@ -146,117 +74,75 @@ tr:first-child {
   box-shadow: 0 8px 18px rgba(0,0,0,.18);
 }
 
-/* BOTÃO CALCULAR MAIS DESTACADO QUANDO ATIVO */
+.actions button:active {
+  transform: scale(.98);
+}
+
+/* Botão Calcular */
 #btnCalcular:not([disabled]) {
-  background: linear-gradient(90deg, #1b5e20, #2e7d32);
+  background: linear-gradient(90deg, #2e7d32, #66bb6a);
 }
 
-#btnCalcular:not([disabled]):hover {
-  box-shadow: 0 10px 22px rgba(46,125,50,.35);
+/* ===== SPINNER ===== */
+.spinner-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-/* 4️⃣ RESUMO COM ANIMAÇÃO SUAVE */
+/* ===== ALERTA CARGA PARCIAL ===== */
+.alerta-parcial {
+  margin: 20px auto;
+  padding: 16px;
+  max-width: 900px;
+  border-radius: 10px;
+  background: #fff3e0;
+  border: 3px solid #f57c00;
+  color: #e65100;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ===== RESUMO ===== */
 .resumo-box {
-  animation: fadeUp .5s ease both;
+  margin: 30px auto;
+  max-width: 1100px;
+  border: 3px solid #0d47a1;
+  padding: 20px;
+  border-radius: 12px;
+  background: #f9fbff;
+  text-align: center;
+  animation: fadeUp .4s ease;
 }
 
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* 5️⃣ MAPA APARECE COM TRANSIÇÃO */
+.total-row {
+  background: #e3f2fd;
+  font-weight: bold;
+}
+
+/* ===== MAPA ===== */
 #mapaRota {
-  transition: opacity .4s ease, transform .4s ease;
+  margin-top: 25px;
+  height: 420px;
+  border-radius: 12px;
+  border: 3px solid #0d47a1;
+  box-shadow: 0 15px 35px rgba(0,0,0,.25);
+  display: none;
 }
 
-#mapaRota[style*="display: block"] {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 6️⃣ MELHOR DESTAQUE DOS TOTAIS */
-.total-row td {
-  font-size: 13px;
-}
-
-/* 7️⃣ RODAPÉ MAIS DISCRETO */
+/* ===== RODAPÉ ===== */
 .footer {
+  text-align: center;
+  font-size: 12px;
   opacity: .6;
-}
-/* ===== MELHORIAS VISUAIS SEM MEXER NA LÓGICA ===== */
-
-/* Transição geral */
-*{
-  transition: all .25s ease;
-}
-
-/* Container com sensação de profundidade */
-.container{
-  animation: fadeIn .6s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(10px)}
-  to{opacity:1; transform:translateY(0)}
-}
-
-/* Destaque visual da área de seleção */
-.grid{
-  background:#f4f8ff;
-  padding:15px;
-  border-radius:10px;
-  border:1px solid #d6e2ff;
-}
-
-/* Inputs mais confortáveis */
-input, select{
-  box-shadow:inset 0 1px 2px rgba(0,0,0,.08);
-}
-
-input:focus, select:focus{
-  outline:none;
-  border-color:#0d47a1;
-  box-shadow:0 0 0 2px rgba(13,71,161,.15);
-}
-
-/* Tabela mais legível */
-table tr:hover{
-  background:#f1f6ff;
-}
-
-/* Botões com feedback real */
-.actions button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 6px 15px rgba(0,0,0,.25);
-}
-
-.actions button:active{
-  transform:scale(.98);
-}
-
-/* Botão calcular mais chamativo */
-#btnCalcular.btn-destaque{
-  background:linear-gradient(90deg,#2e7d32,#66bb6a);
-}
-
-/* Resumo com entrada animada */
-.resumo-box{
-  animation: slideUp .4s ease;
-}
-
-@keyframes slideUp{
-  from{opacity:0; transform:translateY(15px)}
-  to{opacity:1; transform:translateY(0)}
-}
-
-/* Mapa com sombra profissional */
-#mapaRota{
-  box-shadow:0 15px 35px rgba(0,0,0,.25);
+  margin-top: 30px;
 }
