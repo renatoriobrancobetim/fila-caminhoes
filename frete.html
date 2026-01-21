@@ -305,16 +305,21 @@ function calcular(){
       <th>FRETE</th><th>QUANTIDADE</th><th>TOTAL</th><th>VENDEDOR</th>
     </tr>`;
 
-  itens.forEach(i=>{
-    const total=i.litros*unit;
-    document.getElementById("unit"+i.idx).innerText=moeda4(unit);
-    document.getElementById("frete"+i.idx).innerText=moeda(total);
-    html+=`<tr>
-      <td>${i.cliente}</td><td>${i.cidade}</td><td>${i.horario}</td>
-      <td>${moeda(total)}</td><td>${numero(i.litros)}</td>
-      <td>${moeda(total)}</td><td>${i.vendedor}</td>
-    </tr>`;
-  });
+ itens.forEach(i=>{
+  const total=i.litros*unit;
+  document.getElementById("unit"+i.idx).innerText=moeda4(unit);
+  document.getElementById("frete"+i.idx).innerText=moeda(total);
+  html+=`<tr>
+    <td>${i.cliente}</td>
+    <td>${i.cidade}</td>
+    <td>${i.horario}</td>
+    <td>${moeda4(unit)}</td> <!-- FRETE POR LITRO -->
+    <td>${numero(i.litros)}</td>
+    <td>${moeda(total)}</td>
+    <td>${i.vendedor}</td>
+  </tr>`;
+});
+
 
   html+=`<tr class="total-row">
     <td colspan="4">TOTAIS</td>
