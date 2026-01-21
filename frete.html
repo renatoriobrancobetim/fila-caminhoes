@@ -5,88 +5,12 @@
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- CSS EXTERNO -->
+<link rel="stylesheet" href="style.css">
+
 <!-- LEAFLET -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<style>
-:root{--azul:#0d47a1;--vermelho:#c62828}
-body{margin:0;padding:20px;font-family:Arial;background:linear-gradient(135deg,var(--azul),var(--vermelho))}
-.container{max-width:1300px;margin:auto;background:#fff;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.35)}
-.header{background:linear-gradient(90deg,var(--azul),var(--vermelho));color:#fff;padding:18px;text-align:center}
-.content{padding:25px}
-
-input,select{
-  width:100%;padding:7px;border:1px solid #ccc;border-radius:5px;font-size:13px
-}
-input:disabled,select:disabled{background:#eee}
-.uppercase{text-transform:uppercase}
-
-.grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:15px;
-  margin-bottom:20px
-}
-
-table{width:100%;border-collapse:collapse;margin-top:15px}
-th,td{border:1px solid #999;padding:6px;font-size:12px;text-align:center}
-th{background:#e3f2fd}
-
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top:20px
-}
-.actions button{
-  flex:1;
-  padding:14px;
-  background:linear-gradient(90deg,var(--azul),var(--vermelho));
-  color:#fff;border:none;border-radius:8px;font-size:15px;
-  cursor:pointer
-}
-
-.btn-destaque{animation:pulse 1.5s infinite}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(13,71,161,.7)}
-  70%{box-shadow:0 0 0 14px rgba(13,71,161,0)}
-  100%{box-shadow:0 0 0 0 rgba(13,71,161,0)}
-}
-
-.spinner-overlay{
-  position:fixed;inset:0;background:rgba(255,255,255,.85);
-  display:none;align-items:center;justify-content:center;
-  z-index:9999;flex-direction:column
-}
-.spinner{
-  width:70px;height:70px;border:8px solid #ddd;
-  border-top:8px solid var(--azul);
-  border-radius:50%;animation:spin 1s linear infinite
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.alerta-parcial{
-  margin:15px auto;padding:15px;
-  border-radius:8px;background:#fff3e0;
-  border:3px solid #f57c00;
-  color:#e65100;font-weight:bold;text-align:center
-}
-
-.resumo-box{
-  margin:30px auto;max-width:1100px;
-  border:3px solid var(--azul);
-  padding:20px;border-radius:10px;
-  background:#f9fbff;text-align:center
-}
-.total-row{background:#e3f2fd;font-weight:bold}
-
-#mapaRota{
-  margin-top:25px;height:420px;border-radius:10px;
-  border:3px solid var(--azul);display:none
-}
-
-.footer{text-align:center;margin-top:30px;font-size:12px;color:#555}
-</style>
 </head>
 
 <body>
@@ -97,42 +21,46 @@ th{background:#e3f2fd}
 </div>
 
 <div class="container">
-<div class="header"><h2>CÁLCULO DE FRETE POR ROTA</h2></div>
-<div class="content">
-
-<div class="grid">
-  <div>
-    <label>Tipo de Caminhão</label>
-    <select id="tipo" onchange="gerarTabela()">
-      <option value="">Selecione</option>
-      <option value="FROTA">FROTA</option>
-      <option value="BITRUCK">BITRUCK</option>
-      <option value="TRUCK_555">TRUCK 555</option>
-      <option value="TRUCK_5532">TRUCK 5532</option>
-      <option value="TRUCK_53232">TRUCK 53232</option>
-      <option value="TOCO">TOCO</option>
-      <option value="CARRETA">CARRETA</option>
-    </select>
+  <div class="header">
+    <h2>CÁLCULO DE FRETE POR ROTA</h2>
   </div>
-  <div>
-    <label>KM TOTAL DA ROTA</label>
-    <input id="kmTotal" readonly>
+
+  <div class="content">
+
+    <div class="grid">
+      <div>
+        <label>Tipo de Caminhão</label>
+        <select id="tipo" onchange="gerarTabela()">
+          <option value="">Selecione</option>
+          <option value="FROTA">FROTA</option>
+          <option value="BITRUCK">BITRUCK</option>
+          <option value="TRUCK_555">TRUCK 555</option>
+          <option value="TRUCK_5532">TRUCK 5532</option>
+          <option value="TRUCK_53232">TRUCK 53232</option>
+          <option value="TOCO">TOCO</option>
+          <option value="CARRETA">CARRETA</option>
+        </select>
+      </div>
+
+      <div>
+        <label>KM TOTAL DA ROTA</label>
+        <input id="kmTotal" readonly>
+      </div>
+    </div>
+
+    <div id="tabela"></div>
+    <div id="mapaRota"></div>
+
+    <div class="actions">
+      <button id="btnCalcular" onclick="calcular()" disabled>Calcular Frete</button>
+      <button id="btnOtimizar" onclick="otimizarRota()">Otimizar Rota</button>
+      <button onclick="location.reload()">Novo Cálculo</button>
+    </div>
+
+    <div id="resumo"></div>
+
+    <div class="footer">© Renato Monteiro</div>
   </div>
-</div>
-
-<div id="tabela"></div>
-<div id="mapaRota"></div>
-
-<div class="actions">
-  <button id="btnCalcular" onclick="calcular()" disabled>Calcular Frete</button>
-  <button id="btnOtimizar" onclick="otimizarRota()">Otimizar Rota</button>
-  <button onclick="location.reload()">Novo Cálculo</button>
-</div>
-
-<div id="resumo"></div>
-<div class="footer">© Renato Monteiro</div>
-
-</div>
 </div>
 
 <datalist id="cidadesMG"></datalist>
@@ -170,7 +98,8 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   const dl=document.getElementById("cidadesMG");
   Object.keys(d).forEach(c=>{
     const o=document.createElement("option");
-    o.value=c; dl.appendChild(o);
+    o.value=c;
+    dl.appendChild(o);
   });
 });
 
@@ -189,15 +118,15 @@ function gerarTabela(){
   if(!tipo) return;
 
   let html=`<table id="freteTable">
-  <tr>
-    <th>CLIENTE</th>
-    <th>CIDADE</th>
-    <th>HORÁRIO</th>
-    <th>QTDE (L)</th>
-    <th>R$/L</th>
-    <th>TOTAL</th>
-    <th>VENDEDOR</th>
-  </tr>`;
+    <tr>
+      <th>CLIENTE</th>
+      <th>CIDADE</th>
+      <th>HORÁRIO</th>
+      <th>QTDE (L)</th>
+      <th>R$/L</th>
+      <th>TOTAL</th>
+      <th>VENDEDOR</th>
+    </tr>`;
 
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
@@ -258,7 +187,10 @@ async function otimizarRota(){
 async function recalcularKM(){
   const cidades=[...document.querySelectorAll(".cidade")].map(i=>i.value).filter(v=>v);
   let km=0,origem=BASE;
-  for(const c of cidades){km+=await distancia(origem,c);origem=c;}
+  for(const c of cidades){
+    km+=await distancia(origem,c);
+    origem=c;
+  }
   km+=await distancia(origem,BASE);
   document.getElementById("kmTotal").value=km.toFixed(2);
 }
@@ -280,9 +212,7 @@ async function desenharMapa(rota){
   mapa.fitBounds(pontos);
 
   pontos.forEach((p,i)=>{
-    let label = i===0||i===pontos.length-1
-      ? "BASE - BETIM"
-      : rota[i-1].cliente || rota[i-1].cidade;
+    let label=i===0||i===pontos.length-1?"BASE - BETIM":rota[i-1].cliente||rota[i-1].cidade;
     L.marker(p).addTo(mapa).bindPopup(label);
   });
 
@@ -305,7 +235,6 @@ function calcular(){
 
   let itens=[], litrosUsados=0;
 
-
   rows.forEach(r=>{
     const c=r.querySelector("input[id^='cliente']");
     if(!c.value) return;
@@ -321,35 +250,35 @@ function calcular(){
       litros
     });
   });
-  const capacidadeTotal = litrosArr.reduce((a,b)=>a+b,0);
-const cargaParcial = litrosUsados < capacidadeTotal;
+
+  const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
+  const cargaParcial=litrosUsados<capacidadeTotal;
 
   const freteTotal=(km*dados.indice)+dados.taxa;
   const unit=freteTotal/litrosUsados;
 
   let html=`<div class="resumo-box">
-  <h3>
-  RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
-  ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
-</h3>
+    <h3>
+      RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
+      ${cargaParcial?'<span class="badge-parcial">CARGA PARCIAL</span>':''}
+    </h3>`;
 
-
+  html+=`
   <table>
-  <tr>
-    <th>CLIENTE</th>
-    <th>CIDADE</th>
-    <th>HORÁRIO</th>
-    <th>FRETE (R$/L)</th>
-    <th>QUANTIDADE</th>
-    <th>TOTAL</th>
-    <th>VENDEDOR</th>
-  </tr>`;
+    <tr>
+      <th>CLIENTE</th>
+      <th>CIDADE</th>
+      <th>HORÁRIO</th>
+      <th>FRETE (R$/L)</th>
+      <th>QUANTIDADE</th>
+      <th>TOTAL</th>
+      <th>VENDEDOR</th>
+    </tr>`;
 
   itens.forEach(i=>{
     const total=i.litros*unit;
     document.getElementById("unit"+i.idx).innerText=moeda4(unit);
     document.getElementById("frete"+i.idx).innerText=moeda(total);
-
     html+=`
     <tr>
       <td>${i.cliente}</td>
@@ -363,12 +292,12 @@ const cargaParcial = litrosUsados < capacidadeTotal;
   });
 
   html+=`
-  <tr class="total-row">
-    <td colspan="4">TOTAIS</td>
-    <td>${numero(litrosUsados)}</td>
-    <td>${moeda(freteTotal)}</td>
-    <td>-</td>
-  </tr>
+    <tr class="total-row">
+      <td colspan="4">TOTAIS</td>
+      <td>${numero(litrosUsados)}</td>
+      <td>${moeda(freteTotal)}</td>
+      <td>-</td>
+    </tr>
   </table>
 
   <table style="margin-top:18px">
