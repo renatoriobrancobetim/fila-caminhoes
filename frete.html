@@ -5,6 +5,10 @@
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- LEAFLET (MAPA) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <style>
 :root{--azul:#0d47a1;--vermelho:#c62828}
 body{
@@ -42,18 +46,13 @@ th,td{
 th{background:#e3f2fd}
 .drag{cursor:move;font-weight:bold;background:#f4f4f4}
 
-/* BOTÕES */
 .actions{
   display:flex;
-  flex-wrap:wrap;
   gap:12px;
   margin-top:20px
 }
 .actions button{
   flex:1;
-  min-width:220px
-}
-button{
   padding:14px;
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
   color:#fff;border:none;border-radius:8px;
@@ -61,7 +60,6 @@ button{
 }
 button.secondary{background:#555}
 
-/* DESTAQUE CALCULAR */
 .btn-destaque{
   animation:pulse 1.5s infinite
 }
@@ -71,7 +69,6 @@ button.secondary{background:#555}
   100%{box-shadow:0 0 0 0 rgba(13,71,161,0)}
 }
 
-/* SPINNER */
 .spinner-overlay{
   position:fixed;
   inset:0;
@@ -83,18 +80,14 @@ button.secondary{background:#555}
   flex-direction:column;
 }
 .spinner{
-  width:70px;
-  height:70px;
+  width:70px;height:70px;
   border:8px solid #ddd;
   border-top:8px solid var(--azul);
   border-radius:50%;
   animation:spin 1s linear infinite;
-  margin-bottom:15px
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-.spinner-text{font-weight:bold;color:#0d47a1}
 
-/* ALERTA SUCESSO */
 .alerta-sucesso{
   margin-top:20px;
   padding:15px;
@@ -105,6 +98,17 @@ button.secondary{background:#555}
   font-weight:bold;
   text-align:center;
   display:none
+}
+
+.alerta-parcial{
+  margin:15px auto;
+  padding:15px;
+  border-radius:8px;
+  background:#fff3e0;
+  border:3px solid #f57c00;
+  color:#e65100;
+  font-weight:bold;
+  text-align:center
 }
 
 .resumo-box{
@@ -120,6 +124,15 @@ button.secondary{background:#555}
   background:#e3f2fd;
   font-weight:bold
 }
+
+#mapaRota{
+  margin-top:25px;
+  height:420px;
+  border-radius:10px;
+  border:3px solid var(--azul);
+  display:none;
+}
+
 .footer{text-align:center;margin-top:30px;font-size:12px;color:#555}
 </style>
 </head>
@@ -128,7 +141,7 @@ button.secondary{background:#555}
 
 <div class="spinner-overlay" id="spinner">
   <div class="spinner"></div>
-  <div class="spinner-text">Otimizando rota...</div>
+  <div style="margin-top:10px;font-weight:bold">Otimizando rota...</div>
 </div>
 
 <div class="container">
@@ -156,6 +169,7 @@ button.secondary{background:#555}
 </div>
 
 <div id="tabela"></div>
+<div id="mapaRota"></div>
 
 <div class="actions">
   <button id="btnCalcular" onclick="calcular()">Calcular Frete</button>
@@ -177,30 +191,9 @@ button.secondary{background:#555}
 
 <script>
 const BASE="BETIM";
-let cidadesCoords={};
+let cidadesCoords={}, mapa, rotaLayer;
 
-/* FRETE */
-const baseFrete={
-  FROTA:{indice:5.8402,taxa:669.32},
-  BITRUCK:{indice:3.5686,taxa:364.71},
-  TRUCK:{indice:4.4266,taxa:412.57},
-  TOCO:{indice:4.9381,taxa:414.93},
-  CARRETA:{indice:5.6203,taxa:460.29}
-};
-const compartimentos={
-  FROTA:[5000,5000,5000,2500,2500,2500],
-  BITRUCK:[5000,5000,5000],
-  TRUCK_555:[5000,5000,5000],
-  TRUCK_5532:[5000,5000,3000,2000],
-  TRUCK_53232:[5000,3000,2000,3000,2000],
-  TOCO:[5000,3000,2000],
-  CARRETA:[5000,5000,5000,5000,5000,5000]
-};
-const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
-const numero=v=>v.toLocaleString("pt-BR");
-
-/* CIDADES */
+/* carregar cidades */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
@@ -211,7 +204,7 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   });
 });
 
-/* DISTÂNCIA */
+/* distância */
 async function distancia(a,b){
   const [la,lo]=cidadesCoords[a];
   const [lb,lblo]=cidadesCoords[b];
@@ -220,7 +213,65 @@ async function distancia(a,b){
   return j.routes[0].distance/1000;
 }
 
-/* KM */
+/* mapa */
+async function desenharMapaRota(cidades){
+  document.getElementById("mapaRota").style.display="block";
+  if(!mapa){
+    mapa=L.map("mapaRota");
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(mapa);
+  }
+  if(rotaLayer) mapa.removeLayer(rotaLayer);
+
+  const pontos=[BASE,...cidades,BASE].map(c=>{
+    const [lat,lng]=cidadesCoords[c];
+    return [lat,lng];
+  });
+
+  mapa.fitBounds(pontos);
+
+  const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
+  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
+  const j=await r.json();
+
+  rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
+  pontos.forEach((p,i)=>{
+    L.marker(p).addTo(mapa).bindPopup(i===0||i===pontos.length-1?"BASE":"Parada "+i);
+  });
+}
+
+/* tabela */
+const compartimentos={
+  FROTA:[5000,5000,5000,2500,2500,2500],
+  BITRUCK:[5000,5000,5000],
+  TRUCK_555:[5000,5000,5000],
+  TRUCK_5532:[5000,5000,3000,2000],
+  TRUCK_53232:[5000,3000,2000,3000,2000],
+  TOCO:[5000,3000,2000],
+  CARRETA:[5000,5000,5000,5000,5000,5000]
+};
+
+function gerarTabela(){
+  const tipo=document.getElementById("tipo").value;
+  if(!tipo) return;
+  let html=`<table id="freteTable"><tr>
+  <th></th><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+  <th>QTDE</th><th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
+  compartimentos[tipo].forEach((l,i)=>{
+    html+=`<tr data-row>
+      <td class="drag">☰</td>
+      <td><input id="cliente${i}" class="uppercase"></td>
+      <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG" onblur="recalcularKM()"></td>
+      <td><input id="horario${i}" type="time"></td>
+      <td>${l.toLocaleString("pt-BR")}</td>
+      <td id="unit${i}">-</td>
+      <td id="frete${i}">-</td>
+      <td><input id="vendedor${i}" class="uppercase"></td>
+    </tr>`;
+  });
+  html+="</table>";
+  document.getElementById("tabela").innerHTML=html;
+}
+
 async function recalcularKM(){
   const cidades=[...document.querySelectorAll(".cidade")].map(i=>i.value).filter(v=>v);
   if(!cidades.length) return;
@@ -230,53 +281,16 @@ async function recalcularKM(){
   document.getElementById("kmTotal").value=km.toFixed(2);
 }
 
-/* TABELA */
-function gerarTabela(){
-  const tipo=document.getElementById("tipo").value;
-  if(!tipo) return;
-
-  let html=`<table id="freteTable">
-  <tr><th></th><th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
-  <th>QTDE</th><th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th></tr>`;
-
-  compartimentos[tipo].forEach((l,i)=>{
-    html+=`
-    <tr data-row>
-      <td class="drag">☰</td>
-      <td><input id="cliente${i}" class="uppercase"></td>
-      <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG" onblur="recalcularKM()"></td>
-      <td><input id="horario${i}" type="time"></td>
-      <td>${numero(l)}</td>
-      <td id="unit${i}">-</td>
-      <td id="frete${i}">-</td>
-      <td><input id="vendedor${i}" class="uppercase"></td>
-    </tr>`;
-  });
-
-  html+="</table>";
-  document.getElementById("tabela").innerHTML=html;
-}
-
-/* OTIMIZAR */
+/* otimizar */
 async function otimizarRota(){
-  const spinner=document.getElementById("spinner");
-  const msg=document.getElementById("mensagemSucesso");
-  const btnOtimizar=document.getElementById("btnOtimizar");
-  const btnCalcular=document.getElementById("btnCalcular");
-
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
   let cidades=rows.map(r=>r.querySelector(".cidade").value).filter(v=>v);
-
   if(cidades.length<2){alert("Informe ao menos 2 cidades.");return;}
-  spinner.style.display="flex";
 
+  spinner.style.display="flex";
   let rota=[],atual=BASE,rest=[...cidades];
   while(rest.length){
-    let menor=Infinity,prox=null;
-    for(const c of rest){
-      const d=await distancia(atual,c);
-      if(d<menor){menor=d;prox=c;}
-    }
+    let prox=rest.reduce((a,b)=>distancia(atual,a)<distancia(atual,b)?a:b);
     rota.push(prox);
     rest=rest.filter(c=>c!==prox);
     atual=prox;
@@ -288,135 +302,15 @@ async function otimizarRota(){
   });
 
   await recalcularKM();
+  await desenharMapaRota(rota);
+
   spinner.style.display="none";
-  msg.style.display="block";
-  setTimeout(()=>msg.style.display="none",4000);
+  mensagemSucesso.style.display="block";
+  setTimeout(()=>mensagemSucesso.style.display="none",4000);
 
-  btnOtimizar.disabled=true;
+  btnOtimizar.style.display="none";
   btnCalcular.classList.add("btn-destaque");
-  btnOtimizar.style.display = "none";
-
 }
-
-/* CALCULAR */
-function calcular(){
-  const tipo=document.getElementById("tipo").value;
-  const km=parseFloat(document.getElementById("kmTotal").value);
-  if(!tipo||!km){alert("KM não calculado");return;}
-
-  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
-  const litrosArr=compartimentos[tipo];
-  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
-
-  let litrosUsados=0;
-  let itens=[];
-  let cargaParcial = false;
-let compartimentosUsados = 0;
-
-rows.forEach(r=>{
-  const c = r.querySelector("input[id^='cliente']");
-  if(!c || !c.value.trim()) return;
-
-  const idx = parseInt(c.id.replace("cliente",""));
-  compartimentosUsados++;
-  litrosUsados += litrosArr[idx];
-
-  itens.push({
-    cliente: c.value.toUpperCase(),
-    cidade: document.getElementById("cidade"+idx).value,
-    horario: document.getElementById("horario"+idx).value || "-",
-    litros: litrosArr[idx],
-    idx
-  });
-});
-
-// REGRA FINAL DE CARGA PARCIAL
-if(compartimentosUsados < litrosArr.length){
-  cargaParcial = true;
-}
-
-  if(litrosUsados===0){
-    alert("Informe ao menos um cliente para calcular o frete.");
-    return;
-  }
-
-  const freteTotal=(km*dados.indice)+dados.taxa;
-  const unit=freteTotal/litrosUsados;
-
-  let html=`<div class="resumo-box">
-    <h3>RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}</h3>
-  `;
-
-  if(cargaParcial){
-    html+=`
-      <div class="alerta-parcial">
-        ⚠️ CARGA PARCIAL – NEM TODOS OS COMPARTIMENTOS FORAM UTILIZADOS
-      </div>
-    `;
-  }
-
-  html+=`
-    <table>
-    <tr>
-      <th>CLIENTE</th>
-      <th>CIDADE</th>
-      <th>HORÁRIO</th>
-      <th>R$/L</th>
-      <th>QTDE</th>
-      <th>TOTAL</th>
-    </tr>
-  `;
-
-  itens.forEach(i=>{
-    const t=i.litros*unit;
-    document.getElementById("unit"+i.idx).innerText=moeda4(unit);
-    document.getElementById("frete"+i.idx).innerText=moeda(t);
-
-    html+=`
-    <tr>
-      <td>${i.cliente}</td>
-      <td>${i.cidade}</td>
-      <td>${i.horario}</td>
-      <td>${moeda4(unit)}</td>
-      <td>${numero(i.litros)}</td>
-      <td>${moeda(t)}</td>
-    </tr>`;
-  });
-
-  html+=`
-    <tr class="total-row">
-      <td colspan="3">TOTAIS</td>
-      <td>${moeda4(unit)}</td>
-      <td>${numero(litrosUsados)}</td>
-      <td>${moeda(freteTotal)}</td>
-    </tr>
-    </table>
-
-    <table style="margin-top:15px">
-      <tr class="total-row">
-        <td>KM</td>
-        <td>ÍNDICE</td>
-        <td>TAXA</td>
-        <td>M³</td>
-        <td>FRETE</td>
-      </tr>
-      <tr>
-        <td>${numero(km)}</td>
-        <td>${dados.indice.toFixed(4)}</td>
-        <td>${moeda(dados.taxa)}</td>
-        <td>${(litrosUsados/1000).toFixed(1)}</td>
-        <td><b>${moeda(freteTotal)}</b></td>
-      </tr>
-    </table>
-  </div>`;
-
-  document.getElementById("resumo").innerHTML=html;
-
-  document.querySelectorAll("input,select").forEach(e=>e.disabled=true);
-  document.getElementById("btnCalcular").disabled=true;
-  document.getElementById("btnOtimizar").disabled=true;
-}
-
 </script>
 
 </body>
