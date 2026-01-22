@@ -269,8 +269,7 @@ function calcular(){
     itens.push({
       idx,
       cliente:c.value.toUpperCase(),
-      cidade: normalizarCidade(
-  document.getElementById("cidade"+idx).value
+      cidade: document.getElementById("cidade"+idx).value
 ),
 
       horario:document.getElementById("horario"+idx).value||"-",
@@ -280,7 +279,9 @@ function calcular(){
     });
   });
 
-let cidadesUnicas = new Set(itens.map(i => normalizarCidade(i.cidade)));
+let cidadesUnicas = new Set(
+  itens.map(i => normalizarCidade(i.cidade))
+);
 let modalidade = "KM";
 let freteTotal = 0;
 
