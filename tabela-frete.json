@@ -1,0 +1,6586 @@
+[
+  {
+    "CIDADE": "ABADIA DOS DOURADOS",
+    "TRUCK": "0,305118886",
+    "CARRETA": "0,191581557",
+    "TOCO": "0,372178124",
+    "BITRUCK": "0,253016206",
+    "FROTA": "0,308167107"
+  },
+  {
+    "CIDADE": "ABAETE",
+    "TRUCK": "0,136584944",
+    "CARRETA": "0,084590716",
+    "TOCO": "0,168377162",
+    "BITRUCK": "0,112009995",
+    "FROTA": "0,141401656"
+  },
+  {
+    "CIDADE": "ABRE CAMPO",
+    "TRUCK": "0,175893152",
+    "CARRETA": "0,109544848",
+    "TOCO": "0,215910914",
+    "BITRUCK": "0,144897741",
+    "FROTA": "0,180297388"
+  },
+  {
+    "CIDADE": "ACAIACA",
+    "TRUCK": "0,12370944",
+    "CARRETA": "0,076416927",
+    "TOCO": "0,15280736",
+    "BITRUCK": "0,10123753",
+    "FROTA": "0,12866126"
+  },
+  {
+    "CIDADE": "ACUCENA",
+    "TRUCK": "0,2016176",
+    "CARRETA": "0,125875567",
+    "TOCO": "0,2470184",
+    "BITRUCK": "0,16642045",
+    "FROTA": "0,2057519"
+  },
+  {
+    "CIDADE": "AGUA BOA",
+    "TRUCK": "0,271262773",
+    "CARRETA": "0,170088593",
+    "TOCO": "0,33123736",
+    "BITRUCK": "0,22469003",
+    "FROTA": "0,27466626"
+  },
+  {
+    "CIDADE": "AGUANIL",
+    "TRUCK": "0,151325522",
+    "CARRETA": "0,093948516",
+    "TOCO": "0,186202319",
+    "BITRUCK": "0,1243429",
+    "FROTA": "0,155987556"
+  },
+  {
+    "CIDADE": "AIMORES",
+    "TRUCK": "0,319660267",
+    "CARRETA": "0,2008129",
+    "TOCO": "0,3897624",
+    "BITRUCK": "0,26518245",
+    "FROTA": "0,3225559"
+  },
+  {
+    "CIDADE": "AIURUOCA",
+    "TRUCK": "0,263353915",
+    "CARRETA": "0,165067792",
+    "TOCO": "0,321673512",
+    "BITRUCK": "0,218072976",
+    "FROTA": "0,266840392"
+  },
+  {
+    "CIDADE": "ALAGOA",
+    "TRUCK": "0,2812964",
+    "CARRETA": "0,176458267",
+    "TOCO": "0,3433706",
+    "BITRUCK": "0,2330848",
+    "FROTA": "0,2845946"
+  },
+  {
+    "CIDADE": "ALBERTINA",
+    "TRUCK": "0,298731302",
+    "CARRETA": "0,187526511",
+    "TOCO": "0,364453889",
+    "BITRUCK": "0,247671947",
+    "FROTA": "0,301846551"
+  },
+  {
+    "CIDADE": "ALEM PARAIBA",
+    "TRUCK": "0,248244453",
+    "CARRETA": "0,155475813",
+    "TOCO": "0,30340228",
+    "BITRUCK": "0,20543144",
+    "FROTA": "0,25188948"
+  },
+  {
+    "CIDADE": "ALFENAS",
+    "TRUCK": "0,219914213",
+    "CARRETA": "0,137490853",
+    "TOCO": "0,26914372",
+    "BITRUCK": "0,18172856",
+    "FROTA": "0,22385652"
+  },
+  {
+    "CIDADE": "ALFREDO VASCONCELOS",
+    "TRUCK": "0,128431147",
+    "CARRETA": "0,07941442",
+    "TOCO": "0,15851712",
+    "BITRUCK": "0,10518801",
+    "FROTA": "0,13333342"
+  },
+  {
+    "CIDADE": "ALMENARA",
+    "TRUCK": "0,46367232",
+    "CARRETA": "0,292236447",
+    "TOCO": "0,56391008",
+    "BITRUCK": "0,38567209",
+    "FROTA": "0,46505678"
+  },
+  {
+    "CIDADE": "ALPERCATA",
+    "TRUCK": "0,231128267",
+    "CARRETA": "0,1446099",
+    "TOCO": "0,2827044",
+    "BITRUCK": "0,19111095",
+    "FROTA": "0,2349529"
+  },
+  {
+    "CIDADE": "ALPINOPOLIS",
+    "TRUCK": "0,218143573",
+    "CARRETA": "0,136366793",
+    "TOCO": "0,26700256",
+    "BITRUCK": "0,18024713",
+    "FROTA": "0,22210446"
+  },
+  {
+    "CIDADE": "ALTEROSA",
+    "TRUCK": "0,246473813",
+    "CARRETA": "0,154351753",
+    "TOCO": "0,30126112",
+    "BITRUCK": "0,20395001",
+    "FROTA": "0,25013742"
+  },
+  {
+    "CIDADE": "ALTO CAPARAO",
+    "TRUCK": "0,232898907",
+    "CARRETA": "0,14573396",
+    "TOCO": "0,28484556",
+    "BITRUCK": "0,19259238",
+    "FROTA": "0,23670496"
+  },
+  {
+    "CIDADE": "ALTO JEQUITIBA",
+    "TRUCK": "0,22463592",
+    "CARRETA": "0,140488347",
+    "TOCO": "0,27485348",
+    "BITRUCK": "0,18567904",
+    "FROTA": "0,22852868"
+  },
+  {
+    "CIDADE": "ALTO RIO DOCE",
+    "TRUCK": "0,146903348",
+    "CARRETA": "0,091141176",
+    "TOCO": "0,180854772",
+    "BITRUCK": "0,120643028",
+    "FROTA": "0,151611786"
+  },
+  {
+    "CIDADE": "ALVARENGA",
+    "TRUCK": "0,241752107",
+    "CARRETA": "0,15135426",
+    "TOCO": "0,29555136",
+    "BITRUCK": "0,19999953",
+    "FROTA": "0,24546526"
+  },
+  {
+    "CIDADE": "ALVINOPOLIS",
+    "TRUCK": "0,134923493",
+    "CARRETA": "0,083535973",
+    "TOCO": "0,16636804",
+    "BITRUCK": "0,11061992",
+    "FROTA": "0,13975764"
+  },
+  {
+    "CIDADE": "ALVORADA DE MINAS",
+    "TRUCK": "0,1573516",
+    "CARRETA": "0,097774067",
+    "TOCO": "0,1934894",
+    "BITRUCK": "0,1293847",
+    "FROTA": "0,1619504"
+  },
+  {
+    "CIDADE": "AMPARO DO SERRA",
+    "TRUCK": "0,154400533",
+    "CARRETA": "0,095900633",
+    "TOCO": "0,1899208",
+    "BITRUCK": "0,12691565",
+    "FROTA": "0,1590303"
+  },
+  {
+    "CIDADE": "ANDRADAS",
+    "TRUCK": "0,30254408",
+    "CARRETA": "0,189946987",
+    "TOCO": "0,36906452",
+    "BITRUCK": "0,25086196",
+    "FROTA": "0,30561932"
+  },
+  {
+    "CIDADE": "ANDRELANDIA",
+    "TRUCK": "0,216675418",
+    "CARRETA": "0,13543476",
+    "TOCO": "0,265227182",
+    "BITRUCK": "0,179018778",
+    "FROTA": "0,22065171"
+  },
+  {
+    "CIDADE": "ANGELANDIA",
+    "TRUCK": "0,313963232",
+    "CARRETA": "0,197196237",
+    "TOCO": "0,382873218",
+    "BITRUCK": "0,260415949",
+    "FROTA": "0,316918647"
+  },
+  {
+    "CIDADE": "ANTONIO CARLOS",
+    "TRUCK": "0,14318648",
+    "CARRETA": "0,088781587",
+    "TOCO": "0,17636012",
+    "BITRUCK": "0,11753326",
+    "FROTA": "0,14793392"
+  },
+  {
+    "CIDADE": "ANTONIO DIAS",
+    "TRUCK": "0,143776693",
+    "CARRETA": "0,089156273",
+    "TOCO": "0,17707384",
+    "BITRUCK": "0,11802707",
+    "FROTA": "0,14851794"
+  },
+  {
+    "CIDADE": "ARACAI",
+    "TRUCK": "0,105412827",
+    "CARRETA": "0,06480164",
+    "TOCO": "0,13068204",
+    "BITRUCK": "0,08592942",
+    "FROTA": "0,11055664"
+  },
+  {
+    "CIDADE": "ARACITABA",
+    "TRUCK": "0,16797544",
+    "CARRETA": "0,104518427",
+    "TOCO": "0,20633636",
+    "BITRUCK": "0,13827328",
+    "FROTA": "0,17246276"
+  },
+  {
+    "CIDADE": "ARACUAI",
+    "TRUCK": "0,381042453",
+    "CARRETA": "0,239780313",
+    "TOCO": "0,46398928",
+    "BITRUCK": "0,31653869",
+    "FROTA": "0,38329398"
+  },
+  {
+    "CIDADE": "ARAGUARI",
+    "TRUCK": "0,34858072",
+    "CARRETA": "0,219172547",
+    "TOCO": "0,42473468",
+    "BITRUCK": "0,28937914",
+    "FROTA": "0,35117288"
+  },
+  {
+    "CIDADE": "ARANTINA",
+    "TRUCK": "0,238210827",
+    "CARRETA": "0,14910614",
+    "TOCO": "0,29126904",
+    "BITRUCK": "0,19703667",
+    "FROTA": "0,24196114"
+  },
+  {
+    "CIDADE": "ARAPONGA",
+    "TRUCK": "0,193090493",
+    "CARRETA": "0,120462281",
+    "TOCO": "0,23670693",
+    "BITRUCK": "0,15928613",
+    "FROTA": "0,197314271"
+  },
+  {
+    "CIDADE": "ARAPORA",
+    "TRUCK": "0,396756146",
+    "CARRETA": "0,249755877",
+    "TOCO": "0,482991183",
+    "BITRUCK": "0,329685764",
+    "FROTA": "0,398842782"
+  },
+  {
+    "CIDADE": "ARAPUA",
+    "TRUCK": "0,216372933",
+    "CARRETA": "0,135242733",
+    "TOCO": "0,2648614",
+    "BITRUCK": "0,1787657",
+    "FROTA": "0,2203524"
+  },
+  {
+    "CIDADE": "ARAUJOS",
+    "TRUCK": "0,107183467",
+    "CARRETA": "0,0659257",
+    "TOCO": "0,1328232",
+    "BITRUCK": "0,08741085",
+    "FROTA": "0,1123087"
+  },
+  {
+    "CIDADE": "ARAXA",
+    "TRUCK": "0,23171848",
+    "CARRETA": "0,144984587",
+    "TOCO": "0,28341812",
+    "BITRUCK": "0,19160476",
+    "FROTA": "0,23553692"
+  },
+  {
+    "CIDADE": "ARCEBURGO",
+    "TRUCK": "0,282476827",
+    "CARRETA": "0,17720764",
+    "TOCO": "0,34479804",
+    "BITRUCK": "0,23407242",
+    "FROTA": "0,28576264"
+  },
+  {
+    "CIDADE": "ARCOS",
+    "TRUCK": "0,142596267",
+    "CARRETA": "0,0884069",
+    "TOCO": "0,1756464",
+    "BITRUCK": "0,11703945",
+    "FROTA": "0,1473499"
+  },
+  {
+    "CIDADE": "AREADO",
+    "TRUCK": "0,23880104",
+    "CARRETA": "0,149480827",
+    "TOCO": "0,29198276",
+    "BITRUCK": "0,19753048",
+    "FROTA": "0,24254516"
+  },
+  {
+    "CIDADE": "ARGIRITA",
+    "TRUCK": "0,228767413",
+    "CARRETA": "0,143111153",
+    "TOCO": "0,27984952",
+    "BITRUCK": "0,18913571",
+    "FROTA": "0,23261682"
+  },
+  {
+    "CIDADE": "ARICANDUVA",
+    "TRUCK": "0,313717556",
+    "CARRETA": "0,197040274",
+    "TOCO": "0,382576132",
+    "BITRUCK": "0,260210401",
+    "FROTA": "0,316675549"
+  },
+  {
+    "CIDADE": "ARINOS",
+    "TRUCK": "0,417045467",
+    "CARRETA": "0,2626362",
+    "TOCO": "0,5075262",
+    "BITRUCK": "0,3466611",
+    "FROTA": "0,4189192"
+  },
+  {
+    "CIDADE": "ASTOLFO DUTRA",
+    "TRUCK": "0,200437173",
+    "CARRETA": "0,125126193",
+    "TOCO": "0,24559096",
+    "BITRUCK": "0,16543283",
+    "FROTA": "0,20458386"
+  },
+  {
+    "CIDADE": "ATALEIA",
+    "TRUCK": "0,349831972",
+    "CARRETA": "0,219966882",
+    "TOCO": "0,426247766",
+    "BITRUCK": "0,290426017",
+    "FROTA": "0,352411002"
+  },
+  {
+    "CIDADE": "AUGUSTO DE LIMA",
+    "TRUCK": "0,182730773",
+    "CARRETA": "0,113885593",
+    "TOCO": "0,22417936",
+    "BITRUCK": "0,15061853",
+    "FROTA": "0,18706326"
+  },
+  {
+    "CIDADE": "BAEPENDI",
+    "TRUCK": "0,24234232",
+    "CARRETA": "0,151728947",
+    "TOCO": "0,29626508",
+    "BITRUCK": "0,20049334",
+    "FROTA": "0,24604928"
+  },
+  {
+    "CIDADE": "BALDIM",
+    "TRUCK": "0,09360856",
+    "CARRETA": "0,057307907",
+    "TOCO": "0,11640764",
+    "BITRUCK": "0,07605322",
+    "FROTA": "0,09887624"
+  },
+  {
+    "CIDADE": "BAMBUI",
+    "TRUCK": "0,172697147",
+    "CARRETA": "0,10751592",
+    "TOCO": "0,21204612",
+    "BITRUCK": "0,14222376",
+    "FROTA": "0,17713492"
+  },
+  {
+    "CIDADE": "BANDEIRA",
+    "TRUCK": "0,49207855",
+    "CARRETA": "0,310269648",
+    "TOCO": "0,598260531",
+    "BITRUCK": "0,409438548",
+    "FROTA": "0,493164933"
+  },
+  {
+    "CIDADE": "BANDEIRA DO SUL",
+    "TRUCK": "0,275394267",
+    "CARRETA": "0,1727114",
+    "TOCO": "0,3362334",
+    "BITRUCK": "0,2281467",
+    "FROTA": "0,2787544"
+  },
+  {
+    "CIDADE": "BARAO DE COCAIS",
+    "TRUCK": "0,096559627",
+    "CARRETA": "0,05918134",
+    "TOCO": "0,11997624",
+    "BITRUCK": "0,07852227",
+    "FROTA": "0,10179634"
+  },
+  {
+    "CIDADE": "BARAO DE MONTE ALTO",
+    "TRUCK": "0,236440187",
+    "CARRETA": "0,14798208",
+    "TOCO": "0,28912788",
+    "BITRUCK": "0,19555524",
+    "FROTA": "0,24020908"
+  },
+  {
+    "CIDADE": "BARBACENA",
+    "TRUCK": "0,13433328",
+    "CARRETA": "0,083161287",
+    "TOCO": "0,16565432",
+    "BITRUCK": "0,11012611",
+    "FROTA": "0,13917362"
+  },
+  {
+    "CIDADE": "BARRA LONGA",
+    "TRUCK": "0,134923493",
+    "CARRETA": "0,083535973",
+    "TOCO": "0,16636804",
+    "BITRUCK": "0,11061992",
+    "FROTA": "0,13975764"
+  },
+  {
+    "CIDADE": "BARROSO",
+    "TRUCK": "0,149088613",
+    "CARRETA": "0,092528453",
+    "TOCO": "0,18349732",
+    "BITRUCK": "0,12247136",
+    "FROTA": "0,15377412"
+  },
+  {
+    "CIDADE": "BELA VISTA DE MINAS",
+    "TRUCK": "0,11485624",
+    "CARRETA": "0,070796627",
+    "TOCO": "0,14210156",
+    "BITRUCK": "0,09383038",
+    "FROTA": "0,11990096"
+  },
+  {
+    "CIDADE": "BELMIRO BRAGA",
+    "TRUCK": "0,207519733",
+    "CARRETA": "0,129622433",
+    "TOCO": "0,2541556",
+    "BITRUCK": "0,17135855",
+    "FROTA": "0,2115921"
+  },
+  {
+    "CIDADE": "BELO HORIZONTE",
+    "TRUCK": "0,04226",
+    "CARRETA": "0,024710167",
+    "TOCO": "0,054314",
+    "BITRUCK": "0,03309175",
+    "FROTA": "0,0480665"
+  },
+  {
+    "CIDADE": "BELO ORIENTE",
+    "TRUCK": "0,180069649",
+    "CARRETA": "0,112196225",
+    "TOCO": "0,220961375",
+    "BITRUCK": "0,148392064",
+    "FROTA": "0,18443006"
+  },
+  {
+    "CIDADE": "BELO VALE",
+    "TRUCK": "0,079502461",
+    "CARRETA": "0,048352895",
+    "TOCO": "0,099349732",
+    "BITRUCK": "0,064251161",
+    "FROTA": "0,084918162"
+  },
+  {
+    "CIDADE": "BERILO",
+    "TRUCK": "0,356253493",
+    "CARRETA": "0,224043473",
+    "TOCO": "0,43401304",
+    "BITRUCK": "0,29579867",
+    "FROTA": "0,35876514"
+  },
+  {
+    "CIDADE": "BERIZAL",
+    "TRUCK": "0,466033173",
+    "CARRETA": "0,293735193",
+    "TOCO": "0,56676496",
+    "BITRUCK": "0,38764733",
+    "FROTA": "0,46739286"
+  },
+  {
+    "CIDADE": "BERTOPOLIS",
+    "TRUCK": "0,419604041",
+    "CARRETA": "0,264260467",
+    "TOCO": "0,510620176",
+    "BITRUCK": "0,348801766",
+    "FROTA": "0,421450927"
+  },
+  {
+    "CIDADE": "BETIM",
+    "TRUCK": "0,03694808",
+    "CARRETA": "0,021337987",
+    "TOCO": "0,04789052",
+    "BITRUCK": "0,02864746",
+    "FROTA": "0,04281032"
+  },
+  {
+    "CIDADE": "BIAS FORTES",
+    "TRUCK": "0,172106933",
+    "CARRETA": "0,107141233",
+    "TOCO": "0,2113324",
+    "BITRUCK": "0,14172995",
+    "FROTA": "0,1765509"
+  },
+  {
+    "CIDADE": "BICAS",
+    "TRUCK": "0,209290373",
+    "CARRETA": "0,130746493",
+    "TOCO": "0,25629676",
+    "BITRUCK": "0,17283998",
+    "FROTA": "0,21334416"
+  },
+  {
+    "CIDADE": "BIQUINHAS",
+    "TRUCK": "0,179189493",
+    "CARRETA": "0,111637473",
+    "TOCO": "0,21989704",
+    "BITRUCK": "0,14765567",
+    "FROTA": "0,18355914"
+  },
+  {
+    "CIDADE": "BOA ESPERANCA",
+    "TRUCK": "0,18922312",
+    "CARRETA": "0,118007147",
+    "TOCO": "0,23203028",
+    "BITRUCK": "0,15605044",
+    "FROTA": "0,19348748"
+  },
+  {
+    "CIDADE": "BOCAINA DE MINAS",
+    "TRUCK": "0,258440389",
+    "CARRETA": "0,161948526",
+    "TOCO": "0,315731793",
+    "BITRUCK": "0,213962008",
+    "FROTA": "0,261978426"
+  },
+  {
+    "CIDADE": "BOCAIUVA",
+    "TRUCK": "0,253556373",
+    "CARRETA": "0,158847993",
+    "TOCO": "0,30982576",
+    "BITRUCK": "0,20987573",
+    "FROTA": "0,25714566"
+  },
+  {
+    "CIDADE": "BOM DESPACHO",
+    "TRUCK": "0,104155672",
+    "CARRETA": "0,064003557",
+    "TOCO": "0,129161816",
+    "BITRUCK": "0,084877605",
+    "FROTA": "0,109312677"
+  },
+  {
+    "CIDADE": "BOM JARDIM DE MINAS",
+    "TRUCK": "0,236440187",
+    "CARRETA": "0,14798208",
+    "TOCO": "0,28912788",
+    "BITRUCK": "0,19555524",
+    "FROTA": "0,24020908"
+  },
+  {
+    "CIDADE": "BOM JESUS DA PENHA",
+    "TRUCK": "0,236440187",
+    "CARRETA": "0,14798208",
+    "TOCO": "0,28912788",
+    "BITRUCK": "0,19555524",
+    "FROTA": "0,24020908"
+  },
+  {
+    "CIDADE": "BOM JESUS DO AMPARO",
+    "TRUCK": "0,07944344",
+    "CARRETA": "0,048315427",
+    "TOCO": "0,09927836",
+    "BITRUCK": "0,06420178",
+    "FROTA": "0,08485976"
+  },
+  {
+    "CIDADE": "BOM JESUS DO GALHO",
+    "TRUCK": "0,207519733",
+    "CARRETA": "0,129622433",
+    "TOCO": "0,2541556",
+    "BITRUCK": "0,17135855",
+    "FROTA": "0,2115921"
+  },
+  {
+    "CIDADE": "BOM REPOUSO",
+    "TRUCK": "0,276129082",
+    "CARRETA": "0,173177885",
+    "TOCO": "0,337121981",
+    "BITRUCK": "0,228761493",
+    "FROTA": "0,279481505"
+  },
+  {
+    "CIDADE": "BOM SUCESSO",
+    "TRUCK": "0,136694133",
+    "CARRETA": "0,084660033",
+    "TOCO": "0,1685092",
+    "BITRUCK": "0,11210135",
+    "FROTA": "0,1415097"
+  },
+  {
+    "CIDADE": "BONFIM",
+    "TRUCK": "0,074898797",
+    "CARRETA": "0,045430339",
+    "TOCO": "0,093782716",
+    "BITRUCK": "0,060399443",
+    "FROTA": "0,080362806"
+  },
+  {
+    "CIDADE": "BONFINOPOLIS DE MINAS",
+    "TRUCK": "0,356253493",
+    "CARRETA": "0,224043473",
+    "TOCO": "0,43401304",
+    "BITRUCK": "0,29579867",
+    "FROTA": "0,35876514"
+  },
+  {
+    "CIDADE": "BONITO DE MINAS",
+    "TRUCK": "0,415427544",
+    "CARRETA": "0,26160909",
+    "TOCO": "0,505569715",
+    "BITRUCK": "0,345307443",
+    "FROTA": "0,417318255"
+  },
+  {
+    "CIDADE": "BORDA DA MATA",
+    "TRUCK": "0,26359",
+    "CARRETA": "0,165217667",
+    "TOCO": "0,321959",
+    "BITRUCK": "0,2182705",
+    "FROTA": "0,267074"
+  },
+  {
+    "CIDADE": "BOTELHOS",
+    "TRUCK": "0,26004872",
+    "CARRETA": "0,162969547",
+    "TOCO": "0,31767668",
+    "BITRUCK": "0,21530764",
+    "FROTA": "0,26356988"
+  },
+  {
+    "CIDADE": "BOTUMIRIM",
+    "TRUCK": "0,372434192",
+    "CARRETA": "0,234315508",
+    "TOCO": "0,453579674",
+    "BITRUCK": "0,309336471",
+    "FROTA": "0,374776048"
+  },
+  {
+    "CIDADE": "BRAS PIRES",
+    "TRUCK": "0,14318648",
+    "CARRETA": "0,088781587",
+    "TOCO": "0,17636012",
+    "BITRUCK": "0,11753326",
+    "FROTA": "0,14793392"
+  },
+  {
+    "CIDADE": "BRASILANDIA DE MINAS",
+    "TRUCK": "0,319660267",
+    "CARRETA": "0,2008129",
+    "TOCO": "0,3897624",
+    "BITRUCK": "0,26518245",
+    "FROTA": "0,3225559"
+  },
+  {
+    "CIDADE": "BRASILIA DE MINAS",
+    "TRUCK": "0,342461683",
+    "CARRETA": "0,215287983",
+    "TOCO": "0,417335188",
+    "BITRUCK": "0,284259565",
+    "FROTA": "0,345118053"
+  },
+  {
+    "CIDADE": "BRAUNAS",
+    "TRUCK": "0,195715467",
+    "CARRETA": "0,1221287",
+    "TOCO": "0,2398812",
+    "BITRUCK": "0,16148235",
+    "FROTA": "0,1999117"
+  },
+  {
+    "CIDADE": "BRUMADINHO",
+    "TRUCK": "0,050759072",
+    "CARRETA": "0,030105655",
+    "TOCO": "0,064591568",
+    "BITRUCK": "0,040202614",
+    "FROTA": "0,056476388"
+  },
+  {
+    "CIDADE": "BUENO BRANDAO",
+    "TRUCK": "0,281533961",
+    "CARRETA": "0,176609078",
+    "TOCO": "0,343657872",
+    "BITRUCK": "0,233283559",
+    "FROTA": "0,284829668"
+  },
+  {
+    "CIDADE": "BUENOPOLIS",
+    "TRUCK": "0,201443487",
+    "CARRETA": "0,125765034",
+    "TOCO": "0,246807853",
+    "BITRUCK": "0,166274776",
+    "FROTA": "0,205579614"
+  },
+  {
+    "CIDADE": "BUGRE",
+    "TRUCK": "0,18568184",
+    "CARRETA": "0,115759027",
+    "TOCO": "0,22774796",
+    "BITRUCK": "0,15308758",
+    "FROTA": "0,18998336"
+  },
+  {
+    "CIDADE": "BURITIS",
+    "TRUCK": "0,440654",
+    "CARRETA": "0,277623667",
+    "TOCO": "0,536075",
+    "BITRUCK": "0,3664135",
+    "FROTA": "0,44228"
+  },
+  {
+    "CIDADE": "BURITIZEIRO",
+    "TRUCK": "0,239391253",
+    "CARRETA": "0,149855513",
+    "TOCO": "0,29269648",
+    "BITRUCK": "0,19802429",
+    "FROTA": "0,24312918"
+  },
+  {
+    "CIDADE": "CABECEIRA GRANDE",
+    "TRUCK": "0,42471824",
+    "CARRETA": "0,267507127",
+    "TOCO": "0,51680456",
+    "BITRUCK": "0,35308063",
+    "FROTA": "0,42651146"
+  },
+  {
+    "CIDADE": "CABO VERDE",
+    "TRUCK": "0,271852987",
+    "CARRETA": "0,17046328",
+    "TOCO": "0,33195108",
+    "BITRUCK": "0,22518384",
+    "FROTA": "0,27525028"
+  },
+  {
+    "CIDADE": "CACHOEIRA DA PRATA",
+    "TRUCK": "0,085345573",
+    "CARRETA": "0,052062293",
+    "TOCO": "0,10641556",
+    "BITRUCK": "0,06913988",
+    "FROTA": "0,09069996"
+  },
+  {
+    "CIDADE": "CACHOEIRA DE MINAS",
+    "TRUCK": "0,252052805",
+    "CARRETA": "0,157893479",
+    "TOCO": "0,308007558",
+    "BITRUCK": "0,208617749",
+    "FROTA": "0,255657869"
+  },
+  {
+    "CIDADE": "CACHOEIRA DE PAJEU",
+    "TRUCK": "0,470164667",
+    "CARRETA": "0,296358",
+    "TOCO": "0,571761",
+    "BITRUCK": "0,391104",
+    "FROTA": "0,471481"
+  },
+  {
+    "CIDADE": "CAETANOPOLIS",
+    "TRUCK": "0,09183792",
+    "CARRETA": "0,056183847",
+    "TOCO": "0,11426648",
+    "BITRUCK": "0,07457179",
+    "FROTA": "0,09712418"
+  },
+  {
+    "CIDADE": "CAETE",
+    "TRUCK": "0,070664017",
+    "CARRETA": "0,042741963",
+    "TOCO": "0,088661775",
+    "BITRUCK": "0,056856356",
+    "FROTA": "0,076172463"
+  },
+  {
+    "CIDADE": "CAIANA",
+    "TRUCK": "0,24765424",
+    "CARRETA": "0,155101127",
+    "TOCO": "0,30268856",
+    "BITRUCK": "0,20493763",
+    "FROTA": "0,25130546"
+  },
+  {
+    "CIDADE": "CAJURI",
+    "TRUCK": "0,175648213",
+    "CARRETA": "0,109389353",
+    "TOCO": "0,21561472",
+    "BITRUCK": "0,14469281",
+    "FROTA": "0,18005502"
+  },
+  {
+    "CIDADE": "CALDAS",
+    "TRUCK": "0,291330027",
+    "CARRETA": "0,18282794",
+    "TOCO": "0,35550384",
+    "BITRUCK": "0,24147957",
+    "FROTA": "0,29452294"
+  },
+  {
+    "CIDADE": "CAMANDUCAIA",
+    "TRUCK": "0,283657253",
+    "CARRETA": "0,177957013",
+    "TOCO": "0,34622548",
+    "BITRUCK": "0,23506004",
+    "FROTA": "0,28693068"
+  },
+  {
+    "CIDADE": "CAMBUI",
+    "TRUCK": "0,2724432",
+    "CARRETA": "0,170837967",
+    "TOCO": "0,3326648",
+    "BITRUCK": "0,22567765",
+    "FROTA": "0,2758343"
+  },
+  {
+    "CIDADE": "CAMBUQUIRA",
+    "TRUCK": "0,214710007",
+    "CARRETA": "0,134187054",
+    "TOCO": "0,262850494",
+    "BITRUCK": "0,17737439",
+    "FROTA": "0,218706924"
+  },
+  {
+    "CIDADE": "CAMPANARIO",
+    "TRUCK": "0,270082347",
+    "CARRETA": "0,16933922",
+    "TOCO": "0,32980992",
+    "BITRUCK": "0,22370241",
+    "FROTA": "0,27349822"
+  },
+  {
+    "CIDADE": "CAMPANHA",
+    "TRUCK": "0,20338824",
+    "CARRETA": "0,126999627",
+    "TOCO": "0,24915956",
+    "BITRUCK": "0,16790188",
+    "FROTA": "0,20750396"
+  },
+  {
+    "CIDADE": "CAMPESTRE",
+    "TRUCK": "0,26713128",
+    "CARRETA": "0,167465787",
+    "TOCO": "0,32624132",
+    "BITRUCK": "0,22123336",
+    "FROTA": "0,27057812"
+  },
+  {
+    "CIDADE": "CAMPINA VERDE",
+    "TRUCK": "0,402161024",
+    "CARRETA": "0,253187071",
+    "TOCO": "0,489527074",
+    "BITRUCK": "0,334207829",
+    "FROTA": "0,404190946"
+  },
+  {
+    "CIDADE": "CAMPO AZUL",
+    "TRUCK": "0,316118987",
+    "CARRETA": "0,19856478",
+    "TOCO": "0,38548008",
+    "BITRUCK": "0,26221959",
+    "FROTA": "0,31905178"
+  },
+  {
+    "CIDADE": "CAMPO BELO",
+    "TRUCK": "0,146137547",
+    "CARRETA": "0,09065502",
+    "TOCO": "0,17992872",
+    "BITRUCK": "0,12000231",
+    "FROTA": "0,15085402"
+  },
+  {
+    "CIDADE": "CAMPO DO MEIO",
+    "TRUCK": "0,2104708",
+    "CARRETA": "0,131495867",
+    "TOCO": "0,2577242",
+    "BITRUCK": "0,1738276",
+    "FROTA": "0,2145122"
+  },
+  {
+    "CIDADE": "CAMPO FLORIDO",
+    "TRUCK": "0,3267384",
+    "CARRETA": "0,20530633",
+    "TOCO": "0,398321687",
+    "BITRUCK": "0,271104466",
+    "FROTA": "0,32955976"
+  },
+  {
+    "CIDADE": "CAMPOS ALTOS",
+    "TRUCK": "0,176238427",
+    "CARRETA": "0,10976404",
+    "TOCO": "0,21632844",
+    "BITRUCK": "0,14518662",
+    "FROTA": "0,18063904"
+  },
+  {
+    "CIDADE": "CAMPOS GERAIS",
+    "TRUCK": "0,199256747",
+    "CARRETA": "0,12437682",
+    "TOCO": "0,24416352",
+    "BITRUCK": "0,16444521",
+    "FROTA": "0,20341582"
+  },
+  {
+    "CIDADE": "CANA VERDE",
+    "TRUCK": "0,15279958",
+    "CARRETA": "0,094884296",
+    "TOCO": "0,187984835",
+    "BITRUCK": "0,12557619",
+    "FROTA": "0,157446146"
+  },
+  {
+    "CIDADE": "CANAA",
+    "TRUCK": "0,18745248",
+    "CARRETA": "0,116883087",
+    "TOCO": "0,22988912",
+    "BITRUCK": "0,15456901",
+    "FROTA": "0,19173542"
+  },
+  {
+    "CIDADE": "CANAPOLIS",
+    "TRUCK": "0,399704261",
+    "CARRETA": "0,251627437",
+    "TOCO": "0,486556214",
+    "BITRUCK": "0,332152345",
+    "FROTA": "0,401759962"
+  },
+  {
+    "CIDADE": "CANDEIAS",
+    "TRUCK": "0,15203968",
+    "CARRETA": "0,094401887",
+    "TOCO": "0,18706592",
+    "BITRUCK": "0,12494041",
+    "FROTA": "0,15669422"
+  },
+  {
+    "CIDADE": "CANTAGALO",
+    "TRUCK": "0,223063001",
+    "CARRETA": "0,139489807",
+    "TOCO": "0,272951416",
+    "BITRUCK": "0,184363036",
+    "FROTA": "0,226972267"
+  },
+  {
+    "CIDADE": "CAPARAO",
+    "TRUCK": "0,239391253",
+    "CARRETA": "0,149855513",
+    "TOCO": "0,29269648",
+    "BITRUCK": "0,19802429",
+    "FROTA": "0,24312918"
+  },
+  {
+    "CIDADE": "CAPELA NOVA",
+    "TRUCK": "0,130201787",
+    "CARRETA": "0,08053848",
+    "TOCO": "0,16065828",
+    "BITRUCK": "0,10666944",
+    "FROTA": "0,13508548"
+  },
+  {
+    "CIDADE": "CAPELINHA",
+    "TRUCK": "0,30217077",
+    "CARRETA": "0,189709997",
+    "TOCO": "0,368613092",
+    "BITRUCK": "0,250549625",
+    "FROTA": "0,305249927"
+  },
+  {
+    "CIDADE": "CAPETINGA",
+    "TRUCK": "0,261229147",
+    "CARRETA": "0,16371892",
+    "TOCO": "0,31910412",
+    "BITRUCK": "0,21629526",
+    "FROTA": "0,26473792"
+  },
+  {
+    "CIDADE": "CAPIM BRANCO",
+    "TRUCK": "0,070354155",
+    "CARRETA": "0,042545252",
+    "TOCO": "0,088287072",
+    "BITRUCK": "0,056597106",
+    "FROTA": "0,075865852"
+  },
+  {
+    "CIDADE": "CAPITAO ANDRADE",
+    "TRUCK": "0,240751695",
+    "CARRETA": "0,150719166",
+    "TOCO": "0,294341605",
+    "BITRUCK": "0,199162522",
+    "FROTA": "0,244475346"
+  },
+  {
+    "CIDADE": "CAPITAO ENEAS",
+    "TRUCK": "0,317889627",
+    "CARRETA": "0,19968884",
+    "TOCO": "0,38762124",
+    "BITRUCK": "0,26370102",
+    "FROTA": "0,32080384"
+  },
+  {
+    "CIDADE": "CAPITOLIO",
+    "TRUCK": "0,18214056",
+    "CARRETA": "0,113510907",
+    "TOCO": "0,22346564",
+    "BITRUCK": "0,15012472",
+    "FROTA": "0,18647924"
+  },
+  {
+    "CIDADE": "CAPUTIRA",
+    "TRUCK": "0,202426192",
+    "CARRETA": "0,126388887",
+    "TOCO": "0,247996196",
+    "BITRUCK": "0,16709697",
+    "FROTA": "0,206552007"
+  },
+  {
+    "CIDADE": "CARAI",
+    "TRUCK": "0,349170933",
+    "CARRETA": "0,219547233",
+    "TOCO": "0,4254484",
+    "BITRUCK": "0,28987295",
+    "FROTA": "0,3517569"
+  },
+  {
+    "CIDADE": "CARANAIBA",
+    "TRUCK": "0,10954432",
+    "CARRETA": "0,067424447",
+    "TOCO": "0,13567808",
+    "BITRUCK": "0,08938609",
+    "FROTA": "0,11464478"
+  },
+  {
+    "CIDADE": "CARANDAI",
+    "TRUCK": "0,1130856",
+    "CARRETA": "0,069672567",
+    "TOCO": "0,1399604",
+    "BITRUCK": "0,09234895",
+    "FROTA": "0,1181489"
+  },
+  {
+    "CIDADE": "CARANGOLA",
+    "TRUCK": "0,243522747",
+    "CARRETA": "0,15247832",
+    "TOCO": "0,29769252",
+    "BITRUCK": "0,20148096",
+    "FROTA": "0,24721732"
+  },
+  {
+    "CIDADE": "CARATINGA",
+    "TRUCK": "0,21401208",
+    "CARRETA": "0,133743987",
+    "TOCO": "0,26200652",
+    "BITRUCK": "0,17679046",
+    "FROTA": "0,21801632"
+  },
+  {
+    "CIDADE": "CARBONITA",
+    "TRUCK": "0,281886613",
+    "CARRETA": "0,176832953",
+    "TOCO": "0,34408432",
+    "BITRUCK": "0,23357861",
+    "FROTA": "0,28517862"
+  },
+  {
+    "CIDADE": "CAREACU",
+    "TRUCK": "0,225226133",
+    "CARRETA": "0,140863033",
+    "TOCO": "0,2755672",
+    "BITRUCK": "0,18617285",
+    "FROTA": "0,2291127"
+  },
+  {
+    "CIDADE": "CARLOS CHAGAS",
+    "TRUCK": "0,365696907",
+    "CARRETA": "0,23003846",
+    "TOCO": "0,44543256",
+    "BITRUCK": "0,30369963",
+    "FROTA": "0,36810946"
+  },
+  {
+    "CIDADE": "CARMESIA",
+    "TRUCK": "0,138304678",
+    "CARRETA": "0,08568246",
+    "TOCO": "0,170456763",
+    "BITRUCK": "0,113448834",
+    "FROTA": "0,143103345"
+  },
+  {
+    "CIDADE": "CARMO DA CACHOEIRA",
+    "TRUCK": "0,16974608",
+    "CARRETA": "0,105642487",
+    "TOCO": "0,20847752",
+    "BITRUCK": "0,13975471",
+    "FROTA": "0,17421482"
+  },
+  {
+    "CIDADE": "CARMO DA MATA",
+    "TRUCK": "0,1219388",
+    "CARRETA": "0,075292867",
+    "TOCO": "0,1506662",
+    "BITRUCK": "0,0997561",
+    "FROTA": "0,1269092"
+  },
+  {
+    "CIDADE": "CARMO DE MINAS",
+    "TRUCK": "0,239391253",
+    "CARRETA": "0,149855513",
+    "TOCO": "0,29269648",
+    "BITRUCK": "0,19802429",
+    "FROTA": "0,24312918"
+  },
+  {
+    "CIDADE": "CARMO DO CAJURU",
+    "TRUCK": "0,085168509",
+    "CARRETA": "0,051949887",
+    "TOCO": "0,106201444",
+    "BITRUCK": "0,068991737",
+    "FROTA": "0,090524754"
+  },
+  {
+    "CIDADE": "CARMO DO RIO CLARO",
+    "TRUCK": "0,231128267",
+    "CARRETA": "0,1446099",
+    "TOCO": "0,2827044",
+    "BITRUCK": "0,19111095",
+    "FROTA": "0,2349529"
+  },
+  {
+    "CIDADE": "CARMOPOLIS DE MINAS",
+    "TRUCK": "0,089477067",
+    "CARRETA": "0,0546851",
+    "TOCO": "0,1114116",
+    "BITRUCK": "0,07259655",
+    "FROTA": "0,0947881"
+  },
+  {
+    "CIDADE": "CARRANCAS",
+    "TRUCK": "0,191583973",
+    "CARRETA": "0,119505893",
+    "TOCO": "0,23488516",
+    "BITRUCK": "0,15802568",
+    "FROTA": "0,19582356"
+  },
+  {
+    "CIDADE": "CARVALHOPOLIS",
+    "TRUCK": "0,24765424",
+    "CARRETA": "0,155101127",
+    "TOCO": "0,30268856",
+    "BITRUCK": "0,20493763",
+    "FROTA": "0,25130546"
+  },
+  {
+    "CIDADE": "CARVALHOS",
+    "TRUCK": "0,260405799",
+    "CARRETA": "0,163196232",
+    "TOCO": "0,318108481",
+    "BITRUCK": "0,215606395",
+    "FROTA": "0,263923212"
+  },
+  {
+    "CIDADE": "CASA GRANDE",
+    "TRUCK": "0,118650574",
+    "CARRETA": "0,073205394",
+    "TOCO": "0,146689887",
+    "BITRUCK": "0,097004961",
+    "FROTA": "0,123655479"
+  },
+  {
+    "CIDADE": "CASCALHO RICO",
+    "TRUCK": "0,33795688",
+    "CARRETA": "0,212428187",
+    "TOCO": "0,41188772",
+    "BITRUCK": "0,28049056",
+    "FROTA": "0,34066052"
+  },
+  {
+    "CIDADE": "CASSIA",
+    "TRUCK": "0,24942488",
+    "CARRETA": "0,156225187",
+    "TOCO": "0,30482972",
+    "BITRUCK": "0,20641906",
+    "FROTA": "0,25305752"
+  },
+  {
+    "CIDADE": "CATAGUASES",
+    "TRUCK": "0,21224144",
+    "CARRETA": "0,132619927",
+    "TOCO": "0,25986536",
+    "BITRUCK": "0,17530903",
+    "FROTA": "0,21626426"
+  },
+  {
+    "CIDADE": "CATAS ALTAS",
+    "TRUCK": "0,110134533",
+    "CARRETA": "0,067799133",
+    "TOCO": "0,1363918",
+    "BITRUCK": "0,0898799",
+    "FROTA": "0,1152288"
+  },
+  {
+    "CIDADE": "CATAS ALTAS DA NORUEGA",
+    "TRUCK": "0,116036667",
+    "CARRETA": "0,071546",
+    "TOCO": "0,143529",
+    "BITRUCK": "0,094818",
+    "FROTA": "0,121069"
+  },
+  {
+    "CIDADE": "CATUJI",
+    "TRUCK": "0,342678587",
+    "CARRETA": "0,21542568",
+    "TOCO": "0,41759748",
+    "BITRUCK": "0,28444104",
+    "FROTA": "0,34533268"
+  },
+  {
+    "CIDADE": "CATUTI",
+    "TRUCK": "0,413504187",
+    "CARRETA": "0,26038808",
+    "TOCO": "0,50324388",
+    "BITRUCK": "0,34369824",
+    "FROTA": "0,41541508"
+  },
+  {
+    "CIDADE": "CAXAMBU",
+    "TRUCK": "0,24057168",
+    "CARRETA": "0,150604887",
+    "TOCO": "0,29412392",
+    "BITRUCK": "0,19901191",
+    "FROTA": "0,24429722"
+  },
+  {
+    "CIDADE": "CEDRO DO ABAETE",
+    "TRUCK": "0,166795013",
+    "CARRETA": "0,103769053",
+    "TOCO": "0,20490892",
+    "BITRUCK": "0,13728566",
+    "FROTA": "0,17129472"
+  },
+  {
+    "CIDADE": "CENTRAL DE MINAS",
+    "TRUCK": "0,278345333",
+    "CARRETA": "0,174584833",
+    "TOCO": "0,339802",
+    "BITRUCK": "0,23061575",
+    "FROTA": "0,2816745"
+  },
+  {
+    "CIDADE": "CENTRALINA",
+    "TRUCK": "0,40878248",
+    "CARRETA": "0,257390587",
+    "TOCO": "0,49753412",
+    "BITRUCK": "0,33974776",
+    "FROTA": "0,41074292"
+  },
+  {
+    "CIDADE": "CHACARA",
+    "TRUCK": "0,210287834",
+    "CARRETA": "0,131379714",
+    "TOCO": "0,257502947",
+    "BITRUCK": "0,173674519",
+    "FROTA": "0,214331154"
+  },
+  {
+    "CIDADE": "CHALE",
+    "TRUCK": "0,260897152",
+    "CARRETA": "0,163508159",
+    "TOCO": "0,318702653",
+    "BITRUCK": "0,216017492",
+    "FROTA": "0,264409409"
+  },
+  {
+    "CIDADE": "CHAPADA DO NORTE",
+    "TRUCK": "0,352122",
+    "CARRETA": "0,221420667",
+    "TOCO": "0,429017",
+    "BITRUCK": "0,292342",
+    "FROTA": "0,354677"
+  },
+  {
+    "CIDADE": "CHAPADA GAUCHA",
+    "TRUCK": "0,428849733",
+    "CARRETA": "0,270129933",
+    "TOCO": "0,5218006",
+    "BITRUCK": "0,3565373",
+    "FROTA": "0,4305996"
+  },
+  {
+    "CIDADE": "CHIADOR",
+    "TRUCK": "0,232898907",
+    "CARRETA": "0,14573396",
+    "TOCO": "0,28484556",
+    "BITRUCK": "0,19259238",
+    "FROTA": "0,23670496"
+  },
+  {
+    "CIDADE": "CIPOTANEA",
+    "TRUCK": "0,1396452",
+    "CARRETA": "0,086533467",
+    "TOCO": "0,1720778",
+    "BITRUCK": "0,1145704",
+    "FROTA": "0,1444298"
+  },
+  {
+    "CIDADE": "CLARAVAL",
+    "TRUCK": "0,276129082",
+    "CARRETA": "0,173177885",
+    "TOCO": "0,337121981",
+    "BITRUCK": "0,228761493",
+    "FROTA": "0,279481505"
+  },
+  {
+    "CIDADE": "CLARO DOS POCOES",
+    "TRUCK": "0,27775512",
+    "CARRETA": "0,174210147",
+    "TOCO": "0,33908828",
+    "BITRUCK": "0,23012194",
+    "FROTA": "0,28109048"
+  },
+  {
+    "CIDADE": "CLAUDIO",
+    "TRUCK": "0,100100907",
+    "CARRETA": "0,06142946",
+    "TOCO": "0,12425856",
+    "BITRUCK": "0,08148513",
+    "FROTA": "0,10530046"
+  },
+  {
+    "CIDADE": "COIMBRA",
+    "TRUCK": "0,172208007",
+    "CARRETA": "0,107205398",
+    "TOCO": "0,211454625",
+    "BITRUCK": "0,141814515",
+    "FROTA": "0,176650913"
+  },
+  {
+    "CIDADE": "COLUNA",
+    "TRUCK": "0,234079333",
+    "CARRETA": "0,146483333",
+    "TOCO": "0,286273",
+    "BITRUCK": "0,19358",
+    "FROTA": "0,237873"
+  },
+  {
+    "CIDADE": "COMENDADOR GOMES",
+    "TRUCK": "0,379271813",
+    "CARRETA": "0,238656253",
+    "TOCO": "0,46184812",
+    "BITRUCK": "0,31505726",
+    "FROTA": "0,38154192"
+  },
+  {
+    "CIDADE": "COMERCINHO",
+    "TRUCK": "0,437292735",
+    "CARRETA": "0,275489826",
+    "TOCO": "0,532010365",
+    "BITRUCK": "0,363601252",
+    "FROTA": "0,438954006"
+  },
+  {
+    "CIDADE": "CONCEICAO DA APARECIDA",
+    "TRUCK": "0,241161893",
+    "CARRETA": "0,150979573",
+    "TOCO": "0,29483764",
+    "BITRUCK": "0,19950572",
+    "FROTA": "0,24488124"
+  },
+  {
+    "CIDADE": "CONCEICAO DA BARRA DE MINAS",
+    "TRUCK": "0,154400533",
+    "CARRETA": "0,095900633",
+    "TOCO": "0,1899208",
+    "BITRUCK": "0,12691565",
+    "FROTA": "0,1590303"
+  },
+  {
+    "CIDADE": "CONCEICAO DAS ALAGOAS",
+    "TRUCK": "0,3344156",
+    "CARRETA": "0,210180067",
+    "TOCO": "0,4076054",
+    "BITRUCK": "0,2775277",
+    "FROTA": "0,3371564"
+  },
+  {
+    "CIDADE": "CONCEICAO DAS PEDRAS",
+    "TRUCK": "0,257687867",
+    "CARRETA": "0,1614708",
+    "TOCO": "0,3148218",
+    "BITRUCK": "0,2133324",
+    "FROTA": "0,2612338"
+  },
+  {
+    "CIDADE": "CONCEICAO DE IPANEMA",
+    "TRUCK": "0,2547368",
+    "CARRETA": "0,159597367",
+    "TOCO": "0,3112532",
+    "BITRUCK": "0,21086335",
+    "FROTA": "0,2583137"
+  },
+  {
+    "CIDADE": "CONCEICAO DO MATO DENTRO",
+    "TRUCK": "0,134923493",
+    "CARRETA": "0,083535973",
+    "TOCO": "0,16636804",
+    "BITRUCK": "0,11061992",
+    "FROTA": "0,13975764"
+  },
+  {
+    "CIDADE": "CONCEICAO DO PARA",
+    "TRUCK": "0,098330267",
+    "CARRETA": "0,0603054",
+    "TOCO": "0,1221174",
+    "BITRUCK": "0,0800037",
+    "FROTA": "0,1035484"
+  },
+  {
+    "CIDADE": "CONCEICAO DO RIO VERDE",
+    "TRUCK": "0,229357627",
+    "CARRETA": "0,14348584",
+    "TOCO": "0,28056324",
+    "BITRUCK": "0,18962952",
+    "FROTA": "0,23320084"
+  },
+  {
+    "CIDADE": "CONCEICAO DOS OUROS",
+    "TRUCK": "0,265950853",
+    "CARRETA": "0,166716413",
+    "TOCO": "0,32481388",
+    "BITRUCK": "0,22024574",
+    "FROTA": "0,26941008"
+  },
+  {
+    "CIDADE": "CONEGO MARINHO",
+    "TRUCK": "0,397738851",
+    "CARRETA": "0,250379731",
+    "TOCO": "0,484179527",
+    "BITRUCK": "0,330507958",
+    "FROTA": "0,399815176"
+  },
+  {
+    "CIDADE": "CONFINS",
+    "TRUCK": "0,06173704",
+    "CARRETA": "0,037074827",
+    "TOCO": "0,07786676",
+    "BITRUCK": "0,04938748",
+    "FROTA": "0,06733916"
+  },
+  {
+    "CIDADE": "CONGONHAL",
+    "TRUCK": "0,257097653",
+    "CARRETA": "0,161096113",
+    "TOCO": "0,31410808",
+    "BITRUCK": "0,21283859",
+    "FROTA": "0,26064978"
+  },
+  {
+    "CIDADE": "CONGONHAS",
+    "TRUCK": "0,081686251",
+    "CARRETA": "0,049739236",
+    "TOCO": "0,101990496",
+    "BITRUCK": "0,066078258",
+    "FROTA": "0,087079036"
+  },
+  {
+    "CIDADE": "CONGONHAS DO NORTE",
+    "TRUCK": "0,16266352",
+    "CARRETA": "0,101146247",
+    "TOCO": "0,19991288",
+    "BITRUCK": "0,13382899",
+    "FROTA": "0,16720658"
+  },
+  {
+    "CIDADE": "CONQUISTA",
+    "TRUCK": "0,289886955",
+    "CARRETA": "0,181911831",
+    "TOCO": "0,353758795",
+    "BITRUCK": "0,240272205",
+    "FROTA": "0,293095011"
+  },
+  {
+    "CIDADE": "CONSELHEIRO LAFAIETE",
+    "TRUCK": "0,092428133",
+    "CARRETA": "0,056558533",
+    "TOCO": "0,1149802",
+    "BITRUCK": "0,0750656",
+    "FROTA": "0,0977082"
+  },
+  {
+    "CIDADE": "CONSELHEIRO PENA",
+    "TRUCK": "0,27598448",
+    "CARRETA": "0,173086087",
+    "TOCO": "0,33694712",
+    "BITRUCK": "0,22864051",
+    "FROTA": "0,27933842"
+  },
+  {
+    "CIDADE": "CONSOLACAO",
+    "TRUCK": "0,292835071",
+    "CARRETA": "0,183783391",
+    "TOCO": "0,357323826",
+    "BITRUCK": "0,242738786",
+    "FROTA": "0,296012191"
+  },
+  {
+    "CIDADE": "CONTAGEM",
+    "TRUCK": "0,033878971",
+    "CARRETA": "0,019389616",
+    "TOCO": "0,044179176",
+    "BITRUCK": "0,026079648",
+    "FROTA": "0,039773416"
+  },
+  {
+    "CIDADE": "COQUEIRAL",
+    "TRUCK": "0,174910447",
+    "CARRETA": "0,108920995",
+    "TOCO": "0,21472257",
+    "BITRUCK": "0,144075548",
+    "FROTA": "0,179324995"
+  },
+  {
+    "CIDADE": "CORACAO DE JESUS",
+    "TRUCK": "0,3255624",
+    "CARRETA": "0,204559767",
+    "TOCO": "0,3968996",
+    "BITRUCK": "0,27012055",
+    "FROTA": "0,3283961"
+  },
+  {
+    "CIDADE": "CORDISBURGO",
+    "TRUCK": "0,111771638",
+    "CARRETA": "0,06883842",
+    "TOCO": "0,138371481",
+    "BITRUCK": "0,091249605",
+    "FROTA": "0,116848725"
+  },
+  {
+    "CIDADE": "CORDISLANDIA",
+    "TRUCK": "0,21578272",
+    "CARRETA": "0,134868047",
+    "TOCO": "0,26414768",
+    "BITRUCK": "0,17827189",
+    "FROTA": "0,21976838"
+  },
+  {
+    "CIDADE": "CORINTO",
+    "TRUCK": "0,156761387",
+    "CARRETA": "0,09739938",
+    "TOCO": "0,19277568",
+    "BITRUCK": "0,12889089",
+    "FROTA": "0,16136638"
+  },
+  {
+    "CIDADE": "COROACI",
+    "TRUCK": "0,26004872",
+    "CARRETA": "0,162969547",
+    "TOCO": "0,31767668",
+    "BITRUCK": "0,21530764",
+    "FROTA": "0,26356988"
+  },
+  {
+    "CIDADE": "COROMANDEL",
+    "TRUCK": "0,303724507",
+    "CARRETA": "0,19069636",
+    "TOCO": "0,37049196",
+    "BITRUCK": "0,25184958",
+    "FROTA": "0,30678736"
+  },
+  {
+    "CIDADE": "CORONEL FABRICIANO",
+    "TRUCK": "0,156171173",
+    "CARRETA": "0,097024693",
+    "TOCO": "0,19206196",
+    "BITRUCK": "0,12839708",
+    "FROTA": "0,16078236"
+  },
+  {
+    "CIDADE": "CORONEL MURTA",
+    "TRUCK": "0,378091387",
+    "CARRETA": "0,23790688",
+    "TOCO": "0,46042068",
+    "BITRUCK": "0,31406964",
+    "FROTA": "0,38037388"
+  },
+  {
+    "CIDADE": "CORONEL PACHECO",
+    "TRUCK": "0,1927644",
+    "CARRETA": "0,120255267",
+    "TOCO": "0,2363126",
+    "BITRUCK": "0,1590133",
+    "FROTA": "0,1969916"
+  },
+  {
+    "CIDADE": "CORREGO DANTA",
+    "TRUCK": "0,155010666",
+    "CARRETA": "0,096287966",
+    "TOCO": "0,190658608",
+    "BITRUCK": "0,127426126",
+    "FROTA": "0,159634031"
+  },
+  {
+    "CIDADE": "CORREGO DO BOM JESUS",
+    "TRUCK": "0,275394267",
+    "CARRETA": "0,1727114",
+    "TOCO": "0,3362334",
+    "BITRUCK": "0,2281467",
+    "FROTA": "0,2787544"
+  },
+  {
+    "CIDADE": "CORREGO FUNDO",
+    "TRUCK": "0,1396452",
+    "CARRETA": "0,086533467",
+    "TOCO": "0,1720778",
+    "BITRUCK": "0,1145704",
+    "FROTA": "0,1444298"
+  },
+  {
+    "CIDADE": "CORREGO NOVO",
+    "TRUCK": "0,198986724",
+    "CARRETA": "0,124205401",
+    "TOCO": "0,243836993",
+    "BITRUCK": "0,164219292",
+    "FROTA": "0,203148631"
+  },
+  {
+    "CIDADE": "COUTO DE MAGALHAES DE MINAS",
+    "TRUCK": "0,225816347",
+    "CARRETA": "0,14123772",
+    "TOCO": "0,27628092",
+    "BITRUCK": "0,18666666",
+    "FROTA": "0,22969672"
+  },
+  {
+    "CIDADE": "CRISOLITA",
+    "TRUCK": "0,377501173",
+    "CARRETA": "0,237532193",
+    "TOCO": "0,45970696",
+    "BITRUCK": "0,31357583",
+    "FROTA": "0,37978986"
+  },
+  {
+    "CIDADE": "CRISTAIS",
+    "TRUCK": "0,166795013",
+    "CARRETA": "0,103769053",
+    "TOCO": "0,20490892",
+    "BITRUCK": "0,13728566",
+    "FROTA": "0,17129472"
+  },
+  {
+    "CIDADE": "CRISTALIA",
+    "TRUCK": "0,3786816",
+    "CARRETA": "0,238281567",
+    "TOCO": "0,4611344",
+    "BITRUCK": "0,31456345",
+    "FROTA": "0,3809579"
+  },
+  {
+    "CIDADE": "CRISTIANO OTONI",
+    "TRUCK": "0,10246176",
+    "CARRETA": "0,062928207",
+    "TOCO": "0,12711344",
+    "BITRUCK": "0,08346037",
+    "FROTA": "0,10763654"
+  },
+  {
+    "CIDADE": "CRISTINA",
+    "TRUCK": "0,261229147",
+    "CARRETA": "0,16371892",
+    "TOCO": "0,31910412",
+    "BITRUCK": "0,21629526",
+    "FROTA": "0,26473792"
+  },
+  {
+    "CIDADE": "CRUCILANDIA",
+    "TRUCK": "0,080564845",
+    "CARRETA": "0,049027331",
+    "TOCO": "0,100634428",
+    "BITRUCK": "0,065140019",
+    "FROTA": "0,085969398"
+  },
+  {
+    "CIDADE": "CRUZEIRO DA FORTALEZA",
+    "TRUCK": "0,247139279",
+    "CARRETA": "0,154774213",
+    "TOCO": "0,302065839",
+    "BITRUCK": "0,204506781",
+    "FROTA": "0,250795903"
+  },
+  {
+    "CIDADE": "CRUZILIA",
+    "TRUCK": "0,209290373",
+    "CARRETA": "0,130746493",
+    "TOCO": "0,25629676",
+    "BITRUCK": "0,17283998",
+    "FROTA": "0,21334416"
+  },
+  {
+    "CIDADE": "CUPARAQUE",
+    "TRUCK": "0,308446213",
+    "CARRETA": "0,193693853",
+    "TOCO": "0,37620172",
+    "BITRUCK": "0,25580006",
+    "FROTA": "0,31145952"
+  },
+  {
+    "CIDADE": "CURRAL DE DENTRO",
+    "TRUCK": "0,457179973",
+    "CARRETA": "0,288114893",
+    "TOCO": "0,55605916",
+    "BITRUCK": "0,38024018",
+    "FROTA": "0,45863256"
+  },
+  {
+    "CIDADE": "CURVELO",
+    "TRUCK": "0,12725072",
+    "CARRETA": "0,078665047",
+    "TOCO": "0,15708968",
+    "BITRUCK": "0,10420039",
+    "FROTA": "0,13216538"
+  },
+  {
+    "CIDADE": "DATAS",
+    "TRUCK": "0,18922312",
+    "CARRETA": "0,118007147",
+    "TOCO": "0,23203028",
+    "BITRUCK": "0,15605044",
+    "FROTA": "0,19348748"
+  },
+  {
+    "CIDADE": "DELFIM MOREIRA",
+    "TRUCK": "0,296051733",
+    "CARRETA": "0,185825433",
+    "TOCO": "0,3612136",
+    "BITRUCK": "0,24543005",
+    "FROTA": "0,2991951"
+  },
+  {
+    "CIDADE": "DELFINOPOLIS",
+    "TRUCK": "0,270082347",
+    "CARRETA": "0,16933922",
+    "TOCO": "0,32980992",
+    "BITRUCK": "0,22370241",
+    "FROTA": "0,27349822"
+  },
+  {
+    "CIDADE": "DELTA",
+    "TRUCK": "0,313758133",
+    "CARRETA": "0,197066033",
+    "TOCO": "0,3826252",
+    "BITRUCK": "0,26024435",
+    "FROTA": "0,3167157"
+  },
+  {
+    "CIDADE": "DESCOBERTO",
+    "TRUCK": "0,207519733",
+    "CARRETA": "0,129622433",
+    "TOCO": "0,2541556",
+    "BITRUCK": "0,17135855",
+    "FROTA": "0,2115921"
+  },
+  {
+    "CIDADE": "DESTERRO DE ENTRE RIOS",
+    "TRUCK": "0,109560551",
+    "CARRETA": "0,067434751",
+    "TOCO": "0,135697707",
+    "BITRUCK": "0,08939967",
+    "FROTA": "0,114660841"
+  },
+  {
+    "CIDADE": "DESTERRO DO MELO",
+    "TRUCK": "0,149678827",
+    "CARRETA": "0,09290314",
+    "TOCO": "0,18421104",
+    "BITRUCK": "0,12296517",
+    "FROTA": "0,15435814"
+  },
+  {
+    "CIDADE": "DIAMANTINA",
+    "TRUCK": "0,202207813",
+    "CARRETA": "0,126250253",
+    "TOCO": "0,24773212",
+    "BITRUCK": "0,16691426",
+    "FROTA": "0,20633592"
+  },
+  {
+    "CIDADE": "DIOGO DE VASCONCELOS",
+    "TRUCK": "0,11839752",
+    "CARRETA": "0,073044747",
+    "TOCO": "0,14638388",
+    "BITRUCK": "0,09679324",
+    "FROTA": "0,12340508"
+  },
+  {
+    "CIDADE": "DIONISIO",
+    "TRUCK": "0,138464773",
+    "CARRETA": "0,085784093",
+    "TOCO": "0,17065036",
+    "BITRUCK": "0,11358278",
+    "FROTA": "0,14326176"
+  },
+  {
+    "CIDADE": "DIVINESIA",
+    "TRUCK": "0,1662048",
+    "CARRETA": "0,103394367",
+    "TOCO": "0,2041952",
+    "BITRUCK": "0,13679185",
+    "FROTA": "0,1707107"
+  },
+  {
+    "CIDADE": "DIVINO",
+    "TRUCK": "0,22640656",
+    "CARRETA": "0,141612407",
+    "TOCO": "0,27699464",
+    "BITRUCK": "0,18716047",
+    "FROTA": "0,23028074"
+  },
+  {
+    "CIDADE": "DIVINO DAS LARANJEIRAS",
+    "TRUCK": "0,260405799",
+    "CARRETA": "0,163196232",
+    "TOCO": "0,318108481",
+    "BITRUCK": "0,215606395",
+    "FROTA": "0,263923212"
+  },
+  {
+    "CIDADE": "DIVINOLANDIA DE MINAS",
+    "TRUCK": "0,20515888",
+    "CARRETA": "0,128123687",
+    "TOCO": "0,25130072",
+    "BITRUCK": "0,16938331",
+    "FROTA": "0,20925602"
+  },
+  {
+    "CIDADE": "DIVINOPOLIS",
+    "TRUCK": "0,089477067",
+    "CARRETA": "0,0546851",
+    "TOCO": "0,1114116",
+    "BITRUCK": "0,07259655",
+    "FROTA": "0,0947881"
+  },
+  {
+    "CIDADE": "DIVISA ALEGRE",
+    "TRUCK": "0,4672136",
+    "CARRETA": "0,294484567",
+    "TOCO": "0,5681924",
+    "BITRUCK": "0,38863495",
+    "FROTA": "0,4685609"
+  },
+  {
+    "CIDADE": "DIVISA NOVA",
+    "TRUCK": "0,242932533",
+    "CARRETA": "0,152103633",
+    "TOCO": "0,2969788",
+    "BITRUCK": "0,20098715",
+    "FROTA": "0,2466333"
+  },
+  {
+    "CIDADE": "DOM CAVATI",
+    "TRUCK": "0,201027387",
+    "CARRETA": "0,12550088",
+    "TOCO": "0,24630468",
+    "BITRUCK": "0,16592664",
+    "FROTA": "0,20516788"
+  },
+  {
+    "CIDADE": "DOM JOAQUIM",
+    "TRUCK": "0,154400533",
+    "CARRETA": "0,095900633",
+    "TOCO": "0,1899208",
+    "BITRUCK": "0,12691565",
+    "FROTA": "0,1590303"
+  },
+  {
+    "CIDADE": "DOM SILVERIO",
+    "TRUCK": "0,14318648",
+    "CARRETA": "0,088781587",
+    "TOCO": "0,17636012",
+    "BITRUCK": "0,11753326",
+    "FROTA": "0,14793392"
+  },
+  {
+    "CIDADE": "DOM VICOSO",
+    "TRUCK": "0,258868293",
+    "CARRETA": "0,162220173",
+    "TOCO": "0,31624924",
+    "BITRUCK": "0,21432002",
+    "FROTA": "0,26240184"
+  },
+  {
+    "CIDADE": "DONA EUZEBIA",
+    "TRUCK": "0,203978453",
+    "CARRETA": "0,127374313",
+    "TOCO": "0,24987328",
+    "BITRUCK": "0,16839569",
+    "FROTA": "0,20808798"
+  },
+  {
+    "CIDADE": "DORES DE CAMPOS",
+    "TRUCK": "0,154990747",
+    "CARRETA": "0,09627532",
+    "TOCO": "0,19063452",
+    "BITRUCK": "0,12740946",
+    "FROTA": "0,15961432"
+  },
+  {
+    "CIDADE": "DORES DE GUANHAES",
+    "TRUCK": "0,165614587",
+    "CARRETA": "0,10301968",
+    "TOCO": "0,20348148",
+    "BITRUCK": "0,13629804",
+    "FROTA": "0,17012668"
+  },
+  {
+    "CIDADE": "DORES DO INDAIA",
+    "TRUCK": "0,15912224",
+    "CARRETA": "0,098898127",
+    "TOCO": "0,19563056",
+    "BITRUCK": "0,13086613",
+    "FROTA": "0,16370246"
+  },
+  {
+    "CIDADE": "DORES DO TURVO",
+    "TRUCK": "0,165024373",
+    "CARRETA": "0,102644993",
+    "TOCO": "0,20276776",
+    "BITRUCK": "0,13580423",
+    "FROTA": "0,16954266"
+  },
+  {
+    "CIDADE": "DORESOPOLIS",
+    "TRUCK": "0,180960133",
+    "CARRETA": "0,112761533",
+    "TOCO": "0,2220382",
+    "BITRUCK": "0,1491371",
+    "FROTA": "0,1853112"
+  },
+  {
+    "CIDADE": "DOURADOQUARA",
+    "TRUCK": "0,334108689",
+    "CARRETA": "0,20998523",
+    "TOCO": "0,407234266",
+    "BITRUCK": "0,277270919",
+    "FROTA": "0,33685271"
+  },
+  {
+    "CIDADE": "DURANDE",
+    "TRUCK": "0,229357627",
+    "CARRETA": "0,14348584",
+    "TOCO": "0,28056324",
+    "BITRUCK": "0,18962952",
+    "FROTA": "0,23320084"
+  },
+  {
+    "CIDADE": "ELOI MENDES",
+    "TRUCK": "0,210287834",
+    "CARRETA": "0,131379714",
+    "TOCO": "0,257502947",
+    "BITRUCK": "0,173674519",
+    "FROTA": "0,214331154"
+  },
+  {
+    "CIDADE": "ENGENHEIRO CALDAS",
+    "TRUCK": "0,211061013",
+    "CARRETA": "0,131870553",
+    "TOCO": "0,25843792",
+    "BITRUCK": "0,17432141",
+    "FROTA": "0,21509622"
+  },
+  {
+    "CIDADE": "ENGENHEIRO NAVARRO",
+    "TRUCK": "0,23880104",
+    "CARRETA": "0,149480827",
+    "TOCO": "0,29198276",
+    "BITRUCK": "0,19753048",
+    "FROTA": "0,24254516"
+  },
+  {
+    "CIDADE": "ENTRE FOLHAS",
+    "TRUCK": "0,197486107",
+    "CARRETA": "0,12325276",
+    "TOCO": "0,24202236",
+    "BITRUCK": "0,16296378",
+    "FROTA": "0,20166376"
+  },
+  {
+    "CIDADE": "ENTRE RIOS DE MINAS",
+    "TRUCK": "0,10954432",
+    "CARRETA": "0,067424447",
+    "TOCO": "0,13567808",
+    "BITRUCK": "0,08938609",
+    "FROTA": "0,11464478"
+  },
+  {
+    "CIDADE": "ERVALIA",
+    "TRUCK": "0,18568184",
+    "CARRETA": "0,115759027",
+    "TOCO": "0,22774796",
+    "BITRUCK": "0,15308758",
+    "FROTA": "0,18998336"
+  },
+  {
+    "CIDADE": "ESMERALDAS",
+    "TRUCK": "0,057782611",
+    "CARRETA": "0,034564426",
+    "TOCO": "0,073084836",
+    "BITRUCK": "0,046078953",
+    "FROTA": "0,063426226"
+  },
+  {
+    "CIDADE": "ESPERA FELIZ",
+    "TRUCK": "0,245293387",
+    "CARRETA": "0,15360238",
+    "TOCO": "0,29983368",
+    "BITRUCK": "0,20296239",
+    "FROTA": "0,24896938"
+  },
+  {
+    "CIDADE": "ESPINOSA",
+    "TRUCK": "0,443605067",
+    "CARRETA": "0,2794971",
+    "TOCO": "0,5396436",
+    "BITRUCK": "0,36888255",
+    "FROTA": "0,4452001"
+  },
+  {
+    "CIDADE": "ESTIVA",
+    "TRUCK": "0,262999787",
+    "CARRETA": "0,16484298",
+    "TOCO": "0,32124528",
+    "BITRUCK": "0,21777669",
+    "FROTA": "0,26648998"
+  },
+  {
+    "CIDADE": "ESTRELA DO INDAIA",
+    "TRUCK": "0,166311776",
+    "CARRETA": "0,103462279",
+    "TOCO": "0,204324562",
+    "BITRUCK": "0,136881353",
+    "FROTA": "0,170816554"
+  },
+  {
+    "CIDADE": "ESTRELA DO SUL",
+    "TRUCK": "0,316118987",
+    "CARRETA": "0,19856478",
+    "TOCO": "0,38548008",
+    "BITRUCK": "0,26221959",
+    "FROTA": "0,31905178"
+  },
+  {
+    "CIDADE": "EUGENOPOLIS",
+    "TRUCK": "0,23525976",
+    "CARRETA": "0,147232707",
+    "TOCO": "0,28770044",
+    "BITRUCK": "0,19456762",
+    "FROTA": "0,23904104"
+  },
+  {
+    "CIDADE": "EWBANK DA CAMARA",
+    "TRUCK": "0,17151672",
+    "CARRETA": "0,106766547",
+    "TOCO": "0,21061868",
+    "BITRUCK": "0,14123614",
+    "FROTA": "0,17596688"
+  },
+  {
+    "CIDADE": "EXTREMA",
+    "TRUCK": "0,2990028",
+    "CARRETA": "0,187698867",
+    "TOCO": "0,3647822",
+    "BITRUCK": "0,2478991",
+    "FROTA": "0,3021152"
+  },
+  {
+    "CIDADE": "FAMA",
+    "TRUCK": "0,257457683",
+    "CARRETA": "0,161324672",
+    "TOCO": "0,314543449",
+    "BITRUCK": "0,213139814",
+    "FROTA": "0,261006032"
+  },
+  {
+    "CIDADE": "FARIA LEMOS",
+    "TRUCK": "0,248834667",
+    "CARRETA": "0,1558505",
+    "TOCO": "0,304116",
+    "BITRUCK": "0,20592525",
+    "FROTA": "0,2524735"
+  },
+  {
+    "CIDADE": "FELICIO DOS SANTOS",
+    "TRUCK": "0,2458836",
+    "CARRETA": "0,153977067",
+    "TOCO": "0,3005474",
+    "BITRUCK": "0,2034562",
+    "FROTA": "0,2495534"
+  },
+  {
+    "CIDADE": "FELISBURGO",
+    "TRUCK": "0,43711272",
+    "CARRETA": "0,275375547",
+    "TOCO": "0,53179268",
+    "BITRUCK": "0,36345064",
+    "FROTA": "0,43877588"
+  },
+  {
+    "CIDADE": "FELIXLANDIA",
+    "TRUCK": "0,144366907",
+    "CARRETA": "0,08953096",
+    "TOCO": "0,17778756",
+    "BITRUCK": "0,11852088",
+    "FROTA": "0,14910196"
+  },
+  {
+    "CIDADE": "FERNANDES TOURINHO",
+    "TRUCK": "0,212831653",
+    "CARRETA": "0,132994613",
+    "TOCO": "0,26057908",
+    "BITRUCK": "0,17580284",
+    "FROTA": "0,21684828"
+  },
+  {
+    "CIDADE": "FERROS",
+    "TRUCK": "0,151325522",
+    "CARRETA": "0,093948516",
+    "TOCO": "0,186202319",
+    "BITRUCK": "0,1243429",
+    "FROTA": "0,155987556"
+  },
+  {
+    "CIDADE": "FERVEDOURO",
+    "TRUCK": "0,232898907",
+    "CARRETA": "0,14573396",
+    "TOCO": "0,28484556",
+    "BITRUCK": "0,19259238",
+    "FROTA": "0,23670496"
+  },
+  {
+    "CIDADE": "FLORESTAL",
+    "TRUCK": "0,05642512",
+    "CARRETA": "0,033702647",
+    "TOCO": "0,07144328",
+    "BITRUCK": "0,04494319",
+    "FROTA": "0,06208298"
+  },
+  {
+    "CIDADE": "FORMIGA",
+    "TRUCK": "0,13433328",
+    "CARRETA": "0,083161287",
+    "TOCO": "0,16565432",
+    "BITRUCK": "0,11012611",
+    "FROTA": "0,13917362"
+  },
+  {
+    "CIDADE": "FORMOSO",
+    "TRUCK": "0,499675333",
+    "CARRETA": "0,315092333",
+    "TOCO": "0,607447",
+    "BITRUCK": "0,4157945",
+    "FROTA": "0,500682"
+  },
+  {
+    "CIDADE": "FORTALEZA DE MINAS",
+    "TRUCK": "0,24057168",
+    "CARRETA": "0,150604887",
+    "TOCO": "0,29412392",
+    "BITRUCK": "0,19901191",
+    "FROTA": "0,24429722"
+  },
+  {
+    "CIDADE": "FORTUNA DE MINAS",
+    "TRUCK": "0,087706427",
+    "CARRETA": "0,05356104",
+    "TOCO": "0,10927044",
+    "BITRUCK": "0,07111512",
+    "FROTA": "0,09303604"
+  },
+  {
+    "CIDADE": "FRANCISCO BADARO",
+    "TRUCK": "0,37159904",
+    "CARRETA": "0,233785327",
+    "TOCO": "0,45256976",
+    "BITRUCK": "0,30863773",
+    "FROTA": "0,37394966"
+  },
+  {
+    "CIDADE": "FRANCISCO DUMONT",
+    "TRUCK": "0,253556373",
+    "CARRETA": "0,158847993",
+    "TOCO": "0,30982576",
+    "BITRUCK": "0,20987573",
+    "FROTA": "0,25714566"
+  },
+  {
+    "CIDADE": "FRANCISCO SA",
+    "TRUCK": "0,31139728",
+    "CARRETA": "0,195567287",
+    "TOCO": "0,37977032",
+    "BITRUCK": "0,25826911",
+    "FROTA": "0,31437962"
+  },
+  {
+    "CIDADE": "FRANCISCOPOLIS",
+    "TRUCK": "0,309036427",
+    "CARRETA": "0,19406854",
+    "TOCO": "0,37691544",
+    "BITRUCK": "0,25629387",
+    "FROTA": "0,31204354"
+  },
+  {
+    "CIDADE": "FREI GASPAR",
+    "TRUCK": "0,30608536",
+    "CARRETA": "0,192195107",
+    "TOCO": "0,37334684",
+    "BITRUCK": "0,25382482",
+    "FROTA": "0,30912344"
+  },
+  {
+    "CIDADE": "FREI INOCENCIO",
+    "TRUCK": "0,233872759",
+    "CARRETA": "0,146352193",
+    "TOCO": "0,286023198",
+    "BITRUCK": "0,193407167",
+    "FROTA": "0,237668593"
+  },
+  {
+    "CIDADE": "FREI LAGO NEGRO",
+    "TRUCK": "0,24234232",
+    "CARRETA": "0,151728947",
+    "TOCO": "0,29626508",
+    "BITRUCK": "0,20049334",
+    "FROTA": "0,24604928"
+  },
+  {
+    "CIDADE": "FRONTEIRA",
+    "TRUCK": "0,415274827",
+    "CARRETA": "0,26151214",
+    "TOCO": "0,50538504",
+    "BITRUCK": "0,34517967",
+    "FROTA": "0,41716714"
+  },
+  {
+    "CIDADE": "FRONTEIRA DOS VALES",
+    "TRUCK": "0,414684613",
+    "CARRETA": "0,261137453",
+    "TOCO": "0,50467132",
+    "BITRUCK": "0,34468586",
+    "FROTA": "0,41658312"
+  },
+  {
+    "CIDADE": "FRUTA DE LEITE",
+    "TRUCK": "0,390485867",
+    "CARRETA": "0,2457753",
+    "TOCO": "0,4754088",
+    "BITRUCK": "0,32443965",
+    "FROTA": "0,3926383"
+  },
+  {
+    "CIDADE": "FRUTAL",
+    "TRUCK": "0,37691096",
+    "CARRETA": "0,237157507",
+    "TOCO": "0,45899324",
+    "BITRUCK": "0,31308202",
+    "FROTA": "0,37920584"
+  },
+  {
+    "CIDADE": "FUNILANDIA",
+    "TRUCK": "0,091247707",
+    "CARRETA": "0,05580916",
+    "TOCO": "0,11355276",
+    "BITRUCK": "0,07407798",
+    "FROTA": "0,09654016"
+  },
+  {
+    "CIDADE": "GALILEIA",
+    "TRUCK": "0,258868293",
+    "CARRETA": "0,162220173",
+    "TOCO": "0,31624924",
+    "BITRUCK": "0,21432002",
+    "FROTA": "0,26240184"
+  },
+  {
+    "CIDADE": "GLAUCILANDIA",
+    "TRUCK": "0,278345333",
+    "CARRETA": "0,174584833",
+    "TOCO": "0,339802",
+    "BITRUCK": "0,23061575",
+    "FROTA": "0,2816745"
+  },
+  {
+    "CIDADE": "GOIABEIRA",
+    "TRUCK": "0,29723216",
+    "CARRETA": "0,186574807",
+    "TOCO": "0,36264104",
+    "BITRUCK": "0,24641767",
+    "FROTA": "0,30036314"
+  },
+  {
+    "CIDADE": "GONCALVES",
+    "TRUCK": "0,287198533",
+    "CARRETA": "0,180205133",
+    "TOCO": "0,3505078",
+    "BITRUCK": "0,2380229",
+    "FROTA": "0,2904348"
+  },
+  {
+    "CIDADE": "GONZAGA",
+    "TRUCK": "0,237803579",
+    "CARRETA": "0,148847606",
+    "TOCO": "0,290776573",
+    "BITRUCK": "0,196695941",
+    "FROTA": "0,241558166"
+  },
+  {
+    "CIDADE": "GOUVEIA",
+    "TRUCK": "0,170926507",
+    "CARRETA": "0,10639186",
+    "TOCO": "0,20990496",
+    "BITRUCK": "0,14074233",
+    "FROTA": "0,17538286"
+  },
+  {
+    "CIDADE": "GOVERNADOR VALADARES",
+    "TRUCK": "0,22463592",
+    "CARRETA": "0,140488347",
+    "TOCO": "0,27485348",
+    "BITRUCK": "0,18567904",
+    "FROTA": "0,22852868"
+  },
+  {
+    "CIDADE": "GRAO MOGOL",
+    "TRUCK": "0,367467547",
+    "CARRETA": "0,23116252",
+    "TOCO": "0,44757372",
+    "BITRUCK": "0,30518106",
+    "FROTA": "0,36986152"
+  },
+  {
+    "CIDADE": "GRUPIARA",
+    "TRUCK": "0,336776453",
+    "CARRETA": "0,211678813",
+    "TOCO": "0,41046028",
+    "BITRUCK": "0,27950294",
+    "FROTA": "0,33949248"
+  },
+  {
+    "CIDADE": "GUANHAES",
+    "TRUCK": "0,185091627",
+    "CARRETA": "0,11538434",
+    "TOCO": "0,22703424",
+    "BITRUCK": "0,15259377",
+    "FROTA": "0,18939934"
+  },
+  {
+    "CIDADE": "GUAPE",
+    "TRUCK": "0,188042693",
+    "CARRETA": "0,117257773",
+    "TOCO": "0,23060284",
+    "BITRUCK": "0,15506282",
+    "FROTA": "0,19231944"
+  },
+  {
+    "CIDADE": "GUARACIABA",
+    "TRUCK": "0,142596267",
+    "CARRETA": "0,0884069",
+    "TOCO": "0,1756464",
+    "BITRUCK": "0,11703945",
+    "FROTA": "0,1473499"
+  },
+  {
+    "CIDADE": "GUARACIAMA",
+    "TRUCK": "0,2724432",
+    "CARRETA": "0,170837967",
+    "TOCO": "0,3326648",
+    "BITRUCK": "0,22567765",
+    "FROTA": "0,2758343"
+  },
+  {
+    "CIDADE": "GUARANESIA",
+    "TRUCK": "0,26890192",
+    "CARRETA": "0,168589847",
+    "TOCO": "0,32838248",
+    "BITRUCK": "0,22271479",
+    "FROTA": "0,27233018"
+  },
+  {
+    "CIDADE": "GUARANI",
+    "TRUCK": "0,204568667",
+    "CARRETA": "0,127749",
+    "TOCO": "0,250587",
+    "BITRUCK": "0,1688895",
+    "FROTA": "0,208672"
+  },
+  {
+    "CIDADE": "GUARARA",
+    "TRUCK": "0,212831653",
+    "CARRETA": "0,132994613",
+    "TOCO": "0,26057908",
+    "BITRUCK": "0,17580284",
+    "FROTA": "0,21684828"
+  },
+  {
+    "CIDADE": "GUARDA MOR",
+    "TRUCK": "0,342088373",
+    "CARRETA": "0,215050993",
+    "TOCO": "0,41688376",
+    "BITRUCK": "0,28394723",
+    "FROTA": "0,34474866"
+  },
+  {
+    "CIDADE": "GUAXUPE",
+    "TRUCK": "0,264180213",
+    "CARRETA": "0,165592353",
+    "TOCO": "0,32267272",
+    "BITRUCK": "0,21876431",
+    "FROTA": "0,26765802"
+  },
+  {
+    "CIDADE": "GUIDOVAL",
+    "TRUCK": "0,196038608",
+    "CARRETA": "0,122333841",
+    "TOCO": "0,240271962",
+    "BITRUCK": "0,161752711",
+    "FROTA": "0,200231451"
+  },
+  {
+    "CIDADE": "GUIMARANIA",
+    "TRUCK": "0,258868293",
+    "CARRETA": "0,162220173",
+    "TOCO": "0,31624924",
+    "BITRUCK": "0,21432002",
+    "FROTA": "0,26240184"
+  },
+  {
+    "CIDADE": "GUIRICEMA",
+    "TRUCK": "0,19984696",
+    "CARRETA": "0,124751507",
+    "TOCO": "0,24487724",
+    "BITRUCK": "0,16493902",
+    "FROTA": "0,20399984"
+  },
+  {
+    "CIDADE": "GURINHATA",
+    "TRUCK": "0,454228907",
+    "CARRETA": "0,28624146",
+    "TOCO": "0,55249056",
+    "BITRUCK": "0,37777113",
+    "FROTA": "0,45571246"
+  },
+  {
+    "CIDADE": "HELIODORA",
+    "TRUCK": "0,13344796",
+    "CARRETA": "0,082599257",
+    "TOCO": "0,16458374",
+    "BITRUCK": "0,109385395",
+    "FROTA": "0,13829759"
+  },
+  {
+    "CIDADE": "IAPU",
+    "TRUCK": "0,194810227",
+    "CARRETA": "0,121554024",
+    "TOCO": "0,238786532",
+    "BITRUCK": "0,160724969",
+    "FROTA": "0,199015959"
+  },
+  {
+    "CIDADE": "IBERTIOGA",
+    "TRUCK": "0,160302667",
+    "CARRETA": "0,0996475",
+    "TOCO": "0,197058",
+    "BITRUCK": "0,13185375",
+    "FROTA": "0,1648705"
+  },
+  {
+    "CIDADE": "IBIA",
+    "TRUCK": "0,205128632",
+    "CARRETA": "0,128104484",
+    "TOCO": "0,251264142",
+    "BITRUCK": "0,169358002",
+    "FROTA": "0,209226089"
+  },
+  {
+    "CIDADE": "IBIAI",
+    "TRUCK": "0,283499371",
+    "CARRETA": "0,177856785",
+    "TOCO": "0,34603456",
+    "BITRUCK": "0,234927946",
+    "FROTA": "0,286774455"
+  },
+  {
+    "CIDADE": "IBIRACATU",
+    "TRUCK": "0,37159904",
+    "CARRETA": "0,233785327",
+    "TOCO": "0,45256976",
+    "BITRUCK": "0,30863773",
+    "FROTA": "0,37394966"
+  },
+  {
+    "CIDADE": "IBIRACI",
+    "TRUCK": "0,267721493",
+    "CARRETA": "0,167840473",
+    "TOCO": "0,32695504",
+    "BITRUCK": "0,22172717",
+    "FROTA": "0,27116214"
+  },
+  {
+    "CIDADE": "IBIRITE",
+    "TRUCK": "0,035531568",
+    "CARRETA": "0,020438739",
+    "TOCO": "0,046177592",
+    "BITRUCK": "0,027462316",
+    "FROTA": "0,041408672"
+  },
+  {
+    "CIDADE": "IBITURUNA",
+    "TRUCK": "0,147908187",
+    "CARRETA": "0,09177908",
+    "TOCO": "0,18206988",
+    "BITRUCK": "0,12148374",
+    "FROTA": "0,15260608"
+  },
+  {
+    "CIDADE": "ICARAI DE MINAS",
+    "TRUCK": "0,33087432",
+    "CARRETA": "0,207931947",
+    "TOCO": "0,40332308",
+    "BITRUCK": "0,27456484",
+    "FROTA": "0,33365228"
+  },
+  {
+    "CIDADE": "INDAIABIRA",
+    "TRUCK": "0,460721253",
+    "CARRETA": "0,290363013",
+    "TOCO": "0,56034148",
+    "BITRUCK": "0,38320304",
+    "FROTA": "0,46213668"
+  },
+  {
+    "CIDADE": "IGARAPE",
+    "TRUCK": "0,045329109",
+    "CARRETA": "0,026658537",
+    "TOCO": "0,058025344",
+    "BITRUCK": "0,035659562",
+    "FROTA": "0,051103404"
+  },
+  {
+    "CIDADE": "IGARATINGA",
+    "TRUCK": "0,075666075",
+    "CARRETA": "0,045917432",
+    "TOCO": "0,094710552",
+    "BITRUCK": "0,061041396",
+    "FROTA": "0,081122032"
+  },
+  {
+    "CIDADE": "IGUATAMA",
+    "TRUCK": "0,162073307",
+    "CARRETA": "0,10077156",
+    "TOCO": "0,19919916",
+    "BITRUCK": "0,13333518",
+    "FROTA": "0,16662256"
+  },
+  {
+    "CIDADE": "IJACI",
+    "TRUCK": "0,147908187",
+    "CARRETA": "0,09177908",
+    "TOCO": "0,18206988",
+    "BITRUCK": "0,12148374",
+    "FROTA": "0,15260608"
+  },
+  {
+    "CIDADE": "ILICINEA",
+    "TRUCK": "0,190142377",
+    "CARRETA": "0,118590721",
+    "TOCO": "0,233141899",
+    "BITRUCK": "0,156819549",
+    "FROTA": "0,194397091"
+  },
+  {
+    "CIDADE": "IMBE DE MINAS",
+    "TRUCK": "0,22650247",
+    "CARRETA": "0,141673293",
+    "TOCO": "0,27711062",
+    "BITRUCK": "0,187240714",
+    "FROTA": "0,230375643"
+  },
+  {
+    "CIDADE": "INCONFIDENTES",
+    "TRUCK": "0,2724432",
+    "CARRETA": "0,170837967",
+    "TOCO": "0,3326648",
+    "BITRUCK": "0,22567765",
+    "FROTA": "0,2758343"
+  },
+  {
+    "CIDADE": "INDIANOPOLIS",
+    "TRUCK": "0,33264496",
+    "CARRETA": "0,209056007",
+    "TOCO": "0,40546424",
+    "BITRUCK": "0,27604627",
+    "FROTA": "0,33540434"
+  },
+  {
+    "CIDADE": "INGAI",
+    "TRUCK": "0,174467787",
+    "CARRETA": "0,10863998",
+    "TOCO": "0,21418728",
+    "BITRUCK": "0,14370519",
+    "FROTA": "0,17888698"
+  },
+  {
+    "CIDADE": "INHAPIM",
+    "TRUCK": "0,209550805",
+    "CARRETA": "0,130911824",
+    "TOCO": "0,256611689",
+    "BITRUCK": "0,173057874",
+    "FROTA": "0,213601859"
+  },
+  {
+    "CIDADE": "INHAUMA",
+    "TRUCK": "0,083397869",
+    "CARRETA": "0,050825827",
+    "TOCO": "0,104060284",
+    "BITRUCK": "0,067510307",
+    "FROTA": "0,088772694"
+  },
+  {
+    "CIDADE": "INIMUTABA",
+    "TRUCK": "0,138464773",
+    "CARRETA": "0,085784093",
+    "TOCO": "0,17065036",
+    "BITRUCK": "0,11358278",
+    "FROTA": "0,14326176"
+  },
+  {
+    "CIDADE": "IPABA",
+    "TRUCK": "0,178009067",
+    "CARRETA": "0,1108881",
+    "TOCO": "0,2184696",
+    "BITRUCK": "0,14666805",
+    "FROTA": "0,1823911"
+  },
+  {
+    "CIDADE": "IPANEMA",
+    "TRUCK": "0,236820874",
+    "CARRETA": "0,148223753",
+    "TOCO": "0,289588229",
+    "BITRUCK": "0,195873747",
+    "FROTA": "0,240585773"
+  },
+  {
+    "CIDADE": "IPATINGA",
+    "TRUCK": "0,163843947",
+    "CARRETA": "0,10189562",
+    "TOCO": "0,20134032",
+    "BITRUCK": "0,13481661",
+    "FROTA": "0,16837462"
+  },
+  {
+    "CIDADE": "IPIACU",
+    "TRUCK": "0,454228907",
+    "CARRETA": "0,28624146",
+    "TOCO": "0,55249056",
+    "BITRUCK": "0,37777113",
+    "FROTA": "0,45571246"
+  },
+  {
+    "CIDADE": "IPUIUNA",
+    "TRUCK": "0,271262773",
+    "CARRETA": "0,170088593",
+    "TOCO": "0,33123736",
+    "BITRUCK": "0,22469003",
+    "FROTA": "0,27466626"
+  },
+  {
+    "CIDADE": "IRAI DE MINAS",
+    "TRUCK": "0,29553751",
+    "CARRETA": "0,185498988",
+    "TOCO": "0,360591771",
+    "BITRUCK": "0,244999818",
+    "FROTA": "0,298686273"
+  },
+  {
+    "CIDADE": "ITABIRA",
+    "TRUCK": "0,101281333",
+    "CARRETA": "0,062178833",
+    "TOCO": "0,125686",
+    "BITRUCK": "0,08247275",
+    "FROTA": "0,1064685"
+  },
+  {
+    "CIDADE": "ITABIRITO",
+    "TRUCK": "0,067226024",
+    "CARRETA": "0,040559413",
+    "TOCO": "0,084504356",
+    "BITRUCK": "0,053979913",
+    "FROTA": "0,072770546"
+  },
+  {
+    "CIDADE": "ITACAMBIRA",
+    "TRUCK": "0,317889627",
+    "CARRETA": "0,19968884",
+    "TOCO": "0,38762124",
+    "BITRUCK": "0,26370102",
+    "FROTA": "0,32080384"
+  },
+  {
+    "CIDADE": "ITACARAMBI",
+    "TRUCK": "0,42117696",
+    "CARRETA": "0,265259007",
+    "TOCO": "0,51252224",
+    "BITRUCK": "0,35011777",
+    "FROTA": "0,42300734"
+  },
+  {
+    "CIDADE": "ITAGUARA",
+    "TRUCK": "0,07501684",
+    "CARRETA": "0,045505277",
+    "TOCO": "0,09392546",
+    "BITRUCK": "0,060498205",
+    "FROTA": "0,08047961"
+  },
+  {
+    "CIDADE": "ITAIPE",
+    "TRUCK": "0,353302427",
+    "CARRETA": "0,22217004",
+    "TOCO": "0,43044444",
+    "BITRUCK": "0,29332962",
+    "FROTA": "0,35584504"
+  },
+  {
+    "CIDADE": "ITAJUBA",
+    "TRUCK": "0,27952576",
+    "CARRETA": "0,175334207",
+    "TOCO": "0,34122944",
+    "BITRUCK": "0,23160337",
+    "FROTA": "0,28284254"
+  },
+  {
+    "CIDADE": "ITAMARANDIBA",
+    "TRUCK": "0,275394267",
+    "CARRETA": "0,1727114",
+    "TOCO": "0,3362334",
+    "BITRUCK": "0,2281467",
+    "FROTA": "0,2787544"
+  },
+  {
+    "CIDADE": "ITAMARATI DE MINAS",
+    "TRUCK": "0,218143573",
+    "CARRETA": "0,136366793",
+    "TOCO": "0,26700256",
+    "BITRUCK": "0,18024713",
+    "FROTA": "0,22210446"
+  },
+  {
+    "CIDADE": "ITAMBACURI",
+    "TRUCK": "0,285427893",
+    "CARRETA": "0,179081073",
+    "TOCO": "0,34836664",
+    "BITRUCK": "0,23654147",
+    "FROTA": "0,28868274"
+  },
+  {
+    "CIDADE": "ITAMBE DO MATO DENTRO",
+    "TRUCK": "0,115446453",
+    "CARRETA": "0,071171313",
+    "TOCO": "0,14281528",
+    "BITRUCK": "0,09432419",
+    "FROTA": "0,12048498"
+  },
+  {
+    "CIDADE": "ITAMOGI",
+    "TRUCK": "0,26713128",
+    "CARRETA": "0,167465787",
+    "TOCO": "0,32624132",
+    "BITRUCK": "0,22123336",
+    "FROTA": "0,27057812"
+  },
+  {
+    "CIDADE": "ITAMONTE",
+    "TRUCK": "0,269492133",
+    "CARRETA": "0,168964533",
+    "TOCO": "0,3290962",
+    "BITRUCK": "0,2232086",
+    "FROTA": "0,2729142"
+  },
+  {
+    "CIDADE": "ITANHANDU",
+    "TRUCK": "0,267721493",
+    "CARRETA": "0,167840473",
+    "TOCO": "0,32695504",
+    "BITRUCK": "0,22172717",
+    "FROTA": "0,27116214"
+  },
+  {
+    "CIDADE": "ITANHOMI",
+    "TRUCK": "0,2281772",
+    "CARRETA": "0,142736467",
+    "TOCO": "0,2791358",
+    "BITRUCK": "0,1886419",
+    "FROTA": "0,2320328"
+  },
+  {
+    "CIDADE": "ITAOBIM",
+    "TRUCK": "0,393071001",
+    "CARRETA": "0,247416428",
+    "TOCO": "0,478534894",
+    "BITRUCK": "0,326602538",
+    "FROTA": "0,395196308"
+  },
+  {
+    "CIDADE": "ITAPAGIPE",
+    "TRUCK": "0,417045467",
+    "CARRETA": "0,2626362",
+    "TOCO": "0,5075262",
+    "BITRUCK": "0,3466611",
+    "FROTA": "0,4189192"
+  },
+  {
+    "CIDADE": "ITAPECERICA",
+    "TRUCK": "0,12370944",
+    "CARRETA": "0,076416927",
+    "TOCO": "0,15280736",
+    "BITRUCK": "0,10123753",
+    "FROTA": "0,12866126"
+  },
+  {
+    "CIDADE": "ITAPEVA",
+    "TRUCK": "0,312489175",
+    "CARRETA": "0,196260457",
+    "TOCO": "0,381090702",
+    "BITRUCK": "0,259182659",
+    "FROTA": "0,315460057"
+  },
+  {
+    "CIDADE": "ITATIAIUCU",
+    "TRUCK": "0,066045597",
+    "CARRETA": "0,039810039",
+    "TOCO": "0,083076916",
+    "BITRUCK": "0,052992293",
+    "FROTA": "0,071602506"
+  },
+  {
+    "CIDADE": "ITAU DE MINAS",
+    "TRUCK": "0,23348912",
+    "CARRETA": "0,146108647",
+    "TOCO": "0,28555928",
+    "BITRUCK": "0,19308619",
+    "FROTA": "0,23728898"
+  },
+  {
+    "CIDADE": "ITAUNA",
+    "TRUCK": "0,064747128",
+    "CARRETA": "0,038985729",
+    "TOCO": "0,081506732",
+    "BITRUCK": "0,051905911",
+    "FROTA": "0,070317662"
+  },
+  {
+    "CIDADE": "ITAVERAVA",
+    "TRUCK": "0,105412827",
+    "CARRETA": "0,06480164",
+    "TOCO": "0,13068204",
+    "BITRUCK": "0,08592942",
+    "FROTA": "0,11055664"
+  },
+  {
+    "CIDADE": "ITINGA",
+    "TRUCK": "0,407602053",
+    "CARRETA": "0,256641213",
+    "TOCO": "0,49610668",
+    "BITRUCK": "0,33876014",
+    "FROTA": "0,40957488"
+  },
+  {
+    "CIDADE": "ITUETA",
+    "TRUCK": "0,309036427",
+    "CARRETA": "0,19406854",
+    "TOCO": "0,37691544",
+    "BITRUCK": "0,25629387",
+    "FROTA": "0,31204354"
+  },
+  {
+    "CIDADE": "ITUIUTABA",
+    "TRUCK": "0,4140944",
+    "CARRETA": "0,260762767",
+    "TOCO": "0,5039576",
+    "BITRUCK": "0,34419205",
+    "FROTA": "0,4159991"
+  },
+  {
+    "CIDADE": "ITUMIRIM",
+    "TRUCK": "0,172697147",
+    "CARRETA": "0,10751592",
+    "TOCO": "0,21204612",
+    "BITRUCK": "0,14222376",
+    "FROTA": "0,17713492"
+  },
+  {
+    "CIDADE": "ITURAMA",
+    "TRUCK": "0,457929544",
+    "CARRETA": "0,288590745",
+    "TOCO": "0,556965584",
+    "BITRUCK": "0,380867319",
+    "FROTA": "0,459374265"
+  },
+  {
+    "CIDADE": "ITUTINGA",
+    "TRUCK": "0,184501413",
+    "CARRETA": "0,115009653",
+    "TOCO": "0,22632052",
+    "BITRUCK": "0,15209996",
+    "FROTA": "0,18881532"
+  },
+  {
+    "CIDADE": "JABOTICATUBAS",
+    "TRUCK": "0,076728459",
+    "CARRETA": "0,046591868",
+    "TOCO": "0,095995248",
+    "BITRUCK": "0,061930254",
+    "FROTA": "0,082173268"
+  },
+  {
+    "CIDADE": "JACINTO",
+    "TRUCK": "0,496134053",
+    "CARRETA": "0,312844213",
+    "TOCO": "0,60316468",
+    "BITRUCK": "0,41283164",
+    "FROTA": "0,49717788"
+  },
+  {
+    "CIDADE": "JACUI",
+    "TRUCK": "0,2547368",
+    "CARRETA": "0,159597367",
+    "TOCO": "0,3112532",
+    "BITRUCK": "0,21086335",
+    "FROTA": "0,2583137"
+  },
+  {
+    "CIDADE": "JACUTINGA",
+    "TRUCK": "0,296051733",
+    "CARRETA": "0,185825433",
+    "TOCO": "0,3612136",
+    "BITRUCK": "0,24543005",
+    "FROTA": "0,2991951"
+  },
+  {
+    "CIDADE": "JAGUARACU",
+    "TRUCK": "0,152629893",
+    "CARRETA": "0,094776573",
+    "TOCO": "0,18777964",
+    "BITRUCK": "0,12543422",
+    "FROTA": "0,15727824"
+  },
+  {
+    "CIDADE": "JAIBA",
+    "TRUCK": "0,40169992",
+    "CARRETA": "0,252894347",
+    "TOCO": "0,48896948",
+    "BITRUCK": "0,33382204",
+    "FROTA": "0,40373468"
+  },
+  {
+    "CIDADE": "JAMPRUCA",
+    "TRUCK": "0,263845267",
+    "CARRETA": "0,165379719",
+    "TOCO": "0,322267684",
+    "BITRUCK": "0,218484073",
+    "FROTA": "0,267326589"
+  },
+  {
+    "CIDADE": "JANAUBA",
+    "TRUCK": "0,360384987",
+    "CARRETA": "0,22666628",
+    "TOCO": "0,43900908",
+    "BITRUCK": "0,29925534",
+    "FROTA": "0,36285328"
+  },
+  {
+    "CIDADE": "JANUARIA",
+    "TRUCK": "0,38222288",
+    "CARRETA": "0,240529687",
+    "TOCO": "0,46541672",
+    "BITRUCK": "0,31752631",
+    "FROTA": "0,38446202"
+  },
+  {
+    "CIDADE": "JAPARAIBA",
+    "TRUCK": "0,136584944",
+    "CARRETA": "0,084590716",
+    "TOCO": "0,168377162",
+    "BITRUCK": "0,112009995",
+    "FROTA": "0,141401656"
+  },
+  {
+    "CIDADE": "JAPONVAR",
+    "TRUCK": "0,342678587",
+    "CARRETA": "0,21542568",
+    "TOCO": "0,41759748",
+    "BITRUCK": "0,28444104",
+    "FROTA": "0,34533268"
+  },
+  {
+    "CIDADE": "JECEABA",
+    "TRUCK": "0,105138377",
+    "CARRETA": "0,064627411",
+    "TOCO": "0,13035016",
+    "BITRUCK": "0,085699798",
+    "FROTA": "0,110285071"
+  },
+  {
+    "CIDADE": "JENIPAPO DE MINAS",
+    "TRUCK": "0,376320747",
+    "CARRETA": "0,23678282",
+    "TOCO": "0,45827952",
+    "BITRUCK": "0,31258821",
+    "FROTA": "0,37862182"
+  },
+  {
+    "CIDADE": "JEQUERI",
+    "TRUCK": "0,165614587",
+    "CARRETA": "0,10301968",
+    "TOCO": "0,20348148",
+    "BITRUCK": "0,13629804",
+    "FROTA": "0,17012668"
+  },
+  {
+    "CIDADE": "JEQUITAI",
+    "TRUCK": "0,274804053",
+    "CARRETA": "0,172336713",
+    "TOCO": "0,33551968",
+    "BITRUCK": "0,22765289",
+    "FROTA": "0,27817038"
+  },
+  {
+    "CIDADE": "JEQUITIBA",
+    "TRUCK": "0,106858112",
+    "CARRETA": "0,065719154",
+    "TOCO": "0,132429762",
+    "BITRUCK": "0,087138637",
+    "FROTA": "0,111986759"
+  },
+  {
+    "CIDADE": "JEQUITINHONHA",
+    "TRUCK": "0,43357144",
+    "CARRETA": "0,273127427",
+    "TOCO": "0,52751036",
+    "BITRUCK": "0,36048778",
+    "FROTA": "0,43527176"
+  },
+  {
+    "CIDADE": "JESUANIA",
+    "TRUCK": "0,22994784",
+    "CARRETA": "0,143860527",
+    "TOCO": "0,28127696",
+    "BITRUCK": "0,19012333",
+    "FROTA": "0,23378486"
+  },
+  {
+    "CIDADE": "JOAIMA",
+    "TRUCK": "0,446628434",
+    "CARRETA": "0,281416432",
+    "TOCO": "0,543299631",
+    "BITRUCK": "0,371412092",
+    "FROTA": "0,448191742"
+  },
+  {
+    "CIDADE": "JOANESIA",
+    "TRUCK": "0,19630568",
+    "CARRETA": "0,122503387",
+    "TOCO": "0,24059492",
+    "BITRUCK": "0,16197616",
+    "FROTA": "0,20049572"
+  },
+  {
+    "CIDADE": "JOAO MONLEVADE",
+    "TRUCK": "0,106593253",
+    "CARRETA": "0,065551013",
+    "TOCO": "0,13210948",
+    "BITRUCK": "0,08691704",
+    "FROTA": "0,11172468"
+  },
+  {
+    "CIDADE": "JOAO PINHEIRO",
+    "TRUCK": "0,26713128",
+    "CARRETA": "0,167465787",
+    "TOCO": "0,32624132",
+    "BITRUCK": "0,22123336",
+    "FROTA": "0,27057812"
+  },
+  {
+    "CIDADE": "JOAQUIM FELICIO",
+    "TRUCK": "0,204568667",
+    "CARRETA": "0,127749",
+    "TOCO": "0,250587",
+    "BITRUCK": "0,1688895",
+    "FROTA": "0,208672"
+  },
+  {
+    "CIDADE": "JORDANIA",
+    "TRUCK": "0,509118747",
+    "CARRETA": "0,32108732",
+    "TOCO": "0,61886652",
+    "BITRUCK": "0,42369546",
+    "FROTA": "0,51002632"
+  },
+  {
+    "CIDADE": "JOSE GONCALVES DE MINAS",
+    "TRUCK": "0,329693893",
+    "CARRETA": "0,207182573",
+    "TOCO": "0,40189564",
+    "BITRUCK": "0,27357722",
+    "FROTA": "0,33248424"
+  },
+  {
+    "CIDADE": "JOSE RAYDAN",
+    "TRUCK": "0,24234232",
+    "CARRETA": "0,151728947",
+    "TOCO": "0,29626508",
+    "BITRUCK": "0,20049334",
+    "FROTA": "0,24604928"
+  },
+  {
+    "CIDADE": "JUATUBA",
+    "TRUCK": "0,047867027",
+    "CARRETA": "0,02826969",
+    "TOCO": "0,06109434",
+    "BITRUCK": "0,037782945",
+    "FROTA": "0,05361469"
+  },
+  {
+    "CIDADE": "JUIZ DE FORA",
+    "TRUCK": "0,18745248",
+    "CARRETA": "0,116883087",
+    "TOCO": "0,22988912",
+    "BITRUCK": "0,15456901",
+    "FROTA": "0,19173542"
+  },
+  {
+    "CIDADE": "JURAMENTO",
+    "TRUCK": "0,303890504",
+    "CARRETA": "0,190801741",
+    "TOCO": "0,370692694",
+    "BITRUCK": "0,251988464",
+    "FROTA": "0,306951616"
+  },
+  {
+    "CIDADE": "JURUAIA",
+    "TRUCK": "0,257097653",
+    "CARRETA": "0,161096113",
+    "TOCO": "0,31410808",
+    "BITRUCK": "0,21283859",
+    "FROTA": "0,26064978"
+  },
+  {
+    "CIDADE": "LADAINHA",
+    "TRUCK": "0,345629653",
+    "CARRETA": "0,217299113",
+    "TOCO": "0,42116608",
+    "BITRUCK": "0,28691009",
+    "FROTA": "0,34825278"
+  },
+  {
+    "CIDADE": "LAGAMAR",
+    "TRUCK": "0,301363653",
+    "CARRETA": "0,189197613",
+    "TOCO": "0,36763708",
+    "BITRUCK": "0,24987434",
+    "FROTA": "0,30445128"
+  },
+  {
+    "CIDADE": "LAGOA DA PRATA",
+    "TRUCK": "0,136694133",
+    "CARRETA": "0,084660033",
+    "TOCO": "0,1685092",
+    "BITRUCK": "0,11210135",
+    "FROTA": "0,1415097"
+  },
+  {
+    "CIDADE": "LAGOA DOS PATOS",
+    "TRUCK": "0,27067256",
+    "CARRETA": "0,169713907",
+    "TOCO": "0,33052364",
+    "BITRUCK": "0,22419622",
+    "FROTA": "0,27408224"
+  },
+  {
+    "CIDADE": "LAGOA DOURADA",
+    "TRUCK": "0,122529013",
+    "CARRETA": "0,075667553",
+    "TOCO": "0,15137992",
+    "BITRUCK": "0,10024991",
+    "FROTA": "0,12749322"
+  },
+  {
+    "CIDADE": "LAGOA FORMOSA",
+    "TRUCK": "0,23880104",
+    "CARRETA": "0,149480827",
+    "TOCO": "0,29198276",
+    "BITRUCK": "0,19753048",
+    "FROTA": "0,24254516"
+  },
+  {
+    "CIDADE": "LAGOA GRANDE",
+    "TRUCK": "0,29723216",
+    "CARRETA": "0,186574807",
+    "TOCO": "0,36264104",
+    "BITRUCK": "0,24641767",
+    "FROTA": "0,30036314"
+  },
+  {
+    "CIDADE": "LAGOA SANTA",
+    "TRUCK": "0,067639173",
+    "CARRETA": "0,040821693",
+    "TOCO": "0,08500396",
+    "BITRUCK": "0,05432558",
+    "FROTA": "0,07317936"
+  },
+  {
+    "CIDADE": "LAJINHA",
+    "TRUCK": "0,244703173",
+    "CARRETA": "0,153227693",
+    "TOCO": "0,29911996",
+    "BITRUCK": "0,20246858",
+    "FROTA": "0,24838536"
+  },
+  {
+    "CIDADE": "LAMBARI",
+    "TRUCK": "0,224045707",
+    "CARRETA": "0,14011366",
+    "TOCO": "0,27413976",
+    "BITRUCK": "0,18518523",
+    "FROTA": "0,22794466"
+  },
+  {
+    "CIDADE": "LAMIM",
+    "TRUCK": "0,12370944",
+    "CARRETA": "0,076416927",
+    "TOCO": "0,15280736",
+    "BITRUCK": "0,10123753",
+    "FROTA": "0,12866126"
+  },
+  {
+    "CIDADE": "LARANJAL",
+    "TRUCK": "0,239391253",
+    "CARRETA": "0,149855513",
+    "TOCO": "0,29269648",
+    "BITRUCK": "0,19802429",
+    "FROTA": "0,24312918"
+  },
+  {
+    "CIDADE": "LASSANCE",
+    "TRUCK": "0,193581845",
+    "CARRETA": "0,120774208",
+    "TOCO": "0,237301102",
+    "BITRUCK": "0,159697227",
+    "FROTA": "0,197800468"
+  },
+  {
+    "CIDADE": "LAVRAS",
+    "TRUCK": "0,163363661",
+    "CARRETA": "0,101590719",
+    "TOCO": "0,20075953",
+    "BITRUCK": "0,134414772",
+    "FROTA": "0,167899374"
+  },
+  {
+    "CIDADE": "LEANDRO FERREIRA",
+    "TRUCK": "0,103642187",
+    "CARRETA": "0,06367758",
+    "TOCO": "0,12854088",
+    "BITRUCK": "0,08444799",
+    "FROTA": "0,10880458"
+  },
+  {
+    "CIDADE": "LEME DO PRADO",
+    "TRUCK": "0,319660267",
+    "CARRETA": "0,2008129",
+    "TOCO": "0,3897624",
+    "BITRUCK": "0,26518245",
+    "FROTA": "0,3225559"
+  },
+  {
+    "CIDADE": "LEOPOLDINA",
+    "TRUCK": "0,222275067",
+    "CARRETA": "0,1389896",
+    "TOCO": "0,2719986",
+    "BITRUCK": "0,1837038",
+    "FROTA": "0,2261926"
+  },
+  {
+    "CIDADE": "LIBERDADE",
+    "TRUCK": "0,236820874",
+    "CARRETA": "0,148223753",
+    "TOCO": "0,289588229",
+    "BITRUCK": "0,195873747",
+    "FROTA": "0,240585773"
+  },
+  {
+    "CIDADE": "LIMA DUARTE",
+    "TRUCK": "0,206339307",
+    "CARRETA": "0,12887306",
+    "TOCO": "0,25272816",
+    "BITRUCK": "0,17037093",
+    "FROTA": "0,21042406"
+  },
+  {
+    "CIDADE": "LIMEIRA DO OESTE",
+    "TRUCK": "0,503871012",
+    "CARRETA": "0,317755887",
+    "TOCO": "0,612520657",
+    "BITRUCK": "0,419304872",
+    "FROTA": "0,504833652"
+  },
+  {
+    "CIDADE": "LONTRA",
+    "TRUCK": "0,328212458",
+    "CARRETA": "0,20624211",
+    "TOCO": "0,400104203",
+    "BITRUCK": "0,272337757",
+    "FROTA": "0,33101835"
+  },
+  {
+    "CIDADE": "LUISBURGO",
+    "TRUCK": "0,216372933",
+    "CARRETA": "0,135242733",
+    "TOCO": "0,2648614",
+    "BITRUCK": "0,1787657",
+    "FROTA": "0,2203524"
+  },
+  {
+    "CIDADE": "LUISLANDIA",
+    "TRUCK": "0,358430643",
+    "CARRETA": "0,225425599",
+    "TOCO": "0,436645775",
+    "BITRUCK": "0,297620212",
+    "FROTA": "0,360919444"
+  },
+  {
+    "CIDADE": "LUMINARIAS",
+    "TRUCK": "0,20193484",
+    "CARRETA": "0,126076961",
+    "TOCO": "0,247402025",
+    "BITRUCK": "0,166685873",
+    "FROTA": "0,206065811"
+  },
+  {
+    "CIDADE": "LUZ",
+    "TRUCK": "0,136694133",
+    "CARRETA": "0,084660033",
+    "TOCO": "0,1685092",
+    "BITRUCK": "0,11210135",
+    "FROTA": "0,1415097"
+  },
+  {
+    "CIDADE": "MACHACALIS",
+    "TRUCK": "0,404060773",
+    "CARRETA": "0,254393093",
+    "TOCO": "0,49182436",
+    "BITRUCK": "0,33579728",
+    "FROTA": "0,40607076"
+  },
+  {
+    "CIDADE": "MACHADO",
+    "TRUCK": "0,24057168",
+    "CARRETA": "0,150604887",
+    "TOCO": "0,29412392",
+    "BITRUCK": "0,19901191",
+    "FROTA": "0,24429722"
+  },
+  {
+    "CIDADE": "MADRE DE DEUS DE MINAS",
+    "TRUCK": "0,19063373",
+    "CARRETA": "0,118902648",
+    "TOCO": "0,233736071",
+    "BITRUCK": "0,157230646",
+    "FROTA": "0,194883288"
+  },
+  {
+    "CIDADE": "MALACACHETA",
+    "TRUCK": "0,294871307",
+    "CARRETA": "0,18507606",
+    "TOCO": "0,35978616",
+    "BITRUCK": "0,24444243",
+    "FROTA": "0,29802706"
+  },
+  {
+    "CIDADE": "MAMONAS",
+    "TRUCK": "0,434751867",
+    "CARRETA": "0,2738768",
+    "TOCO": "0,5289378",
+    "BITRUCK": "0,3614754",
+    "FROTA": "0,4364398"
+  },
+  {
+    "CIDADE": "MANGA",
+    "TRUCK": "0,44596592",
+    "CARRETA": "0,280995847",
+    "TOCO": "0,54249848",
+    "BITRUCK": "0,37085779",
+    "FROTA": "0,44753618"
+  },
+  {
+    "CIDADE": "MANHUACU",
+    "TRUCK": "0,20515888",
+    "CARRETA": "0,128123687",
+    "TOCO": "0,25130072",
+    "BITRUCK": "0,16938331",
+    "FROTA": "0,20925602"
+  },
+  {
+    "CIDADE": "MANHUMIRIM",
+    "TRUCK": "0,218143573",
+    "CARRETA": "0,136366793",
+    "TOCO": "0,26700256",
+    "BITRUCK": "0,18024713",
+    "FROTA": "0,22210446"
+  },
+  {
+    "CIDADE": "MANTENA",
+    "TRUCK": "0,305495147",
+    "CARRETA": "0,19182042",
+    "TOCO": "0,37263312",
+    "BITRUCK": "0,25333101",
+    "FROTA": "0,30853942"
+  },
+  {
+    "CIDADE": "MAR DE ESPANHA",
+    "TRUCK": "0,221684853",
+    "CARRETA": "0,138614913",
+    "TOCO": "0,27128488",
+    "BITRUCK": "0,18320999",
+    "FROTA": "0,22560858"
+  },
+  {
+    "CIDADE": "MARAVILHAS",
+    "TRUCK": "0,095969413",
+    "CARRETA": "0,058806653",
+    "TOCO": "0,11926252",
+    "BITRUCK": "0,07802846",
+    "FROTA": "0,10121232"
+  },
+  {
+    "CIDADE": "MARIA DA FE",
+    "TRUCK": "0,1660661",
+    "CARRETA": "0,103306315",
+    "TOCO": "0,204027476",
+    "BITRUCK": "0,136675805",
+    "FROTA": "0,170573455"
+  },
+  {
+    "CIDADE": "MARIANA",
+    "TRUCK": "0,101871547",
+    "CARRETA": "0,06255352",
+    "TOCO": "0,12639972",
+    "BITRUCK": "0,08296656",
+    "FROTA": "0,10705252"
+  },
+  {
+    "CIDADE": "MARILAC",
+    "TRUCK": "0,259458507",
+    "CARRETA": "0,16259486",
+    "TOCO": "0,31696296",
+    "BITRUCK": "0,21481383",
+    "FROTA": "0,26298586"
+  },
+  {
+    "CIDADE": "MARIO CAMPOS",
+    "TRUCK": "0,043912597",
+    "CARRETA": "0,025759289",
+    "TOCO": "0,056312416",
+    "BITRUCK": "0,034474418",
+    "FROTA": "0,049701756"
+  },
+  {
+    "CIDADE": "MARIPA DE MINAS",
+    "TRUCK": "0,216963147",
+    "CARRETA": "0,13561742",
+    "TOCO": "0,26557512",
+    "BITRUCK": "0,17925951",
+    "FROTA": "0,22093642"
+  },
+  {
+    "CIDADE": "MARLIERIA",
+    "TRUCK": "0,163363661",
+    "CARRETA": "0,101590719",
+    "TOCO": "0,20075953",
+    "BITRUCK": "0,134414772",
+    "FROTA": "0,167899374"
+  },
+  {
+    "CIDADE": "MARMELOPOLIS",
+    "TRUCK": "0,308446213",
+    "CARRETA": "0,193693853",
+    "TOCO": "0,37620172",
+    "BITRUCK": "0,25580006",
+    "FROTA": "0,31145952"
+  },
+  {
+    "CIDADE": "MARTINHO CAMPOS",
+    "TRUCK": "0,12370944",
+    "CARRETA": "0,076416927",
+    "TOCO": "0,15280736",
+    "BITRUCK": "0,10123753",
+    "FROTA": "0,12866126"
+  },
+  {
+    "CIDADE": "MARTINS SOARES",
+    "TRUCK": "0,216963147",
+    "CARRETA": "0,13561742",
+    "TOCO": "0,26557512",
+    "BITRUCK": "0,17925951",
+    "FROTA": "0,22093642"
+  },
+  {
+    "CIDADE": "MATERLANDIA",
+    "TRUCK": "0,21578272",
+    "CARRETA": "0,134868047",
+    "TOCO": "0,26414768",
+    "BITRUCK": "0,17827189",
+    "FROTA": "0,21976838"
+  },
+  {
+    "CIDADE": "MATEUS LEME",
+    "TRUCK": "0,054831544",
+    "CARRETA": "0,032690993",
+    "TOCO": "0,069516236",
+    "BITRUCK": "0,043609903",
+    "FROTA": "0,060506126"
+  },
+  {
+    "CIDADE": "MATHIAS LOBATO",
+    "TRUCK": "0,242932533",
+    "CARRETA": "0,152103633",
+    "TOCO": "0,2969788",
+    "BITRUCK": "0,20098715",
+    "FROTA": "0,2466333"
+  },
+  {
+    "CIDADE": "MATIAS BARBOSA",
+    "TRUCK": "0,19807632",
+    "CARRETA": "0,123627447",
+    "TOCO": "0,24273608",
+    "BITRUCK": "0,16345759",
+    "FROTA": "0,20224778"
+  },
+  {
+    "CIDADE": "MATIAS CARDOSO",
+    "TRUCK": "0,440240851",
+    "CARRETA": "0,277361386",
+    "TOCO": "0,535575396",
+    "BITRUCK": "0,366067833",
+    "FROTA": "0,441871186"
+  },
+  {
+    "CIDADE": "MATIPO",
+    "TRUCK": "0,185091627",
+    "CARRETA": "0,11538434",
+    "TOCO": "0,22703424",
+    "BITRUCK": "0,15259377",
+    "FROTA": "0,18939934"
+  },
+  {
+    "CIDADE": "MATO VERDE",
+    "TRUCK": "0,40701184",
+    "CARRETA": "0,256266527",
+    "TOCO": "0,49539296",
+    "BITRUCK": "0,33826633",
+    "FROTA": "0,40899086"
+  },
+  {
+    "CIDADE": "MATOZINHOS",
+    "TRUCK": "0,065868533",
+    "CARRETA": "0,039697633",
+    "TOCO": "0,0828628",
+    "BITRUCK": "0,05284415",
+    "FROTA": "0,0714273"
+  },
+  {
+    "CIDADE": "MATUTINA",
+    "TRUCK": "0,209290373",
+    "CARRETA": "0,130746493",
+    "TOCO": "0,25629676",
+    "BITRUCK": "0,17283998",
+    "FROTA": "0,21334416"
+  },
+  {
+    "CIDADE": "MEDEIROS",
+    "TRUCK": "0,19259914",
+    "CARRETA": "0,120150354",
+    "TOCO": "0,236112758",
+    "BITRUCK": "0,158875033",
+    "FROTA": "0,196828074"
+  },
+  {
+    "CIDADE": "MEDINA",
+    "TRUCK": "0,422357387",
+    "CARRETA": "0,26600838",
+    "TOCO": "0,51394968",
+    "BITRUCK": "0,35110539",
+    "FROTA": "0,42417538"
+  },
+  {
+    "CIDADE": "MENDES PIMENTEL",
+    "TRUCK": "0,271262773",
+    "CARRETA": "0,170088593",
+    "TOCO": "0,33123736",
+    "BITRUCK": "0,22469003",
+    "FROTA": "0,27466626"
+  },
+  {
+    "CIDADE": "MERCES",
+    "TRUCK": "0,16974608",
+    "CARRETA": "0,105642487",
+    "TOCO": "0,20847752",
+    "BITRUCK": "0,13975471",
+    "FROTA": "0,17421482"
+  },
+  {
+    "CIDADE": "MESQUITA",
+    "TRUCK": "0,193336169",
+    "CARRETA": "0,120618244",
+    "TOCO": "0,237004016",
+    "BITRUCK": "0,159491678",
+    "FROTA": "0,197557369"
+  },
+  {
+    "CIDADE": "MINAS NOVAS",
+    "TRUCK": "0,344449227",
+    "CARRETA": "0,21654974",
+    "TOCO": "0,41973864",
+    "BITRUCK": "0,28592247",
+    "FROTA": "0,34708474"
+  },
+  {
+    "CIDADE": "MINDURI",
+    "TRUCK": "0,216184065",
+    "CARRETA": "0,135122834",
+    "TOCO": "0,26463301",
+    "BITRUCK": "0,178607681",
+    "FROTA": "0,220165514"
+  },
+  {
+    "CIDADE": "MIRABELA",
+    "TRUCK": "0,324381973",
+    "CARRETA": "0,203810393",
+    "TOCO": "0,39547216",
+    "BITRUCK": "0,26913293",
+    "FROTA": "0,32722806"
+  },
+  {
+    "CIDADE": "MIRADOURO",
+    "TRUCK": "0,234079333",
+    "CARRETA": "0,146483333",
+    "TOCO": "0,286273",
+    "BITRUCK": "0,19358",
+    "FROTA": "0,237873"
+  },
+  {
+    "CIDADE": "MIRAI",
+    "TRUCK": "0,21578272",
+    "CARRETA": "0,134868047",
+    "TOCO": "0,26414768",
+    "BITRUCK": "0,17827189",
+    "FROTA": "0,21976838"
+  },
+  {
+    "CIDADE": "MIRAVANIA",
+    "TRUCK": "0,437702933",
+    "CARRETA": "0,275750233",
+    "TOCO": "0,5325064",
+    "BITRUCK": "0,36394445",
+    "FROTA": "0,4393599"
+  },
+  {
+    "CIDADE": "MOEDA",
+    "TRUCK": "0,068406451",
+    "CARRETA": "0,041308786",
+    "TOCO": "0,085931796",
+    "BITRUCK": "0,054967533",
+    "FROTA": "0,073938586"
+  },
+  {
+    "CIDADE": "MOEMA",
+    "TRUCK": "0,131917094",
+    "CARRETA": "0,081627413",
+    "TOCO": "0,162732529",
+    "BITRUCK": "0,108104575",
+    "FROTA": "0,136782788"
+  },
+  {
+    "CIDADE": "MONJOLOS",
+    "TRUCK": "0,186862267",
+    "CARRETA": "0,1165084",
+    "TOCO": "0,2291754",
+    "BITRUCK": "0,1540752",
+    "FROTA": "0,1911514"
+  },
+  {
+    "CIDADE": "MONSENHOR PAULO",
+    "TRUCK": "0,206339307",
+    "CARRETA": "0,12887306",
+    "TOCO": "0,25272816",
+    "BITRUCK": "0,17037093",
+    "FROTA": "0,21042406"
+  },
+  {
+    "CIDADE": "MONTALVANIA",
+    "TRUCK": "0,49200256",
+    "CARRETA": "0,310221407",
+    "TOCO": "0,59816864",
+    "BITRUCK": "0,40937497",
+    "FROTA": "0,49308974"
+  },
+  {
+    "CIDADE": "MONTE ALEGRE DE MINAS",
+    "TRUCK": "0,37514032",
+    "CARRETA": "0,236033447",
+    "TOCO": "0,45685208",
+    "BITRUCK": "0,31160059",
+    "FROTA": "0,37745378"
+  },
+  {
+    "CIDADE": "MONTE AZUL",
+    "TRUCK": "0,378330423",
+    "CARRETA": "0,238058628",
+    "TOCO": "0,460709737",
+    "BITRUCK": "0,314269633",
+    "FROTA": "0,380610408"
+  },
+  {
+    "CIDADE": "MONTE BELO",
+    "TRUCK": "0,253556373",
+    "CARRETA": "0,158847993",
+    "TOCO": "0,30982576",
+    "BITRUCK": "0,20987573",
+    "FROTA": "0,25714566"
+  },
+  {
+    "CIDADE": "MONTE CARMELO",
+    "TRUCK": "0,31139728",
+    "CARRETA": "0,195567287",
+    "TOCO": "0,37977032",
+    "BITRUCK": "0,25826911",
+    "FROTA": "0,31437962"
+  },
+  {
+    "CIDADE": "MONTE FORMOSO",
+    "TRUCK": "0,386354373",
+    "CARRETA": "0,243152493",
+    "TOCO": "0,47041276",
+    "BITRUCK": "0,32098298",
+    "FROTA": "0,38855016"
+  },
+  {
+    "CIDADE": "MONTE SIAO",
+    "TRUCK": "0,299593013",
+    "CARRETA": "0,188073553",
+    "TOCO": "0,36549592",
+    "BITRUCK": "0,24839291",
+    "FROTA": "0,30269922"
+  },
+  {
+    "CIDADE": "MONTE SANTO DE MINAS",
+    "TRUCK": "0,2724432",
+    "CARRETA": "0,170837967",
+    "TOCO": "0,3326648",
+    "BITRUCK": "0,22567765",
+    "FROTA": "0,2758343"
+  },
+  {
+    "CIDADE": "MONTES CLAROS",
+    "TRUCK": "0,280706187",
+    "CARRETA": "0,17608358",
+    "TOCO": "0,34265688",
+    "BITRUCK": "0,23259099",
+    "FROTA": "0,28401058"
+  },
+  {
+    "CIDADE": "MONTEZUMA",
+    "TRUCK": "0,446137082",
+    "CARRETA": "0,281104506",
+    "TOCO": "0,542705459",
+    "BITRUCK": "0,371000995",
+    "FROTA": "0,447705546"
+  },
+  {
+    "CIDADE": "MORADA NOVA DE MINAS",
+    "TRUCK": "0,192174187",
+    "CARRETA": "0,11988058",
+    "TOCO": "0,23559888",
+    "BITRUCK": "0,15851949",
+    "FROTA": "0,19640758"
+  },
+  {
+    "CIDADE": "MORRO DA GARCA",
+    "TRUCK": "0,15558096",
+    "CARRETA": "0,096650007",
+    "TOCO": "0,19134824",
+    "BITRUCK": "0,12790327",
+    "FROTA": "0,16019834"
+  },
+  {
+    "CIDADE": "MORRO DO PILAR",
+    "TRUCK": "0,128431147",
+    "CARRETA": "0,07941442",
+    "TOCO": "0,15851712",
+    "BITRUCK": "0,10518801",
+    "FROTA": "0,13333342"
+  },
+  {
+    "CIDADE": "MUNHOZ",
+    "TRUCK": "0,296641947",
+    "CARRETA": "0,18620012",
+    "TOCO": "0,36192732",
+    "BITRUCK": "0,24592386",
+    "FROTA": "0,29977912"
+  },
+  {
+    "CIDADE": "MURIAE",
+    "TRUCK": "0,21755336",
+    "CARRETA": "0,135992107",
+    "TOCO": "0,26628884",
+    "BITRUCK": "0,17975332",
+    "FROTA": "0,22152044"
+  },
+  {
+    "CIDADE": "MUTUM",
+    "TRUCK": "0,265950853",
+    "CARRETA": "0,166716413",
+    "TOCO": "0,32481388",
+    "BITRUCK": "0,22024574",
+    "FROTA": "0,26941008"
+  },
+  {
+    "CIDADE": "MUZAMBINHO",
+    "TRUCK": "0,26536064",
+    "CARRETA": "0,166341727",
+    "TOCO": "0,32410016",
+    "BITRUCK": "0,21975193",
+    "FROTA": "0,26882606"
+  },
+  {
+    "CIDADE": "NACIP RAYDAN",
+    "TRUCK": "0,26181936",
+    "CARRETA": "0,164093607",
+    "TOCO": "0,31981784",
+    "BITRUCK": "0,21678907",
+    "FROTA": "0,26532194"
+  },
+  {
+    "CIDADE": "NANUQUE",
+    "TRUCK": "0,375136631",
+    "CARRETA": "0,236031105",
+    "TOCO": "0,456847619",
+    "BITRUCK": "0,311597504",
+    "FROTA": "0,37745013"
+  },
+  {
+    "CIDADE": "NAQUE",
+    "TRUCK": "0,190403547",
+    "CARRETA": "0,11875652",
+    "TOCO": "0,23345772",
+    "BITRUCK": "0,15703806",
+    "FROTA": "0,19465552"
+  },
+  {
+    "CIDADE": "NATALANDIA",
+    "TRUCK": "0,375730533",
+    "CARRETA": "0,236408133",
+    "TOCO": "0,4575658",
+    "BITRUCK": "0,3120944",
+    "FROTA": "0,3780378"
+  },
+  {
+    "CIDADE": "NATERCIA",
+    "TRUCK": "0,248244453",
+    "CARRETA": "0,155475813",
+    "TOCO": "0,30340228",
+    "BITRUCK": "0,20543144",
+    "FROTA": "0,25188948"
+  },
+  {
+    "CIDADE": "NAZARENO",
+    "TRUCK": "0,15912224",
+    "CARRETA": "0,098898127",
+    "TOCO": "0,19563056",
+    "BITRUCK": "0,13086613",
+    "FROTA": "0,16370246"
+  },
+  {
+    "CIDADE": "NEPOMUCENO",
+    "TRUCK": "0,157941813",
+    "CARRETA": "0,098148753",
+    "TOCO": "0,19420312",
+    "BITRUCK": "0,12987851",
+    "FROTA": "0,16253442"
+  },
+  {
+    "CIDADE": "NINHEIRA",
+    "TRUCK": "0,49554384",
+    "CARRETA": "0,312469527",
+    "TOCO": "0,60245096",
+    "BITRUCK": "0,41233783",
+    "FROTA": "0,49659386"
+  },
+  {
+    "CIDADE": "NOVA BELEM",
+    "TRUCK": "0,30431472",
+    "CARRETA": "0,191071047",
+    "TOCO": "0,37120568",
+    "BITRUCK": "0,25234339",
+    "FROTA": "0,30737138"
+  },
+  {
+    "CIDADE": "NOVA ERA",
+    "TRUCK": "0,120758373",
+    "CARRETA": "0,074543493",
+    "TOCO": "0,14923876",
+    "BITRUCK": "0,09876848",
+    "FROTA": "0,12574116"
+  },
+  {
+    "CIDADE": "NOVA LIMA",
+    "TRUCK": "0,049873752",
+    "CARRETA": "0,029543625",
+    "TOCO": "0,063520988",
+    "BITRUCK": "0,039461899",
+    "FROTA": "0,055600358"
+  },
+  {
+    "CIDADE": "NOVA MODICA",
+    "TRUCK": "0,294871307",
+    "CARRETA": "0,18507606",
+    "TOCO": "0,35978616",
+    "BITRUCK": "0,24444243",
+    "FROTA": "0,29802706"
+  },
+  {
+    "CIDADE": "NOVA PONTE",
+    "TRUCK": "0,294281093",
+    "CARRETA": "0,184701373",
+    "TOCO": "0,35907244",
+    "BITRUCK": "0,24394862",
+    "FROTA": "0,29744304"
+  },
+  {
+    "CIDADE": "NOVA RESENDE",
+    "TRUCK": "0,239981467",
+    "CARRETA": "0,1502302",
+    "TOCO": "0,2934102",
+    "BITRUCK": "0,1985181",
+    "FROTA": "0,2437132"
+  },
+  {
+    "CIDADE": "NOVA SERRANA",
+    "TRUCK": "0,090657493",
+    "CARRETA": "0,055434473",
+    "TOCO": "0,11283904",
+    "BITRUCK": "0,07358417",
+    "FROTA": "0,09595614"
+  },
+  {
+    "CIDADE": "NOVA UNIAO",
+    "TRUCK": "0,075843139",
+    "CARRETA": "0,046029838",
+    "TOCO": "0,094924668",
+    "BITRUCK": "0,061189539",
+    "FROTA": "0,081297238"
+  },
+  {
+    "CIDADE": "NOVO CRUZEIRO",
+    "TRUCK": "0,376365013",
+    "CARRETA": "0,236810922",
+    "TOCO": "0,458333049",
+    "BITRUCK": "0,312625246",
+    "FROTA": "0,378665622"
+  },
+  {
+    "CIDADE": "NOVO ORIENTE DE MINAS",
+    "TRUCK": "0,342088373",
+    "CARRETA": "0,215050993",
+    "TOCO": "0,41688376",
+    "BITRUCK": "0,28394723",
+    "FROTA": "0,34474866"
+  },
+  {
+    "CIDADE": "OLARIA",
+    "TRUCK": "0,251561452",
+    "CARRETA": "0,157581552",
+    "TOCO": "0,307413386",
+    "BITRUCK": "0,208206652",
+    "FROTA": "0,255171672"
+  },
+  {
+    "CIDADE": "OLHOS D'AGUA",
+    "TRUCK": "0,280115973",
+    "CARRETA": "0,175708893",
+    "TOCO": "0,34194316",
+    "BITRUCK": "0,23209718",
+    "FROTA": "0,28342656"
+  },
+  {
+    "CIDADE": "OLIMPIO NORONHA",
+    "TRUCK": "0,237620613",
+    "CARRETA": "0,148731453",
+    "TOCO": "0,29055532",
+    "BITRUCK": "0,19654286",
+    "FROTA": "0,24137712"
+  },
+  {
+    "CIDADE": "OLIVEIRA",
+    "TRUCK": "0,110724747",
+    "CARRETA": "0,06817382",
+    "TOCO": "0,13710552",
+    "BITRUCK": "0,09037371",
+    "FROTA": "0,11581282"
+  },
+  {
+    "CIDADE": "OLIVEIRA FORTES",
+    "TRUCK": "0,1573516",
+    "CARRETA": "0,097774067",
+    "TOCO": "0,1934894",
+    "BITRUCK": "0,1293847",
+    "FROTA": "0,1619504"
+  },
+  {
+    "CIDADE": "ONCA DE PITANGUI",
+    "TRUCK": "0,085050467",
+    "CARRETA": "0,05187495",
+    "TOCO": "0,1060587",
+    "BITRUCK": "0,068892975",
+    "FROTA": "0,09040795"
+  },
+  {
+    "CIDADE": "ORATORIOS",
+    "TRUCK": "0,150859253",
+    "CARRETA": "0,093652513",
+    "TOCO": "0,18563848",
+    "BITRUCK": "0,12395279",
+    "FROTA": "0,15552618"
+  },
+  {
+    "CIDADE": "ORIZANIA",
+    "TRUCK": "0,218143573",
+    "CARRETA": "0,136366793",
+    "TOCO": "0,26700256",
+    "BITRUCK": "0,18024713",
+    "FROTA": "0,22210446"
+  },
+  {
+    "CIDADE": "OURO BRANCO",
+    "TRUCK": "0,092428133",
+    "CARRETA": "0,056558533",
+    "TOCO": "0,1149802",
+    "BITRUCK": "0,0750656",
+    "FROTA": "0,0977082"
+  },
+  {
+    "CIDADE": "OURO FINO",
+    "TRUCK": "0,280115973",
+    "CARRETA": "0,175708893",
+    "TOCO": "0,34194316",
+    "BITRUCK": "0,23209718",
+    "FROTA": "0,28342656"
+  },
+  {
+    "CIDADE": "OURO PRETO",
+    "TRUCK": "0,090657493",
+    "CARRETA": "0,055434473",
+    "TOCO": "0,11283904",
+    "BITRUCK": "0,07358417",
+    "FROTA": "0,09595614"
+  },
+  {
+    "CIDADE": "OURO VERDE DE MINAS",
+    "TRUCK": "0,31847984",
+    "CARRETA": "0,200063527",
+    "TOCO": "0,38833496",
+    "BITRUCK": "0,26419483",
+    "FROTA": "0,32138786"
+  },
+  {
+    "CIDADE": "PADRE CARVALHO",
+    "TRUCK": "0,38399352",
+    "CARRETA": "0,241653747",
+    "TOCO": "0,46755788",
+    "BITRUCK": "0,31900774",
+    "FROTA": "0,38621408"
+  },
+  {
+    "CIDADE": "PADRE PARAISO",
+    "TRUCK": "0,365696907",
+    "CARRETA": "0,23003846",
+    "TOCO": "0,44543256",
+    "BITRUCK": "0,30369963",
+    "FROTA": "0,36810946"
+  },
+  {
+    "CIDADE": "PAI PEDRO",
+    "TRUCK": "0,393436933",
+    "CARRETA": "0,247648733",
+    "TOCO": "0,4789774",
+    "BITRUCK": "0,3269087",
+    "FROTA": "0,3955584"
+  },
+  {
+    "CIDADE": "PAINEIRAS",
+    "TRUCK": "0,163253733",
+    "CARRETA": "0,101520933",
+    "TOCO": "0,2006266",
+    "BITRUCK": "0,1343228",
+    "FROTA": "0,1677906"
+  },
+  {
+    "CIDADE": "PAINS",
+    "TRUCK": "0,146137547",
+    "CARRETA": "0,09065502",
+    "TOCO": "0,17992872",
+    "BITRUCK": "0,12000231",
+    "FROTA": "0,15085402"
+  },
+  {
+    "CIDADE": "PAIVA",
+    "TRUCK": "0,16266352",
+    "CARRETA": "0,101146247",
+    "TOCO": "0,19991288",
+    "BITRUCK": "0,13382899",
+    "FROTA": "0,16720658"
+  },
+  {
+    "CIDADE": "PALMA",
+    "TRUCK": "0,257457683",
+    "CARRETA": "0,161324672",
+    "TOCO": "0,314543449",
+    "BITRUCK": "0,213139814",
+    "FROTA": "0,261006032"
+  },
+  {
+    "CIDADE": "PALMOPOLIS",
+    "TRUCK": "0,475476587",
+    "CARRETA": "0,29973018",
+    "TOCO": "0,57818448",
+    "BITRUCK": "0,39554829",
+    "FROTA": "0,47673718"
+  },
+  {
+    "CIDADE": "PAPAGAIOS",
+    "TRUCK": "0,101871547",
+    "CARRETA": "0,06255352",
+    "TOCO": "0,12639972",
+    "BITRUCK": "0,08296656",
+    "FROTA": "0,10705252"
+  },
+  {
+    "CIDADE": "PARA DE MINAS",
+    "TRUCK": "0,066871896",
+    "CARRETA": "0,040334601",
+    "TOCO": "0,084076124",
+    "BITRUCK": "0,053683627",
+    "FROTA": "0,072420134"
+  },
+  {
+    "CIDADE": "PARACATU",
+    "TRUCK": "0,326742827",
+    "CARRETA": "0,20530914",
+    "TOCO": "0,39832704",
+    "BITRUCK": "0,27110817",
+    "FROTA": "0,32956414"
+  },
+  {
+    "CIDADE": "PARAGUACU",
+    "TRUCK": "0,220504427",
+    "CARRETA": "0,13786554",
+    "TOCO": "0,26985744",
+    "BITRUCK": "0,18222237",
+    "FROTA": "0,22444054"
+  },
+  {
+    "CIDADE": "PARAISOPOLIS",
+    "TRUCK": "0,273623627",
+    "CARRETA": "0,17158734",
+    "TOCO": "0,33409224",
+    "BITRUCK": "0,22666527",
+    "FROTA": "0,27700234"
+  },
+  {
+    "CIDADE": "PARAOPEBA",
+    "TRUCK": "0,086526",
+    "CARRETA": "0,052811667",
+    "TOCO": "0,107843",
+    "BITRUCK": "0,0701275",
+    "FROTA": "0,091868"
+  },
+  {
+    "CIDADE": "PASSA QUATRO",
+    "TRUCK": "0,276574693",
+    "CARRETA": "0,173460773",
+    "TOCO": "0,33766084",
+    "BITRUCK": "0,22913432",
+    "FROTA": "0,27992244"
+  },
+  {
+    "CIDADE": "PASSA TEMPO",
+    "TRUCK": "0,10600304",
+    "CARRETA": "0,065176327",
+    "TOCO": "0,13139576",
+    "BITRUCK": "0,08642323",
+    "FROTA": "0,11114066"
+  },
+  {
+    "CIDADE": "PASSA VINTE",
+    "TRUCK": "0,27067256",
+    "CARRETA": "0,169713907",
+    "TOCO": "0,33052364",
+    "BITRUCK": "0,22419622",
+    "FROTA": "0,27408224"
+  },
+  {
+    "CIDADE": "PASSABEM",
+    "TRUCK": "0,137284347",
+    "CARRETA": "0,08503472",
+    "TOCO": "0,16922292",
+    "BITRUCK": "0,11259516",
+    "FROTA": "0,14209372"
+  },
+  {
+    "CIDADE": "PASSOS",
+    "TRUCK": "0,22286528",
+    "CARRETA": "0,139364287",
+    "TOCO": "0,27271232",
+    "BITRUCK": "0,18419761",
+    "FROTA": "0,22677662"
+  },
+  {
+    "CIDADE": "PATIS",
+    "TRUCK": "0,339022215",
+    "CARRETA": "0,213104496",
+    "TOCO": "0,413175985",
+    "BITRUCK": "0,281381887",
+    "FROTA": "0,341714676"
+  },
+  {
+    "CIDADE": "PATOS DE MINAS",
+    "TRUCK": "0,253556373",
+    "CARRETA": "0,158847993",
+    "TOCO": "0,30982576",
+    "BITRUCK": "0,20987573",
+    "FROTA": "0,25714566"
+  },
+  {
+    "CIDADE": "PATROCINIO",
+    "TRUCK": "0,258194712",
+    "CARRETA": "0,161792562",
+    "TOCO": "0,315434707",
+    "BITRUCK": "0,213756459",
+    "FROTA": "0,261735327"
+  },
+  {
+    "CIDADE": "PATROCINIO DO MURIAE",
+    "TRUCK": "0,23171848",
+    "CARRETA": "0,144984587",
+    "TOCO": "0,28341812",
+    "BITRUCK": "0,19160476",
+    "FROTA": "0,23553692"
+  },
+  {
+    "CIDADE": "PAULA CANDIDO",
+    "TRUCK": "0,16797544",
+    "CARRETA": "0,104518427",
+    "TOCO": "0,20633636",
+    "BITRUCK": "0,13827328",
+    "FROTA": "0,17246276"
+  },
+  {
+    "CIDADE": "PAULISTAS",
+    "TRUCK": "0,23043329",
+    "CARRETA": "0,144168706",
+    "TOCO": "0,281863995",
+    "BITRUCK": "0,190529489",
+    "FROTA": "0,234265216"
+  },
+  {
+    "CIDADE": "PAVAO",
+    "TRUCK": "0,360384987",
+    "CARRETA": "0,22666628",
+    "TOCO": "0,43900908",
+    "BITRUCK": "0,29925534",
+    "FROTA": "0,36285328"
+  },
+  {
+    "CIDADE": "PECANHA",
+    "TRUCK": "0,228222204",
+    "CARRETA": "0,142765037",
+    "TOCO": "0,279190221",
+    "BITRUCK": "0,188679553",
+    "FROTA": "0,232077332"
+  },
+  {
+    "CIDADE": "PEDRA AZUL",
+    "TRUCK": "0,443188966",
+    "CARRETA": "0,279232946",
+    "TOCO": "0,539140427",
+    "BITRUCK": "0,368534414",
+    "FROTA": "0,444788366"
+  },
+  {
+    "CIDADE": "PEDRA BONITA",
+    "TRUCK": "0,18922312",
+    "CARRETA": "0,118007147",
+    "TOCO": "0,23203028",
+    "BITRUCK": "0,15605044",
+    "FROTA": "0,19348748"
+  },
+  {
+    "CIDADE": "PEDRA DO ANTA",
+    "TRUCK": "0,170336293",
+    "CARRETA": "0,106017173",
+    "TOCO": "0,20919124",
+    "BITRUCK": "0,14024852",
+    "FROTA": "0,17479884"
+  },
+  {
+    "CIDADE": "PEDRA DO INDAIA",
+    "TRUCK": "0,117807307",
+    "CARRETA": "0,07267006",
+    "TOCO": "0,14567016",
+    "BITRUCK": "0,09629943",
+    "FROTA": "0,12282106"
+  },
+  {
+    "CIDADE": "PEDRA DOURADA",
+    "TRUCK": "0,260638933",
+    "CARRETA": "0,163344233",
+    "TOCO": "0,3183904",
+    "BITRUCK": "0,21580145",
+    "FROTA": "0,2641539"
+  },
+  {
+    "CIDADE": "PEDRALVA",
+    "TRUCK": "0,280115973",
+    "CARRETA": "0,175708893",
+    "TOCO": "0,34194316",
+    "BITRUCK": "0,23209718",
+    "FROTA": "0,28342656"
+  },
+  {
+    "CIDADE": "PEDRAS DE MARIA DA CRUZ",
+    "TRUCK": "0,3786816",
+    "CARRETA": "0,238281567",
+    "TOCO": "0,4611344",
+    "BITRUCK": "0,31456345",
+    "FROTA": "0,3809579"
+  },
+  {
+    "CIDADE": "PEDRINOPOLIS",
+    "TRUCK": "0,278094493",
+    "CARRETA": "0,174425592",
+    "TOCO": "0,339498669",
+    "BITRUCK": "0,230405881",
+    "FROTA": "0,281426292"
+  },
+  {
+    "CIDADE": "PEDRO LEOPOLDO",
+    "TRUCK": "0,062032147",
+    "CARRETA": "0,03726217",
+    "TOCO": "0,07822362",
+    "BITRUCK": "0,049634385",
+    "FROTA": "0,06763117"
+  },
+  {
+    "CIDADE": "PEDRO TEIXEIRA",
+    "TRUCK": "0,205749093",
+    "CARRETA": "0,128498373",
+    "TOCO": "0,25201444",
+    "BITRUCK": "0,16987712",
+    "FROTA": "0,20984004"
+  },
+  {
+    "CIDADE": "PEQUERI",
+    "TRUCK": "0,218143573",
+    "CARRETA": "0,136366793",
+    "TOCO": "0,26700256",
+    "BITRUCK": "0,18024713",
+    "FROTA": "0,22210446"
+  },
+  {
+    "CIDADE": "PEQUI",
+    "TRUCK": "0,09006728",
+    "CARRETA": "0,055059787",
+    "TOCO": "0,11212532",
+    "BITRUCK": "0,07309036",
+    "FROTA": "0,09537212"
+  },
+  {
+    "CIDADE": "PERDIGAO",
+    "TRUCK": "0,101281333",
+    "CARRETA": "0,062178833",
+    "TOCO": "0,125686",
+    "BITRUCK": "0,08247275",
+    "FROTA": "0,1064685"
+  },
+  {
+    "CIDADE": "PERDIZES",
+    "TRUCK": "0,263353915",
+    "CARRETA": "0,165067792",
+    "TOCO": "0,321673512",
+    "BITRUCK": "0,218072976",
+    "FROTA": "0,266840392"
+  },
+  {
+    "CIDADE": "PERDOES",
+    "TRUCK": "0,142006053",
+    "CARRETA": "0,088032213",
+    "TOCO": "0,17493268",
+    "BITRUCK": "0,11654564",
+    "FROTA": "0,14676588"
+  },
+  {
+    "CIDADE": "PERIQUITO",
+    "TRUCK": "0,204391603",
+    "CARRETA": "0,127636594",
+    "TOCO": "0,250372884",
+    "BITRUCK": "0,168741357",
+    "FROTA": "0,208496794"
+  },
+  {
+    "CIDADE": "PESCADOR",
+    "TRUCK": "0,284247467",
+    "CARRETA": "0,1783317",
+    "TOCO": "0,3469392",
+    "BITRUCK": "0,23555385",
+    "FROTA": "0,2875147"
+  },
+  {
+    "CIDADE": "PIAU",
+    "TRUCK": "0,198666533",
+    "CARRETA": "0,124002133",
+    "TOCO": "0,2434498",
+    "BITRUCK": "0,1639514",
+    "FROTA": "0,2028318"
+  },
+  {
+    "CIDADE": "PIEDADE DE CARATINGA",
+    "TRUCK": "0,222275067",
+    "CARRETA": "0,1389896",
+    "TOCO": "0,2719986",
+    "BITRUCK": "0,1837038",
+    "FROTA": "0,2261926"
+  },
+  {
+    "CIDADE": "PIEDADE DE PONTE NOVA",
+    "TRUCK": "0,16266352",
+    "CARRETA": "0,101146247",
+    "TOCO": "0,19991288",
+    "BITRUCK": "0,13382899",
+    "FROTA": "0,16720658"
+  },
+  {
+    "CIDADE": "PIEDADE DO RIO GRANDE",
+    "TRUCK": "0,175648213",
+    "CARRETA": "0,109389353",
+    "TOCO": "0,21561472",
+    "BITRUCK": "0,14469281",
+    "FROTA": "0,18005502"
+  },
+  {
+    "CIDADE": "PIEDADE DOS GERAIS",
+    "TRUCK": "0,082807656",
+    "CARRETA": "0,050451141",
+    "TOCO": "0,103346564",
+    "BITRUCK": "0,067016497",
+    "FROTA": "0,088188674"
+  },
+  {
+    "CIDADE": "PIMENTA",
+    "TRUCK": "0,156761387",
+    "CARRETA": "0,09739938",
+    "TOCO": "0,19277568",
+    "BITRUCK": "0,12889089",
+    "FROTA": "0,16136638"
+  },
+  {
+    "CIDADE": "PINGO D'AGUA",
+    "TRUCK": "0,1927644",
+    "CARRETA": "0,120255267",
+    "TOCO": "0,2363126",
+    "BITRUCK": "0,1590133",
+    "FROTA": "0,1969916"
+  },
+  {
+    "CIDADE": "PINTOPOLIS",
+    "TRUCK": "0,38045224",
+    "CARRETA": "0,239405627",
+    "TOCO": "0,46327556",
+    "BITRUCK": "0,31604488",
+    "FROTA": "0,38270996"
+  },
+  {
+    "CIDADE": "PIRACEMA",
+    "TRUCK": "0,09360856",
+    "CARRETA": "0,057307907",
+    "TOCO": "0,11640764",
+    "BITRUCK": "0,07605322",
+    "FROTA": "0,09887624"
+  },
+  {
+    "CIDADE": "PIRAJUBA",
+    "TRUCK": "0,351797383",
+    "CARRETA": "0,221214589",
+    "TOCO": "0,428624454",
+    "BITRUCK": "0,292070405",
+    "FROTA": "0,354355789"
+  },
+  {
+    "CIDADE": "PIRANGA",
+    "TRUCK": "0,139054987",
+    "CARRETA": "0,08615878",
+    "TOCO": "0,17136408",
+    "BITRUCK": "0,11407659",
+    "FROTA": "0,14384578"
+  },
+  {
+    "CIDADE": "PIRANGUCU",
+    "TRUCK": "0,284247467",
+    "CARRETA": "0,1783317",
+    "TOCO": "0,3469392",
+    "BITRUCK": "0,23555385",
+    "FROTA": "0,2875147"
+  },
+  {
+    "CIDADE": "PIRANGUINHO",
+    "TRUCK": "0,273033413",
+    "CARRETA": "0,171212653",
+    "TOCO": "0,33337852",
+    "BITRUCK": "0,22617146",
+    "FROTA": "0,27641832"
+  },
+  {
+    "CIDADE": "PIRAPETINGA",
+    "TRUCK": "0,27952576",
+    "CARRETA": "0,175334207",
+    "TOCO": "0,34122944",
+    "BITRUCK": "0,23160337",
+    "FROTA": "0,28284254"
+  },
+  {
+    "CIDADE": "PIRAPORA",
+    "TRUCK": "0,23525976",
+    "CARRETA": "0,147232707",
+    "TOCO": "0,28770044",
+    "BITRUCK": "0,19456762",
+    "FROTA": "0,23904104"
+  },
+  {
+    "CIDADE": "PIRAUBA",
+    "TRUCK": "0,18745248",
+    "CARRETA": "0,116883087",
+    "TOCO": "0,22988912",
+    "BITRUCK": "0,15456901",
+    "FROTA": "0,19173542"
+  },
+  {
+    "CIDADE": "PITANGUI",
+    "TRUCK": "0,095311325",
+    "CARRETA": "0,058388878",
+    "TOCO": "0,118466722",
+    "BITRUCK": "0,077477862",
+    "FROTA": "0,100561138"
+  },
+  {
+    "CIDADE": "PIUMHI",
+    "TRUCK": "0,192353464",
+    "CARRETA": "0,119994391",
+    "TOCO": "0,235815672",
+    "BITRUCK": "0,158669485",
+    "FROTA": "0,196584976"
+  },
+  {
+    "CIDADE": "PLANURA",
+    "TRUCK": "0,361565413",
+    "CARRETA": "0,227415653",
+    "TOCO": "0,44043652",
+    "BITRUCK": "0,30024296",
+    "FROTA": "0,36402132"
+  },
+  {
+    "CIDADE": "POCO FUNDO",
+    "TRUCK": "0,25296616",
+    "CARRETA": "0,158473307",
+    "TOCO": "0,30911204",
+    "BITRUCK": "0,20938192",
+    "FROTA": "0,25656164"
+  },
+  {
+    "CIDADE": "POCOS DE CALDAS",
+    "TRUCK": "0,289559387",
+    "CARRETA": "0,18170388",
+    "TOCO": "0,35336268",
+    "BITRUCK": "0,23999814",
+    "FROTA": "0,29277088"
+  },
+  {
+    "CIDADE": "POCRANE",
+    "TRUCK": "0,275394267",
+    "CARRETA": "0,1727114",
+    "TOCO": "0,3362334",
+    "BITRUCK": "0,2281467",
+    "FROTA": "0,2787544"
+  },
+  {
+    "CIDADE": "POMPEU",
+    "TRUCK": "0,133152853",
+    "CARRETA": "0,082411913",
+    "TOCO": "0,16422688",
+    "BITRUCK": "0,10913849",
+    "FROTA": "0,13800558"
+  },
+  {
+    "CIDADE": "PONTE NOVA",
+    "TRUCK": "0,14318648",
+    "CARRETA": "0,088781587",
+    "TOCO": "0,17636012",
+    "BITRUCK": "0,11753326",
+    "FROTA": "0,14793392"
+  },
+  {
+    "CIDADE": "PONTO CHIQUE",
+    "TRUCK": "0,301679417",
+    "CARRETA": "0,189398071",
+    "TOCO": "0,36801892",
+    "BITRUCK": "0,250138528",
+    "FROTA": "0,304763731"
+  },
+  {
+    "CIDADE": "PONTO DOS VOLANTES",
+    "TRUCK": "0,384583733",
+    "CARRETA": "0,242028433",
+    "TOCO": "0,4682716",
+    "BITRUCK": "0,31950155",
+    "FROTA": "0,3867981"
+  },
+  {
+    "CIDADE": "PORTEIRINHA",
+    "TRUCK": "0,381042453",
+    "CARRETA": "0,239780313",
+    "TOCO": "0,46398928",
+    "BITRUCK": "0,31653869",
+    "FROTA": "0,38329398"
+  },
+  {
+    "CIDADE": "PORTO FIRME",
+    "TRUCK": "0,15026904",
+    "CARRETA": "0,093277827",
+    "TOCO": "0,18492476",
+    "BITRUCK": "0,12345898",
+    "FROTA": "0,15494216"
+  },
+  {
+    "CIDADE": "POTE",
+    "TRUCK": "0,32733304",
+    "CARRETA": "0,205683827",
+    "TOCO": "0,39904076",
+    "BITRUCK": "0,27160198",
+    "FROTA": "0,33014816"
+  },
+  {
+    "CIDADE": "POUSO ALEGRE",
+    "TRUCK": "0,248834667",
+    "CARRETA": "0,1558505",
+    "TOCO": "0,304116",
+    "BITRUCK": "0,20592525",
+    "FROTA": "0,2524735"
+  },
+  {
+    "CIDADE": "POUSO ALTO",
+    "TRUCK": "0,260638933",
+    "CARRETA": "0,163344233",
+    "TOCO": "0,3183904",
+    "BITRUCK": "0,21580145",
+    "FROTA": "0,2641539"
+  },
+  {
+    "CIDADE": "PRADOS",
+    "TRUCK": "0,14318648",
+    "CARRETA": "0,088781587",
+    "TOCO": "0,17636012",
+    "BITRUCK": "0,11753326",
+    "FROTA": "0,14793392"
+  },
+  {
+    "CIDADE": "PRATA",
+    "TRUCK": "0,381278539",
+    "CARRETA": "0,239930188",
+    "TOCO": "0,464274768",
+    "BITRUCK": "0,316736214",
+    "FROTA": "0,383527588"
+  },
+  {
+    "CIDADE": "PRATAPOLIS",
+    "TRUCK": "0,24411296",
+    "CARRETA": "0,152853007",
+    "TOCO": "0,29840624",
+    "BITRUCK": "0,20197477",
+    "FROTA": "0,24780134"
+  },
+  {
+    "CIDADE": "PRATINHA",
+    "TRUCK": "0,207339718",
+    "CARRETA": "0,129508154",
+    "TOCO": "0,253937915",
+    "BITRUCK": "0,171207938",
+    "FROTA": "0,211413974"
+  },
+  {
+    "CIDADE": "PRESIDENTE JUSCELINO",
+    "TRUCK": "0,154990747",
+    "CARRETA": "0,09627532",
+    "TOCO": "0,19063452",
+    "BITRUCK": "0,12740946",
+    "FROTA": "0,15961432"
+  },
+  {
+    "CIDADE": "PRESIDENTE KUBITSCHEK",
+    "TRUCK": "0,209290373",
+    "CARRETA": "0,130746493",
+    "TOCO": "0,25629676",
+    "BITRUCK": "0,17283998",
+    "FROTA": "0,21334416"
+  },
+  {
+    "CIDADE": "PRESIDENTE BERNARDES",
+    "TRUCK": "0,150859253",
+    "CARRETA": "0,093652513",
+    "TOCO": "0,18563848",
+    "BITRUCK": "0,12395279",
+    "FROTA": "0,15552618"
+  },
+  {
+    "CIDADE": "PRESIDENTE OLEGARIO",
+    "TRUCK": "0,267721493",
+    "CARRETA": "0,167840473",
+    "TOCO": "0,32695504",
+    "BITRUCK": "0,22172717",
+    "FROTA": "0,27116214"
+  },
+  {
+    "CIDADE": "PRUDENTE DE MORAIS",
+    "TRUCK": "0,083518863",
+    "CARRETA": "0,050902638",
+    "TOCO": "0,104206597",
+    "BITRUCK": "0,067611538",
+    "FROTA": "0,088892418"
+  },
+  {
+    "CIDADE": "QUARTEL GERAL",
+    "TRUCK": "0,152629893",
+    "CARRETA": "0,094776573",
+    "TOCO": "0,18777964",
+    "BITRUCK": "0,12543422",
+    "FROTA": "0,15727824"
+  },
+  {
+    "CIDADE": "QUELUZITA",
+    "TRUCK": "0,10246176",
+    "CARRETA": "0,062928207",
+    "TOCO": "0,12711344",
+    "BITRUCK": "0,08346037",
+    "FROTA": "0,10763654"
+  },
+  {
+    "CIDADE": "RAPOSOS",
+    "TRUCK": "0,059553251",
+    "CARRETA": "0,035688486",
+    "TOCO": "0,075225996",
+    "BITRUCK": "0,047560383",
+    "FROTA": "0,065178286"
+  },
+  {
+    "CIDADE": "RAUL SOARES",
+    "TRUCK": "0,17328736",
+    "CARRETA": "0,107890607",
+    "TOCO": "0,21275984",
+    "BITRUCK": "0,14271757",
+    "FROTA": "0,17771894"
+  },
+  {
+    "CIDADE": "RECREIO",
+    "TRUCK": "0,243522747",
+    "CARRETA": "0,15247832",
+    "TOCO": "0,29769252",
+    "BITRUCK": "0,20148096",
+    "FROTA": "0,24721732"
+  },
+  {
+    "CIDADE": "REDUTO",
+    "TRUCK": "0,215192507",
+    "CARRETA": "0,13449336",
+    "TOCO": "0,26343396",
+    "BITRUCK": "0,17777808",
+    "FROTA": "0,21918436"
+  },
+  {
+    "CIDADE": "RESENDE COSTA",
+    "TRUCK": "0,129611573",
+    "CARRETA": "0,080163793",
+    "TOCO": "0,15994456",
+    "BITRUCK": "0,10617563",
+    "FROTA": "0,13450146"
+  },
+  {
+    "CIDADE": "RESPLENDOR",
+    "TRUCK": "0,303134293",
+    "CARRETA": "0,190321673",
+    "TOCO": "0,36977824",
+    "BITRUCK": "0,25135577",
+    "FROTA": "0,30620334"
+  },
+  {
+    "CIDADE": "RESSAQUINHA",
+    "TRUCK": "0,121348587",
+    "CARRETA": "0,07491818",
+    "TOCO": "0,14995248",
+    "BITRUCK": "0,09926229",
+    "FROTA": "0,12632518"
+  },
+  {
+    "CIDADE": "RIACHINHO",
+    "TRUCK": "0,399339067",
+    "CARRETA": "0,2513956",
+    "TOCO": "0,4861146",
+    "BITRUCK": "0,3318468",
+    "FROTA": "0,4013986"
+  },
+  {
+    "CIDADE": "RIACHO DOS MACHADOS",
+    "TRUCK": "0,367467547",
+    "CARRETA": "0,23116252",
+    "TOCO": "0,44757372",
+    "BITRUCK": "0,30518106",
+    "FROTA": "0,36986152"
+  },
+  {
+    "CIDADE": "RIBEIRAO DAS NEVES",
+    "TRUCK": "0,050168859",
+    "CARRETA": "0,029730968",
+    "TOCO": "0,063877848",
+    "BITRUCK": "0,039708804",
+    "FROTA": "0,055892368"
+  },
+  {
+    "CIDADE": "RIBEIRAO VERMELHO",
+    "TRUCK": "0,146137547",
+    "CARRETA": "0,09065502",
+    "TOCO": "0,17992872",
+    "BITRUCK": "0,12000231",
+    "FROTA": "0,15085402"
+  },
+  {
+    "CIDADE": "RIO ACIMA",
+    "TRUCK": "0,058785973",
+    "CARRETA": "0,035201393",
+    "TOCO": "0,07429816",
+    "BITRUCK": "0,04691843",
+    "FROTA": "0,06441906"
+  },
+  {
+    "CIDADE": "RIO CASCA",
+    "TRUCK": "0,152629893",
+    "CARRETA": "0,094776573",
+    "TOCO": "0,18777964",
+    "BITRUCK": "0,12543422",
+    "FROTA": "0,15727824"
+  },
+  {
+    "CIDADE": "RIO DOCE",
+    "TRUCK": "0,156761387",
+    "CARRETA": "0,09739938",
+    "TOCO": "0,19277568",
+    "BITRUCK": "0,12889089",
+    "FROTA": "0,16136638"
+  },
+  {
+    "CIDADE": "RIO ESPERA",
+    "TRUCK": "0,130792",
+    "CARRETA": "0,080913167",
+    "TOCO": "0,161372",
+    "BITRUCK": "0,10716325",
+    "FROTA": "0,1356695"
+  },
+  {
+    "CIDADE": "RIO MANSO",
+    "TRUCK": "0,064865171",
+    "CARRETA": "0,039060666",
+    "TOCO": "0,081649476",
+    "BITRUCK": "0,052004673",
+    "FROTA": "0,070434466"
+  },
+  {
+    "CIDADE": "RIO NOVO",
+    "TRUCK": "0,207519733",
+    "CARRETA": "0,129622433",
+    "TOCO": "0,2541556",
+    "BITRUCK": "0,17135855",
+    "FROTA": "0,2115921"
+  },
+  {
+    "CIDADE": "RIO PARANAIBA",
+    "TRUCK": "0,236820874",
+    "CARRETA": "0,148223753",
+    "TOCO": "0,289588229",
+    "BITRUCK": "0,195873747",
+    "FROTA": "0,240585773"
+  },
+  {
+    "CIDADE": "RIO PARDO DE MINAS",
+    "TRUCK": "0,428448388",
+    "CARRETA": "0,269875146",
+    "TOCO": "0,52131527",
+    "BITRUCK": "0,356201509",
+    "FROTA": "0,430202466"
+  },
+  {
+    "CIDADE": "RIO PIRACICABA",
+    "TRUCK": "0,120758373",
+    "CARRETA": "0,074543493",
+    "TOCO": "0,14923876",
+    "BITRUCK": "0,09876848",
+    "FROTA": "0,12574116"
+  },
+  {
+    "CIDADE": "RIO POMBA",
+    "TRUCK": "0,176238427",
+    "CARRETA": "0,10976404",
+    "TOCO": "0,21632844",
+    "BITRUCK": "0,14518662",
+    "FROTA": "0,18063904"
+  },
+  {
+    "CIDADE": "RIO PRETO",
+    "TRUCK": "0,255246597",
+    "CARRETA": "0,159921002",
+    "TOCO": "0,311869676",
+    "BITRUCK": "0,211289878",
+    "FROTA": "0,258818147"
+  },
+  {
+    "CIDADE": "RIO VERMELHO",
+    "TRUCK": "0,23976899",
+    "CARRETA": "0,150095313",
+    "TOCO": "0,293153261",
+    "BITRUCK": "0,198340328",
+    "FROTA": "0,243502953"
+  },
+  {
+    "CIDADE": "RITAPOLIS",
+    "TRUCK": "0,149678827",
+    "CARRETA": "0,09290314",
+    "TOCO": "0,18421104",
+    "BITRUCK": "0,12296517",
+    "FROTA": "0,15435814"
+  },
+  {
+    "CIDADE": "ROCHEDO DE MINAS",
+    "TRUCK": "0,218143573",
+    "CARRETA": "0,136366793",
+    "TOCO": "0,26700256",
+    "BITRUCK": "0,18024713",
+    "FROTA": "0,22210446"
+  },
+  {
+    "CIDADE": "RODEIRO",
+    "TRUCK": "0,204568667",
+    "CARRETA": "0,127749",
+    "TOCO": "0,250587",
+    "BITRUCK": "0,1688895",
+    "FROTA": "0,208672"
+  },
+  {
+    "CIDADE": "ROMARIA",
+    "TRUCK": "0,306675573",
+    "CARRETA": "0,192569793",
+    "TOCO": "0,37406056",
+    "BITRUCK": "0,25431863",
+    "FROTA": "0,30970746"
+  },
+  {
+    "CIDADE": "ROSARIO DA LIMEIRA",
+    "TRUCK": "0,20338824",
+    "CARRETA": "0,126999627",
+    "TOCO": "0,24915956",
+    "BITRUCK": "0,16790188",
+    "FROTA": "0,20750396"
+  },
+  {
+    "CIDADE": "RUBELITA",
+    "TRUCK": "0,404060773",
+    "CARRETA": "0,254393093",
+    "TOCO": "0,49182436",
+    "BITRUCK": "0,33579728",
+    "FROTA": "0,40607076"
+  },
+  {
+    "CIDADE": "RUBIM",
+    "TRUCK": "0,493306931",
+    "CARRETA": "0,311049464",
+    "TOCO": "0,599745961",
+    "BITRUCK": "0,41046629",
+    "FROTA": "0,494380424"
+  },
+  {
+    "CIDADE": "SABARA",
+    "TRUCK": "0,051762435",
+    "CARRETA": "0,030742622",
+    "TOCO": "0,065804892",
+    "BITRUCK": "0,041042091",
+    "FROTA": "0,057469222"
+  },
+  {
+    "CIDADE": "SABINOPOLIS",
+    "TRUCK": "0,2016176",
+    "CARRETA": "0,125875567",
+    "TOCO": "0,2470184",
+    "BITRUCK": "0,16642045",
+    "FROTA": "0,2057519"
+  },
+  {
+    "CIDADE": "SACRAMENTO",
+    "TRUCK": "0,285427893",
+    "CARRETA": "0,179081073",
+    "TOCO": "0,34836664",
+    "BITRUCK": "0,23654147",
+    "FROTA": "0,28868274"
+  },
+  {
+    "CIDADE": "SALINAS",
+    "TRUCK": "0,408192267",
+    "CARRETA": "0,2570159",
+    "TOCO": "0,4968204",
+    "BITRUCK": "0,33925395",
+    "FROTA": "0,4101589"
+  },
+  {
+    "CIDADE": "SALTO DA DIVISA",
+    "TRUCK": "0,51325024",
+    "CARRETA": "0,323710127",
+    "TOCO": "0,62386256",
+    "BITRUCK": "0,42715213",
+    "FROTA": "0,51411446"
+  },
+  {
+    "CIDADE": "SANTA BARBARA",
+    "TRUCK": "0,103051973",
+    "CARRETA": "0,063302893",
+    "TOCO": "0,12782716",
+    "BITRUCK": "0,08395418",
+    "FROTA": "0,10822056"
+  },
+  {
+    "CIDADE": "SANTA BARBARA DO TUGURIO",
+    "TRUCK": "0,14672776",
+    "CARRETA": "0,091029707",
+    "TOCO": "0,18064244",
+    "BITRUCK": "0,12049612",
+    "FROTA": "0,15143804"
+  },
+  {
+    "CIDADE": "SANTA BARBARA DO LESTE",
+    "TRUCK": "0,218733787",
+    "CARRETA": "0,13674148",
+    "TOCO": "0,26771628",
+    "BITRUCK": "0,18074094",
+    "FROTA": "0,22268848"
+  },
+  {
+    "CIDADE": "SANTA BARBARA DO MONTE VERDE",
+    "TRUCK": "0,213421867",
+    "CARRETA": "0,1333693",
+    "TOCO": "0,2612928",
+    "BITRUCK": "0,17629665",
+    "FROTA": "0,2174323"
+  },
+  {
+    "CIDADE": "SANTA CRUZ DE MINAS",
+    "TRUCK": "0,156484724",
+    "CARRETA": "0,097223746",
+    "TOCO": "0,192441124",
+    "BITRUCK": "0,128659417",
+    "FROTA": "0,161092621"
+  },
+  {
+    "CIDADE": "SANTA CRUZ DE SALINAS",
+    "TRUCK": "0,462491893",
+    "CARRETA": "0,291487073",
+    "TOCO": "0,56248264",
+    "BITRUCK": "0,38468447",
+    "FROTA": "0,46388874"
+  },
+  {
+    "CIDADE": "SANTA CRUZ DO ESCALVADO",
+    "TRUCK": "0,158532027",
+    "CARRETA": "0,09852344",
+    "TOCO": "0,19491684",
+    "BITRUCK": "0,13037232",
+    "FROTA": "0,16311844"
+  },
+  {
+    "CIDADE": "SANTA EFIGENIA DE MINAS",
+    "TRUCK": "0,2194078",
+    "CARRETA": "0,137169366",
+    "TOCO": "0,268531336",
+    "BITRUCK": "0,181304862",
+    "FROTA": "0,223355421"
+  },
+  {
+    "CIDADE": "SANTA FE DE MINAS",
+    "TRUCK": "0,31347188",
+    "CARRETA": "0,19688431",
+    "TOCO": "0,382279046",
+    "BITRUCK": "0,260004852",
+    "FROTA": "0,31643245"
+  },
+  {
+    "CIDADE": "SANTA HELENA DE MINAS",
+    "TRUCK": "0,411143333",
+    "CARRETA": "0,258889333",
+    "TOCO": "0,500389",
+    "BITRUCK": "0,341723",
+    "FROTA": "0,413079"
+  },
+  {
+    "CIDADE": "SANTA JULIANA",
+    "TRUCK": "0,28306704",
+    "CARRETA": "0,177582327",
+    "TOCO": "0,34551176",
+    "BITRUCK": "0,23456623",
+    "FROTA": "0,28634666"
+  },
+  {
+    "CIDADE": "SANTA LUZIA",
+    "TRUCK": "0,053474053",
+    "CARRETA": "0,031829213",
+    "TOCO": "0,06787468",
+    "BITRUCK": "0,04247414",
+    "FROTA": "0,05916288"
+  },
+  {
+    "CIDADE": "SANTA MARGARIDA",
+    "TRUCK": "0,186198277",
+    "CARRETA": "0,116086878",
+    "TOCO": "0,228372465",
+    "BITRUCK": "0,153519664",
+    "FROTA": "0,190494378"
+  },
+  {
+    "CIDADE": "SANTA MARIA DE ITABIRA",
+    "TRUCK": "0,127740597",
+    "CARRETA": "0,078976037",
+    "TOCO": "0,157682068",
+    "BITRUCK": "0,104610252",
+    "FROTA": "0,132650117"
+  },
+  {
+    "CIDADE": "SANTA MARIA DO SALTO",
+    "TRUCK": "0,52387408",
+    "CARRETA": "0,330454487",
+    "TOCO": "0,63670952",
+    "BITRUCK": "0,43604071",
+    "FROTA": "0,52462682"
+  },
+  {
+    "CIDADE": "SANTA MARIA DO SUACUI",
+    "TRUCK": "0,24942488",
+    "CARRETA": "0,156225187",
+    "TOCO": "0,30482972",
+    "BITRUCK": "0,20641906",
+    "FROTA": "0,25305752"
+  },
+  {
+    "CIDADE": "SANTA RITA DE CALDAS",
+    "TRUCK": "0,28306704",
+    "CARRETA": "0,177582327",
+    "TOCO": "0,34551176",
+    "BITRUCK": "0,23456623",
+    "FROTA": "0,28634666"
+  },
+  {
+    "CIDADE": "SANTA RITA DE MINAS",
+    "TRUCK": "0,22640656",
+    "CARRETA": "0,141612407",
+    "TOCO": "0,27699464",
+    "BITRUCK": "0,18716047",
+    "FROTA": "0,23028074"
+  },
+  {
+    "CIDADE": "SANTA RITA DO ITUETO",
+    "TRUCK": "0,303724507",
+    "CARRETA": "0,19069636",
+    "TOCO": "0,37049196",
+    "BITRUCK": "0,25184958",
+    "FROTA": "0,30678736"
+  },
+  {
+    "CIDADE": "SANTA RITA DE IBITIPOCA",
+    "TRUCK": "0,175058",
+    "CARRETA": "0,109014667",
+    "TOCO": "0,214901",
+    "BITRUCK": "0,144199",
+    "FROTA": "0,179471"
+  },
+  {
+    "CIDADE": "SANTA RITA DE JACUTINGA",
+    "TRUCK": "0,25650744",
+    "CARRETA": "0,160721427",
+    "TOCO": "0,31339436",
+    "BITRUCK": "0,21234478",
+    "FROTA": "0,26006576"
+  },
+  {
+    "CIDADE": "SANTA RITA DO SAPUCAI",
+    "TRUCK": "0,291226094",
+    "CARRETA": "0,18276196",
+    "TOCO": "0,355378158",
+    "BITRUCK": "0,241392613",
+    "FROTA": "0,294420098"
+  },
+  {
+    "CIDADE": "SANTA ROSA DA SERRA",
+    "TRUCK": "0,17859928",
+    "CARRETA": "0,111262787",
+    "TOCO": "0,21918332",
+    "BITRUCK": "0,14716186",
+    "FROTA": "0,18297512"
+  },
+  {
+    "CIDADE": "SANTA VITORIA",
+    "TRUCK": "0,457179973",
+    "CARRETA": "0,288114893",
+    "TOCO": "0,55605916",
+    "BITRUCK": "0,38024018",
+    "FROTA": "0,45863256"
+  },
+  {
+    "CIDADE": "SANTANA DOS MONTES",
+    "TRUCK": "0,1042324",
+    "CARRETA": "0,064052267",
+    "TOCO": "0,1292546",
+    "BITRUCK": "0,0849418",
+    "FROTA": "0,1093886"
+  },
+  {
+    "CIDADE": "SANTANA DA VARGEM",
+    "TRUCK": "0,180069649",
+    "CARRETA": "0,112196225",
+    "TOCO": "0,220961375",
+    "BITRUCK": "0,148392064",
+    "FROTA": "0,18443006"
+  },
+  {
+    "CIDADE": "SANTANA DE CATAGUASES",
+    "TRUCK": "0,225226133",
+    "CARRETA": "0,140863033",
+    "TOCO": "0,2755672",
+    "BITRUCK": "0,18617285",
+    "FROTA": "0,2291127"
+  },
+  {
+    "CIDADE": "SANTANA DE PIRAPAMA",
+    "TRUCK": "0,130201787",
+    "CARRETA": "0,08053848",
+    "TOCO": "0,16065828",
+    "BITRUCK": "0,10666944",
+    "FROTA": "0,13508548"
+  },
+  {
+    "CIDADE": "SANTANA DO DESERTO",
+    "TRUCK": "0,211061013",
+    "CARRETA": "0,131870553",
+    "TOCO": "0,25843792",
+    "BITRUCK": "0,17432141",
+    "FROTA": "0,21509622"
+  },
+  {
+    "CIDADE": "SANTANA DO GARAMBEU",
+    "TRUCK": "0,17859928",
+    "CARRETA": "0,111262787",
+    "TOCO": "0,21918332",
+    "BITRUCK": "0,14716186",
+    "FROTA": "0,18297512"
+  },
+  {
+    "CIDADE": "SANTANA DO JACARE",
+    "TRUCK": "0,140825627",
+    "CARRETA": "0,08728284",
+    "TOCO": "0,17350524",
+    "BITRUCK": "0,11555802",
+    "FROTA": "0,14559784"
+  },
+  {
+    "CIDADE": "SANTANA DO MANHUACU",
+    "TRUCK": "0,224045707",
+    "CARRETA": "0,14011366",
+    "TOCO": "0,27413976",
+    "BITRUCK": "0,18518523",
+    "FROTA": "0,22794466"
+  },
+  {
+    "CIDADE": "SANTANA DO PARAISO",
+    "TRUCK": "0,175648213",
+    "CARRETA": "0,109389353",
+    "TOCO": "0,21561472",
+    "BITRUCK": "0,14469281",
+    "FROTA": "0,18005502"
+  },
+  {
+    "CIDADE": "SANTANA DO RIACHO",
+    "TRUCK": "0,111771638",
+    "CARRETA": "0,06883842",
+    "TOCO": "0,138371481",
+    "BITRUCK": "0,091249605",
+    "FROTA": "0,116848725"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO RIO ABAIXO",
+    "TRUCK": "0,147317973",
+    "CARRETA": "0,091404393",
+    "TOCO": "0,18135616",
+    "BITRUCK": "0,12098993",
+    "FROTA": "0,15202206"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO AMPARO",
+    "TRUCK": "0,126660507",
+    "CARRETA": "0,07829036",
+    "TOCO": "0,15637596",
+    "BITRUCK": "0,10370658",
+    "FROTA": "0,13158136"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO AVENTUREIRO",
+    "TRUCK": "0,232898907",
+    "CARRETA": "0,14573396",
+    "TOCO": "0,28484556",
+    "BITRUCK": "0,19259238",
+    "FROTA": "0,23670496"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO GRAMA",
+    "TRUCK": "0,1662048",
+    "CARRETA": "0,103394367",
+    "TOCO": "0,2041952",
+    "BITRUCK": "0,13679185",
+    "FROTA": "0,1707107"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO ITAMBE",
+    "TRUCK": "0,188042693",
+    "CARRETA": "0,117257773",
+    "TOCO": "0,23060284",
+    "BITRUCK": "0,15506282",
+    "FROTA": "0,19231944"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO JACINTO",
+    "TRUCK": "0,537448987",
+    "CARRETA": "0,33907228",
+    "TOCO": "0,65312508",
+    "BITRUCK": "0,44739834",
+    "FROTA": "0,53805928"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO MONTE",
+    "TRUCK": "0,133152853",
+    "CARRETA": "0,082411913",
+    "TOCO": "0,16422688",
+    "BITRUCK": "0,10913849",
+    "FROTA": "0,13800558"
+  },
+  {
+    "CIDADE": "SANTO ANTONIO DO RETIRO",
+    "TRUCK": "0,431210587",
+    "CARRETA": "0,27162868",
+    "TOCO": "0,52465548",
+    "BITRUCK": "0,35851254",
+    "FROTA": "0,43293568"
+  },
+  {
+    "CIDADE": "SANTO HIPOLITO",
+    "TRUCK": "0,157941813",
+    "CARRETA": "0,098148753",
+    "TOCO": "0,19420312",
+    "BITRUCK": "0,12987851",
+    "FROTA": "0,16253442"
+  },
+  {
+    "CIDADE": "SANTOS DUMONT",
+    "TRUCK": "0,1660661",
+    "CARRETA": "0,103306315",
+    "TOCO": "0,204027476",
+    "BITRUCK": "0,136675805",
+    "FROTA": "0,170573455"
+  },
+  {
+    "CIDADE": "SAO BENTO ABADE",
+    "TRUCK": "0,1839112",
+    "CARRETA": "0,114634967",
+    "TOCO": "0,2256068",
+    "BITRUCK": "0,15160615",
+    "FROTA": "0,1882313"
+  },
+  {
+    "CIDADE": "SAO BRAS DO SUACUI",
+    "TRUCK": "0,095969413",
+    "CARRETA": "0,058806653",
+    "TOCO": "0,11926252",
+    "BITRUCK": "0,07802846",
+    "FROTA": "0,10121232"
+  },
+  {
+    "CIDADE": "SAO DOMINGOS DAS DORES",
+    "TRUCK": "0,20870016",
+    "CARRETA": "0,130371807",
+    "TOCO": "0,25558304",
+    "BITRUCK": "0,17234617",
+    "FROTA": "0,21276014"
+  },
+  {
+    "CIDADE": "SAO DOMINGOS DO PRATA",
+    "TRUCK": "0,122529013",
+    "CARRETA": "0,075667553",
+    "TOCO": "0,15137992",
+    "BITRUCK": "0,10024991",
+    "FROTA": "0,12749322"
+  },
+  {
+    "CIDADE": "SAO FELIX DE MINAS",
+    "TRUCK": "0,277164907",
+    "CARRETA": "0,17383546",
+    "TOCO": "0,33837456",
+    "BITRUCK": "0,22962813",
+    "FROTA": "0,28050646"
+  },
+  {
+    "CIDADE": "SAO FRANCISCO DE PAULA",
+    "TRUCK": "0,1219388",
+    "CARRETA": "0,075292867",
+    "TOCO": "0,1506662",
+    "BITRUCK": "0,0997561",
+    "FROTA": "0,1269092"
+  },
+  {
+    "CIDADE": "SAO FRANCISCO DO GLORIA",
+    "TRUCK": "0,23880104",
+    "CARRETA": "0,149480827",
+    "TOCO": "0,29198276",
+    "BITRUCK": "0,19753048",
+    "FROTA": "0,24254516"
+  },
+  {
+    "CIDADE": "SAO FRANCISCO DE SALES",
+    "TRUCK": "0,438293147",
+    "CARRETA": "0,27612492",
+    "TOCO": "0,53322012",
+    "BITRUCK": "0,36443826",
+    "FROTA": "0,43994392"
+  },
+  {
+    "CIDADE": "SAO GERALDO",
+    "TRUCK": "0,178104239",
+    "CARRETA": "0,110948518",
+    "TOCO": "0,218584687",
+    "BITRUCK": "0,146747677",
+    "FROTA": "0,182485273"
+  },
+  {
+    "CIDADE": "SAO GERALDO DO BAIXIO",
+    "TRUCK": "0,27598448",
+    "CARRETA": "0,173086087",
+    "TOCO": "0,33694712",
+    "BITRUCK": "0,22864051",
+    "FROTA": "0,27933842"
+  },
+  {
+    "CIDADE": "SAO GERALDO DA PIEDADE",
+    "TRUCK": "0,230538053",
+    "CARRETA": "0,144235213",
+    "TOCO": "0,28199068",
+    "BITRUCK": "0,19061714",
+    "FROTA": "0,23436888"
+  },
+  {
+    "CIDADE": "SAO GONCALO DO ABAETE",
+    "TRUCK": "0,25296616",
+    "CARRETA": "0,158473307",
+    "TOCO": "0,30911204",
+    "BITRUCK": "0,20938192",
+    "FROTA": "0,25656164"
+  },
+  {
+    "CIDADE": "SAO GONCALO DO PARA",
+    "TRUCK": "0,09006728",
+    "CARRETA": "0,055059787",
+    "TOCO": "0,11212532",
+    "BITRUCK": "0,07309036",
+    "FROTA": "0,09537212"
+  },
+  {
+    "CIDADE": "SAO GONCALO DO RIO ABAIXO",
+    "TRUCK": "0,090309328",
+    "CARRETA": "0,055213447",
+    "TOCO": "0,112418019",
+    "BITRUCK": "0,073292873",
+    "FROTA": "0,095611629"
+  },
+  {
+    "CIDADE": "SAO GONCALO DO RIO PRETO",
+    "TRUCK": "0,23348912",
+    "CARRETA": "0,146108647",
+    "TOCO": "0,28555928",
+    "BITRUCK": "0,19308619",
+    "FROTA": "0,23728898"
+  },
+  {
+    "CIDADE": "SAO GONCALO DO SAPUCAI",
+    "TRUCK": "0,21401208",
+    "CARRETA": "0,133743987",
+    "TOCO": "0,26200652",
+    "BITRUCK": "0,17679046",
+    "FROTA": "0,21801632"
+  },
+  {
+    "CIDADE": "SAO GOTARDO",
+    "TRUCK": "0,19807632",
+    "CARRETA": "0,123627447",
+    "TOCO": "0,24273608",
+    "BITRUCK": "0,16345759",
+    "FROTA": "0,20224778"
+  },
+  {
+    "CIDADE": "SAO JOAO BATISTA DO GLORIA",
+    "TRUCK": "0,21578272",
+    "CARRETA": "0,134868047",
+    "TOCO": "0,26414768",
+    "BITRUCK": "0,17827189",
+    "FROTA": "0,21976838"
+  },
+  {
+    "CIDADE": "SAO JOAO DA LAGOA",
+    "TRUCK": "0,286018107",
+    "CARRETA": "0,17945576",
+    "TOCO": "0,34908036",
+    "BITRUCK": "0,23703528",
+    "FROTA": "0,28926676"
+  },
+  {
+    "CIDADE": "SAO JOAO DA PONTE",
+    "TRUCK": "0,34503944",
+    "CARRETA": "0,216924427",
+    "TOCO": "0,42045236",
+    "BITRUCK": "0,28641628",
+    "FROTA": "0,34766876"
+  },
+  {
+    "CIDADE": "SAO JOAO DAS MISSOES",
+    "TRUCK": "0,434344619",
+    "CARRETA": "0,273618266",
+    "TOCO": "0,528445333",
+    "BITRUCK": "0,361134671",
+    "FROTA": "0,436036826"
+  },
+  {
+    "CIDADE": "SAO JOAO DEL REI",
+    "TRUCK": "0,154273637",
+    "CARRETA": "0,095820076",
+    "TOCO": "0,18976735",
+    "BITRUCK": "0,126809481",
+    "FROTA": "0,158904736"
+  },
+  {
+    "CIDADE": "SAO JOAO DO MANHUACU",
+    "TRUCK": "0,204568667",
+    "CARRETA": "0,127749",
+    "TOCO": "0,250587",
+    "BITRUCK": "0,1688895",
+    "FROTA": "0,208672"
+  },
+  {
+    "CIDADE": "SAO JOAO DO ORIENTE",
+    "TRUCK": "0,199256747",
+    "CARRETA": "0,12437682",
+    "TOCO": "0,24416352",
+    "BITRUCK": "0,16444521",
+    "FROTA": "0,20341582"
+  },
+  {
+    "CIDADE": "SAO JOAO DO PACUI",
+    "TRUCK": "0,34503944",
+    "CARRETA": "0,216924427",
+    "TOCO": "0,42045236",
+    "BITRUCK": "0,28641628",
+    "FROTA": "0,34766876"
+  },
+  {
+    "CIDADE": "SAO JOAO DO PARAISO",
+    "TRUCK": "0,479017867",
+    "CARRETA": "0,3019783",
+    "TOCO": "0,5824668",
+    "BITRUCK": "0,39851115",
+    "FROTA": "0,4802413"
+  },
+  {
+    "CIDADE": "SAO JOAO EVANGELISTA",
+    "TRUCK": "0,2104708",
+    "CARRETA": "0,131495867",
+    "TOCO": "0,2577242",
+    "BITRUCK": "0,1738276",
+    "FROTA": "0,2145122"
+  },
+  {
+    "CIDADE": "SAO JOAO NEPOMUCENO",
+    "TRUCK": "0,212831653",
+    "CARRETA": "0,132994613",
+    "TOCO": "0,26057908",
+    "BITRUCK": "0,17580284",
+    "FROTA": "0,21684828"
+  },
+  {
+    "CIDADE": "SAO JOAQUIM DE BICAS",
+    "TRUCK": "0,043558469",
+    "CARRETA": "0,025534477",
+    "TOCO": "0,055884184",
+    "BITRUCK": "0,034178132",
+    "FROTA": "0,049351344"
+  },
+  {
+    "CIDADE": "SAO JOSE DA BARRA",
+    "TRUCK": "0,201443487",
+    "CARRETA": "0,125765034",
+    "TOCO": "0,246807853",
+    "BITRUCK": "0,166274776",
+    "FROTA": "0,205579614"
+  },
+  {
+    "CIDADE": "SAO JOSE DA LAPA",
+    "TRUCK": "0,054536437",
+    "CARRETA": "0,032503649",
+    "TOCO": "0,069159376",
+    "BITRUCK": "0,043362998",
+    "FROTA": "0,060214116"
+  },
+  {
+    "CIDADE": "SAO JOSE DA SAFIRA",
+    "TRUCK": "0,273623627",
+    "CARRETA": "0,17158734",
+    "TOCO": "0,33409224",
+    "BITRUCK": "0,22666527",
+    "FROTA": "0,27700234"
+  },
+  {
+    "CIDADE": "SAO JOSE DA VARGINHA",
+    "TRUCK": "0,079502461",
+    "CARRETA": "0,048352895",
+    "TOCO": "0,099349732",
+    "BITRUCK": "0,064251161",
+    "FROTA": "0,084918162"
+  },
+  {
+    "CIDADE": "SAO JOSE DO ALEGRE",
+    "TRUCK": "0,27421384",
+    "CARRETA": "0,171962027",
+    "TOCO": "0,33480596",
+    "BITRUCK": "0,22715908",
+    "FROTA": "0,27758636"
+  },
+  {
+    "CIDADE": "SAO JOSE DO DIVINO",
+    "TRUCK": "0,304904933",
+    "CARRETA": "0,191445733",
+    "TOCO": "0,3719194",
+    "BITRUCK": "0,2528372",
+    "FROTA": "0,3079554"
+  },
+  {
+    "CIDADE": "SAO JOSE DO GOIABAL",
+    "TRUCK": "0,147317973",
+    "CARRETA": "0,091404393",
+    "TOCO": "0,18135616",
+    "BITRUCK": "0,12098993",
+    "FROTA": "0,15202206"
+  },
+  {
+    "CIDADE": "SAO JOSE DO JACURI",
+    "TRUCK": "0,24057168",
+    "CARRETA": "0,150604887",
+    "TOCO": "0,29412392",
+    "BITRUCK": "0,19901191",
+    "FROTA": "0,24429722"
+  },
+  {
+    "CIDADE": "SAO JOSE DO MANTIMENTO",
+    "TRUCK": "0,242932533",
+    "CARRETA": "0,152103633",
+    "TOCO": "0,2969788",
+    "BITRUCK": "0,20098715",
+    "FROTA": "0,2466333"
+  },
+  {
+    "CIDADE": "SAO LOURENCO",
+    "TRUCK": "0,248834667",
+    "CARRETA": "0,1558505",
+    "TOCO": "0,304116",
+    "BITRUCK": "0,20592525",
+    "FROTA": "0,2524735"
+  },
+  {
+    "CIDADE": "SAO MIGUEL DO ANTA",
+    "TRUCK": "0,178009067",
+    "CARRETA": "0,1108881",
+    "TOCO": "0,2184696",
+    "BITRUCK": "0,14666805",
+    "FROTA": "0,1823911"
+  },
+  {
+    "CIDADE": "SAO PEDRO DA UNIAO",
+    "TRUCK": "0,248244453",
+    "CARRETA": "0,155475813",
+    "TOCO": "0,30340228",
+    "BITRUCK": "0,20543144",
+    "FROTA": "0,25188948"
+  },
+  {
+    "CIDADE": "SAO PEDRO DO SUACUI",
+    "TRUCK": "0,225816347",
+    "CARRETA": "0,14123772",
+    "TOCO": "0,27628092",
+    "BITRUCK": "0,18666666",
+    "FROTA": "0,22969672"
+  },
+  {
+    "CIDADE": "SAO PEDRO DOS FERROS",
+    "TRUCK": "0,15912224",
+    "CARRETA": "0,098898127",
+    "TOCO": "0,19563056",
+    "BITRUCK": "0,13086613",
+    "FROTA": "0,16370246"
+  },
+  {
+    "CIDADE": "SAO ROMAO",
+    "TRUCK": "0,342678587",
+    "CARRETA": "0,21542568",
+    "TOCO": "0,41759748",
+    "BITRUCK": "0,28444104",
+    "FROTA": "0,34533268"
+  },
+  {
+    "CIDADE": "SAO ROQUE DE MINAS",
+    "TRUCK": "0,20193484",
+    "CARRETA": "0,126076961",
+    "TOCO": "0,247402025",
+    "BITRUCK": "0,166685873",
+    "FROTA": "0,206065811"
+  },
+  {
+    "CIDADE": "SAO SEBASTIAO DA VARGEM ALEGRE",
+    "TRUCK": "0,200437173",
+    "CARRETA": "0,125126193",
+    "TOCO": "0,24559096",
+    "BITRUCK": "0,16543283",
+    "FROTA": "0,20458386"
+  },
+  {
+    "CIDADE": "SAO SEBASTIAO DO ANTA",
+    "TRUCK": "0,21578272",
+    "CARRETA": "0,134868047",
+    "TOCO": "0,26414768",
+    "BITRUCK": "0,17827189",
+    "FROTA": "0,21976838"
+  },
+  {
+    "CIDADE": "SAO SEBASTIAO DO MARANHAO",
+    "TRUCK": "0,263353915",
+    "CARRETA": "0,165067792",
+    "TOCO": "0,321673512",
+    "BITRUCK": "0,218072976",
+    "FROTA": "0,266840392"
+  },
+  {
+    "CIDADE": "SAO SEBASTIAO DO OESTE",
+    "TRUCK": "0,096048354",
+    "CARRETA": "0,058856768",
+    "TOCO": "0,11935798",
+    "BITRUCK": "0,078094507",
+    "FROTA": "0,101290433"
+  },
+  {
+    "CIDADE": "SAO SEBASTIAO DO PARAISO",
+    "TRUCK": "0,25119552",
+    "CARRETA": "0,157349247",
+    "TOCO": "0,30697088",
+    "BITRUCK": "0,20790049",
+    "FROTA": "0,25480958"
+  },
+  {
+    "CIDADE": "SAO SEBASTIAO DO RIO VERDE",
+    "TRUCK": "0,258868293",
+    "CARRETA": "0,162220173",
+    "TOCO": "0,31624924",
+    "BITRUCK": "0,21432002",
+    "FROTA": "0,26240184"
+  },
+  {
+    "CIDADE": "SAO SEBASTIAO DO RIO PRETO",
+    "TRUCK": "0,14318648",
+    "CARRETA": "0,088781587",
+    "TOCO": "0,17636012",
+    "BITRUCK": "0,11753326",
+    "FROTA": "0,14793392"
+  },
+  {
+    "CIDADE": "SAO TIAGO",
+    "TRUCK": "0,137321973",
+    "CARRETA": "0,085058606",
+    "TOCO": "0,16926842",
+    "BITRUCK": "0,11262664",
+    "FROTA": "0,142130951"
+  },
+  {
+    "CIDADE": "SAO TOMAS DE AQUINO",
+    "TRUCK": "0,265950853",
+    "CARRETA": "0,166716413",
+    "TOCO": "0,32481388",
+    "BITRUCK": "0,22024574",
+    "FROTA": "0,26941008"
+  },
+  {
+    "CIDADE": "SAO THOME DAS LETRAS",
+    "TRUCK": "0,216963147",
+    "CARRETA": "0,13561742",
+    "TOCO": "0,26557512",
+    "BITRUCK": "0,17925951",
+    "FROTA": "0,22093642"
+  },
+  {
+    "CIDADE": "SAO VICENTE DE MINAS",
+    "TRUCK": "0,20586566",
+    "CARRETA": "0,128572374",
+    "TOCO": "0,2521554",
+    "BITRUCK": "0,169974647",
+    "FROTA": "0,209955384"
+  },
+  {
+    "CIDADE": "SAPUCAI MIRIM",
+    "TRUCK": "0,303134293",
+    "CARRETA": "0,190321673",
+    "TOCO": "0,36977824",
+    "BITRUCK": "0,25135577",
+    "FROTA": "0,30620334"
+  },
+  {
+    "CIDADE": "SARDOA",
+    "TRUCK": "0,23348912",
+    "CARRETA": "0,146108647",
+    "TOCO": "0,28555928",
+    "BITRUCK": "0,19308619",
+    "FROTA": "0,23728898"
+  },
+  {
+    "CIDADE": "SARZEDO",
+    "TRUCK": "0,037007101",
+    "CARRETA": "0,021375455",
+    "TOCO": "0,047961892",
+    "BITRUCK": "0,028696841",
+    "FROTA": "0,042868722"
+  },
+  {
+    "CIDADE": "SEM PEIXE",
+    "TRUCK": "0,150859253",
+    "CARRETA": "0,093652513",
+    "TOCO": "0,18563848",
+    "BITRUCK": "0,12395279",
+    "FROTA": "0,15552618"
+  },
+  {
+    "CIDADE": "SENADOR AMARAL",
+    "TRUCK": "0,271215556",
+    "CARRETA": "0,170058618",
+    "TOCO": "0,331180262",
+    "BITRUCK": "0,224650525",
+    "FROTA": "0,274619538"
+  },
+  {
+    "CIDADE": "SENADOR CORTES",
+    "TRUCK": "0,2281772",
+    "CARRETA": "0,142736467",
+    "TOCO": "0,2791358",
+    "BITRUCK": "0,1886419",
+    "FROTA": "0,2320328"
+  },
+  {
+    "CIDADE": "SENADOR FIRMINO",
+    "TRUCK": "0,154400533",
+    "CARRETA": "0,095900633",
+    "TOCO": "0,1899208",
+    "BITRUCK": "0,12691565",
+    "FROTA": "0,1590303"
+  },
+  {
+    "CIDADE": "SENADOR MODESTINO GONCALVES",
+    "TRUCK": "0,246473813",
+    "CARRETA": "0,154351753",
+    "TOCO": "0,30126112",
+    "BITRUCK": "0,20395001",
+    "FROTA": "0,25013742"
+  },
+  {
+    "CIDADE": "SENHORA DE OLIVEIRA",
+    "TRUCK": "0,133743067",
+    "CARRETA": "0,0827866",
+    "TOCO": "0,1649406",
+    "BITRUCK": "0,1096323",
+    "FROTA": "0,1385896"
+  },
+  {
+    "CIDADE": "SENHORA DO PORTO",
+    "TRUCK": "0,169155867",
+    "CARRETA": "0,1052678",
+    "TOCO": "0,2077638",
+    "BITRUCK": "0,1392609",
+    "FROTA": "0,1736308"
+  },
+  {
+    "CIDADE": "SENHORA DOS REMEDIOS",
+    "TRUCK": "0,137284347",
+    "CARRETA": "0,08503472",
+    "TOCO": "0,16922292",
+    "BITRUCK": "0,11259516",
+    "FROTA": "0,14209372"
+  },
+  {
+    "CIDADE": "SERICITA",
+    "TRUCK": "0,186862267",
+    "CARRETA": "0,1165084",
+    "TOCO": "0,2291754",
+    "BITRUCK": "0,1540752",
+    "FROTA": "0,1911514"
+  },
+  {
+    "CIDADE": "SERITINGA",
+    "TRUCK": "0,252375947",
+    "CARRETA": "0,15809862",
+    "TOCO": "0,30839832",
+    "BITRUCK": "0,20888811",
+    "FROTA": "0,25597762"
+  },
+  {
+    "CIDADE": "SERRA AZUL DE MINAS",
+    "TRUCK": "0,237066551",
+    "CARRETA": "0,148379716",
+    "TOCO": "0,289885315",
+    "BITRUCK": "0,196079296",
+    "FROTA": "0,240828871"
+  },
+  {
+    "CIDADE": "SERRA DA SAUDADE",
+    "TRUCK": "0,174467787",
+    "CARRETA": "0,10863998",
+    "TOCO": "0,21418728",
+    "BITRUCK": "0,14370519",
+    "FROTA": "0,17888698"
+  },
+  {
+    "CIDADE": "SERRA DO SALITRE",
+    "TRUCK": "0,244703173",
+    "CARRETA": "0,153227693",
+    "TOCO": "0,29911996",
+    "BITRUCK": "0,20246858",
+    "FROTA": "0,24838536"
+  },
+  {
+    "CIDADE": "SERRA DOS AIMORES",
+    "TRUCK": "0,402880347",
+    "CARRETA": "0,25364372",
+    "TOCO": "0,49039692",
+    "BITRUCK": "0,33480966",
+    "FROTA": "0,40490272"
+  },
+  {
+    "CIDADE": "SERRANIA",
+    "TRUCK": "0,234669547",
+    "CARRETA": "0,14685802",
+    "TOCO": "0,28698672",
+    "BITRUCK": "0,19407381",
+    "FROTA": "0,23845702"
+  },
+  {
+    "CIDADE": "SERRANOPOLIS DE MINAS",
+    "TRUCK": "0,396388",
+    "CARRETA": "0,249522167",
+    "TOCO": "0,482546",
+    "BITRUCK": "0,32937775",
+    "FROTA": "0,3984785"
+  },
+  {
+    "CIDADE": "SERRANOS",
+    "TRUCK": "0,227586987",
+    "CARRETA": "0,14236178",
+    "TOCO": "0,27842208",
+    "BITRUCK": "0,18814809",
+    "FROTA": "0,23144878"
+  },
+  {
+    "CIDADE": "SERRO",
+    "TRUCK": "0,172106933",
+    "CARRETA": "0,107141233",
+    "TOCO": "0,2113324",
+    "BITRUCK": "0,14172995",
+    "FROTA": "0,1765509"
+  },
+  {
+    "CIDADE": "SETE LAGOAS",
+    "TRUCK": "0,075252925",
+    "CARRETA": "0,045655151",
+    "TOCO": "0,094210948",
+    "BITRUCK": "0,060695729",
+    "FROTA": "0,080713218"
+  },
+  {
+    "CIDADE": "SETUBINHA",
+    "TRUCK": "0,333125984",
+    "CARRETA": "0,209361376",
+    "TOCO": "0,406045922",
+    "BITRUCK": "0,276448725",
+    "FROTA": "0,335880316"
+  },
+  {
+    "CIDADE": "SILVEIRANIA",
+    "TRUCK": "0,178009067",
+    "CARRETA": "0,1108881",
+    "TOCO": "0,2184696",
+    "BITRUCK": "0,14666805",
+    "FROTA": "0,1823911"
+  },
+  {
+    "CIDADE": "SILVIANOPOLIS",
+    "TRUCK": "0,23348912",
+    "CARRETA": "0,146108647",
+    "TOCO": "0,28555928",
+    "BITRUCK": "0,19308619",
+    "FROTA": "0,23728898"
+  },
+  {
+    "CIDADE": "SIMAO PEREIRA",
+    "TRUCK": "0,204568667",
+    "CARRETA": "0,127749",
+    "TOCO": "0,250587",
+    "BITRUCK": "0,1688895",
+    "FROTA": "0,208672"
+  },
+  {
+    "CIDADE": "SIMONESIA",
+    "TRUCK": "0,223455493",
+    "CARRETA": "0,139738973",
+    "TOCO": "0,27342604",
+    "BITRUCK": "0,18469142",
+    "FROTA": "0,22736064"
+  },
+  {
+    "CIDADE": "SOBRALIA",
+    "TRUCK": "0,214602293",
+    "CARRETA": "0,134118673",
+    "TOCO": "0,26272024",
+    "BITRUCK": "0,17728427",
+    "FROTA": "0,21860034"
+  },
+  {
+    "CIDADE": "SOLEDADE DE MINAS",
+    "TRUCK": "0,241752107",
+    "CARRETA": "0,15135426",
+    "TOCO": "0,29555136",
+    "BITRUCK": "0,19999953",
+    "FROTA": "0,24546526"
+  },
+  {
+    "CIDADE": "TABULEIRO",
+    "TRUCK": "0,184501413",
+    "CARRETA": "0,115009653",
+    "TOCO": "0,22632052",
+    "BITRUCK": "0,15209996",
+    "FROTA": "0,18881532"
+  },
+  {
+    "CIDADE": "TAIOBEIRAS",
+    "TRUCK": "0,434751867",
+    "CARRETA": "0,2738768",
+    "TOCO": "0,5289378",
+    "BITRUCK": "0,3614754",
+    "FROTA": "0,4364398"
+  },
+  {
+    "CIDADE": "TAPARUBA",
+    "TRUCK": "0,264770427",
+    "CARRETA": "0,16596704",
+    "TOCO": "0,32338644",
+    "BITRUCK": "0,21925812",
+    "FROTA": "0,26824204"
+  },
+  {
+    "CIDADE": "TAPIRA",
+    "TRUCK": "0,258194712",
+    "CARRETA": "0,161792562",
+    "TOCO": "0,315434707",
+    "BITRUCK": "0,213756459",
+    "FROTA": "0,261735327"
+  },
+  {
+    "CIDADE": "TAPIRAI",
+    "TRUCK": "0,187931291",
+    "CARRETA": "0,117187051",
+    "TOCO": "0,230468125",
+    "BITRUCK": "0,154969613",
+    "FROTA": "0,192209206"
+  },
+  {
+    "CIDADE": "TAQUARACU DE MINAS",
+    "TRUCK": "0,073423264",
+    "CARRETA": "0,044493623",
+    "TOCO": "0,091998416",
+    "BITRUCK": "0,059164918",
+    "FROTA": "0,078902756"
+  },
+  {
+    "CIDADE": "TARUMIRIM",
+    "TRUCK": "0,198986724",
+    "CARRETA": "0,124205401",
+    "TOCO": "0,243836993",
+    "BITRUCK": "0,164219292",
+    "FROTA": "0,203148631"
+  },
+  {
+    "CIDADE": "TEIXEIRAS",
+    "TRUCK": "0,16089288",
+    "CARRETA": "0,100022187",
+    "TOCO": "0,19777172",
+    "BITRUCK": "0,13234756",
+    "FROTA": "0,16545452"
+  },
+  {
+    "CIDADE": "TEOFILO OTONI",
+    "TRUCK": "0,301363653",
+    "CARRETA": "0,189197613",
+    "TOCO": "0,36763708",
+    "BITRUCK": "0,24987434",
+    "FROTA": "0,30445128"
+  },
+  {
+    "CIDADE": "TIMOTEO",
+    "TRUCK": "0,159712453",
+    "CARRETA": "0,099272813",
+    "TOCO": "0,19634428",
+    "BITRUCK": "0,13135994",
+    "FROTA": "0,16428648"
+  },
+  {
+    "CIDADE": "TIRADENTES",
+    "TRUCK": "0,158695811",
+    "CARRETA": "0,098627416",
+    "TOCO": "0,195114897",
+    "BITRUCK": "0,130509352",
+    "FROTA": "0,163280506"
+  },
+  {
+    "CIDADE": "TIROS",
+    "TRUCK": "0,224045707",
+    "CARRETA": "0,14011366",
+    "TOCO": "0,27413976",
+    "BITRUCK": "0,18518523",
+    "FROTA": "0,22794466"
+  },
+  {
+    "CIDADE": "TOCANTINS",
+    "TRUCK": "0,197021314",
+    "CARRETA": "0,122957694",
+    "TOCO": "0,241460306",
+    "BITRUCK": "0,162574905",
+    "FROTA": "0,201203844"
+  },
+  {
+    "CIDADE": "TOCOS DOMOJI",
+    "TRUCK": "0,263353915",
+    "CARRETA": "0,165067792",
+    "TOCO": "0,321673512",
+    "BITRUCK": "0,218072976",
+    "FROTA": "0,266840392"
+  },
+  {
+    "CIDADE": "TOMBOS",
+    "TRUCK": "0,259458507",
+    "CARRETA": "0,16259486",
+    "TOCO": "0,31696296",
+    "BITRUCK": "0,21481383",
+    "FROTA": "0,26298586"
+  },
+  {
+    "CIDADE": "TRES CORACOES",
+    "TRUCK": "0,190403547",
+    "CARRETA": "0,11875652",
+    "TOCO": "0,23345772",
+    "BITRUCK": "0,15703806",
+    "FROTA": "0,19465552"
+  },
+  {
+    "CIDADE": "TRES MARIAS",
+    "TRUCK": "0,188042693",
+    "CARRETA": "0,117257773",
+    "TOCO": "0,23060284",
+    "BITRUCK": "0,15506282",
+    "FROTA": "0,19231944"
+  },
+  {
+    "CIDADE": "TRES PONTAS",
+    "TRUCK": "0,185228851",
+    "CARRETA": "0,115471455",
+    "TOCO": "0,22720018",
+    "BITRUCK": "0,152708581",
+    "FROTA": "0,189535125"
+  },
+  {
+    "CIDADE": "TUMIRITINGA",
+    "TRUCK": "0,262409573",
+    "CARRETA": "0,164468293",
+    "TOCO": "0,32053156",
+    "BITRUCK": "0,21728288",
+    "FROTA": "0,26590596"
+  },
+  {
+    "CIDADE": "TUPACIGUARA",
+    "TRUCK": "0,38045224",
+    "CARRETA": "0,239405627",
+    "TOCO": "0,46327556",
+    "BITRUCK": "0,31604488",
+    "FROTA": "0,38270996"
+  },
+  {
+    "CIDADE": "TURMALINA",
+    "TRUCK": "0,315528773",
+    "CARRETA": "0,198190093",
+    "TOCO": "0,38476636",
+    "BITRUCK": "0,26172578",
+    "FROTA": "0,31846776"
+  },
+  {
+    "CIDADE": "TURVOLANDIA",
+    "TRUCK": "0,229357627",
+    "CARRETA": "0,14348584",
+    "TOCO": "0,28056324",
+    "BITRUCK": "0,18962952",
+    "FROTA": "0,23320084"
+  },
+  {
+    "CIDADE": "UBA",
+    "TRUCK": "0,185228851",
+    "CARRETA": "0,115471455",
+    "TOCO": "0,22720018",
+    "BITRUCK": "0,152708581",
+    "FROTA": "0,189535125"
+  },
+  {
+    "CIDADE": "UBAI",
+    "TRUCK": "0,329693893",
+    "CARRETA": "0,207182573",
+    "TOCO": "0,40189564",
+    "BITRUCK": "0,27357722",
+    "FROTA": "0,33248424"
+  },
+  {
+    "CIDADE": "UBAPORANGA",
+    "TRUCK": "0,207519733",
+    "CARRETA": "0,129622433",
+    "TOCO": "0,2541556",
+    "BITRUCK": "0,17135855",
+    "FROTA": "0,2115921"
+  },
+  {
+    "CIDADE": "UBERABA",
+    "TRUCK": "0,298412587",
+    "CARRETA": "0,18732418",
+    "TOCO": "0,36406848",
+    "BITRUCK": "0,24740529",
+    "FROTA": "0,30153118"
+  },
+  {
+    "CIDADE": "UBERLANDIA",
+    "TRUCK": "0,3344156",
+    "CARRETA": "0,210180067",
+    "TOCO": "0,4076054",
+    "BITRUCK": "0,2775277",
+    "FROTA": "0,3371564"
+  },
+  {
+    "CIDADE": "UMBURATIBA",
+    "TRUCK": "0,405831413",
+    "CARRETA": "0,255517153",
+    "TOCO": "0,49396552",
+    "BITRUCK": "0,33727871",
+    "FROTA": "0,40782282"
+  },
+  {
+    "CIDADE": "UNAI",
+    "TRUCK": "0,385173947",
+    "CARRETA": "0,24240312",
+    "TOCO": "0,46898532",
+    "BITRUCK": "0,31999536",
+    "FROTA": "0,38738212"
+  },
+  {
+    "CIDADE": "UNIAO DE MINAS",
+    "TRUCK": "0,481968933",
+    "CARRETA": "0,303851733",
+    "TOCO": "0,5860354",
+    "BITRUCK": "0,4009802",
+    "FROTA": "0,4831614"
+  },
+  {
+    "CIDADE": "URUANA DE MINAS",
+    "TRUCK": "0,406337521",
+    "CARRETA": "0,255838447",
+    "TOCO": "0,494577535",
+    "BITRUCK": "0,337702152",
+    "FROTA": "0,408323617"
+  },
+  {
+    "CIDADE": "URUCANIA",
+    "TRUCK": "0,156171173",
+    "CARRETA": "0,097024693",
+    "TOCO": "0,19206196",
+    "BITRUCK": "0,12839708",
+    "FROTA": "0,16078236"
+  },
+  {
+    "CIDADE": "URUCUIA",
+    "TRUCK": "0,400519493",
+    "CARRETA": "0,252144973",
+    "TOCO": "0,48754204",
+    "BITRUCK": "0,33283442",
+    "FROTA": "0,40256664"
+  },
+  {
+    "CIDADE": "VARGEM ALEGRE",
+    "TRUCK": "0,189813333",
+    "CARRETA": "0,118381833",
+    "TOCO": "0,232744",
+    "BITRUCK": "0,15654425",
+    "FROTA": "0,1940715"
+  },
+  {
+    "CIDADE": "VARGEM GRANDE DO RIO PARDO",
+    "TRUCK": "0,454228907",
+    "CARRETA": "0,28624146",
+    "TOCO": "0,55249056",
+    "BITRUCK": "0,37777113",
+    "FROTA": "0,45571246"
+  },
+  {
+    "CIDADE": "VARGINHA",
+    "TRUCK": "0,202207813",
+    "CARRETA": "0,126250253",
+    "TOCO": "0,24773212",
+    "BITRUCK": "0,16691426",
+    "FROTA": "0,20633592"
+  },
+  {
+    "CIDADE": "VARJAO DE MINAS",
+    "TRUCK": "0,257687867",
+    "CARRETA": "0,1614708",
+    "TOCO": "0,3148218",
+    "BITRUCK": "0,2133324",
+    "FROTA": "0,2612338"
+  },
+  {
+    "CIDADE": "VARZEA DA PALMA",
+    "TRUCK": "0,224045707",
+    "CARRETA": "0,14011366",
+    "TOCO": "0,27413976",
+    "BITRUCK": "0,18518523",
+    "FROTA": "0,22794466"
+  },
+  {
+    "CIDADE": "VARZELANDIA",
+    "TRUCK": "0,385946388",
+    "CARRETA": "0,242893491",
+    "TOCO": "0,469919401",
+    "BITRUCK": "0,320641634",
+    "FROTA": "0,388146456"
+  },
+  {
+    "CIDADE": "VAZANTE",
+    "TRUCK": "0,31493856",
+    "CARRETA": "0,197815407",
+    "TOCO": "0,38405264",
+    "BITRUCK": "0,26123197",
+    "FROTA": "0,31788374"
+  },
+  {
+    "CIDADE": "VERDELANDIA",
+    "TRUCK": "0,368749047",
+    "CARRETA": "0,231976058",
+    "TOCO": "0,449123385",
+    "BITRUCK": "0,306253245",
+    "FROTA": "0,371129573"
+  },
+  {
+    "CIDADE": "VEREDINHA",
+    "TRUCK": "0,325264342",
+    "CARRETA": "0,20437055",
+    "TOCO": "0,396539171",
+    "BITRUCK": "0,269871176",
+    "FROTA": "0,32810117"
+  },
+  {
+    "CIDADE": "VARGEM BONITA",
+    "TRUCK": "0,19807632",
+    "CARRETA": "0,123627447",
+    "TOCO": "0,24273608",
+    "BITRUCK": "0,16345759",
+    "FROTA": "0,20224778"
+  },
+  {
+    "CIDADE": "VERISSIMO",
+    "TRUCK": "0,322316227",
+    "CARRETA": "0,20249899",
+    "TOCO": "0,39297414",
+    "BITRUCK": "0,267404595",
+    "FROTA": "0,32518399"
+  },
+  {
+    "CIDADE": "VERMELHO NOVO",
+    "TRUCK": "0,19630568",
+    "CARRETA": "0,122503387",
+    "TOCO": "0,24059492",
+    "BITRUCK": "0,16197616",
+    "FROTA": "0,20049572"
+  },
+  {
+    "CIDADE": "VESPASIANO",
+    "TRUCK": "0,053946224",
+    "CARRETA": "0,032128963",
+    "TOCO": "0,068445656",
+    "BITRUCK": "0,042869188",
+    "FROTA": "0,059630096"
+  },
+  {
+    "CIDADE": "VICOSA",
+    "TRUCK": "0,165614587",
+    "CARRETA": "0,10301968",
+    "TOCO": "0,20348148",
+    "BITRUCK": "0,13629804",
+    "FROTA": "0,17012668"
+  },
+  {
+    "CIDADE": "VIEIRAS",
+    "TRUCK": "0,24057168",
+    "CARRETA": "0,150604887",
+    "TOCO": "0,29412392",
+    "BITRUCK": "0,19901191",
+    "FROTA": "0,24429722"
+  },
+  {
+    "CIDADE": "VIRGEM DA LAPA",
+    "TRUCK": "0,360384987",
+    "CARRETA": "0,22666628",
+    "TOCO": "0,43900908",
+    "BITRUCK": "0,29925534",
+    "FROTA": "0,36285328"
+  },
+  {
+    "CIDADE": "VIRGINIA",
+    "TRUCK": "0,274804053",
+    "CARRETA": "0,172336713",
+    "TOCO": "0,33551968",
+    "BITRUCK": "0,22765289",
+    "FROTA": "0,27817038"
+  },
+  {
+    "CIDADE": "VIRGINOPOLIS",
+    "TRUCK": "0,207519733",
+    "CARRETA": "0,129622433",
+    "TOCO": "0,2541556",
+    "BITRUCK": "0,17135855",
+    "FROTA": "0,2115921"
+  },
+  {
+    "CIDADE": "VIRGOLANDIA",
+    "TRUCK": "0,254146587",
+    "CARRETA": "0,15922268",
+    "TOCO": "0,31053948",
+    "BITRUCK": "0,21036954",
+    "FROTA": "0,25772968"
+  },
+  {
+    "CIDADE": "VISCONDE DO RIO BRANCO",
+    "TRUCK": "0,19099376",
+    "CARRETA": "0,119131207",
+    "TOCO": "0,23417144",
+    "BITRUCK": "0,15753187",
+    "FROTA": "0,19523954"
+  },
+  {
+    "CIDADE": "VOLTA GRANDE",
+    "TRUCK": "0,262409573",
+    "CARRETA": "0,164468293",
+    "TOCO": "0,32053156",
+    "BITRUCK": "0,21728288",
+    "FROTA": "0,26590596"
+  },
+  {
+    "CIDADE": "WENCESLAU BRAZ",
+    "TRUCK": "0,309541059",
+    "CARRETA": "0,194388897",
+    "TOCO": "0,377525671",
+    "BITRUCK": "0,256716078",
+    "FROTA": "0,312542877"
+  },
+  {
+    "CIDADE": "SENADOR CANEDO",
+    "TRUCK": "0,547010443",
+    "CARRETA": "0,345142204",
+    "TOCO": "0,664687344",
+    "BITRUCK": "0,455398062",
+    "FROTA": "0,547520404"
+  }
+]
