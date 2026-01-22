@@ -112,7 +112,7 @@ const compartimentos={
 };
 
 const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
+const moeda3=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
 const numero=v=>v.toLocaleString("pt-BR");
 
 /* ================= CIDADES ================= */
@@ -337,7 +337,7 @@ html += `
   itens.forEach(i=>{
     const total=i.litros*i.margem*freteUnitBase;
     const unit=total/i.litros;
-    document.getElementById("unit"+i.idx).innerText=moeda4(unit);
+    document.getElementById("unit"+i.idx).innerText=moeda3(unit);
     document.getElementById("frete"+i.idx).innerText=moeda(total);
 
     html+=`
@@ -346,7 +346,7 @@ html += `
         <td>${i.cidade}</td>
         <td>${i.horario}</td>
         <td>${i.margem.toFixed(2)}</td>
-        <td>${moeda4(unit)}</td>
+        <td>${moeda3(unit)}</td>
         <td>${numero(i.litros)}</td>
         <td>${moeda(total)}</td>
         <td>${i.vendedor}</td>
@@ -388,7 +388,7 @@ html += `
     <td>${indiceLabel}</td>
     <td>${taxaLabel}</td>
     <td>${m3Total}</td>
-    <td>${moeda4(freteUnitMedio)}</td>
+    <td>${moeda3(freteUnitMedio)}</td>
     <td><b>${moeda(freteTotal)}</b></td>
   </tr>
 </table>
