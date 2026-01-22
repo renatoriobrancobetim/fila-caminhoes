@@ -297,12 +297,21 @@ function calcular(){
   const cargaParcial=litrosUsados<capacidadeTotal;
   const freteUnitBase=freteTotal/litrosPonderadosTotal;
 
-  let html=`<div class="resumo-box">
-    <h3>
-      RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
-      <span class="badge-${modalidade==="TABELA"?"completa":"parcial"}">FRETE ${modalidade}</span>
-      ${cargaParcial?'<span class="badge-parcial">CARGA PARCIAL</span>':''}
-    </h3>
+let html = `
+<div class="resumo-box">
+  <h3>
+    RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
+
+    ${
+      modalidade === "TABELA"
+        ? '<span class="badge-frete badge-tabela">FRETE TABELA</span>'
+        : '<span class="badge-frete badge-km">FRETE KM</span>'
+    }
+
+    ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
+  </h3>
+`;
+
 
     <table>
       <tr>
