@@ -277,21 +277,29 @@ function calcular(){
     });
   });
 
-  let cidadesUnicas=new Set(itens.map(i=>normalizarCidade(i.cidade)));
-  let modalidade="KM";
-  let freteTotal=0;
+let cidadesUnicas = new Set(itens.map(i => normalizarCidade(i.cidade)));
+let modalidade = "KM";
+let freteTotal = 0;
 
-  if(cidadesUnicas.size===1){
-    const cidade=[...cidadesUnicas][0];
-    if(tabelaFrete[cidade]){
-      modalidade="TABELA";
-      freteTotal=tabelaFrete[cidade].frete;
-    }
-  }
+// normaliza tipo do caminhão para bater com a tabela
+let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
 
-  if(modalidade==="KM"){
-    freteTotal=(km*dados.indice)+dados.taxa;
+if (cidadesUnicas.size === 1) {
+  const cidade = [...cidadesUnicas][0];
+
+  if (
+    tabelaFrete[cidade] &&
+    tabelaFrete[cidade][tipoTabela] !== undefined
+  ) {
+    modalidade = "TABELA";
+    freteTotal = tabelaFrete[cidade][tipoTabela];
   }
+}
+
+if (modalidade === "KM") {
+  freteTotal = (km * dados.indice) + dados.taxa;
+}
+
 
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
