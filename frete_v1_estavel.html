@@ -79,12 +79,18 @@ function normalizarCidade(nome){
 /* ================= VARIÁVEIS ================= */
 const BASE="BETIM";
 let cidadesCoords={}, mapa, rotaLayer;
-let tabelaFrete = {};
 
 /* ================= FRETE TABELA ================= */
+let tabelaFrete = {};
+
 fetch("tabela-frete.json")
-  .then(r=>r.json())
-  .then(d=>tabelaFrete=d);
+  .then(r => r.json())
+  .then(d => {
+    Object.keys(d).forEach(cidade => {
+      tabelaFrete[normalizarCidade(cidade)] = d[cidade];
+    });
+  });
+
 
 /* ================= CONFIG ================= */
 const baseFrete={
