@@ -269,7 +269,10 @@ function calcular(){
     itens.push({
       idx,
       cliente:c.value.toUpperCase(),
-      cidade:document.getElementById("cidade"+idx).value,
+      cidade: normalizarCidade(
+  document.getElementById("cidade"+idx).value
+),
+
       horario:document.getElementById("horario"+idx).value||"-",
       vendedor:document.getElementById("vendedor"+idx).value||"-",
       litros,
