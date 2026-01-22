@@ -302,3 +302,30 @@ th{
     box-shadow:none;
   }
 }
+
+/* ===== BADGE MODALIDADE DE FRETE ===== */
+.badge-frete {
+  display:inline-block;
+  margin-left:12px;
+  padding:6px 14px;
+  font-size:12px;
+  font-weight:700;
+  border-radius:20px;
+  letter-spacing:.5px;
+  vertical-align:middle;
+}
+
+.badge-km {
+  background:#e3f2fd;
+  color:#0d47a1;
+  border:2px solid #0d47a1;
+  box-shadow:0 3px 8px rgba(13,71,161,.25);
+}
+
+.badge-tabela {
+  background:#fff3e0;
+  color:#e65100;
+  border:2px solid #f57c00;
+  box-shadow:0 3px 10px rgba(245,124,0,.35);
+}
+
