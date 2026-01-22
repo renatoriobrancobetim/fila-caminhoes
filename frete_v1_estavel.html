@@ -269,7 +269,7 @@ function calcular(){
   itens.push({
     idx,
     cliente: c.value.toUpperCase(),
-    cidade: document.getElementById("cidade"+idx).value,
+    cidade: document.getElementById("cidade"+idx).value.trim()
     horario: document.getElementById("horario"+idx).value || "-",
     vendedor: document.getElementById("vendedor"+idx).value || "-",
     litros,
