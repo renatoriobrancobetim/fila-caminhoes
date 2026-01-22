@@ -267,17 +267,15 @@ function calcular(){
     litrosPonderadosTotal+=litros*margem;
 
     itens.push({
-      idx,
-      cliente:c.value.toUpperCase(),
-      cidade: document.getElementById("cidade"+idx).value
-),
+  idx,
+  cliente: c.value.toUpperCase(),
+  cidade: document.getElementById("cidade"+idx).value,
+  horario: document.getElementById("horario"+idx).value || "-",
+  vendedor: document.getElementById("vendedor"+idx).value || "-",
+  litros,
+  margem
+});
 
-      horario:document.getElementById("horario"+idx).value||"-",
-      vendedor:document.getElementById("vendedor"+idx).value||"-",
-      litros,
-      margem
-    });
-  });
 
 let cidadesUnicas = new Set(
   itens.map(i => normalizarCidade(i.cidade))
