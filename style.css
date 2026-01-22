@@ -302,3 +302,39 @@ th{
     box-shadow:none;
   }
 }
+/* =====================================================
+   TOOLTIP AJUSTE DE MARGEM MENSAGEM
+===================================================== */
+.tooltip{
+  position:relative;
+  display:inline-block;
+  margin-left:6px;
+  cursor:help;
+  font-weight:bold;
+  color:#0d47a1;
+}
+
+.tooltip-text{
+  visibility:hidden;
+  opacity:0;
+  width:220px;
+  background:#263238;
+  color:#fff;
+  text-align:left;
+  padding:10px;
+  border-radius:8px;
+  font-size:12px;
+  position:absolute;
+  z-index:10;
+  bottom:125%;
+  left:50%;
+  transform:translateX(-50%);
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+  transition:opacity .2s ease;
+}
+
+.tooltip:hover .tooltip-text{
+  visibility:visible;
+  opacity:1;
+}
+
