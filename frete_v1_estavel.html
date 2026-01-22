@@ -312,18 +312,19 @@ let html = `
   </h3>
 `;
 
-
-    <table>
-      <tr>
-        <th>CLIENTE</th>
-        <th>CIDADE</th>
-        <th>HORÁRIO</th>
-        <th>AJUSTE</th>
-        <th>FRETE (R$/L)</th>
-        <th>QUANTIDADE</th>
-        <th>TOTAL</th>
-        <th>VENDEDOR</th>
-      </tr>`;
+html += `
+<table>
+  <tr>
+    <th>CLIENTE</th>
+    <th>CIDADE</th>
+    <th>HORÁRIO</th>
+    <th>AJUSTE</th>
+    <th>FRETE (R$/L)</th>
+    <th>QUANTIDADE</th>
+    <th>TOTAL</th>
+    <th>VENDEDOR</th>
+  </tr>
+`;
 
   itens.forEach(i=>{
     const total=i.litros*i.margem*freteUnitBase;
