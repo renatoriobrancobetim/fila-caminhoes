@@ -79,14 +79,15 @@ const baseFrete={
 };
 
 const compartimentos={
-  FROTA:[5000,5000,5000,2500,2500,2500],
-  BITRUCK:[5000,5000,5000],
+  TOCO:[5000,3000,2000],
   TRUCK_555:[5000,5000,5000],
   TRUCK_5532:[5000,5000,3000,2000],
   TRUCK_53232:[5000,3000,2000,3000,2000],
-  TOCO:[5000,3000,2000],
+  BITRUCK:[5000,5000,5000,5000], // ✅ CORRIGIDO
+  FROTA:[5000,5000,5000,2500,2500,2500],
   CARRETA:[5000,5000,5000,5000,5000,5000]
 };
+
 
 const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
