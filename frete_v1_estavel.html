@@ -66,6 +66,15 @@
 <datalist id="cidadesMG"></datalist>
 
 <script>
+  function normalizarCidade(nome){
+  return nome
+    .normalize("NFD")                 // separa acentos
+    .replace(/[\u0300-\u036f]/g, "")  // remove acentos
+    .replace(/[^A-Za-z\s]/g, "")      // remove hífen, pontos etc
+    .trim()
+    .toUpperCase();
+}
+
 const BASE="BETIM";
 let cidadesCoords={}, mapa, rotaLayer;
 
