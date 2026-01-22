@@ -256,25 +256,27 @@ function calcular(){
   let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
 
   rows.forEach(r=>{
-    const c=r.querySelector("input[id^='cliente']");
-    if(!c.value) return;
+  const c=r.querySelector("input[id^='cliente']");
+  if(!c.value) return;
 
-    const idx=parseInt(c.id.replace("cliente",""));
-    const litros=litrosArr[idx];
-    const margem=parseFloat(document.getElementById("margem"+idx).value||1);
+  const idx=parseInt(c.id.replace("cliente",""));
+  const litros=litrosArr[idx];
+  const margem=parseFloat(document.getElementById("margem"+idx).value||1);
 
-    litrosUsados+=litros;
-    litrosPonderadosTotal+=litros*margem;
+  litrosUsados+=litros;
+  litrosPonderadosTotal+=litros*margem;
 
-    itens.push({
-  idx,
-  cliente: c.value.toUpperCase(),
-  cidade: document.getElementById("cidade"+idx).value,
-  horario: document.getElementById("horario"+idx).value || "-",
-  vendedor: document.getElementById("vendedor"+idx).value || "-",
-  litros,
-  margem
+  itens.push({
+    idx,
+    cliente: c.value.toUpperCase(),
+    cidade: document.getElementById("cidade"+idx).value,
+    horario: document.getElementById("horario"+idx).value || "-",
+    vendedor: document.getElementById("vendedor"+idx).value || "-",
+    litros,
+    margem
+  });
 });
+
 
 
 let cidadesUnicas = new Set(
