@@ -218,7 +218,48 @@ async function otimizarRota(){
   spinner.style.display="flex";
 
   try {
-    // 🔁 TODO o código atual da função fica aqui dentro
+
+    const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
+    let paradas=rows.map(r=>({
+      row:r,
+      cidade:r.querySelector(".cidade").value,
+      cliente:r.querySelector("input[id^='cliente']").value
+    })).filter(p=>p.cidade);
+
+    let rota = [];
+    let restantes = [...paradas];
+    let atualCidade = null;
+
+    while (restantes.length) {
+      let menor = Infinity;
+      let escolhido = null;
+
+      for (const p of restantes) {
+        let d = !atualCidade
+          ? await distanciaBaseCidade(p.cidade)
+          : await distanciaCidades(atualCidade, p.cidade);
+
+        if (d < menor) {
+          menor = d;
+          escolhido = p;
+        }
+      }
+
+      rota.push(escolhido);
+      restantes = restantes.filter(p => p !== escolhido);
+      atualCidade = escolhido.cidade;
+    }
+
+    rota.forEach(p=>document.querySelector("#freteTable").appendChild(p.row));
+
+    await recalcularKM();
+    await desenharMapa(rota);
+
+    document.querySelectorAll("input").forEach(i=>i.disabled=true);
+    document.getElementById("btnOtimizar").style.display="none";
+    document.getElementById("btnCalcular").disabled=false;
+    document.getElementById("btnCalcular").classList.add("btn-destaque");
+
   } catch (e) {
     alert("Erro ao otimizar rota:\n" + e.message);
     console.error(e);
@@ -226,6 +267,7 @@ async function otimizarRota(){
     spinner.style.display="none";
   }
 }
+
 
 
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
@@ -299,8 +341,6 @@ for (let i = 0; i < cidades.length - 1; i++) {
   km += await distanciaCidades(cidades[i], cidades[i + 1]);
 }
 
-
-  }
 
   // Última cidade → Empresa
   km += await distanciaBaseCidade(cidades[cidades.length - 1]);
