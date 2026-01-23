@@ -259,8 +259,11 @@ function calcular(){
   let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
 
   rows.forEach(r=>{
-  const c=r.querySelector("input[id^='cliente']");
-  if(!c.value) return;
+const cidadeInput = r.querySelector(".cidade");
+if (!cidadeInput.value) return;
+
+const c = r.querySelector("input[id^='cliente']");
+
 
   const idx=parseInt(c.id.replace("cliente",""));
   const litros=litrosArr[idx];
