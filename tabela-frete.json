@@ -6,161 +6,161 @@
     "BITRUCK": 0.253,
     "FROTA": 0.308
   },
-  "ABAETE": {
+  "Abaeté": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.168,
     "BITRUCK": 0.112,
     "FROTA": 0.141
   },
-  "ABRE CAMPO": {
+  "Abre Campo": {
     "TRUCK": 0.176,
     "CARRETA": 0.11,
     "TOCO": 0.216,
     "BITRUCK": 0.145,
     "FROTA": 0.18
   },
-  "ACAIACA": {
+  "Acaiaca": {
     "TRUCK": 0.124,
     "CARRETA": 0.076,
     "TOCO": 0.153,
     "BITRUCK": 0.101,
     "FROTA": 0.129
   },
-  "ACUCENA": {
+  "Açucena": {
     "TRUCK": 0.202,
     "CARRETA": 0.126,
     "TOCO": 0.247,
     "BITRUCK": 0.166,
     "FROTA": 0.206
   },
-  "AGUA BOA": {
+  "Água Boa": {
     "TRUCK": 0.271,
     "CARRETA": 0.17,
     "TOCO": 0.331,
     "BITRUCK": 0.225,
     "FROTA": 0.275
   },
-  "AGUANIL": {
+  "Aguanil": {
     "TRUCK": 0.151,
     "CARRETA": 0.094,
     "TOCO": 0.186,
     "BITRUCK": 0.124,
     "FROTA": 0.156
   },
-  "AIMORES": {
+  "Aimorés": {
     "TRUCK": 0.32,
     "CARRETA": 0.201,
     "TOCO": 0.39,
     "BITRUCK": 0.265,
     "FROTA": 0.323
   },
-  "AIURUOCA": {
+  "Aiuruoca": {
     "TRUCK": 0.263,
     "CARRETA": 0.165,
     "TOCO": 0.322,
     "BITRUCK": 0.218,
     "FROTA": 0.267
   },
-  "ALAGOA": {
+  "Alagoa": {
     "TRUCK": 0.281,
     "CARRETA": 0.176,
     "TOCO": 0.343,
     "BITRUCK": 0.233,
     "FROTA": 0.285
   },
-  "ALBERTINA": {
+  "Albertina": {
     "TRUCK": 0.299,
     "CARRETA": 0.188,
     "TOCO": 0.364,
     "BITRUCK": 0.248,
     "FROTA": 0.302
   },
-  "ALEM PARAIBA": {
+  "Além Paraíba": {
     "TRUCK": 0.248,
     "CARRETA": 0.155,
     "TOCO": 0.303,
     "BITRUCK": 0.205,
     "FROTA": 0.252
   },
-  "ALFENAS": {
+  "Alfenas": {
     "TRUCK": 0.22,
     "CARRETA": 0.137,
     "TOCO": 0.269,
     "BITRUCK": 0.182,
     "FROTA": 0.224
   },
-  "ALFREDO VASCONCELOS": {
+  "Alfredo Vasconcelos": {
     "TRUCK": 0.128,
     "CARRETA": 0.079,
     "TOCO": 0.159,
     "BITRUCK": 0.105,
     "FROTA": 0.133
   },
-  "ALMENARA": {
+  "Almenara": {
     "TRUCK": 0.464,
     "CARRETA": 0.292,
     "TOCO": 0.564,
     "BITRUCK": 0.386,
     "FROTA": 0.465
   },
-  "ALPERCATA": {
+  "Alpercata": {
     "TRUCK": 0.231,
     "CARRETA": 0.145,
     "TOCO": 0.283,
     "BITRUCK": 0.191,
     "FROTA": 0.235
   },
-  "ALPINOPOLIS": {
+  "Alpinópolis": {
     "TRUCK": 0.218,
     "CARRETA": 0.136,
     "TOCO": 0.267,
     "BITRUCK": 0.18,
     "FROTA": 0.222
   },
-  "ALTEROSA": {
+  "Alterosa": {
     "TRUCK": 0.246,
     "CARRETA": 0.154,
     "TOCO": 0.301,
     "BITRUCK": 0.204,
     "FROTA": 0.25
   },
-  "ALTO CAPARAO": {
+  "Alto Caparaó": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.285,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "ALTO JEQUITIBA": {
+  "Alto Jequitibá": {
     "TRUCK": 0.225,
     "CARRETA": 0.14,
     "TOCO": 0.275,
     "BITRUCK": 0.186,
     "FROTA": 0.229
   },
-  "ALTO RIO DOCE": {
+  "Alto Rio Doce": {
     "TRUCK": 0.147,
     "CARRETA": 0.091,
     "TOCO": 0.181,
     "BITRUCK": 0.121,
     "FROTA": 0.152
   },
-  "ALVARENGA": {
+  "Alvarenga": {
     "TRUCK": 0.242,
     "CARRETA": 0.151,
     "TOCO": 0.296,
     "BITRUCK": 0.2,
     "FROTA": 0.245
   },
-  "ALVINOPOLIS": {
+  "Alvinópolis": {
     "TRUCK": 0.135,
     "CARRETA": 0.084,
     "TOCO": 0.166,
     "BITRUCK": 0.111,
     "FROTA": 0.14
   },
-  "ALVORADA DE MINAS": {
+  "Alvorada de Minas": {
     "TRUCK": 0.157,
     "CARRETA": 0.098,
     "TOCO": 0.193,
@@ -174,210 +174,210 @@
     "BITRUCK": 0.127,
     "FROTA": 0.159
   },
-  "ANDRADAS": {
+  "Andradas": {
     "TRUCK": 0.303,
     "CARRETA": 0.19,
     "TOCO": 0.369,
     "BITRUCK": 0.251,
     "FROTA": 0.306
   },
-  "ANDRELANDIA": {
+  "Andrelândia": {
     "TRUCK": 0.217,
     "CARRETA": 0.135,
     "TOCO": 0.265,
     "BITRUCK": 0.179,
     "FROTA": 0.221
   },
-  "ANGELANDIA": {
+  "Angelândia": {
     "TRUCK": 0.314,
     "CARRETA": 0.197,
     "TOCO": 0.383,
     "BITRUCK": 0.26,
     "FROTA": 0.317
   },
-  "ANTONIO CARLOS": {
+  "Antônio Carlos": {
     "TRUCK": 0.143,
     "CARRETA": 0.089,
     "TOCO": 0.176,
     "BITRUCK": 0.118,
     "FROTA": 0.148
   },
-  "ANTONIO DIAS": {
+  "Antônio Dias": {
     "TRUCK": 0.144,
     "CARRETA": 0.089,
     "TOCO": 0.177,
     "BITRUCK": 0.118,
     "FROTA": 0.149
   },
-  "ARACAI": {
+  "Araçaí": {
     "TRUCK": 0.105,
     "CARRETA": 0.065,
     "TOCO": 0.131,
     "BITRUCK": 0.086,
     "FROTA": 0.111
   },
-  "ARACITABA": {
+  "Aracitaba": {
     "TRUCK": 0.168,
     "CARRETA": 0.105,
     "TOCO": 0.206,
     "BITRUCK": 0.138,
     "FROTA": 0.172
   },
-  "ARACUAI": {
+  "Araçuaí": {
     "TRUCK": 0.381,
     "CARRETA": 0.24,
     "TOCO": 0.464,
     "BITRUCK": 0.317,
     "FROTA": 0.383
   },
-  "ARAGUARI": {
+  "Araguari": {
     "TRUCK": 0.349,
     "CARRETA": 0.219,
     "TOCO": 0.425,
     "BITRUCK": 0.289,
     "FROTA": 0.351
   },
-  "ARANTINA": {
+  "Arantina": {
     "TRUCK": 0.238,
     "CARRETA": 0.149,
     "TOCO": 0.291,
     "BITRUCK": 0.197,
     "FROTA": 0.242
   },
-  "ARAPONGA": {
+  "Araponga": {
     "TRUCK": 0.193,
     "CARRETA": 0.12,
     "TOCO": 0.237,
     "BITRUCK": 0.159,
     "FROTA": 0.197
   },
-  "ARAPORA": {
+  "Araporã": {
     "TRUCK": 0.397,
     "CARRETA": 0.25,
     "TOCO": 0.483,
     "BITRUCK": 0.33,
     "FROTA": 0.399
   },
-  "ARAPUA": {
+  "Arapuá": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.265,
     "BITRUCK": 0.179,
     "FROTA": 0.22
   },
-  "ARAUJOS": {
+  "Araújos": {
     "TRUCK": 0.107,
     "CARRETA": 0.066,
     "TOCO": 0.133,
     "BITRUCK": 0.087,
     "FROTA": 0.112
   },
-  "ARAXA": {
+  "Araxá": {
     "TRUCK": 0.232,
     "CARRETA": 0.145,
     "TOCO": 0.283,
     "BITRUCK": 0.192,
     "FROTA": 0.236
   },
-  "ARCEBURGO": {
+  "Arceburgo": {
     "TRUCK": 0.282,
     "CARRETA": 0.177,
     "TOCO": 0.345,
     "BITRUCK": 0.234,
     "FROTA": 0.286
   },
-  "ARCOS": {
+  "Arcos": {
     "TRUCK": 0.143,
     "CARRETA": 0.088,
     "TOCO": 0.176,
     "BITRUCK": 0.117,
     "FROTA": 0.147
   },
-  "AREADO": {
+  "Areado": {
     "TRUCK": 0.239,
     "CARRETA": 0.149,
     "TOCO": 0.292,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "ARGIRITA": {
+  "Argirita": {
     "TRUCK": 0.229,
     "CARRETA": 0.143,
     "TOCO": 0.28,
     "BITRUCK": 0.189,
     "FROTA": 0.233
   },
-  "ARICANDUVA": {
+  "Aricanduva": {
     "TRUCK": 0.314,
     "CARRETA": 0.197,
     "TOCO": 0.383,
     "BITRUCK": 0.26,
     "FROTA": 0.317
   },
-  "ARINOS": {
+  "Arinos": {
     "TRUCK": 0.417,
     "CARRETA": 0.263,
     "TOCO": 0.508,
     "BITRUCK": 0.347,
     "FROTA": 0.419
   },
-  "ASTOLFO DUTRA": {
+  "Astolfo Dutra": {
     "TRUCK": 0.2,
     "CARRETA": 0.125,
     "TOCO": 0.246,
     "BITRUCK": 0.165,
     "FROTA": 0.205
   },
-  "ATALEIA": {
+  "Ataléia": {
     "TRUCK": 0.35,
     "CARRETA": 0.22,
     "TOCO": 0.426,
     "BITRUCK": 0.29,
     "FROTA": 0.352
   },
-  "AUGUSTO DE LIMA": {
+  "Augusto de Lima": {
     "TRUCK": 0.183,
     "CARRETA": 0.114,
     "TOCO": 0.224,
     "BITRUCK": 0.151,
     "FROTA": 0.187
   },
-  "BAEPENDI": {
+  "Baependi": {
     "TRUCK": 0.242,
     "CARRETA": 0.152,
     "TOCO": 0.296,
     "BITRUCK": 0.2,
     "FROTA": 0.246
   },
-  "BALDIM": {
+  "Baldim": {
     "TRUCK": 0.094,
     "CARRETA": 0.057,
     "TOCO": 0.116,
     "BITRUCK": 0.076,
     "FROTA": 0.099
   },
-  "BAMBUI": {
+  "Bambuí": {
     "TRUCK": 0.173,
     "CARRETA": 0.108,
     "TOCO": 0.212,
     "BITRUCK": 0.142,
     "FROTA": 0.177
   },
-  "BANDEIRA": {
+  "Bandeira": {
     "TRUCK": 0.492,
     "CARRETA": 0.31,
     "TOCO": 0.598,
     "BITRUCK": 0.409,
     "FROTA": 0.493
   },
-  "BANDEIRA DO SUL": {
+  "Bandeira do Sul": {
     "TRUCK": 0.275,
     "CARRETA": 0.173,
     "TOCO": 0.336,
     "BITRUCK": 0.228,
     "FROTA": 0.279
   },
-  "BARAO DE COCAIS": {
+  "Barão de Cocais": {
     "TRUCK": 0.097,
     "CARRETA": 0.059,
     "TOCO": 0.12,
@@ -391,1309 +391,1309 @@
     "BITRUCK": 0.196,
     "FROTA": 0.24
   },
-  "BARBACENA": {
+  "Barbacena": {
     "TRUCK": 0.134,
     "CARRETA": 0.083,
     "TOCO": 0.166,
     "BITRUCK": 0.11,
     "FROTA": 0.139
   },
-  "BARRA LONGA": {
+  "Barra Longa": {
     "TRUCK": 0.135,
     "CARRETA": 0.084,
     "TOCO": 0.166,
     "BITRUCK": 0.111,
     "FROTA": 0.14
   },
-  "BARROSO": {
+  "Barroso": {
     "TRUCK": 0.149,
     "CARRETA": 0.093,
     "TOCO": 0.183,
     "BITRUCK": 0.122,
     "FROTA": 0.154
   },
-  "BELA VISTA DE MINAS": {
+  "Bela Vista de Minas": {
     "TRUCK": 0.115,
     "CARRETA": 0.071,
     "TOCO": 0.142,
     "BITRUCK": 0.094,
     "FROTA": 0.12
   },
-  "BELMIRO BRAGA": {
+  "Belmiro Braga": {
     "TRUCK": 0.208,
     "CARRETA": 0.13,
     "TOCO": 0.254,
     "BITRUCK": 0.171,
     "FROTA": 0.212
   },
-  "BELO HORIZONTE": {
+  "Belo Horizonte": {
     "TRUCK": 0.042,
     "CARRETA": 0.025,
     "TOCO": 0.054,
     "BITRUCK": 0.033,
     "FROTA": 0.048
   },
-  "BELO ORIENTE": {
+  "Belo Oriente": {
     "TRUCK": 0.18,
     "CARRETA": 0.112,
     "TOCO": 0.221,
     "BITRUCK": 0.148,
     "FROTA": 0.184
   },
-  "BELO VALE": {
+  "Belo Vale": {
     "TRUCK": 0.08,
     "CARRETA": 0.048,
     "TOCO": 0.099,
     "BITRUCK": 0.064,
     "FROTA": 0.085
   },
-  "BERILO": {
+  "Berilo": {
     "TRUCK": 0.356,
     "CARRETA": 0.224,
     "TOCO": 0.434,
     "BITRUCK": 0.296,
     "FROTA": 0.359
   },
-  "BERIZAL": {
+  "Berizal": {
     "TRUCK": 0.466,
     "CARRETA": 0.294,
     "TOCO": 0.567,
     "BITRUCK": 0.388,
     "FROTA": 0.467
   },
-  "BERTOPOLIS": {
+  "Bertópolis": {
     "TRUCK": 0.42,
     "CARRETA": 0.264,
     "TOCO": 0.511,
     "BITRUCK": 0.349,
     "FROTA": 0.421
   },
-  "BETIM": {
+  "Betim": {
     "TRUCK": 0.037,
     "CARRETA": 0.021,
     "TOCO": 0.048,
     "BITRUCK": 0.029,
     "FROTA": 0.043
   },
-  "BIAS FORTES": {
+  "Bias Fortes": {
     "TRUCK": 0.172,
     "CARRETA": 0.107,
     "TOCO": 0.211,
     "BITRUCK": 0.142,
     "FROTA": 0.177
   },
-  "BICAS": {
+  "Bicas": {
     "TRUCK": 0.209,
     "CARRETA": 0.131,
     "TOCO": 0.256,
     "BITRUCK": 0.173,
     "FROTA": 0.213
   },
-  "BIQUINHAS": {
+  "Biquinhas": {
     "TRUCK": 0.179,
     "CARRETA": 0.112,
     "TOCO": 0.22,
     "BITRUCK": 0.148,
     "FROTA": 0.184
   },
-  "BOA ESPERANCA": {
+  "Boa Esperança": {
     "TRUCK": 0.189,
     "CARRETA": 0.118,
     "TOCO": 0.232,
     "BITRUCK": 0.156,
     "FROTA": 0.193
   },
-  "BOCAINA DE MINAS": {
+  "Bocaina de Minas": {
     "TRUCK": 0.258,
     "CARRETA": 0.162,
     "TOCO": 0.316,
     "BITRUCK": 0.214,
     "FROTA": 0.262
   },
-  "BOCAIUVA": {
+  "Bocaiúva": {
     "TRUCK": 0.254,
     "CARRETA": 0.159,
     "TOCO": 0.31,
     "BITRUCK": 0.21,
     "FROTA": 0.257
   },
-  "BOM DESPACHO": {
+  "Bom Despacho": {
     "TRUCK": 0.104,
     "CARRETA": 0.064,
     "TOCO": 0.129,
     "BITRUCK": 0.085,
     "FROTA": 0.109
   },
-  "BOM JARDIM DE MINAS": {
+  "Bom Jardim de Minas": {
     "TRUCK": 0.236,
     "CARRETA": 0.148,
     "TOCO": 0.289,
     "BITRUCK": 0.196,
     "FROTA": 0.24
   },
-  "BOM JESUS DA PENHA": {
+  "Bom Jesus da Penha": {
     "TRUCK": 0.236,
     "CARRETA": 0.148,
     "TOCO": 0.289,
     "BITRUCK": 0.196,
     "FROTA": 0.24
   },
-  "BOM JESUS DO AMPARO": {
+  "Bom Jesus do Amparo": {
     "TRUCK": 0.079,
     "CARRETA": 0.048,
     "TOCO": 0.099,
     "BITRUCK": 0.064,
     "FROTA": 0.085
   },
-  "BOM JESUS DO GALHO": {
+  "Bom Jesus do Galho": {
     "TRUCK": 0.208,
     "CARRETA": 0.13,
     "TOCO": 0.254,
     "BITRUCK": 0.171,
     "FROTA": 0.212
   },
-  "BOM REPOUSO": {
+  "Bom Repouso": {
     "TRUCK": 0.276,
     "CARRETA": 0.173,
     "TOCO": 0.337,
     "BITRUCK": 0.229,
     "FROTA": 0.279
   },
-  "BOM SUCESSO": {
+  "Bom Sucesso": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.169,
     "BITRUCK": 0.112,
     "FROTA": 0.142
   },
-  "BONFIM": {
+  "Bonfim": {
     "TRUCK": 0.075,
     "CARRETA": 0.045,
     "TOCO": 0.094,
     "BITRUCK": 0.06,
     "FROTA": 0.08
   },
-  "BONFINOPOLIS DE MINAS": {
+  "Bonfinópolis de Minas": {
     "TRUCK": 0.356,
     "CARRETA": 0.224,
     "TOCO": 0.434,
     "BITRUCK": 0.296,
     "FROTA": 0.359
   },
-  "BONITO DE MINAS": {
+  "Bonito de Minas": {
     "TRUCK": 0.415,
     "CARRETA": 0.262,
     "TOCO": 0.506,
     "BITRUCK": 0.345,
     "FROTA": 0.417
   },
-  "BORDA DA MATA": {
+  "Borda da Mata": {
     "TRUCK": 0.264,
     "CARRETA": 0.165,
     "TOCO": 0.322,
     "BITRUCK": 0.218,
     "FROTA": 0.267
   },
-  "BOTELHOS": {
+  "Botelhos": {
     "TRUCK": 0.26,
     "CARRETA": 0.163,
     "TOCO": 0.318,
     "BITRUCK": 0.215,
     "FROTA": 0.264
   },
-  "BOTUMIRIM": {
+  "Botumirim": {
     "TRUCK": 0.372,
     "CARRETA": 0.234,
     "TOCO": 0.454,
     "BITRUCK": 0.309,
     "FROTA": 0.375
   },
-  "BRAS PIRES": {
+  "Brás Pires": {
     "TRUCK": 0.143,
     "CARRETA": 0.089,
     "TOCO": 0.176,
     "BITRUCK": 0.118,
     "FROTA": 0.148
   },
-  "BRASILANDIA DE MINAS": {
+  "Brasilândia de Minas": {
     "TRUCK": 0.32,
     "CARRETA": 0.201,
     "TOCO": 0.39,
     "BITRUCK": 0.265,
     "FROTA": 0.323
   },
-  "BRASILIA DE MINAS": {
+  "Brasília de Minas": {
     "TRUCK": 0.342,
     "CARRETA": 0.215,
     "TOCO": 0.417,
     "BITRUCK": 0.284,
     "FROTA": 0.345
   },
-  "BRAUNAS": {
+  "Braúnas": {
     "TRUCK": 0.196,
     "CARRETA": 0.122,
     "TOCO": 0.24,
     "BITRUCK": 0.161,
     "FROTA": 0.2
   },
-  "BRUMADINHO": {
+  "Brumadinho": {
     "TRUCK": 0.051,
     "CARRETA": 0.03,
     "TOCO": 0.065,
     "BITRUCK": 0.04,
     "FROTA": 0.056
   },
-  "BUENO BRANDAO": {
+  "Bueno Brandão": {
     "TRUCK": 0.282,
     "CARRETA": 0.177,
     "TOCO": 0.344,
     "BITRUCK": 0.233,
     "FROTA": 0.285
   },
-  "BUENOPOLIS": {
+  "Buenópolis": {
     "TRUCK": 0.201,
     "CARRETA": 0.126,
     "TOCO": 0.247,
     "BITRUCK": 0.166,
     "FROTA": 0.206
   },
-  "BUGRE": {
+  "Bugre": {
     "TRUCK": 0.186,
     "CARRETA": 0.116,
     "TOCO": 0.228,
     "BITRUCK": 0.153,
     "FROTA": 0.19
   },
-  "BURITIS": {
+  "Buritis": {
     "TRUCK": 0.441,
     "CARRETA": 0.278,
     "TOCO": 0.536,
     "BITRUCK": 0.366,
     "FROTA": 0.442
   },
-  "BURITIZEIRO": {
+  "Buritizeiro": {
     "TRUCK": 0.239,
     "CARRETA": 0.15,
     "TOCO": 0.293,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "CABECEIRA GRANDE": {
+  "Cabeceira Grande": {
     "TRUCK": 0.425,
     "CARRETA": 0.268,
     "TOCO": 0.517,
     "BITRUCK": 0.353,
     "FROTA": 0.427
   },
-  "CABO VERDE": {
+  "Cabo Verde": {
     "TRUCK": 0.272,
     "CARRETA": 0.17,
     "TOCO": 0.332,
     "BITRUCK": 0.225,
     "FROTA": 0.275
   },
-  "CACHOEIRA DA PRATA": {
+  "Cachoeira da Prata": {
     "TRUCK": 0.085,
     "CARRETA": 0.052,
     "TOCO": 0.106,
     "BITRUCK": 0.069,
     "FROTA": 0.091
   },
-  "CACHOEIRA DE MINAS": {
+  "Cachoeira de Minas": {
     "TRUCK": 0.252,
     "CARRETA": 0.158,
     "TOCO": 0.308,
     "BITRUCK": 0.209,
     "FROTA": 0.256
   },
-  "CACHOEIRA DE PAJEU": {
+  "Cachoeira de Pajeú": {
     "TRUCK": 0.47,
     "CARRETA": 0.296,
     "TOCO": 0.572,
     "BITRUCK": 0.391,
     "FROTA": 0.471
   },
-  "CAETANOPOLIS": {
+  "Caetanópolis": {
     "TRUCK": 0.092,
     "CARRETA": 0.056,
     "TOCO": 0.114,
     "BITRUCK": 0.075,
     "FROTA": 0.097
   },
-  "CAETE": {
+  "Caeté": {
     "TRUCK": 0.071,
     "CARRETA": 0.043,
     "TOCO": 0.089,
     "BITRUCK": 0.057,
     "FROTA": 0.076
   },
-  "CAIANA": {
+  "Caiana": {
     "TRUCK": 0.248,
     "CARRETA": 0.155,
     "TOCO": 0.303,
     "BITRUCK": 0.205,
     "FROTA": 0.251
   },
-  "CAJURI": {
+  "Cajuri": {
     "TRUCK": 0.176,
     "CARRETA": 0.109,
     "TOCO": 0.216,
     "BITRUCK": 0.145,
     "FROTA": 0.18
   },
-  "CALDAS": {
+  "Caldas": {
     "TRUCK": 0.291,
     "CARRETA": 0.183,
     "TOCO": 0.356,
     "BITRUCK": 0.241,
     "FROTA": 0.295
   },
-  "CAMANDUCAIA": {
+  "Camanducaia": {
     "TRUCK": 0.284,
     "CARRETA": 0.178,
     "TOCO": 0.346,
     "BITRUCK": 0.235,
     "FROTA": 0.287
   },
-  "CAMBUI": {
+  "Cambuí": {
     "TRUCK": 0.272,
     "CARRETA": 0.171,
     "TOCO": 0.333,
     "BITRUCK": 0.226,
     "FROTA": 0.276
   },
-  "CAMBUQUIRA": {
+  "Cambuquira": {
     "TRUCK": 0.215,
     "CARRETA": 0.134,
     "TOCO": 0.263,
     "BITRUCK": 0.177,
     "FROTA": 0.219
   },
-  "CAMPANARIO": {
+  "Campanário": {
     "TRUCK": 0.27,
     "CARRETA": 0.169,
     "TOCO": 0.33,
     "BITRUCK": 0.224,
     "FROTA": 0.273
   },
-  "CAMPANHA": {
+  "Campanha": {
     "TRUCK": 0.203,
     "CARRETA": 0.127,
     "TOCO": 0.249,
     "BITRUCK": 0.168,
     "FROTA": 0.208
   },
-  "CAMPESTRE": {
+  "Campestre": {
     "TRUCK": 0.267,
     "CARRETA": 0.167,
     "TOCO": 0.326,
     "BITRUCK": 0.221,
     "FROTA": 0.271
   },
-  "CAMPINA VERDE": {
+  "Campina Verde": {
     "TRUCK": 0.402,
     "CARRETA": 0.253,
     "TOCO": 0.49,
     "BITRUCK": 0.334,
     "FROTA": 0.404
   },
-  "CAMPO AZUL": {
+  "Campo Azul": {
     "TRUCK": 0.316,
     "CARRETA": 0.199,
     "TOCO": 0.385,
     "BITRUCK": 0.262,
     "FROTA": 0.319
   },
-  "CAMPO BELO": {
+  "Campo Belo": {
     "TRUCK": 0.146,
     "CARRETA": 0.091,
     "TOCO": 0.18,
     "BITRUCK": 0.12,
     "FROTA": 0.151
   },
-  "CAMPO DO MEIO": {
+  "Campo do Meio": {
     "TRUCK": 0.21,
     "CARRETA": 0.131,
     "TOCO": 0.258,
     "BITRUCK": 0.174,
     "FROTA": 0.215
   },
-  "CAMPO FLORIDO": {
+  "Campo Florido": {
     "TRUCK": 0.327,
     "CARRETA": 0.205,
     "TOCO": 0.398,
     "BITRUCK": 0.271,
     "FROTA": 0.33
   },
-  "CAMPOS ALTOS": {
+  "Campos Altos": {
     "TRUCK": 0.176,
     "CARRETA": 0.11,
     "TOCO": 0.216,
     "BITRUCK": 0.145,
     "FROTA": 0.181
   },
-  "CAMPOS GERAIS": {
+  "Campos Gerais": {
     "TRUCK": 0.199,
     "CARRETA": 0.124,
     "TOCO": 0.244,
     "BITRUCK": 0.164,
     "FROTA": 0.203
   },
-  "CANA VERDE": {
+  "Cana Verde": {
     "TRUCK": 0.153,
     "CARRETA": 0.095,
     "TOCO": 0.188,
     "BITRUCK": 0.126,
     "FROTA": 0.157
   },
-  "CANAA": {
+  "Canaã": {
     "TRUCK": 0.187,
     "CARRETA": 0.117,
     "TOCO": 0.23,
     "BITRUCK": 0.155,
     "FROTA": 0.192
   },
-  "CANAPOLIS": {
+  "Canápolis": {
     "TRUCK": 0.4,
     "CARRETA": 0.252,
     "TOCO": 0.487,
     "BITRUCK": 0.332,
     "FROTA": 0.402
   },
-  "CANDEIAS": {
+  "Candeias": {
     "TRUCK": 0.152,
     "CARRETA": 0.094,
     "TOCO": 0.187,
     "BITRUCK": 0.125,
     "FROTA": 0.157
   },
-  "CANTAGALO": {
+  "Cantagalo": {
     "TRUCK": 0.223,
     "CARRETA": 0.139,
     "TOCO": 0.273,
     "BITRUCK": 0.184,
     "FROTA": 0.227
   },
-  "CAPARAO": {
+  "Caparaó": {
     "TRUCK": 0.239,
     "CARRETA": 0.15,
     "TOCO": 0.293,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "CAPELA NOVA": {
+  "Capela Nova": {
     "TRUCK": 0.13,
     "CARRETA": 0.081,
     "TOCO": 0.161,
     "BITRUCK": 0.107,
     "FROTA": 0.135
   },
-  "CAPELINHA": {
+  "Capelinha": {
     "TRUCK": 0.302,
     "CARRETA": 0.19,
     "TOCO": 0.369,
     "BITRUCK": 0.251,
     "FROTA": 0.305
   },
-  "CAPETINGA": {
+  "Capetinga": {
     "TRUCK": 0.261,
     "CARRETA": 0.164,
     "TOCO": 0.319,
     "BITRUCK": 0.216,
     "FROTA": 0.265
   },
-  "CAPIM BRANCO": {
+  "Capim Branco": {
     "TRUCK": 0.07,
     "CARRETA": 0.043,
     "TOCO": 0.088,
     "BITRUCK": 0.057,
     "FROTA": 0.076
   },
-  "CAPITAO ANDRADE": {
+  "Capitão Andrade": {
     "TRUCK": 0.241,
     "CARRETA": 0.151,
     "TOCO": 0.294,
     "BITRUCK": 0.199,
     "FROTA": 0.244
   },
-  "CAPITAO ENEAS": {
+  "Capitão Enéas": {
     "TRUCK": 0.318,
     "CARRETA": 0.2,
     "TOCO": 0.388,
     "BITRUCK": 0.264,
     "FROTA": 0.321
   },
-  "CAPITOLIO": {
+  "Capitólio": {
     "TRUCK": 0.182,
     "CARRETA": 0.114,
     "TOCO": 0.223,
     "BITRUCK": 0.15,
     "FROTA": 0.186
   },
-  "CAPUTIRA": {
+  "Caputira": {
     "TRUCK": 0.202,
     "CARRETA": 0.126,
     "TOCO": 0.248,
     "BITRUCK": 0.167,
     "FROTA": 0.207
   },
-  "CARAI": {
+  "Caraí": {
     "TRUCK": 0.349,
     "CARRETA": 0.22,
     "TOCO": 0.425,
     "BITRUCK": 0.29,
     "FROTA": 0.352
   },
-  "CARANAIBA": {
+  "Caranaíba": {
     "TRUCK": 0.11,
     "CARRETA": 0.067,
     "TOCO": 0.136,
     "BITRUCK": 0.089,
     "FROTA": 0.115
   },
-  "CARANDAI": {
+  "Carandaí": {
     "TRUCK": 0.113,
     "CARRETA": 0.07,
     "TOCO": 0.14,
     "BITRUCK": 0.092,
     "FROTA": 0.118
   },
-  "CARANGOLA": {
+  "Carangola": {
     "TRUCK": 0.244,
     "CARRETA": 0.152,
     "TOCO": 0.298,
     "BITRUCK": 0.201,
     "FROTA": 0.247
   },
-  "CARATINGA": {
+  "Caratinga": {
     "TRUCK": 0.214,
     "CARRETA": 0.134,
     "TOCO": 0.262,
     "BITRUCK": 0.177,
     "FROTA": 0.218
   },
-  "CARBONITA": {
+  "Carbonita": {
     "TRUCK": 0.282,
     "CARRETA": 0.177,
     "TOCO": 0.344,
     "BITRUCK": 0.234,
     "FROTA": 0.285
   },
-  "CAREACU": {
+  "Careaçu": {
     "TRUCK": 0.225,
     "CARRETA": 0.141,
     "TOCO": 0.276,
     "BITRUCK": 0.186,
     "FROTA": 0.229
   },
-  "CARLOS CHAGAS": {
+  "Carlos Chagas": {
     "TRUCK": 0.366,
     "CARRETA": 0.23,
     "TOCO": 0.445,
     "BITRUCK": 0.304,
     "FROTA": 0.368
   },
-  "CARMESIA": {
+  "Carmésia": {
     "TRUCK": 0.138,
     "CARRETA": 0.086,
     "TOCO": 0.17,
     "BITRUCK": 0.113,
     "FROTA": 0.143
   },
-  "CARMO DA CACHOEIRA": {
+  "Carmo da Cachoeira": {
     "TRUCK": 0.17,
     "CARRETA": 0.106,
     "TOCO": 0.208,
     "BITRUCK": 0.14,
     "FROTA": 0.174
   },
-  "CARMO DA MATA": {
+  "Carmo da Mata": {
     "TRUCK": 0.122,
     "CARRETA": 0.075,
     "TOCO": 0.151,
     "BITRUCK": 0.1,
     "FROTA": 0.127
   },
-  "CARMO DE MINAS": {
+  "Carmo de Minas": {
     "TRUCK": 0.239,
     "CARRETA": 0.15,
     "TOCO": 0.293,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "CARMO DO CAJURU": {
+  "Carmo do Cajuru": {
     "TRUCK": 0.085,
     "CARRETA": 0.052,
     "TOCO": 0.106,
     "BITRUCK": 0.069,
     "FROTA": 0.091
   },
-  "CARMO DO RIO CLARO": {
+  "Carmo do Rio Claro": {
     "TRUCK": 0.231,
     "CARRETA": 0.145,
     "TOCO": 0.283,
     "BITRUCK": 0.191,
     "FROTA": 0.235
   },
-  "CARMOPOLIS DE MINAS": {
+  "Carmópolis de Minas": {
     "TRUCK": 0.089,
     "CARRETA": 0.055,
     "TOCO": 0.111,
     "BITRUCK": 0.073,
     "FROTA": 0.095
   },
-  "CARRANCAS": {
+  "Carrancas": {
     "TRUCK": 0.192,
     "CARRETA": 0.12,
     "TOCO": 0.235,
     "BITRUCK": 0.158,
     "FROTA": 0.196
   },
-  "CARVALHOPOLIS": {
+  "Carvalhópolis": {
     "TRUCK": 0.248,
     "CARRETA": 0.155,
     "TOCO": 0.303,
     "BITRUCK": 0.205,
     "FROTA": 0.251
   },
-  "CARVALHOS": {
+  "Carvalhos": {
     "TRUCK": 0.26,
     "CARRETA": 0.163,
     "TOCO": 0.318,
     "BITRUCK": 0.216,
     "FROTA": 0.264
   },
-  "CASA GRANDE": {
+  "Casa Grande": {
     "TRUCK": 0.119,
     "CARRETA": 0.073,
     "TOCO": 0.147,
     "BITRUCK": 0.097,
     "FROTA": 0.124
   },
-  "CASCALHO RICO": {
+  "Cascalho Rico": {
     "TRUCK": 0.338,
     "CARRETA": 0.212,
     "TOCO": 0.412,
     "BITRUCK": 0.28,
     "FROTA": 0.341
   },
-  "CASSIA": {
+  "Cássia": {
     "TRUCK": 0.249,
     "CARRETA": 0.156,
     "TOCO": 0.305,
     "BITRUCK": 0.206,
     "FROTA": 0.253
   },
-  "CATAGUASES": {
+  "Cataguases": {
     "TRUCK": 0.212,
     "CARRETA": 0.133,
     "TOCO": 0.26,
     "BITRUCK": 0.175,
     "FROTA": 0.216
   },
-  "CATAS ALTAS": {
+  "Catas Altas": {
     "TRUCK": 0.11,
     "CARRETA": 0.068,
     "TOCO": 0.136,
     "BITRUCK": 0.09,
     "FROTA": 0.115
   },
-  "CATAS ALTAS DA NORUEGA": {
+  "Catas Altas da Noruega": {
     "TRUCK": 0.116,
     "CARRETA": 0.072,
     "TOCO": 0.144,
     "BITRUCK": 0.095,
     "FROTA": 0.121
   },
-  "CATUJI": {
+  "Catuji": {
     "TRUCK": 0.343,
     "CARRETA": 0.215,
     "TOCO": 0.418,
     "BITRUCK": 0.284,
     "FROTA": 0.345
   },
-  "CATUTI": {
+  "Catuti": {
     "TRUCK": 0.414,
     "CARRETA": 0.26,
     "TOCO": 0.503,
     "BITRUCK": 0.344,
     "FROTA": 0.415
   },
-  "CAXAMBU": {
+  "Caxambu": {
     "TRUCK": 0.241,
     "CARRETA": 0.151,
     "TOCO": 0.294,
     "BITRUCK": 0.199,
     "FROTA": 0.244
   },
-  "CEDRO DO ABAETE": {
+  "Cedro do Abaeté": {
     "TRUCK": 0.167,
     "CARRETA": 0.104,
     "TOCO": 0.205,
     "BITRUCK": 0.137,
     "FROTA": 0.171
   },
-  "CENTRAL DE MINAS": {
+  "Central de Minas": {
     "TRUCK": 0.278,
     "CARRETA": 0.175,
     "TOCO": 0.34,
     "BITRUCK": 0.231,
     "FROTA": 0.282
   },
-  "CENTRALINA": {
+  "Centralina": {
     "TRUCK": 0.409,
     "CARRETA": 0.257,
     "TOCO": 0.498,
     "BITRUCK": 0.34,
     "FROTA": 0.411
   },
-  "CHACARA": {
+  "Chácara": {
     "TRUCK": 0.21,
     "CARRETA": 0.131,
     "TOCO": 0.258,
     "BITRUCK": 0.174,
     "FROTA": 0.214
   },
-  "CHALE": {
+  "Chalé": {
     "TRUCK": 0.261,
     "CARRETA": 0.164,
     "TOCO": 0.319,
     "BITRUCK": 0.216,
     "FROTA": 0.264
   },
-  "CHAPADA DO NORTE": {
+  "Chapada do Norte": {
     "TRUCK": 0.352,
     "CARRETA": 0.221,
     "TOCO": 0.429,
     "BITRUCK": 0.292,
     "FROTA": 0.355
   },
-  "CHAPADA GAUCHA": {
+  "Chapada Gaúcha": {
     "TRUCK": 0.429,
     "CARRETA": 0.27,
     "TOCO": 0.522,
     "BITRUCK": 0.357,
     "FROTA": 0.431
   },
-  "CHIADOR": {
+  "Chiador": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.285,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "CIPOTANEA": {
+  "Cipotânea": {
     "TRUCK": 0.14,
     "CARRETA": 0.087,
     "TOCO": 0.172,
     "BITRUCK": 0.115,
     "FROTA": 0.144
   },
-  "CLARAVAL": {
+  "Claraval": {
     "TRUCK": 0.276,
     "CARRETA": 0.173,
     "TOCO": 0.337,
     "BITRUCK": 0.229,
     "FROTA": 0.279
   },
-  "CLARO DOS POCOES": {
+  "Claro dos Poções": {
     "TRUCK": 0.278,
     "CARRETA": 0.174,
     "TOCO": 0.339,
     "BITRUCK": 0.23,
     "FROTA": 0.281
   },
-  "CLAUDIO": {
+  "Cláudio": {
     "TRUCK": 0.1,
     "CARRETA": 0.061,
     "TOCO": 0.124,
     "BITRUCK": 0.081,
     "FROTA": 0.105
   },
-  "COIMBRA": {
+  "Coimbra": {
     "TRUCK": 0.172,
     "CARRETA": 0.107,
     "TOCO": 0.211,
     "BITRUCK": 0.142,
     "FROTA": 0.177
   },
-  "COLUNA": {
+  "Coluna": {
     "TRUCK": 0.234,
     "CARRETA": 0.146,
     "TOCO": 0.286,
     "BITRUCK": 0.194,
     "FROTA": 0.238
   },
-  "COMENDADOR GOMES": {
+  "Comendador Gomes": {
     "TRUCK": 0.379,
     "CARRETA": 0.239,
     "TOCO": 0.462,
     "BITRUCK": 0.315,
     "FROTA": 0.382
   },
-  "COMERCINHO": {
+  "Comercinho": {
     "TRUCK": 0.437,
     "CARRETA": 0.275,
     "TOCO": 0.532,
     "BITRUCK": 0.364,
     "FROTA": 0.439
   },
-  "CONCEICAO DA APARECIDA": {
+  "Conceição da Aparecida": {
     "TRUCK": 0.241,
     "CARRETA": 0.151,
     "TOCO": 0.295,
     "BITRUCK": 0.2,
     "FROTA": 0.245
   },
-  "CONCEICAO DA BARRA DE MINAS": {
+  "Conceição da Barra de Minas": {
     "TRUCK": 0.154,
     "CARRETA": 0.096,
     "TOCO": 0.19,
     "BITRUCK": 0.127,
     "FROTA": 0.159
   },
-  "CONCEICAO DAS ALAGOAS": {
+  "Conceição das Alagoas": {
     "TRUCK": 0.334,
     "CARRETA": 0.21,
     "TOCO": 0.408,
     "BITRUCK": 0.278,
     "FROTA": 0.337
   },
-  "CONCEICAO DAS PEDRAS": {
+  "Conceição das Pedras": {
     "TRUCK": 0.258,
     "CARRETA": 0.161,
     "TOCO": 0.315,
     "BITRUCK": 0.213,
     "FROTA": 0.261
   },
-  "CONCEICAO DE IPANEMA": {
+  "Conceição de Ipanema": {
     "TRUCK": 0.255,
     "CARRETA": 0.16,
     "TOCO": 0.311,
     "BITRUCK": 0.211,
     "FROTA": 0.258
   },
-  "CONCEICAO DO MATO DENTRO": {
+  "Conceição do Mato Dentro": {
     "TRUCK": 0.135,
     "CARRETA": 0.084,
     "TOCO": 0.166,
     "BITRUCK": 0.111,
     "FROTA": 0.14
   },
-  "CONCEICAO DO PARA": {
+  "Conceição do Pará": {
     "TRUCK": 0.098,
     "CARRETA": 0.06,
     "TOCO": 0.122,
     "BITRUCK": 0.08,
     "FROTA": 0.104
   },
-  "CONCEICAO DO RIO VERDE": {
+  "Conceição do Rio Verde": {
     "TRUCK": 0.229,
     "CARRETA": 0.143,
     "TOCO": 0.281,
     "BITRUCK": 0.19,
     "FROTA": 0.233
   },
-  "CONCEICAO DOS OUROS": {
+  "Conceição dos Ouros": {
     "TRUCK": 0.266,
     "CARRETA": 0.167,
     "TOCO": 0.325,
     "BITRUCK": 0.22,
     "FROTA": 0.269
   },
-  "CONEGO MARINHO": {
+  "Cônego Marinho": {
     "TRUCK": 0.398,
     "CARRETA": 0.25,
     "TOCO": 0.484,
     "BITRUCK": 0.331,
     "FROTA": 0.4
   },
-  "CONFINS": {
+  "Confins": {
     "TRUCK": 0.062,
     "CARRETA": 0.037,
     "TOCO": 0.078,
     "BITRUCK": 0.049,
     "FROTA": 0.067
   },
-  "CONGONHAL": {
+  "Congonhal": {
     "TRUCK": 0.257,
     "CARRETA": 0.161,
     "TOCO": 0.314,
     "BITRUCK": 0.213,
     "FROTA": 0.261
   },
-  "CONGONHAS": {
+  "Congonhas": {
     "TRUCK": 0.082,
     "CARRETA": 0.05,
     "TOCO": 0.102,
     "BITRUCK": 0.066,
     "FROTA": 0.087
   },
-  "CONGONHAS DO NORTE": {
+  "Congonhas do Norte": {
     "TRUCK": 0.163,
     "CARRETA": 0.101,
     "TOCO": 0.2,
     "BITRUCK": 0.134,
     "FROTA": 0.167
   },
-  "CONQUISTA": {
+  "Conquista": {
     "TRUCK": 0.29,
     "CARRETA": 0.182,
     "TOCO": 0.354,
     "BITRUCK": 0.24,
     "FROTA": 0.293
   },
-  "CONSELHEIRO LAFAIETE": {
+  "Conselheiro Lafaiete": {
     "TRUCK": 0.092,
     "CARRETA": 0.057,
     "TOCO": 0.115,
     "BITRUCK": 0.075,
     "FROTA": 0.098
   },
-  "CONSELHEIRO PENA": {
+  "Conselheiro Pena": {
     "TRUCK": 0.276,
     "CARRETA": 0.173,
     "TOCO": 0.337,
     "BITRUCK": 0.229,
     "FROTA": 0.279
   },
-  "CONSOLACAO": {
+  "Consolação": {
     "TRUCK": 0.293,
     "CARRETA": 0.184,
     "TOCO": 0.357,
     "BITRUCK": 0.243,
     "FROTA": 0.296
   },
-  "CONTAGEM": {
+  "Contagem": {
     "TRUCK": 0.034,
     "CARRETA": 0.019,
     "TOCO": 0.044,
     "BITRUCK": 0.026,
     "FROTA": 0.04
   },
-  "COQUEIRAL": {
+  "Coqueiral": {
     "TRUCK": 0.175,
     "CARRETA": 0.109,
     "TOCO": 0.215,
     "BITRUCK": 0.144,
     "FROTA": 0.179
   },
-  "CORACAO DE JESUS": {
+  "Coração de Jesus": {
     "TRUCK": 0.326,
     "CARRETA": 0.205,
     "TOCO": 0.397,
     "BITRUCK": 0.27,
     "FROTA": 0.328
   },
-  "CORDISBURGO": {
+  "Cordisburgo": {
     "TRUCK": 0.112,
     "CARRETA": 0.069,
     "TOCO": 0.138,
     "BITRUCK": 0.091,
     "FROTA": 0.117
   },
-  "CORDISLANDIA": {
+  "Cordislândia": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.264,
     "BITRUCK": 0.178,
     "FROTA": 0.22
   },
-  "CORINTO": {
+  "Corinto": {
     "TRUCK": 0.157,
     "CARRETA": 0.097,
     "TOCO": 0.193,
     "BITRUCK": 0.129,
     "FROTA": 0.161
   },
-  "COROACI": {
+  "Coroaci": {
     "TRUCK": 0.26,
     "CARRETA": 0.163,
     "TOCO": 0.318,
     "BITRUCK": 0.215,
     "FROTA": 0.264
   },
-  "COROMANDEL": {
+  "Coromandel": {
     "TRUCK": 0.304,
     "CARRETA": 0.191,
     "TOCO": 0.37,
     "BITRUCK": 0.252,
     "FROTA": 0.307
   },
-  "CORONEL FABRICIANO": {
+  "Coronel Fabriciano": {
     "TRUCK": 0.156,
     "CARRETA": 0.097,
     "TOCO": 0.192,
     "BITRUCK": 0.128,
     "FROTA": 0.161
   },
-  "CORONEL MURTA": {
+  "Coronel Murta": {
     "TRUCK": 0.378,
     "CARRETA": 0.238,
     "TOCO": 0.46,
     "BITRUCK": 0.314,
     "FROTA": 0.38
   },
-  "CORONEL PACHECO": {
+  "Coronel Pacheco": {
     "TRUCK": 0.193,
     "CARRETA": 0.12,
     "TOCO": 0.236,
     "BITRUCK": 0.159,
     "FROTA": 0.197
   },
-  "CORREGO DANTA": {
+  "Córrego Danta": {
     "TRUCK": 0.155,
     "CARRETA": 0.096,
     "TOCO": 0.191,
     "BITRUCK": 0.127,
     "FROTA": 0.16
   },
-  "CORREGO DO BOM JESUS": {
+  "Córrego do Bom Jesus": {
     "TRUCK": 0.275,
     "CARRETA": 0.173,
     "TOCO": 0.336,
     "BITRUCK": 0.228,
     "FROTA": 0.279
   },
-  "CORREGO FUNDO": {
+  "Córrego Fundo": {
     "TRUCK": 0.14,
     "CARRETA": 0.087,
     "TOCO": 0.172,
     "BITRUCK": 0.115,
     "FROTA": 0.144
   },
-  "CORREGO NOVO": {
+  "Córrego Novo": {
     "TRUCK": 0.199,
     "CARRETA": 0.124,
     "TOCO": 0.244,
     "BITRUCK": 0.164,
     "FROTA": 0.203
   },
-  "COUTO DE MAGALHAES DE MINAS": {
+  "Couto de Magalhães de Minas": {
     "TRUCK": 0.226,
     "CARRETA": 0.141,
     "TOCO": 0.276,
     "BITRUCK": 0.187,
     "FROTA": 0.23
   },
-  "CRISOLITA": {
+  "Crisólita": {
     "TRUCK": 0.378,
     "CARRETA": 0.238,
     "TOCO": 0.46,
     "BITRUCK": 0.314,
     "FROTA": 0.38
   },
-  "CRISTAIS": {
+  "Cristais": {
     "TRUCK": 0.167,
     "CARRETA": 0.104,
     "TOCO": 0.205,
     "BITRUCK": 0.137,
     "FROTA": 0.171
   },
-  "CRISTALIA": {
+  "Cristália": {
     "TRUCK": 0.379,
     "CARRETA": 0.238,
     "TOCO": 0.461,
     "BITRUCK": 0.315,
     "FROTA": 0.381
   },
-  "CRISTIANO OTONI": {
+  "Cristiano Otoni": {
     "TRUCK": 0.102,
     "CARRETA": 0.063,
     "TOCO": 0.127,
     "BITRUCK": 0.083,
     "FROTA": 0.108
   },
-  "CRISTINA": {
+  "Cristina": {
     "TRUCK": 0.261,
     "CARRETA": 0.164,
     "TOCO": 0.319,
     "BITRUCK": 0.216,
     "FROTA": 0.265
   },
-  "CRUCILANDIA": {
+  "Crucilândia": {
     "TRUCK": 0.081,
     "CARRETA": 0.049,
     "TOCO": 0.101,
     "BITRUCK": 0.065,
     "FROTA": 0.086
   },
-  "CRUZEIRO DA FORTALEZA": {
+  "Cruzeiro da Fortaleza": {
     "TRUCK": 0.247,
     "CARRETA": 0.155,
     "TOCO": 0.302,
     "BITRUCK": 0.205,
     "FROTA": 0.251
   },
-  "CRUZILIA": {
+  "Cruzília": {
     "TRUCK": 0.209,
     "CARRETA": 0.131,
     "TOCO": 0.256,
     "BITRUCK": 0.173,
     "FROTA": 0.213
   },
-  "CUPARAQUE": {
+  "Cuparaque": {
     "TRUCK": 0.308,
     "CARRETA": 0.194,
     "TOCO": 0.376,
     "BITRUCK": 0.256,
     "FROTA": 0.311
   },
-  "CURRAL DE DENTRO": {
+  "Curral de Dentro": {
     "TRUCK": 0.457,
     "CARRETA": 0.288,
     "TOCO": 0.556,
     "BITRUCK": 0.38,
     "FROTA": 0.459
   },
-  "CURVELO": {
+  "Curvelo": {
     "TRUCK": 0.127,
     "CARRETA": 0.079,
     "TOCO": 0.157,
     "BITRUCK": 0.104,
     "FROTA": 0.132
   },
-  "DATAS": {
+  "Datas": {
     "TRUCK": 0.189,
     "CARRETA": 0.118,
     "TOCO": 0.232,
     "BITRUCK": 0.156,
     "FROTA": 0.193
   },
-  "DELFIM MOREIRA": {
+  "Delfim Moreira": {
     "TRUCK": 0.296,
     "CARRETA": 0.186,
     "TOCO": 0.361,
     "BITRUCK": 0.245,
     "FROTA": 0.299
   },
-  "DELFINOPOLIS": {
+  "Delfinópolis": {
     "TRUCK": 0.27,
     "CARRETA": 0.169,
     "TOCO": 0.33,
     "BITRUCK": 0.224,
     "FROTA": 0.273
   },
-  "DELTA": {
+  "Delta": {
     "TRUCK": 0.314,
     "CARRETA": 0.197,
     "TOCO": 0.383,
     "BITRUCK": 0.26,
     "FROTA": 0.317
   },
-  "DESCOBERTO": {
+  "Descoberto": {
     "TRUCK": 0.208,
     "CARRETA": 0.13,
     "TOCO": 0.254,
     "BITRUCK": 0.171,
     "FROTA": 0.212
   },
-  "DESTERRO DE ENTRE RIOS": {
+  "Desterro de Entre Rios": {
     "TRUCK": 0.11,
     "CARRETA": 0.067,
     "TOCO": 0.136,
     "BITRUCK": 0.089,
     "FROTA": 0.115
   },
-  "DESTERRO DO MELO": {
+  "Desterro do Melo": {
     "TRUCK": 0.15,
     "CARRETA": 0.093,
     "TOCO": 0.184,
     "BITRUCK": 0.123,
     "FROTA": 0.154
   },
-  "DIAMANTINA": {
+  "Diamantina": {
     "TRUCK": 0.202,
     "CARRETA": 0.126,
     "TOCO": 0.248,
     "BITRUCK": 0.167,
     "FROTA": 0.206
   },
-  "DIOGO DE VASCONCELOS": {
+  "Diogo de Vasconcelos": {
     "TRUCK": 0.118,
     "CARRETA": 0.073,
     "TOCO": 0.146,
     "BITRUCK": 0.097,
     "FROTA": 0.123
   },
-  "DIONISIO": {
+  "Dionísio": {
     "TRUCK": 0.138,
     "CARRETA": 0.086,
     "TOCO": 0.171,
     "BITRUCK": 0.114,
     "FROTA": 0.143
   },
-  "DIVINESIA": {
+  "Divinésia": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.204,
     "BITRUCK": 0.137,
     "FROTA": 0.171
   },
-  "DIVINO": {
+  "Divino": {
     "TRUCK": 0.226,
     "CARRETA": 0.142,
     "TOCO": 0.277,
     "BITRUCK": 0.187,
     "FROTA": 0.23
   },
-  "DIVINO DAS LARANJEIRAS": {
+  "Divino das Laranjeiras": {
     "TRUCK": 0.26,
     "CARRETA": 0.163,
     "TOCO": 0.318,
     "BITRUCK": 0.216,
     "FROTA": 0.264
   },
-  "DIVINOLANDIA DE MINAS": {
+  "Divinolândia de Minas": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "DIVINOPOLIS": {
+  "Divinópolis": {
     "TRUCK": 0.089,
     "CARRETA": 0.055,
     "TOCO": 0.111,
     "BITRUCK": 0.073,
     "FROTA": 0.095
   },
-  "DIVISA ALEGRE": {
+  "Divisa Alegre": {
     "TRUCK": 0.467,
     "CARRETA": 0.294,
     "TOCO": 0.568,
     "BITRUCK": 0.389,
     "FROTA": 0.469
   },
-  "DIVISA NOVA": {
+  "Divisa Nova": {
     "TRUCK": 0.243,
     "CARRETA": 0.152,
     "TOCO": 0.297,
     "BITRUCK": 0.201,
     "FROTA": 0.247
   },
-  "DOM CAVATI": {
+  "Dom Cavati": {
     "TRUCK": 0.201,
     "CARRETA": 0.126,
     "TOCO": 0.246,
     "BITRUCK": 0.166,
     "FROTA": 0.205
   },
-  "DOM JOAQUIM": {
+  "Dom Joaquim": {
     "TRUCK": 0.154,
     "CARRETA": 0.096,
     "TOCO": 0.19,
     "BITRUCK": 0.127,
     "FROTA": 0.159
   },
-  "DOM SILVERIO": {
+  "Dom Silvério": {
     "TRUCK": 0.143,
     "CARRETA": 0.089,
     "TOCO": 0.176,
     "BITRUCK": 0.118,
     "FROTA": 0.148
   },
-  "DOM VICOSO": {
+  "Dom Viçoso": {
     "TRUCK": 0.259,
     "CARRETA": 0.162,
     "TOCO": 0.316,
@@ -1707,287 +1707,287 @@
     "BITRUCK": 0.168,
     "FROTA": 0.208
   },
-  "DORES DE CAMPOS": {
+  "Dores de Campos": {
     "TRUCK": 0.155,
     "CARRETA": 0.096,
     "TOCO": 0.191,
     "BITRUCK": 0.127,
     "FROTA": 0.16
   },
-  "DORES DE GUANHAES": {
+  "Dores de Guanhães": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.203,
     "BITRUCK": 0.136,
     "FROTA": 0.17
   },
-  "DORES DO INDAIA": {
+  "Dores do Indaiá": {
     "TRUCK": 0.159,
     "CARRETA": 0.099,
     "TOCO": 0.196,
     "BITRUCK": 0.131,
     "FROTA": 0.164
   },
-  "DORES DO TURVO": {
+  "Dores do Turvo": {
     "TRUCK": 0.165,
     "CARRETA": 0.103,
     "TOCO": 0.203,
     "BITRUCK": 0.136,
     "FROTA": 0.17
   },
-  "DORESOPOLIS": {
+  "Doresópolis": {
     "TRUCK": 0.181,
     "CARRETA": 0.113,
     "TOCO": 0.222,
     "BITRUCK": 0.149,
     "FROTA": 0.185
   },
-  "DOURADOQUARA": {
+  "Douradoquara": {
     "TRUCK": 0.334,
     "CARRETA": 0.21,
     "TOCO": 0.407,
     "BITRUCK": 0.277,
     "FROTA": 0.337
   },
-  "DURANDE": {
+  "Durandé": {
     "TRUCK": 0.229,
     "CARRETA": 0.143,
     "TOCO": 0.281,
     "BITRUCK": 0.19,
     "FROTA": 0.233
   },
-  "ELOI MENDES": {
+  "Elói Mendes": {
     "TRUCK": 0.21,
     "CARRETA": 0.131,
     "TOCO": 0.258,
     "BITRUCK": 0.174,
     "FROTA": 0.214
   },
-  "ENGENHEIRO CALDAS": {
+  "Engenheiro Caldas": {
     "TRUCK": 0.211,
     "CARRETA": 0.132,
     "TOCO": 0.258,
     "BITRUCK": 0.174,
     "FROTA": 0.215
   },
-  "ENGENHEIRO NAVARRO": {
+  "Engenheiro Navarro": {
     "TRUCK": 0.239,
     "CARRETA": 0.149,
     "TOCO": 0.292,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "ENTRE FOLHAS": {
+  "Entre Folhas": {
     "TRUCK": 0.197,
     "CARRETA": 0.123,
     "TOCO": 0.242,
     "BITRUCK": 0.163,
     "FROTA": 0.202
   },
-  "ENTRE RIOS DE MINAS": {
+  "Entre Rios de Minas": {
     "TRUCK": 0.11,
     "CARRETA": 0.067,
     "TOCO": 0.136,
     "BITRUCK": 0.089,
     "FROTA": 0.115
   },
-  "ERVALIA": {
+  "Ervália": {
     "TRUCK": 0.186,
     "CARRETA": 0.116,
     "TOCO": 0.228,
     "BITRUCK": 0.153,
     "FROTA": 0.19
   },
-  "ESMERALDAS": {
+  "Esmeraldas": {
     "TRUCK": 0.058,
     "CARRETA": 0.035,
     "TOCO": 0.073,
     "BITRUCK": 0.046,
     "FROTA": 0.063
   },
-  "ESPERA FELIZ": {
+  "Espera Feliz": {
     "TRUCK": 0.245,
     "CARRETA": 0.154,
     "TOCO": 0.3,
     "BITRUCK": 0.203,
     "FROTA": 0.249
   },
-  "ESPINOSA": {
+  "Espinosa": {
     "TRUCK": 0.444,
     "CARRETA": 0.279,
     "TOCO": 0.54,
     "BITRUCK": 0.369,
     "FROTA": 0.445
   },
-  "ESTIVA": {
+  "Estiva": {
     "TRUCK": 0.263,
     "CARRETA": 0.165,
     "TOCO": 0.321,
     "BITRUCK": 0.218,
     "FROTA": 0.266
   },
-  "ESTRELA DO INDAIA": {
+  "Estrela do Indaiá": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.204,
     "BITRUCK": 0.137,
     "FROTA": 0.171
   },
-  "ESTRELA DO SUL": {
+  "Estrela do Sul": {
     "TRUCK": 0.316,
     "CARRETA": 0.199,
     "TOCO": 0.385,
     "BITRUCK": 0.262,
     "FROTA": 0.319
   },
-  "EUGENOPOLIS": {
+  "Eugenópolis": {
     "TRUCK": 0.235,
     "CARRETA": 0.147,
     "TOCO": 0.288,
     "BITRUCK": 0.195,
     "FROTA": 0.239
   },
-  "EWBANK DA CAMARA": {
+  "Ewbank da Câmara": {
     "TRUCK": 0.172,
     "CARRETA": 0.107,
     "TOCO": 0.211,
     "BITRUCK": 0.141,
     "FROTA": 0.176
   },
-  "EXTREMA": {
+  "Extrema": {
     "TRUCK": 0.299,
     "CARRETA": 0.188,
     "TOCO": 0.365,
     "BITRUCK": 0.248,
     "FROTA": 0.302
   },
-  "FAMA": {
+  "Fama": {
     "TRUCK": 0.257,
     "CARRETA": 0.161,
     "TOCO": 0.315,
     "BITRUCK": 0.213,
     "FROTA": 0.261
   },
-  "FARIA LEMOS": {
+  "Faria Lemos": {
     "TRUCK": 0.249,
     "CARRETA": 0.156,
     "TOCO": 0.304,
     "BITRUCK": 0.206,
     "FROTA": 0.252
   },
-  "FELICIO DOS SANTOS": {
+  "Felício dos Santos": {
     "TRUCK": 0.246,
     "CARRETA": 0.154,
     "TOCO": 0.301,
     "BITRUCK": 0.203,
     "FROTA": 0.25
   },
-  "FELISBURGO": {
+  "Felisburgo": {
     "TRUCK": 0.437,
     "CARRETA": 0.275,
     "TOCO": 0.532,
     "BITRUCK": 0.363,
     "FROTA": 0.439
   },
-  "FELIXLANDIA": {
+  "Felixlândia": {
     "TRUCK": 0.144,
     "CARRETA": 0.09,
     "TOCO": 0.178,
     "BITRUCK": 0.119,
     "FROTA": 0.149
   },
-  "FERNANDES TOURINHO": {
+  "Fernandes Tourinho": {
     "TRUCK": 0.213,
     "CARRETA": 0.133,
     "TOCO": 0.261,
     "BITRUCK": 0.176,
     "FROTA": 0.217
   },
-  "FERROS": {
+  "Ferros": {
     "TRUCK": 0.151,
     "CARRETA": 0.094,
     "TOCO": 0.186,
     "BITRUCK": 0.124,
     "FROTA": 0.156
   },
-  "FERVEDOURO": {
+  "Fervedouro": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.285,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "FLORESTAL": {
+  "Florestal": {
     "TRUCK": 0.056,
     "CARRETA": 0.034,
     "TOCO": 0.071,
     "BITRUCK": 0.045,
     "FROTA": 0.062
   },
-  "FORMIGA": {
+  "Formiga": {
     "TRUCK": 0.134,
     "CARRETA": 0.083,
     "TOCO": 0.166,
     "BITRUCK": 0.11,
     "FROTA": 0.139
   },
-  "FORMOSO": {
+  "Formoso": {
     "TRUCK": 0.5,
     "CARRETA": 0.315,
     "TOCO": 0.607,
     "BITRUCK": 0.416,
     "FROTA": 0.501
   },
-  "FORTALEZA DE MINAS": {
+  "Fortaleza de Minas": {
     "TRUCK": 0.241,
     "CARRETA": 0.151,
     "TOCO": 0.294,
     "BITRUCK": 0.199,
     "FROTA": 0.244
   },
-  "FORTUNA DE MINAS": {
+  "Fortuna de Minas": {
     "TRUCK": 0.088,
     "CARRETA": 0.054,
     "TOCO": 0.109,
     "BITRUCK": 0.071,
     "FROTA": 0.093
   },
-  "FRANCISCO BADARO": {
+  "Francisco Badaró": {
     "TRUCK": 0.372,
     "CARRETA": 0.234,
     "TOCO": 0.453,
     "BITRUCK": 0.309,
     "FROTA": 0.374
   },
-  "FRANCISCO DUMONT": {
+  "Francisco Dumont": {
     "TRUCK": 0.254,
     "CARRETA": 0.159,
     "TOCO": 0.31,
     "BITRUCK": 0.21,
     "FROTA": 0.257
   },
-  "FRANCISCO SA": {
+  "Francisco Sá": {
     "TRUCK": 0.311,
     "CARRETA": 0.196,
     "TOCO": 0.38,
     "BITRUCK": 0.258,
     "FROTA": 0.314
   },
-  "FRANCISCOPOLIS": {
+  "Franciscópolis": {
     "TRUCK": 0.309,
     "CARRETA": 0.194,
     "TOCO": 0.377,
     "BITRUCK": 0.256,
     "FROTA": 0.312
   },
-  "FREI GASPAR": {
+  "Frei Gaspar": {
     "TRUCK": 0.306,
     "CARRETA": 0.192,
     "TOCO": 0.373,
     "BITRUCK": 0.254,
     "FROTA": 0.309
   },
-  "FREI INOCENCIO": {
+  "Frei Inocêncio": {
     "TRUCK": 0.234,
     "CARRETA": 0.146,
     "TOCO": 0.286,
@@ -2001,147 +2001,147 @@
     "BITRUCK": 0.2,
     "FROTA": 0.246
   },
-  "FRONTEIRA": {
+  "Fronteira": {
     "TRUCK": 0.415,
     "CARRETA": 0.262,
     "TOCO": 0.505,
     "BITRUCK": 0.345,
     "FROTA": 0.417
   },
-  "FRONTEIRA DOS VALES": {
+  "Fronteira dos Vales": {
     "TRUCK": 0.415,
     "CARRETA": 0.261,
     "TOCO": 0.505,
     "BITRUCK": 0.345,
     "FROTA": 0.417
   },
-  "FRUTA DE LEITE": {
+  "Fruta de Leite": {
     "TRUCK": 0.39,
     "CARRETA": 0.246,
     "TOCO": 0.475,
     "BITRUCK": 0.324,
     "FROTA": 0.393
   },
-  "FRUTAL": {
+  "Frutal": {
     "TRUCK": 0.377,
     "CARRETA": 0.237,
     "TOCO": 0.459,
     "BITRUCK": 0.313,
     "FROTA": 0.379
   },
-  "FUNILANDIA": {
+  "Funilândia": {
     "TRUCK": 0.091,
     "CARRETA": 0.056,
     "TOCO": 0.114,
     "BITRUCK": 0.074,
     "FROTA": 0.097
   },
-  "GALILEIA": {
+  "Galiléia": {
     "TRUCK": 0.259,
     "CARRETA": 0.162,
     "TOCO": 0.316,
     "BITRUCK": 0.214,
     "FROTA": 0.262
   },
-  "GLAUCILANDIA": {
+  "Glaucilândia": {
     "TRUCK": 0.278,
     "CARRETA": 0.175,
     "TOCO": 0.34,
     "BITRUCK": 0.231,
     "FROTA": 0.282
   },
-  "GOIABEIRA": {
+  "Goiabeira": {
     "TRUCK": 0.297,
     "CARRETA": 0.187,
     "TOCO": 0.363,
     "BITRUCK": 0.246,
     "FROTA": 0.3
   },
-  "GONCALVES": {
+  "Gonçalves": {
     "TRUCK": 0.287,
     "CARRETA": 0.18,
     "TOCO": 0.351,
     "BITRUCK": 0.238,
     "FROTA": 0.29
   },
-  "GONZAGA": {
+  "Gonzaga": {
     "TRUCK": 0.238,
     "CARRETA": 0.149,
     "TOCO": 0.291,
     "BITRUCK": 0.197,
     "FROTA": 0.242
   },
-  "GOUVEIA": {
+  "Gouveia": {
     "TRUCK": 0.171,
     "CARRETA": 0.106,
     "TOCO": 0.21,
     "BITRUCK": 0.141,
     "FROTA": 0.175
   },
-  "GOVERNADOR VALADARES": {
+  "Governador Valadares": {
     "TRUCK": 0.225,
     "CARRETA": 0.14,
     "TOCO": 0.275,
     "BITRUCK": 0.186,
     "FROTA": 0.229
   },
-  "GRAO MOGOL": {
+  "Grão Mogol": {
     "TRUCK": 0.367,
     "CARRETA": 0.231,
     "TOCO": 0.448,
     "BITRUCK": 0.305,
     "FROTA": 0.37
   },
-  "GRUPIARA": {
+  "Grupiara": {
     "TRUCK": 0.337,
     "CARRETA": 0.212,
     "TOCO": 0.41,
     "BITRUCK": 0.28,
     "FROTA": 0.339
   },
-  "GUANHAES": {
+  "Guanhães": {
     "TRUCK": 0.185,
     "CARRETA": 0.115,
     "TOCO": 0.227,
     "BITRUCK": 0.153,
     "FROTA": 0.189
   },
-  "GUAPE": {
+  "Guapé": {
     "TRUCK": 0.188,
     "CARRETA": 0.117,
     "TOCO": 0.231,
     "BITRUCK": 0.155,
     "FROTA": 0.192
   },
-  "GUARACIABA": {
+  "Guaraciaba": {
     "TRUCK": 0.143,
     "CARRETA": 0.088,
     "TOCO": 0.176,
     "BITRUCK": 0.117,
     "FROTA": 0.147
   },
-  "GUARACIAMA": {
+  "Guaraciama": {
     "TRUCK": 0.272,
     "CARRETA": 0.171,
     "TOCO": 0.333,
     "BITRUCK": 0.226,
     "FROTA": 0.276
   },
-  "GUARANESIA": {
+  "Guaranésia": {
     "TRUCK": 0.269,
     "CARRETA": 0.169,
     "TOCO": 0.328,
     "BITRUCK": 0.223,
     "FROTA": 0.272
   },
-  "GUARANI": {
+  "Guarani": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "GUARARA": {
+  "Guarará": {
     "TRUCK": 0.213,
     "CARRETA": 0.133,
     "TOCO": 0.261,
@@ -2155,1386 +2155,1386 @@
     "BITRUCK": 0.284,
     "FROTA": 0.345
   },
-  "GUAXUPE": {
+  "Guaxupé": {
     "TRUCK": 0.264,
     "CARRETA": 0.166,
     "TOCO": 0.323,
     "BITRUCK": 0.219,
     "FROTA": 0.268
   },
-  "GUIDOVAL": {
+  "Guidoval": {
     "TRUCK": 0.196,
     "CARRETA": 0.122,
     "TOCO": 0.24,
     "BITRUCK": 0.162,
     "FROTA": 0.2
   },
-  "GUIMARANIA": {
+  "Guimarânia": {
     "TRUCK": 0.259,
     "CARRETA": 0.162,
     "TOCO": 0.316,
     "BITRUCK": 0.214,
     "FROTA": 0.262
   },
-  "GUIRICEMA": {
+  "Guiricema": {
     "TRUCK": 0.2,
     "CARRETA": 0.125,
     "TOCO": 0.245,
     "BITRUCK": 0.165,
     "FROTA": 0.204
   },
-  "GURINHATA": {
+  "Gurinhatã": {
     "TRUCK": 0.454,
     "CARRETA": 0.286,
     "TOCO": 0.552,
     "BITRUCK": 0.378,
     "FROTA": 0.456
   },
-  "HELIODORA": {
+  "Heliodora": {
     "TRUCK": 0.133,
     "CARRETA": 0.083,
     "TOCO": 0.165,
     "BITRUCK": 0.109,
     "FROTA": 0.138
   },
-  "IAPU": {
+  "Iapu": {
     "TRUCK": 0.195,
     "CARRETA": 0.122,
     "TOCO": 0.239,
     "BITRUCK": 0.161,
     "FROTA": 0.199
   },
-  "IBERTIOGA": {
+  "Ibertioga": {
     "TRUCK": 0.16,
     "CARRETA": 0.1,
     "TOCO": 0.197,
     "BITRUCK": 0.132,
     "FROTA": 0.165
   },
-  "IBIA": {
+  "Ibiá": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "IBIAI": {
+  "Ibiaí": {
     "TRUCK": 0.283,
     "CARRETA": 0.178,
     "TOCO": 0.346,
     "BITRUCK": 0.235,
     "FROTA": 0.287
   },
-  "IBIRACATU": {
+  "Ibiracatu": {
     "TRUCK": 0.372,
     "CARRETA": 0.234,
     "TOCO": 0.453,
     "BITRUCK": 0.309,
     "FROTA": 0.374
   },
-  "IBIRACI": {
+  "Ibiraci": {
     "TRUCK": 0.268,
     "CARRETA": 0.168,
     "TOCO": 0.327,
     "BITRUCK": 0.222,
     "FROTA": 0.271
   },
-  "IBIRITE": {
+  "Ibirité": {
     "TRUCK": 0.036,
     "CARRETA": 0.02,
     "TOCO": 0.046,
     "BITRUCK": 0.027,
     "FROTA": 0.041
   },
-  "IBITURUNA": {
+  "Ibituruna": {
     "TRUCK": 0.148,
     "CARRETA": 0.092,
     "TOCO": 0.182,
     "BITRUCK": 0.121,
     "FROTA": 0.153
   },
-  "ICARAI DE MINAS": {
+  "Icaraí de Minas": {
     "TRUCK": 0.331,
     "CARRETA": 0.208,
     "TOCO": 0.403,
     "BITRUCK": 0.275,
     "FROTA": 0.334
   },
-  "INDAIABIRA": {
+  "Indaiabira": {
     "TRUCK": 0.461,
     "CARRETA": 0.29,
     "TOCO": 0.56,
     "BITRUCK": 0.383,
     "FROTA": 0.462
   },
-  "IGARAPE": {
+  "Igarapé": {
     "TRUCK": 0.045,
     "CARRETA": 0.027,
     "TOCO": 0.058,
     "BITRUCK": 0.036,
     "FROTA": 0.051
   },
-  "IGARATINGA": {
+  "Igaratinga": {
     "TRUCK": 0.076,
     "CARRETA": 0.046,
     "TOCO": 0.095,
     "BITRUCK": 0.061,
     "FROTA": 0.081
   },
-  "IGUATAMA": {
+  "Iguatama": {
     "TRUCK": 0.162,
     "CARRETA": 0.101,
     "TOCO": 0.199,
     "BITRUCK": 0.133,
     "FROTA": 0.167
   },
-  "IJACI": {
+  "Ijaci": {
     "TRUCK": 0.148,
     "CARRETA": 0.092,
     "TOCO": 0.182,
     "BITRUCK": 0.121,
     "FROTA": 0.153
   },
-  "ILICINEA": {
+  "Ilicínea": {
     "TRUCK": 0.19,
     "CARRETA": 0.119,
     "TOCO": 0.233,
     "BITRUCK": 0.157,
     "FROTA": 0.194
   },
-  "IMBE DE MINAS": {
+  "Imbé de Minas": {
     "TRUCK": 0.227,
     "CARRETA": 0.142,
     "TOCO": 0.277,
     "BITRUCK": 0.187,
     "FROTA": 0.23
   },
-  "INCONFIDENTES": {
+  "Inconfidentes": {
     "TRUCK": 0.272,
     "CARRETA": 0.171,
     "TOCO": 0.333,
     "BITRUCK": 0.226,
     "FROTA": 0.276
   },
-  "INDIANOPOLIS": {
+  "Indianópolis": {
     "TRUCK": 0.333,
     "CARRETA": 0.209,
     "TOCO": 0.405,
     "BITRUCK": 0.276,
     "FROTA": 0.335
   },
-  "INGAI": {
+  "Ingaí": {
     "TRUCK": 0.174,
     "CARRETA": 0.109,
     "TOCO": 0.214,
     "BITRUCK": 0.144,
     "FROTA": 0.179
   },
-  "INHAPIM": {
+  "Inhapim": {
     "TRUCK": 0.21,
     "CARRETA": 0.131,
     "TOCO": 0.257,
     "BITRUCK": 0.173,
     "FROTA": 0.214
   },
-  "INHAUMA": {
+  "Inhaúma": {
     "TRUCK": 0.083,
     "CARRETA": 0.051,
     "TOCO": 0.104,
     "BITRUCK": 0.068,
     "FROTA": 0.089
   },
-  "INIMUTABA": {
+  "Inimutaba": {
     "TRUCK": 0.138,
     "CARRETA": 0.086,
     "TOCO": 0.171,
     "BITRUCK": 0.114,
     "FROTA": 0.143
   },
-  "IPABA": {
+  "Ipaba": {
     "TRUCK": 0.178,
     "CARRETA": 0.111,
     "TOCO": 0.218,
     "BITRUCK": 0.147,
     "FROTA": 0.182
   },
-  "IPANEMA": {
+  "Ipanema": {
     "TRUCK": 0.237,
     "CARRETA": 0.148,
     "TOCO": 0.29,
     "BITRUCK": 0.196,
     "FROTA": 0.241
   },
-  "IPATINGA": {
+  "Ipatinga": {
     "TRUCK": 0.164,
     "CARRETA": 0.102,
     "TOCO": 0.201,
     "BITRUCK": 0.135,
     "FROTA": 0.168
   },
-  "IPIACU": {
+  "Ipiaçu": {
     "TRUCK": 0.454,
     "CARRETA": 0.286,
     "TOCO": 0.552,
     "BITRUCK": 0.378,
     "FROTA": 0.456
   },
-  "IPUIUNA": {
+  "Ipuiúna": {
     "TRUCK": 0.271,
     "CARRETA": 0.17,
     "TOCO": 0.331,
     "BITRUCK": 0.225,
     "FROTA": 0.275
   },
-  "IRAI DE MINAS": {
+  "Iraí de Minas": {
     "TRUCK": 0.296,
     "CARRETA": 0.185,
     "TOCO": 0.361,
     "BITRUCK": 0.245,
     "FROTA": 0.299
   },
-  "ITABIRA": {
+  "Itabira": {
     "TRUCK": 0.101,
     "CARRETA": 0.062,
     "TOCO": 0.126,
     "BITRUCK": 0.082,
     "FROTA": 0.106
   },
-  "ITABIRITO": {
+  "Itabirito": {
     "TRUCK": 0.067,
     "CARRETA": 0.041,
     "TOCO": 0.085,
     "BITRUCK": 0.054,
     "FROTA": 0.073
   },
-  "ITACAMBIRA": {
+  "Itacambira": {
     "TRUCK": 0.318,
     "CARRETA": 0.2,
     "TOCO": 0.388,
     "BITRUCK": 0.264,
     "FROTA": 0.321
   },
-  "ITACARAMBI": {
+  "Itacarambi": {
     "TRUCK": 0.421,
     "CARRETA": 0.265,
     "TOCO": 0.513,
     "BITRUCK": 0.35,
     "FROTA": 0.423
   },
-  "ITAGUARA": {
+  "Itaguara": {
     "TRUCK": 0.075,
     "CARRETA": 0.046,
     "TOCO": 0.094,
     "BITRUCK": 0.06,
     "FROTA": 0.08
   },
-  "ITAIPE": {
+  "Itaipé": {
     "TRUCK": 0.353,
     "CARRETA": 0.222,
     "TOCO": 0.43,
     "BITRUCK": 0.293,
     "FROTA": 0.356
   },
-  "ITAJUBA": {
+  "Itajubá": {
     "TRUCK": 0.28,
     "CARRETA": 0.175,
     "TOCO": 0.341,
     "BITRUCK": 0.232,
     "FROTA": 0.283
   },
-  "ITAMARANDIBA": {
+  "Itamarandiba": {
     "TRUCK": 0.275,
     "CARRETA": 0.173,
     "TOCO": 0.336,
     "BITRUCK": 0.228,
     "FROTA": 0.279
   },
-  "ITAMARATI DE MINAS": {
+  "Itamarati de Minas": {
     "TRUCK": 0.218,
     "CARRETA": 0.136,
     "TOCO": 0.267,
     "BITRUCK": 0.18,
     "FROTA": 0.222
   },
-  "ITAMBACURI": {
+  "Itambacuri": {
     "TRUCK": 0.285,
     "CARRETA": 0.179,
     "TOCO": 0.348,
     "BITRUCK": 0.237,
     "FROTA": 0.289
   },
-  "ITAMBE DO MATO DENTRO": {
+  "Itambé do Mato Dentro": {
     "TRUCK": 0.115,
     "CARRETA": 0.071,
     "TOCO": 0.143,
     "BITRUCK": 0.094,
     "FROTA": 0.12
   },
-  "ITAMOGI": {
+  "Itamogi": {
     "TRUCK": 0.267,
     "CARRETA": 0.167,
     "TOCO": 0.326,
     "BITRUCK": 0.221,
     "FROTA": 0.271
   },
-  "ITAMONTE": {
+  "Itamonte": {
     "TRUCK": 0.269,
     "CARRETA": 0.169,
     "TOCO": 0.329,
     "BITRUCK": 0.223,
     "FROTA": 0.273
   },
-  "ITANHANDU": {
+  "Itanhandu": {
     "TRUCK": 0.268,
     "CARRETA": 0.168,
     "TOCO": 0.327,
     "BITRUCK": 0.222,
     "FROTA": 0.271
   },
-  "ITANHOMI": {
+  "Itanhomi": {
     "TRUCK": 0.228,
     "CARRETA": 0.143,
     "TOCO": 0.279,
     "BITRUCK": 0.189,
     "FROTA": 0.232
   },
-  "ITAOBIM": {
+  "Itaobim": {
     "TRUCK": 0.393,
     "CARRETA": 0.247,
     "TOCO": 0.479,
     "BITRUCK": 0.327,
     "FROTA": 0.395
   },
-  "ITAPAGIPE": {
+  "Itapagipe": {
     "TRUCK": 0.417,
     "CARRETA": 0.263,
     "TOCO": 0.508,
     "BITRUCK": 0.347,
     "FROTA": 0.419
   },
-  "ITAPECERICA": {
+  "Itapecerica": {
     "TRUCK": 0.124,
     "CARRETA": 0.076,
     "TOCO": 0.153,
     "BITRUCK": 0.101,
     "FROTA": 0.129
   },
-  "ITAPEVA": {
+  "Itapeva": {
     "TRUCK": 0.312,
     "CARRETA": 0.196,
     "TOCO": 0.381,
     "BITRUCK": 0.259,
     "FROTA": 0.315
   },
-  "ITATIAIUCU": {
+  "Itatiaiuçu": {
     "TRUCK": 0.066,
     "CARRETA": 0.04,
     "TOCO": 0.083,
     "BITRUCK": 0.053,
     "FROTA": 0.072
   },
-  "ITAU DE MINAS": {
+  "Itaú de Minas": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.286,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "ITAUNA": {
+  "Itaúna": {
     "TRUCK": 0.065,
     "CARRETA": 0.039,
     "TOCO": 0.082,
     "BITRUCK": 0.052,
     "FROTA": 0.07
   },
-  "ITAVERAVA": {
+  "Itaverava": {
     "TRUCK": 0.105,
     "CARRETA": 0.065,
     "TOCO": 0.131,
     "BITRUCK": 0.086,
     "FROTA": 0.111
   },
-  "ITINGA": {
+  "Itinga": {
     "TRUCK": 0.408,
     "CARRETA": 0.257,
     "TOCO": 0.496,
     "BITRUCK": 0.339,
     "FROTA": 0.41
   },
-  "ITUETA": {
+  "Itueta": {
     "TRUCK": 0.309,
     "CARRETA": 0.194,
     "TOCO": 0.377,
     "BITRUCK": 0.256,
     "FROTA": 0.312
   },
-  "ITUIUTABA": {
+  "Ituiutaba": {
     "TRUCK": 0.414,
     "CARRETA": 0.261,
     "TOCO": 0.504,
     "BITRUCK": 0.344,
     "FROTA": 0.416
   },
-  "ITUMIRIM": {
+  "Itumirim": {
     "TRUCK": 0.173,
     "CARRETA": 0.108,
     "TOCO": 0.212,
     "BITRUCK": 0.142,
     "FROTA": 0.177
   },
-  "ITURAMA": {
+  "Iturama": {
     "TRUCK": 0.458,
     "CARRETA": 0.289,
     "TOCO": 0.557,
     "BITRUCK": 0.381,
     "FROTA": 0.459
   },
-  "ITUTINGA": {
+  "Itutinga": {
     "TRUCK": 0.185,
     "CARRETA": 0.115,
     "TOCO": 0.226,
     "BITRUCK": 0.152,
     "FROTA": 0.189
   },
-  "JABOTICATUBAS": {
+  "Jaboticatubas": {
     "TRUCK": 0.077,
     "CARRETA": 0.047,
     "TOCO": 0.096,
     "BITRUCK": 0.062,
     "FROTA": 0.082
   },
-  "JACINTO": {
+  "Jacinto": {
     "TRUCK": 0.496,
     "CARRETA": 0.313,
     "TOCO": 0.603,
     "BITRUCK": 0.413,
     "FROTA": 0.497
   },
-  "JACUI": {
+  "Jacuí": {
     "TRUCK": 0.255,
     "CARRETA": 0.16,
     "TOCO": 0.311,
     "BITRUCK": 0.211,
     "FROTA": 0.258
   },
-  "JACUTINGA": {
+  "Jacutinga": {
     "TRUCK": 0.296,
     "CARRETA": 0.186,
     "TOCO": 0.361,
     "BITRUCK": 0.245,
     "FROTA": 0.299
   },
-  "JAGUARACU": {
+  "Jaguaraçu": {
     "TRUCK": 0.153,
     "CARRETA": 0.095,
     "TOCO": 0.188,
     "BITRUCK": 0.125,
     "FROTA": 0.157
   },
-  "JAIBA": {
+  "Jaíba": {
     "TRUCK": 0.402,
     "CARRETA": 0.253,
     "TOCO": 0.489,
     "BITRUCK": 0.334,
     "FROTA": 0.404
   },
-  "JAMPRUCA": {
+  "Jampruca": {
     "TRUCK": 0.264,
     "CARRETA": 0.165,
     "TOCO": 0.322,
     "BITRUCK": 0.218,
     "FROTA": 0.267
   },
-  "JANAUBA": {
+  "Janaúba": {
     "TRUCK": 0.36,
     "CARRETA": 0.227,
     "TOCO": 0.439,
     "BITRUCK": 0.299,
     "FROTA": 0.363
   },
-  "JANUARIA": {
+  "Januária": {
     "TRUCK": 0.382,
     "CARRETA": 0.241,
     "TOCO": 0.465,
     "BITRUCK": 0.318,
     "FROTA": 0.384
   },
-  "JAPARAIBA": {
+  "Japaraíba": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.168,
     "BITRUCK": 0.112,
     "FROTA": 0.141
   },
-  "JAPONVAR": {
+  "Japonvar": {
     "TRUCK": 0.343,
     "CARRETA": 0.215,
     "TOCO": 0.418,
     "BITRUCK": 0.284,
     "FROTA": 0.345
   },
-  "JECEABA": {
+  "Jeceaba": {
     "TRUCK": 0.105,
     "CARRETA": 0.065,
     "TOCO": 0.13,
     "BITRUCK": 0.086,
     "FROTA": 0.11
   },
-  "JENIPAPO DE MINAS": {
+  "Jenipapo de Minas": {
     "TRUCK": 0.376,
     "CARRETA": 0.237,
     "TOCO": 0.458,
     "BITRUCK": 0.313,
     "FROTA": 0.379
   },
-  "JEQUERI": {
+  "Jequeri": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.203,
     "BITRUCK": 0.136,
     "FROTA": 0.17
   },
-  "JEQUITAI": {
+  "Jequitaí": {
     "TRUCK": 0.275,
     "CARRETA": 0.172,
     "TOCO": 0.336,
     "BITRUCK": 0.228,
     "FROTA": 0.278
   },
-  "JEQUITIBA": {
+  "Jequitibá": {
     "TRUCK": 0.107,
     "CARRETA": 0.066,
     "TOCO": 0.132,
     "BITRUCK": 0.087,
     "FROTA": 0.112
   },
-  "JEQUITINHONHA": {
+  "Jequitinhonha": {
     "TRUCK": 0.434,
     "CARRETA": 0.273,
     "TOCO": 0.528,
     "BITRUCK": 0.36,
     "FROTA": 0.435
   },
-  "JESUANIA": {
+  "Jesuânia": {
     "TRUCK": 0.23,
     "CARRETA": 0.144,
     "TOCO": 0.281,
     "BITRUCK": 0.19,
     "FROTA": 0.234
   },
-  "JOAIMA": {
+  "Joaíma": {
     "TRUCK": 0.447,
     "CARRETA": 0.281,
     "TOCO": 0.543,
     "BITRUCK": 0.371,
     "FROTA": 0.448
   },
-  "JOANESIA": {
+  "Joanésia": {
     "TRUCK": 0.196,
     "CARRETA": 0.123,
     "TOCO": 0.241,
     "BITRUCK": 0.162,
     "FROTA": 0.2
   },
-  "JOAO MONLEVADE": {
+  "João Monlevade": {
     "TRUCK": 0.107,
     "CARRETA": 0.066,
     "TOCO": 0.132,
     "BITRUCK": 0.087,
     "FROTA": 0.112
   },
-  "JOAO PINHEIRO": {
+  "João Pinheiro": {
     "TRUCK": 0.267,
     "CARRETA": 0.167,
     "TOCO": 0.326,
     "BITRUCK": 0.221,
     "FROTA": 0.271
   },
-  "JOAQUIM FELICIO": {
+  "Joaquim Felício": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "JORDANIA": {
+  "Jordânia": {
     "TRUCK": 0.509,
     "CARRETA": 0.321,
     "TOCO": 0.619,
     "BITRUCK": 0.424,
     "FROTA": 0.51
   },
-  "JOSE GONCALVES DE MINAS": {
+  "José Gonçalves de Minas": {
     "TRUCK": 0.33,
     "CARRETA": 0.207,
     "TOCO": 0.402,
     "BITRUCK": 0.274,
     "FROTA": 0.332
   },
-  "JOSE RAYDAN": {
+  "José Raydan": {
     "TRUCK": 0.242,
     "CARRETA": 0.152,
     "TOCO": 0.296,
     "BITRUCK": 0.2,
     "FROTA": 0.246
   },
-  "JUATUBA": {
+  "Juatuba": {
     "TRUCK": 0.048,
     "CARRETA": 0.028,
     "TOCO": 0.061,
     "BITRUCK": 0.038,
     "FROTA": 0.054
   },
-  "JUIZ DE FORA": {
+  "Juiz de Fora": {
     "TRUCK": 0.187,
     "CARRETA": 0.117,
     "TOCO": 0.23,
     "BITRUCK": 0.155,
     "FROTA": 0.192
   },
-  "JURAMENTO": {
+  "Juramento": {
     "TRUCK": 0.304,
     "CARRETA": 0.191,
     "TOCO": 0.371,
     "BITRUCK": 0.252,
     "FROTA": 0.307
   },
-  "JURUAIA": {
+  "Juruaia": {
     "TRUCK": 0.257,
     "CARRETA": 0.161,
     "TOCO": 0.314,
     "BITRUCK": 0.213,
     "FROTA": 0.261
   },
-  "LADAINHA": {
+  "Ladainha": {
     "TRUCK": 0.346,
     "CARRETA": 0.217,
     "TOCO": 0.421,
     "BITRUCK": 0.287,
     "FROTA": 0.348
   },
-  "LAGAMAR": {
+  "Lagamar": {
     "TRUCK": 0.301,
     "CARRETA": 0.189,
     "TOCO": 0.368,
     "BITRUCK": 0.25,
     "FROTA": 0.304
   },
-  "LAGOA DA PRATA": {
+  "Lagoa da Prata": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.169,
     "BITRUCK": 0.112,
     "FROTA": 0.142
   },
-  "LAGOA DOS PATOS": {
+  "Lagoa dos Patos": {
     "TRUCK": 0.271,
     "CARRETA": 0.17,
     "TOCO": 0.331,
     "BITRUCK": 0.224,
     "FROTA": 0.274
   },
-  "LAGOA DOURADA": {
+  "Lagoa Dourada": {
     "TRUCK": 0.123,
     "CARRETA": 0.076,
     "TOCO": 0.151,
     "BITRUCK": 0.1,
     "FROTA": 0.127
   },
-  "LAGOA FORMOSA": {
+  "Lagoa Formosa": {
     "TRUCK": 0.239,
     "CARRETA": 0.149,
     "TOCO": 0.292,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "LAGOA GRANDE": {
+  "Lagoa Grande": {
     "TRUCK": 0.297,
     "CARRETA": 0.187,
     "TOCO": 0.363,
     "BITRUCK": 0.246,
     "FROTA": 0.3
   },
-  "LAGOA SANTA": {
+  "Lagoa Santa": {
     "TRUCK": 0.068,
     "CARRETA": 0.041,
     "TOCO": 0.085,
     "BITRUCK": 0.054,
     "FROTA": 0.073
   },
-  "LAJINHA": {
+  "Lajinha": {
     "TRUCK": 0.245,
     "CARRETA": 0.153,
     "TOCO": 0.299,
     "BITRUCK": 0.202,
     "FROTA": 0.248
   },
-  "LAMBARI": {
+  "Lambari": {
     "TRUCK": 0.224,
     "CARRETA": 0.14,
     "TOCO": 0.274,
     "BITRUCK": 0.185,
     "FROTA": 0.228
   },
-  "LAMIM": {
+  "Lamim": {
     "TRUCK": 0.124,
     "CARRETA": 0.076,
     "TOCO": 0.153,
     "BITRUCK": 0.101,
     "FROTA": 0.129
   },
-  "LARANJAL": {
+  "Laranjal": {
     "TRUCK": 0.239,
     "CARRETA": 0.15,
     "TOCO": 0.293,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "LASSANCE": {
+  "Lassance": {
     "TRUCK": 0.194,
     "CARRETA": 0.121,
     "TOCO": 0.237,
     "BITRUCK": 0.16,
     "FROTA": 0.198
   },
-  "LAVRAS": {
+  "Lavras": {
     "TRUCK": 0.163,
     "CARRETA": 0.102,
     "TOCO": 0.201,
     "BITRUCK": 0.134,
     "FROTA": 0.168
   },
-  "LEANDRO FERREIRA": {
+  "Leandro Ferreira": {
     "TRUCK": 0.104,
     "CARRETA": 0.064,
     "TOCO": 0.129,
     "BITRUCK": 0.084,
     "FROTA": 0.109
   },
-  "LEME DO PRADO": {
+  "Leme do Prado": {
     "TRUCK": 0.32,
     "CARRETA": 0.201,
     "TOCO": 0.39,
     "BITRUCK": 0.265,
     "FROTA": 0.323
   },
-  "LEOPOLDINA": {
+  "Leopoldina": {
     "TRUCK": 0.222,
     "CARRETA": 0.139,
     "TOCO": 0.272,
     "BITRUCK": 0.184,
     "FROTA": 0.226
   },
-  "LIBERDADE": {
+  "Liberdade": {
     "TRUCK": 0.237,
     "CARRETA": 0.148,
     "TOCO": 0.29,
     "BITRUCK": 0.196,
     "FROTA": 0.241
   },
-  "LIMA DUARTE": {
+  "Lima Duarte": {
     "TRUCK": 0.206,
     "CARRETA": 0.129,
     "TOCO": 0.253,
     "BITRUCK": 0.17,
     "FROTA": 0.21
   },
-  "LIMEIRA DO OESTE": {
+  "Limeira do Oeste": {
     "TRUCK": 0.504,
     "CARRETA": 0.318,
     "TOCO": 0.613,
     "BITRUCK": 0.419,
     "FROTA": 0.505
   },
-  "LONTRA": {
+  "Lontra": {
     "TRUCK": 0.328,
     "CARRETA": 0.206,
     "TOCO": 0.4,
     "BITRUCK": 0.272,
     "FROTA": 0.331
   },
-  "LUISBURGO": {
+  "Luisburgo": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.265,
     "BITRUCK": 0.179,
     "FROTA": 0.22
   },
-  "LUISLANDIA": {
+  "Luislândia": {
     "TRUCK": 0.358,
     "CARRETA": 0.225,
     "TOCO": 0.437,
     "BITRUCK": 0.298,
     "FROTA": 0.361
   },
-  "LUMINARIAS": {
+  "Luminárias": {
     "TRUCK": 0.202,
     "CARRETA": 0.126,
     "TOCO": 0.247,
     "BITRUCK": 0.167,
     "FROTA": 0.206
   },
-  "LUZ": {
+  "Luz": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.169,
     "BITRUCK": 0.112,
     "FROTA": 0.142
   },
-  "MACHACALIS": {
+  "Machacalis": {
     "TRUCK": 0.404,
     "CARRETA": 0.254,
     "TOCO": 0.492,
     "BITRUCK": 0.336,
     "FROTA": 0.406
   },
-  "MACHADO": {
+  "Machado": {
     "TRUCK": 0.241,
     "CARRETA": 0.151,
     "TOCO": 0.294,
     "BITRUCK": 0.199,
     "FROTA": 0.244
   },
-  "MADRE DE DEUS DE MINAS": {
+  "Madre de Deus de Minas": {
     "TRUCK": 0.191,
     "CARRETA": 0.119,
     "TOCO": 0.234,
     "BITRUCK": 0.157,
     "FROTA": 0.195
   },
-  "MALACACHETA": {
+  "Malacacheta": {
     "TRUCK": 0.295,
     "CARRETA": 0.185,
     "TOCO": 0.36,
     "BITRUCK": 0.244,
     "FROTA": 0.298
   },
-  "MAMONAS": {
+  "Mamonas": {
     "TRUCK": 0.435,
     "CARRETA": 0.274,
     "TOCO": 0.529,
     "BITRUCK": 0.361,
     "FROTA": 0.436
   },
-  "MANGA": {
+  "Manga": {
     "TRUCK": 0.446,
     "CARRETA": 0.281,
     "TOCO": 0.542,
     "BITRUCK": 0.371,
     "FROTA": 0.448
   },
-  "MANHUACU": {
+  "Manhuaçu": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "MANHUMIRIM": {
+  "Manhumirim": {
     "TRUCK": 0.218,
     "CARRETA": 0.136,
     "TOCO": 0.267,
     "BITRUCK": 0.18,
     "FROTA": 0.222
   },
-  "MANTENA": {
+  "Mantena": {
     "TRUCK": 0.305,
     "CARRETA": 0.192,
     "TOCO": 0.373,
     "BITRUCK": 0.253,
     "FROTA": 0.309
   },
-  "MAR DE ESPANHA": {
+  "Mar de Espanha": {
     "TRUCK": 0.222,
     "CARRETA": 0.139,
     "TOCO": 0.271,
     "BITRUCK": 0.183,
     "FROTA": 0.226
   },
-  "MARAVILHAS": {
+  "Maravilhas": {
     "TRUCK": 0.096,
     "CARRETA": 0.059,
     "TOCO": 0.119,
     "BITRUCK": 0.078,
     "FROTA": 0.101
   },
-  "MARIA DA FE": {
+  "Maria da Fé": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.204,
     "BITRUCK": 0.137,
     "FROTA": 0.171
   },
-  "MARIANA": {
+  "Mariana": {
     "TRUCK": 0.102,
     "CARRETA": 0.063,
     "TOCO": 0.126,
     "BITRUCK": 0.083,
     "FROTA": 0.107
   },
-  "MARILAC": {
+  "Marilac": {
     "TRUCK": 0.259,
     "CARRETA": 0.163,
     "TOCO": 0.317,
     "BITRUCK": 0.215,
     "FROTA": 0.263
   },
-  "MARIO CAMPOS": {
+  "Mário Campos": {
     "TRUCK": 0.044,
     "CARRETA": 0.026,
     "TOCO": 0.056,
     "BITRUCK": 0.034,
     "FROTA": 0.05
   },
-  "MARIPA DE MINAS": {
+  "Maripá de Minas": {
     "TRUCK": 0.217,
     "CARRETA": 0.136,
     "TOCO": 0.266,
     "BITRUCK": 0.179,
     "FROTA": 0.221
   },
-  "MARLIERIA": {
+  "Marliéria": {
     "TRUCK": 0.163,
     "CARRETA": 0.102,
     "TOCO": 0.201,
     "BITRUCK": 0.134,
     "FROTA": 0.168
   },
-  "MARMELOPOLIS": {
+  "Marmelópolis": {
     "TRUCK": 0.308,
     "CARRETA": 0.194,
     "TOCO": 0.376,
     "BITRUCK": 0.256,
     "FROTA": 0.311
   },
-  "MARTINHO CAMPOS": {
+  "Martinho Campos": {
     "TRUCK": 0.124,
     "CARRETA": 0.076,
     "TOCO": 0.153,
     "BITRUCK": 0.101,
     "FROTA": 0.129
   },
-  "MARTINS SOARES": {
+  "Martins Soares": {
     "TRUCK": 0.217,
     "CARRETA": 0.136,
     "TOCO": 0.266,
     "BITRUCK": 0.179,
     "FROTA": 0.221
   },
-  "MATERLANDIA": {
+  "Materlândia": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.264,
     "BITRUCK": 0.178,
     "FROTA": 0.22
   },
-  "MATEUS LEME": {
+  "Mateus Leme": {
     "TRUCK": 0.055,
     "CARRETA": 0.033,
     "TOCO": 0.07,
     "BITRUCK": 0.044,
     "FROTA": 0.061
   },
-  "MATHIAS LOBATO": {
+  "Mathias Lobato": {
     "TRUCK": 0.243,
     "CARRETA": 0.152,
     "TOCO": 0.297,
     "BITRUCK": 0.201,
     "FROTA": 0.247
   },
-  "MATIAS BARBOSA": {
+  "Matias Barbosa": {
     "TRUCK": 0.198,
     "CARRETA": 0.124,
     "TOCO": 0.243,
     "BITRUCK": 0.163,
     "FROTA": 0.202
   },
-  "MATIAS CARDOSO": {
+  "Matias Cardoso": {
     "TRUCK": 0.44,
     "CARRETA": 0.277,
     "TOCO": 0.536,
     "BITRUCK": 0.366,
     "FROTA": 0.442
   },
-  "MATIPO": {
+  "Matipó": {
     "TRUCK": 0.185,
     "CARRETA": 0.115,
     "TOCO": 0.227,
     "BITRUCK": 0.153,
     "FROTA": 0.189
   },
-  "MATO VERDE": {
+  "Mato Verde": {
     "TRUCK": 0.407,
     "CARRETA": 0.256,
     "TOCO": 0.495,
     "BITRUCK": 0.338,
     "FROTA": 0.409
   },
-  "MATOZINHOS": {
+  "Matozinhos": {
     "TRUCK": 0.066,
     "CARRETA": 0.04,
     "TOCO": 0.083,
     "BITRUCK": 0.053,
     "FROTA": 0.071
   },
-  "MATUTINA": {
+  "Matutina": {
     "TRUCK": 0.209,
     "CARRETA": 0.131,
     "TOCO": 0.256,
     "BITRUCK": 0.173,
     "FROTA": 0.213
   },
-  "MEDEIROS": {
+  "Medeiros": {
     "TRUCK": 0.193,
     "CARRETA": 0.12,
     "TOCO": 0.236,
     "BITRUCK": 0.159,
     "FROTA": 0.197
   },
-  "MEDINA": {
+  "Medina": {
     "TRUCK": 0.422,
     "CARRETA": 0.266,
     "TOCO": 0.514,
     "BITRUCK": 0.351,
     "FROTA": 0.424
   },
-  "MENDES PIMENTEL": {
+  "Mendes Pimentel": {
     "TRUCK": 0.271,
     "CARRETA": 0.17,
     "TOCO": 0.331,
     "BITRUCK": 0.225,
     "FROTA": 0.275
   },
-  "MERCES": {
+  "Mercês": {
     "TRUCK": 0.17,
     "CARRETA": 0.106,
     "TOCO": 0.208,
     "BITRUCK": 0.14,
     "FROTA": 0.174
   },
-  "MESQUITA": {
+  "Mesquita": {
     "TRUCK": 0.193,
     "CARRETA": 0.121,
     "TOCO": 0.237,
     "BITRUCK": 0.159,
     "FROTA": 0.198
   },
-  "MINAS NOVAS": {
+  "Minas Novas": {
     "TRUCK": 0.344,
     "CARRETA": 0.217,
     "TOCO": 0.42,
     "BITRUCK": 0.286,
     "FROTA": 0.347
   },
-  "MINDURI": {
+  "Minduri": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.265,
     "BITRUCK": 0.179,
     "FROTA": 0.22
   },
-  "MIRABELA": {
+  "Mirabela": {
     "TRUCK": 0.324,
     "CARRETA": 0.204,
     "TOCO": 0.395,
     "BITRUCK": 0.269,
     "FROTA": 0.327
   },
-  "MIRADOURO": {
+  "Miradouro": {
     "TRUCK": 0.234,
     "CARRETA": 0.146,
     "TOCO": 0.286,
     "BITRUCK": 0.194,
     "FROTA": 0.238
   },
-  "MIRAI": {
+  "Miraí": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.264,
     "BITRUCK": 0.178,
     "FROTA": 0.22
   },
-  "MIRAVANIA": {
+  "Miravânia": {
     "TRUCK": 0.438,
     "CARRETA": 0.276,
     "TOCO": 0.533,
     "BITRUCK": 0.364,
     "FROTA": 0.439
   },
-  "MOEDA": {
+  "Moeda": {
     "TRUCK": 0.068,
     "CARRETA": 0.041,
     "TOCO": 0.086,
     "BITRUCK": 0.055,
     "FROTA": 0.074
   },
-  "MOEMA": {
+  "Moema": {
     "TRUCK": 0.132,
     "CARRETA": 0.082,
     "TOCO": 0.163,
     "BITRUCK": 0.108,
     "FROTA": 0.137
   },
-  "MONJOLOS": {
+  "Monjolos": {
     "TRUCK": 0.187,
     "CARRETA": 0.117,
     "TOCO": 0.229,
     "BITRUCK": 0.154,
     "FROTA": 0.191
   },
-  "MONSENHOR PAULO": {
+  "Monsenhor Paulo": {
     "TRUCK": 0.206,
     "CARRETA": 0.129,
     "TOCO": 0.253,
     "BITRUCK": 0.17,
     "FROTA": 0.21
   },
-  "MONTALVANIA": {
+  "Montalvânia": {
     "TRUCK": 0.492,
     "CARRETA": 0.31,
     "TOCO": 0.598,
     "BITRUCK": 0.409,
     "FROTA": 0.493
   },
-  "MONTE ALEGRE DE MINAS": {
+  "Monte Alegre de Minas": {
     "TRUCK": 0.375,
     "CARRETA": 0.236,
     "TOCO": 0.457,
     "BITRUCK": 0.312,
     "FROTA": 0.377
   },
-  "MONTE AZUL": {
+  "Monte Azul": {
     "TRUCK": 0.378,
     "CARRETA": 0.238,
     "TOCO": 0.461,
     "BITRUCK": 0.314,
     "FROTA": 0.381
   },
-  "MONTE BELO": {
+  "Monte Belo": {
     "TRUCK": 0.254,
     "CARRETA": 0.159,
     "TOCO": 0.31,
     "BITRUCK": 0.21,
     "FROTA": 0.257
   },
-  "MONTE CARMELO": {
+  "Monte Carmelo": {
     "TRUCK": 0.311,
     "CARRETA": 0.196,
     "TOCO": 0.38,
     "BITRUCK": 0.258,
     "FROTA": 0.314
   },
-  "MONTE FORMOSO": {
+  "Monte Formoso": {
     "TRUCK": 0.386,
     "CARRETA": 0.243,
     "TOCO": 0.47,
     "BITRUCK": 0.321,
     "FROTA": 0.389
   },
-  "MONTE SIAO": {
+  "Monte Sião": {
     "TRUCK": 0.3,
     "CARRETA": 0.188,
     "TOCO": 0.365,
     "BITRUCK": 0.248,
     "FROTA": 0.303
   },
-  "MONTE SANTO DE MINAS": {
+  "Monte Santo de Minas": {
     "TRUCK": 0.272,
     "CARRETA": 0.171,
     "TOCO": 0.333,
     "BITRUCK": 0.226,
     "FROTA": 0.276
   },
-  "MONTES CLAROS": {
+  "Montes Claros": {
     "TRUCK": 0.281,
     "CARRETA": 0.176,
     "TOCO": 0.343,
     "BITRUCK": 0.233,
     "FROTA": 0.284
   },
-  "MONTEZUMA": {
+  "Montezuma": {
     "TRUCK": 0.446,
     "CARRETA": 0.281,
     "TOCO": 0.543,
     "BITRUCK": 0.371,
     "FROTA": 0.448
   },
-  "MORADA NOVA DE MINAS": {
+  "Morada Nova de Minas": {
     "TRUCK": 0.192,
     "CARRETA": 0.12,
     "TOCO": 0.236,
     "BITRUCK": 0.159,
     "FROTA": 0.196
   },
-  "MORRO DA GARCA": {
+  "Morro da Garça": {
     "TRUCK": 0.156,
     "CARRETA": 0.097,
     "TOCO": 0.191,
     "BITRUCK": 0.128,
     "FROTA": 0.16
   },
-  "MORRO DO PILAR": {
+  "Morro do Pilar": {
     "TRUCK": 0.128,
     "CARRETA": 0.079,
     "TOCO": 0.159,
     "BITRUCK": 0.105,
     "FROTA": 0.133
   },
-  "MUNHOZ": {
+  "Munhoz": {
     "TRUCK": 0.297,
     "CARRETA": 0.186,
     "TOCO": 0.362,
     "BITRUCK": 0.246,
     "FROTA": 0.3
   },
-  "MURIAE": {
+  "Muriaé": {
     "TRUCK": 0.218,
     "CARRETA": 0.136,
     "TOCO": 0.266,
     "BITRUCK": 0.18,
     "FROTA": 0.222
   },
-  "MUTUM": {
+  "Mutum": {
     "TRUCK": 0.266,
     "CARRETA": 0.167,
     "TOCO": 0.325,
     "BITRUCK": 0.22,
     "FROTA": 0.269
   },
-  "MUZAMBINHO": {
+  "Muzambinho": {
     "TRUCK": 0.265,
     "CARRETA": 0.166,
     "TOCO": 0.324,
     "BITRUCK": 0.22,
     "FROTA": 0.269
   },
-  "NACIP RAYDAN": {
+  "Nacip Raydan": {
     "TRUCK": 0.262,
     "CARRETA": 0.164,
     "TOCO": 0.32,
     "BITRUCK": 0.217,
     "FROTA": 0.265
   },
-  "NANUQUE": {
+  "Nanuque": {
     "TRUCK": 0.375,
     "CARRETA": 0.236,
     "TOCO": 0.457,
     "BITRUCK": 0.312,
     "FROTA": 0.377
   },
-  "NAQUE": {
+  "Naque": {
     "TRUCK": 0.19,
     "CARRETA": 0.119,
     "TOCO": 0.233,
     "BITRUCK": 0.157,
     "FROTA": 0.195
   },
-  "NATALANDIA": {
+  "Natalândia": {
     "TRUCK": 0.376,
     "CARRETA": 0.236,
     "TOCO": 0.458,
     "BITRUCK": 0.312,
     "FROTA": 0.378
   },
-  "NATERCIA": {
+  "Natércia": {
     "TRUCK": 0.248,
     "CARRETA": 0.155,
     "TOCO": 0.303,
     "BITRUCK": 0.205,
     "FROTA": 0.252
   },
-  "NAZARENO": {
+  "Nazareno": {
     "TRUCK": 0.159,
     "CARRETA": 0.099,
     "TOCO": 0.196,
     "BITRUCK": 0.131,
     "FROTA": 0.164
   },
-  "NEPOMUCENO": {
+  "Nepomuceno": {
     "TRUCK": 0.158,
     "CARRETA": 0.098,
     "TOCO": 0.194,
     "BITRUCK": 0.13,
     "FROTA": 0.163
   },
-  "NINHEIRA": {
+  "Ninheira": {
     "TRUCK": 0.496,
     "CARRETA": 0.312,
     "TOCO": 0.602,
     "BITRUCK": 0.412,
     "FROTA": 0.497
   },
-  "NOVA BELEM": {
+  "Nova Belém": {
     "TRUCK": 0.304,
     "CARRETA": 0.191,
     "TOCO": 0.371,
     "BITRUCK": 0.252,
     "FROTA": 0.307
   },
-  "NOVA ERA": {
+  "Nova Era": {
     "TRUCK": 0.121,
     "CARRETA": 0.075,
     "TOCO": 0.149,
     "BITRUCK": 0.099,
     "FROTA": 0.126
   },
-  "NOVA LIMA": {
+  "Nova Lima": {
     "TRUCK": 0.05,
     "CARRETA": 0.03,
     "TOCO": 0.064,
     "BITRUCK": 0.039,
     "FROTA": 0.056
   },
-  "NOVA MODICA": {
+  "Nova Módica": {
     "TRUCK": 0.295,
     "CARRETA": 0.185,
     "TOCO": 0.36,
     "BITRUCK": 0.244,
     "FROTA": 0.298
   },
-  "NOVA PONTE": {
+  "Nova Ponte": {
     "TRUCK": 0.294,
     "CARRETA": 0.185,
     "TOCO": 0.359,
     "BITRUCK": 0.244,
     "FROTA": 0.297
   },
-  "NOVA RESENDE": {
+  "Nova Resende": {
     "TRUCK": 0.24,
     "CARRETA": 0.15,
     "TOCO": 0.293,
     "BITRUCK": 0.199,
     "FROTA": 0.244
   },
-  "NOVA SERRANA": {
+  "Nova Serrana": {
     "TRUCK": 0.091,
     "CARRETA": 0.055,
     "TOCO": 0.113,
     "BITRUCK": 0.074,
     "FROTA": 0.096
   },
-  "NOVA UNIAO": {
+  "Nova União": {
     "TRUCK": 0.076,
     "CARRETA": 0.046,
     "TOCO": 0.095,
     "BITRUCK": 0.061,
     "FROTA": 0.081
   },
-  "NOVO CRUZEIRO": {
+  "Novo Cruzeiro": {
     "TRUCK": 0.376,
     "CARRETA": 0.237,
     "TOCO": 0.458,
     "BITRUCK": 0.313,
     "FROTA": 0.379
   },
-  "NOVO ORIENTE DE MINAS": {
+  "Novo Oriente de Minas": {
     "TRUCK": 0.342,
     "CARRETA": 0.215,
     "TOCO": 0.417,
     "BITRUCK": 0.284,
     "FROTA": 0.345
   },
-  "OLARIA": {
+  "Olaria": {
     "TRUCK": 0.252,
     "CARRETA": 0.158,
     "TOCO": 0.307,
@@ -3548,420 +3548,420 @@
     "BITRUCK": 0.232,
     "FROTA": 0.283
   },
-  "OLIMPIO NORONHA": {
+  "Olímpio Noronha": {
     "TRUCK": 0.238,
     "CARRETA": 0.149,
     "TOCO": 0.291,
     "BITRUCK": 0.197,
     "FROTA": 0.241
   },
-  "OLIVEIRA": {
+  "Oliveira": {
     "TRUCK": 0.111,
     "CARRETA": 0.068,
     "TOCO": 0.137,
     "BITRUCK": 0.09,
     "FROTA": 0.116
   },
-  "OLIVEIRA FORTES": {
+  "Oliveira Fortes": {
     "TRUCK": 0.157,
     "CARRETA": 0.098,
     "TOCO": 0.193,
     "BITRUCK": 0.129,
     "FROTA": 0.162
   },
-  "ONCA DE PITANGUI": {
+  "Onça de Pitangui": {
     "TRUCK": 0.085,
     "CARRETA": 0.052,
     "TOCO": 0.106,
     "BITRUCK": 0.069,
     "FROTA": 0.09
   },
-  "ORATORIOS": {
+  "Oratórios": {
     "TRUCK": 0.151,
     "CARRETA": 0.094,
     "TOCO": 0.186,
     "BITRUCK": 0.124,
     "FROTA": 0.156
   },
-  "ORIZANIA": {
+  "Orizânia": {
     "TRUCK": 0.218,
     "CARRETA": 0.136,
     "TOCO": 0.267,
     "BITRUCK": 0.18,
     "FROTA": 0.222
   },
-  "OURO BRANCO": {
+  "Ouro Branco": {
     "TRUCK": 0.092,
     "CARRETA": 0.057,
     "TOCO": 0.115,
     "BITRUCK": 0.075,
     "FROTA": 0.098
   },
-  "OURO FINO": {
+  "Ouro Fino": {
     "TRUCK": 0.28,
     "CARRETA": 0.176,
     "TOCO": 0.342,
     "BITRUCK": 0.232,
     "FROTA": 0.283
   },
-  "OURO PRETO": {
+  "Ouro Preto": {
     "TRUCK": 0.091,
     "CARRETA": 0.055,
     "TOCO": 0.113,
     "BITRUCK": 0.074,
     "FROTA": 0.096
   },
-  "OURO VERDE DE MINAS": {
+  "Ouro Verde de Minas": {
     "TRUCK": 0.318,
     "CARRETA": 0.2,
     "TOCO": 0.388,
     "BITRUCK": 0.264,
     "FROTA": 0.321
   },
-  "PADRE CARVALHO": {
+  "Padre Carvalho": {
     "TRUCK": 0.384,
     "CARRETA": 0.242,
     "TOCO": 0.468,
     "BITRUCK": 0.319,
     "FROTA": 0.386
   },
-  "PADRE PARAISO": {
+  "Padre Paraíso": {
     "TRUCK": 0.366,
     "CARRETA": 0.23,
     "TOCO": 0.445,
     "BITRUCK": 0.304,
     "FROTA": 0.368
   },
-  "PAI PEDRO": {
+  "Pai Pedro": {
     "TRUCK": 0.393,
     "CARRETA": 0.248,
     "TOCO": 0.479,
     "BITRUCK": 0.327,
     "FROTA": 0.396
   },
-  "PAINEIRAS": {
+  "Paineiras": {
     "TRUCK": 0.163,
     "CARRETA": 0.102,
     "TOCO": 0.201,
     "BITRUCK": 0.134,
     "FROTA": 0.168
   },
-  "PAINS": {
+  "Pains": {
     "TRUCK": 0.146,
     "CARRETA": 0.091,
     "TOCO": 0.18,
     "BITRUCK": 0.12,
     "FROTA": 0.151
   },
-  "PAIVA": {
+  "Paiva": {
     "TRUCK": 0.163,
     "CARRETA": 0.101,
     "TOCO": 0.2,
     "BITRUCK": 0.134,
     "FROTA": 0.167
   },
-  "PALMA": {
+  "Palma": {
     "TRUCK": 0.257,
     "CARRETA": 0.161,
     "TOCO": 0.315,
     "BITRUCK": 0.213,
     "FROTA": 0.261
   },
-  "PALMOPOLIS": {
+  "Palmópolis": {
     "TRUCK": 0.475,
     "CARRETA": 0.3,
     "TOCO": 0.578,
     "BITRUCK": 0.396,
     "FROTA": 0.477
   },
-  "PAPAGAIOS": {
+  "Papagaios": {
     "TRUCK": 0.102,
     "CARRETA": 0.063,
     "TOCO": 0.126,
     "BITRUCK": 0.083,
     "FROTA": 0.107
   },
-  "PARA DE MINAS": {
+  "Pará de Minas": {
     "TRUCK": 0.067,
     "CARRETA": 0.04,
     "TOCO": 0.084,
     "BITRUCK": 0.054,
     "FROTA": 0.072
   },
-  "PARACATU": {
+  "Paracatu": {
     "TRUCK": 0.327,
     "CARRETA": 0.205,
     "TOCO": 0.398,
     "BITRUCK": 0.271,
     "FROTA": 0.33
   },
-  "PARAGUACU": {
+  "Paraguaçu": {
     "TRUCK": 0.221,
     "CARRETA": 0.138,
     "TOCO": 0.27,
     "BITRUCK": 0.182,
     "FROTA": 0.224
   },
-  "PARAISOPOLIS": {
+  "Paraisópolis": {
     "TRUCK": 0.274,
     "CARRETA": 0.172,
     "TOCO": 0.334,
     "BITRUCK": 0.227,
     "FROTA": 0.277
   },
-  "PARAOPEBA": {
+  "Paraopeba": {
     "TRUCK": 0.087,
     "CARRETA": 0.053,
     "TOCO": 0.108,
     "BITRUCK": 0.07,
     "FROTA": 0.092
   },
-  "PASSA QUATRO": {
+  "Passa Quatro": {
     "TRUCK": 0.277,
     "CARRETA": 0.173,
     "TOCO": 0.338,
     "BITRUCK": 0.229,
     "FROTA": 0.28
   },
-  "PASSA TEMPO": {
+  "Passa Tempo": {
     "TRUCK": 0.106,
     "CARRETA": 0.065,
     "TOCO": 0.131,
     "BITRUCK": 0.086,
     "FROTA": 0.111
   },
-  "PASSA VINTE": {
+  "Passa Vinte": {
     "TRUCK": 0.271,
     "CARRETA": 0.17,
     "TOCO": 0.331,
     "BITRUCK": 0.224,
     "FROTA": 0.274
   },
-  "PASSABEM": {
+  "Passabém": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.169,
     "BITRUCK": 0.113,
     "FROTA": 0.142
   },
-  "PASSOS": {
+  "Passos": {
     "TRUCK": 0.223,
     "CARRETA": 0.139,
     "TOCO": 0.273,
     "BITRUCK": 0.184,
     "FROTA": 0.227
   },
-  "PATIS": {
+  "Patis": {
     "TRUCK": 0.339,
     "CARRETA": 0.213,
     "TOCO": 0.413,
     "BITRUCK": 0.281,
     "FROTA": 0.342
   },
-  "PATOS DE MINAS": {
+  "Patos de Minas": {
     "TRUCK": 0.254,
     "CARRETA": 0.159,
     "TOCO": 0.31,
     "BITRUCK": 0.21,
     "FROTA": 0.257
   },
-  "PATROCINIO": {
+  "Patrocínio": {
     "TRUCK": 0.258,
     "CARRETA": 0.162,
     "TOCO": 0.315,
     "BITRUCK": 0.214,
     "FROTA": 0.262
   },
-  "PATROCINIO DO MURIAE": {
+  "Patrocínio do Muriaé": {
     "TRUCK": 0.232,
     "CARRETA": 0.145,
     "TOCO": 0.283,
     "BITRUCK": 0.192,
     "FROTA": 0.236
   },
-  "PAULA CANDIDO": {
+  "Paula Cândido": {
     "TRUCK": 0.168,
     "CARRETA": 0.105,
     "TOCO": 0.206,
     "BITRUCK": 0.138,
     "FROTA": 0.172
   },
-  "PAULISTAS": {
+  "Paulistas": {
     "TRUCK": 0.23,
     "CARRETA": 0.144,
     "TOCO": 0.282,
     "BITRUCK": 0.191,
     "FROTA": 0.234
   },
-  "PAVAO": {
+  "Pavão": {
     "TRUCK": 0.36,
     "CARRETA": 0.227,
     "TOCO": 0.439,
     "BITRUCK": 0.299,
     "FROTA": 0.363
   },
-  "PECANHA": {
+  "Peçanha": {
     "TRUCK": 0.228,
     "CARRETA": 0.143,
     "TOCO": 0.279,
     "BITRUCK": 0.189,
     "FROTA": 0.232
   },
-  "PEDRA AZUL": {
+  "Pedra Azul": {
     "TRUCK": 0.443,
     "CARRETA": 0.279,
     "TOCO": 0.539,
     "BITRUCK": 0.369,
     "FROTA": 0.445
   },
-  "PEDRA BONITA": {
+  "Pedra Bonita": {
     "TRUCK": 0.189,
     "CARRETA": 0.118,
     "TOCO": 0.232,
     "BITRUCK": 0.156,
     "FROTA": 0.193
   },
-  "PEDRA DO ANTA": {
+  "Pedra do Anta": {
     "TRUCK": 0.17,
     "CARRETA": 0.106,
     "TOCO": 0.209,
     "BITRUCK": 0.14,
     "FROTA": 0.175
   },
-  "PEDRA DO INDAIA": {
+  "Pedra do Indaiá": {
     "TRUCK": 0.118,
     "CARRETA": 0.073,
     "TOCO": 0.146,
     "BITRUCK": 0.096,
     "FROTA": 0.123
   },
-  "PEDRA DOURADA": {
+  "Pedra Dourada": {
     "TRUCK": 0.261,
     "CARRETA": 0.163,
     "TOCO": 0.318,
     "BITRUCK": 0.216,
     "FROTA": 0.264
   },
-  "PEDRALVA": {
+  "Pedralva": {
     "TRUCK": 0.28,
     "CARRETA": 0.176,
     "TOCO": 0.342,
     "BITRUCK": 0.232,
     "FROTA": 0.283
   },
-  "PEDRAS DE MARIA DA CRUZ": {
+  "Pedras de Maria da Cruz": {
     "TRUCK": 0.379,
     "CARRETA": 0.238,
     "TOCO": 0.461,
     "BITRUCK": 0.315,
     "FROTA": 0.381
   },
-  "PEDRINOPOLIS": {
+  "Pedrinópolis": {
     "TRUCK": 0.278,
     "CARRETA": 0.174,
     "TOCO": 0.339,
     "BITRUCK": 0.23,
     "FROTA": 0.281
   },
-  "PEDRO LEOPOLDO": {
+  "Pedro Leopoldo": {
     "TRUCK": 0.062,
     "CARRETA": 0.037,
     "TOCO": 0.078,
     "BITRUCK": 0.05,
     "FROTA": 0.068
   },
-  "PEDRO TEIXEIRA": {
+  "Pedro Teixeira": {
     "TRUCK": 0.206,
     "CARRETA": 0.128,
     "TOCO": 0.252,
     "BITRUCK": 0.17,
     "FROTA": 0.21
   },
-  "PEQUERI": {
+  "Pequeri": {
     "TRUCK": 0.218,
     "CARRETA": 0.136,
     "TOCO": 0.267,
     "BITRUCK": 0.18,
     "FROTA": 0.222
   },
-  "PEQUI": {
+  "Pequi": {
     "TRUCK": 0.09,
     "CARRETA": 0.055,
     "TOCO": 0.112,
     "BITRUCK": 0.073,
     "FROTA": 0.095
   },
-  "PERDIGAO": {
+  "Perdigão": {
     "TRUCK": 0.101,
     "CARRETA": 0.062,
     "TOCO": 0.126,
     "BITRUCK": 0.082,
     "FROTA": 0.106
   },
-  "PERDIZES": {
+  "Perdizes": {
     "TRUCK": 0.263,
     "CARRETA": 0.165,
     "TOCO": 0.322,
     "BITRUCK": 0.218,
     "FROTA": 0.267
   },
-  "PERDOES": {
+  "Perdões": {
     "TRUCK": 0.142,
     "CARRETA": 0.088,
     "TOCO": 0.175,
     "BITRUCK": 0.117,
     "FROTA": 0.147
   },
-  "PERIQUITO": {
+  "Periquito": {
     "TRUCK": 0.204,
     "CARRETA": 0.128,
     "TOCO": 0.25,
     "BITRUCK": 0.169,
     "FROTA": 0.208
   },
-  "PESCADOR": {
+  "Pescador": {
     "TRUCK": 0.284,
     "CARRETA": 0.178,
     "TOCO": 0.347,
     "BITRUCK": 0.236,
     "FROTA": 0.288
   },
-  "PIAU": {
+  "Piau": {
     "TRUCK": 0.199,
     "CARRETA": 0.124,
     "TOCO": 0.243,
     "BITRUCK": 0.164,
     "FROTA": 0.203
   },
-  "PIEDADE DE CARATINGA": {
+  "Piedade de Caratinga": {
     "TRUCK": 0.222,
     "CARRETA": 0.139,
     "TOCO": 0.272,
     "BITRUCK": 0.184,
     "FROTA": 0.226
   },
-  "PIEDADE DE PONTE NOVA": {
+  "Piedade de Ponte Nova": {
     "TRUCK": 0.163,
     "CARRETA": 0.101,
     "TOCO": 0.2,
     "BITRUCK": 0.134,
     "FROTA": 0.167
   },
-  "PIEDADE DO RIO GRANDE": {
+  "Piedade do Rio Grande": {
     "TRUCK": 0.176,
     "CARRETA": 0.109,
     "TOCO": 0.216,
     "BITRUCK": 0.145,
     "FROTA": 0.18
   },
-  "PIEDADE DOS GERAIS": {
+  "Piedade dos Gerais": {
     "TRUCK": 0.083,
     "CARRETA": 0.05,
     "TOCO": 0.103,
     "BITRUCK": 0.067,
     "FROTA": 0.088
   },
-  "PIMENTA": {
+  "Pimenta": {
     "TRUCK": 0.157,
     "CARRETA": 0.097,
     "TOCO": 0.193,
@@ -3975,238 +3975,238 @@
     "BITRUCK": 0.159,
     "FROTA": 0.197
   },
-  "PINTOPOLIS": {
+  "Pintópolis": {
     "TRUCK": 0.38,
     "CARRETA": 0.239,
     "TOCO": 0.463,
     "BITRUCK": 0.316,
     "FROTA": 0.383
   },
-  "PIRACEMA": {
+  "Piracema": {
     "TRUCK": 0.094,
     "CARRETA": 0.057,
     "TOCO": 0.116,
     "BITRUCK": 0.076,
     "FROTA": 0.099
   },
-  "PIRAJUBA": {
+  "Pirajuba": {
     "TRUCK": 0.352,
     "CARRETA": 0.221,
     "TOCO": 0.429,
     "BITRUCK": 0.292,
     "FROTA": 0.354
   },
-  "PIRANGA": {
+  "Piranga": {
     "TRUCK": 0.139,
     "CARRETA": 0.086,
     "TOCO": 0.171,
     "BITRUCK": 0.114,
     "FROTA": 0.144
   },
-  "PIRANGUCU": {
+  "Piranguçu": {
     "TRUCK": 0.284,
     "CARRETA": 0.178,
     "TOCO": 0.347,
     "BITRUCK": 0.236,
     "FROTA": 0.288
   },
-  "PIRANGUINHO": {
+  "Piranguinho": {
     "TRUCK": 0.273,
     "CARRETA": 0.171,
     "TOCO": 0.333,
     "BITRUCK": 0.226,
     "FROTA": 0.276
   },
-  "PIRAPETINGA": {
+  "Pirapetinga": {
     "TRUCK": 0.28,
     "CARRETA": 0.175,
     "TOCO": 0.341,
     "BITRUCK": 0.232,
     "FROTA": 0.283
   },
-  "PIRAPORA": {
+  "Pirapora": {
     "TRUCK": 0.235,
     "CARRETA": 0.147,
     "TOCO": 0.288,
     "BITRUCK": 0.195,
     "FROTA": 0.239
   },
-  "PIRAUBA": {
+  "Piraúba": {
     "TRUCK": 0.187,
     "CARRETA": 0.117,
     "TOCO": 0.23,
     "BITRUCK": 0.155,
     "FROTA": 0.192
   },
-  "PITANGUI": {
+  "Pitangui": {
     "TRUCK": 0.095,
     "CARRETA": 0.058,
     "TOCO": 0.118,
     "BITRUCK": 0.077,
     "FROTA": 0.101
   },
-  "PIUMHI": {
+  "Piumhi": {
     "TRUCK": 0.192,
     "CARRETA": 0.12,
     "TOCO": 0.236,
     "BITRUCK": 0.159,
     "FROTA": 0.197
   },
-  "PLANURA": {
+  "Planura": {
     "TRUCK": 0.362,
     "CARRETA": 0.227,
     "TOCO": 0.44,
     "BITRUCK": 0.3,
     "FROTA": 0.364
   },
-  "POCO FUNDO": {
+  "Poço Fundo": {
     "TRUCK": 0.253,
     "CARRETA": 0.158,
     "TOCO": 0.309,
     "BITRUCK": 0.209,
     "FROTA": 0.257
   },
-  "POCOS DE CALDAS": {
+  "Poços de Caldas": {
     "TRUCK": 0.29,
     "CARRETA": 0.182,
     "TOCO": 0.353,
     "BITRUCK": 0.24,
     "FROTA": 0.293
   },
-  "POCRANE": {
+  "Pocrane": {
     "TRUCK": 0.275,
     "CARRETA": 0.173,
     "TOCO": 0.336,
     "BITRUCK": 0.228,
     "FROTA": 0.279
   },
-  "POMPEU": {
+  "Pompéu": {
     "TRUCK": 0.133,
     "CARRETA": 0.082,
     "TOCO": 0.164,
     "BITRUCK": 0.109,
     "FROTA": 0.138
   },
-  "PONTE NOVA": {
+  "Ponte Nova": {
     "TRUCK": 0.143,
     "CARRETA": 0.089,
     "TOCO": 0.176,
     "BITRUCK": 0.118,
     "FROTA": 0.148
   },
-  "PONTO CHIQUE": {
+  "Ponto Chique": {
     "TRUCK": 0.302,
     "CARRETA": 0.189,
     "TOCO": 0.368,
     "BITRUCK": 0.25,
     "FROTA": 0.305
   },
-  "PONTO DOS VOLANTES": {
+  "Ponto dos Volantes": {
     "TRUCK": 0.385,
     "CARRETA": 0.242,
     "TOCO": 0.468,
     "BITRUCK": 0.32,
     "FROTA": 0.387
   },
-  "PORTEIRINHA": {
+  "Porteirinha": {
     "TRUCK": 0.381,
     "CARRETA": 0.24,
     "TOCO": 0.464,
     "BITRUCK": 0.317,
     "FROTA": 0.383
   },
-  "PORTO FIRME": {
+  "Porto Firme": {
     "TRUCK": 0.15,
     "CARRETA": 0.093,
     "TOCO": 0.185,
     "BITRUCK": 0.123,
     "FROTA": 0.155
   },
-  "POTE": {
+  "Poté": {
     "TRUCK": 0.327,
     "CARRETA": 0.206,
     "TOCO": 0.399,
     "BITRUCK": 0.272,
     "FROTA": 0.33
   },
-  "POUSO ALEGRE": {
+  "Pouso Alegre": {
     "TRUCK": 0.249,
     "CARRETA": 0.156,
     "TOCO": 0.304,
     "BITRUCK": 0.206,
     "FROTA": 0.252
   },
-  "POUSO ALTO": {
+  "Pouso Alto": {
     "TRUCK": 0.261,
     "CARRETA": 0.163,
     "TOCO": 0.318,
     "BITRUCK": 0.216,
     "FROTA": 0.264
   },
-  "PRADOS": {
+  "Prados": {
     "TRUCK": 0.143,
     "CARRETA": 0.089,
     "TOCO": 0.176,
     "BITRUCK": 0.118,
     "FROTA": 0.148
   },
-  "PRATA": {
+  "Prata": {
     "TRUCK": 0.381,
     "CARRETA": 0.24,
     "TOCO": 0.464,
     "BITRUCK": 0.317,
     "FROTA": 0.384
   },
-  "PRATAPOLIS": {
+  "Pratápolis": {
     "TRUCK": 0.244,
     "CARRETA": 0.153,
     "TOCO": 0.298,
     "BITRUCK": 0.202,
     "FROTA": 0.248
   },
-  "PRATINHA": {
+  "Pratinha": {
     "TRUCK": 0.207,
     "CARRETA": 0.13,
     "TOCO": 0.254,
     "BITRUCK": 0.171,
     "FROTA": 0.211
   },
-  "PRESIDENTE JUSCELINO": {
+  "Presidente Juscelino": {
     "TRUCK": 0.155,
     "CARRETA": 0.096,
     "TOCO": 0.191,
     "BITRUCK": 0.127,
     "FROTA": 0.16
   },
-  "PRESIDENTE KUBITSCHEK": {
+  "Presidente Kubitschek": {
     "TRUCK": 0.209,
     "CARRETA": 0.131,
     "TOCO": 0.256,
     "BITRUCK": 0.173,
     "FROTA": 0.213
   },
-  "PRESIDENTE BERNARDES": {
+  "Presidente Bernardes": {
     "TRUCK": 0.151,
     "CARRETA": 0.094,
     "TOCO": 0.186,
     "BITRUCK": 0.124,
     "FROTA": 0.156
   },
-  "PRESIDENTE OLEGARIO": {
+  "Presidente Olegário": {
     "TRUCK": 0.268,
     "CARRETA": 0.168,
     "TOCO": 0.327,
     "BITRUCK": 0.222,
     "FROTA": 0.271
   },
-  "PRUDENTE DE MORAIS": {
+  "Prudente de Morais": {
     "TRUCK": 0.084,
     "CARRETA": 0.051,
     "TOCO": 0.104,
     "BITRUCK": 0.068,
     "FROTA": 0.089
   },
-  "QUARTEL GERAL": {
+  "Quartel Geral": {
     "TRUCK": 0.153,
     "CARRETA": 0.095,
     "TOCO": 0.188,
@@ -4220,931 +4220,931 @@
     "BITRUCK": 0.083,
     "FROTA": 0.108
   },
-  "RAPOSOS": {
+  "Raposos": {
     "TRUCK": 0.06,
     "CARRETA": 0.036,
     "TOCO": 0.075,
     "BITRUCK": 0.048,
     "FROTA": 0.065
   },
-  "RAUL SOARES": {
+  "Raul Soares": {
     "TRUCK": 0.173,
     "CARRETA": 0.108,
     "TOCO": 0.213,
     "BITRUCK": 0.143,
     "FROTA": 0.178
   },
-  "RECREIO": {
+  "Recreio": {
     "TRUCK": 0.244,
     "CARRETA": 0.152,
     "TOCO": 0.298,
     "BITRUCK": 0.201,
     "FROTA": 0.247
   },
-  "REDUTO": {
+  "Reduto": {
     "TRUCK": 0.215,
     "CARRETA": 0.134,
     "TOCO": 0.263,
     "BITRUCK": 0.178,
     "FROTA": 0.219
   },
-  "RESENDE COSTA": {
+  "Resende Costa": {
     "TRUCK": 0.13,
     "CARRETA": 0.08,
     "TOCO": 0.16,
     "BITRUCK": 0.106,
     "FROTA": 0.135
   },
-  "RESPLENDOR": {
+  "Resplendor": {
     "TRUCK": 0.303,
     "CARRETA": 0.19,
     "TOCO": 0.37,
     "BITRUCK": 0.251,
     "FROTA": 0.306
   },
-  "RESSAQUINHA": {
+  "Ressaquinha": {
     "TRUCK": 0.121,
     "CARRETA": 0.075,
     "TOCO": 0.15,
     "BITRUCK": 0.099,
     "FROTA": 0.126
   },
-  "RIACHINHO": {
+  "Riachinho": {
     "TRUCK": 0.399,
     "CARRETA": 0.251,
     "TOCO": 0.486,
     "BITRUCK": 0.332,
     "FROTA": 0.401
   },
-  "RIACHO DOS MACHADOS": {
+  "Riacho dos Machados": {
     "TRUCK": 0.367,
     "CARRETA": 0.231,
     "TOCO": 0.448,
     "BITRUCK": 0.305,
     "FROTA": 0.37
   },
-  "RIBEIRAO DAS NEVES": {
+  "Ribeirão das Neves": {
     "TRUCK": 0.05,
     "CARRETA": 0.03,
     "TOCO": 0.064,
     "BITRUCK": 0.04,
     "FROTA": 0.056
   },
-  "RIBEIRAO VERMELHO": {
+  "Ribeirão Vermelho": {
     "TRUCK": 0.146,
     "CARRETA": 0.091,
     "TOCO": 0.18,
     "BITRUCK": 0.12,
     "FROTA": 0.151
   },
-  "RIO ACIMA": {
+  "Rio Acima": {
     "TRUCK": 0.059,
     "CARRETA": 0.035,
     "TOCO": 0.074,
     "BITRUCK": 0.047,
     "FROTA": 0.064
   },
-  "RIO CASCA": {
+  "Rio Casca": {
     "TRUCK": 0.153,
     "CARRETA": 0.095,
     "TOCO": 0.188,
     "BITRUCK": 0.125,
     "FROTA": 0.157
   },
-  "RIO DOCE": {
+  "Rio Doce": {
     "TRUCK": 0.157,
     "CARRETA": 0.097,
     "TOCO": 0.193,
     "BITRUCK": 0.129,
     "FROTA": 0.161
   },
-  "RIO ESPERA": {
+  "Rio Espera": {
     "TRUCK": 0.131,
     "CARRETA": 0.081,
     "TOCO": 0.161,
     "BITRUCK": 0.107,
     "FROTA": 0.136
   },
-  "RIO MANSO": {
+  "Rio Manso": {
     "TRUCK": 0.065,
     "CARRETA": 0.039,
     "TOCO": 0.082,
     "BITRUCK": 0.052,
     "FROTA": 0.07
   },
-  "RIO NOVO": {
+  "Rio Novo": {
     "TRUCK": 0.208,
     "CARRETA": 0.13,
     "TOCO": 0.254,
     "BITRUCK": 0.171,
     "FROTA": 0.212
   },
-  "RIO PARANAIBA": {
+  "Rio Paranaíba": {
     "TRUCK": 0.237,
     "CARRETA": 0.148,
     "TOCO": 0.29,
     "BITRUCK": 0.196,
     "FROTA": 0.241
   },
-  "RIO PARDO DE MINAS": {
+  "Rio Pardo de Minas": {
     "TRUCK": 0.428,
     "CARRETA": 0.27,
     "TOCO": 0.521,
     "BITRUCK": 0.356,
     "FROTA": 0.43
   },
-  "RIO PIRACICABA": {
+  "Rio Piracicaba": {
     "TRUCK": 0.121,
     "CARRETA": 0.075,
     "TOCO": 0.149,
     "BITRUCK": 0.099,
     "FROTA": 0.126
   },
-  "RIO POMBA": {
+  "Rio Pomba": {
     "TRUCK": 0.176,
     "CARRETA": 0.11,
     "TOCO": 0.216,
     "BITRUCK": 0.145,
     "FROTA": 0.181
   },
-  "RIO PRETO": {
+  "Rio Preto": {
     "TRUCK": 0.255,
     "CARRETA": 0.16,
     "TOCO": 0.312,
     "BITRUCK": 0.211,
     "FROTA": 0.259
   },
-  "RIO VERMELHO": {
+  "Rio Vermelho": {
     "TRUCK": 0.24,
     "CARRETA": 0.15,
     "TOCO": 0.293,
     "BITRUCK": 0.198,
     "FROTA": 0.244
   },
-  "RITAPOLIS": {
+  "Ritápolis": {
     "TRUCK": 0.15,
     "CARRETA": 0.093,
     "TOCO": 0.184,
     "BITRUCK": 0.123,
     "FROTA": 0.154
   },
-  "ROCHEDO DE MINAS": {
+  "Rochedo de Minas": {
     "TRUCK": 0.218,
     "CARRETA": 0.136,
     "TOCO": 0.267,
     "BITRUCK": 0.18,
     "FROTA": 0.222
   },
-  "RODEIRO": {
+  "Rodeiro": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "ROMARIA": {
+  "Romaria": {
     "TRUCK": 0.307,
     "CARRETA": 0.193,
     "TOCO": 0.374,
     "BITRUCK": 0.254,
     "FROTA": 0.31
   },
-  "ROSARIO DA LIMEIRA": {
+  "Rosário da Limeira": {
     "TRUCK": 0.203,
     "CARRETA": 0.127,
     "TOCO": 0.249,
     "BITRUCK": 0.168,
     "FROTA": 0.208
   },
-  "RUBELITA": {
+  "Rubelita": {
     "TRUCK": 0.404,
     "CARRETA": 0.254,
     "TOCO": 0.492,
     "BITRUCK": 0.336,
     "FROTA": 0.406
   },
-  "RUBIM": {
+  "Rubim": {
     "TRUCK": 0.493,
     "CARRETA": 0.311,
     "TOCO": 0.6,
     "BITRUCK": 0.41,
     "FROTA": 0.494
   },
-  "SABARA": {
+  "Sabará": {
     "TRUCK": 0.052,
     "CARRETA": 0.031,
     "TOCO": 0.066,
     "BITRUCK": 0.041,
     "FROTA": 0.057
   },
-  "SABINOPOLIS": {
+  "Sabinópolis": {
     "TRUCK": 0.202,
     "CARRETA": 0.126,
     "TOCO": 0.247,
     "BITRUCK": 0.166,
     "FROTA": 0.206
   },
-  "SACRAMENTO": {
+  "Sacramento": {
     "TRUCK": 0.285,
     "CARRETA": 0.179,
     "TOCO": 0.348,
     "BITRUCK": 0.237,
     "FROTA": 0.289
   },
-  "SALINAS": {
+  "Salinas": {
     "TRUCK": 0.408,
     "CARRETA": 0.257,
     "TOCO": 0.497,
     "BITRUCK": 0.339,
     "FROTA": 0.41
   },
-  "SALTO DA DIVISA": {
+  "Salto da Divisa": {
     "TRUCK": 0.513,
     "CARRETA": 0.324,
     "TOCO": 0.624,
     "BITRUCK": 0.427,
     "FROTA": 0.514
   },
-  "SANTA BARBARA": {
+  "Santa Bárbara": {
     "TRUCK": 0.103,
     "CARRETA": 0.063,
     "TOCO": 0.128,
     "BITRUCK": 0.084,
     "FROTA": 0.108
   },
-  "SANTA BARBARA DO TUGURIO": {
+  "Santa Bárbara do Tugúrio": {
     "TRUCK": 0.147,
     "CARRETA": 0.091,
     "TOCO": 0.181,
     "BITRUCK": 0.12,
     "FROTA": 0.151
   },
-  "SANTA BARBARA DO LESTE": {
+  "Santa Bárbara do Leste": {
     "TRUCK": 0.219,
     "CARRETA": 0.137,
     "TOCO": 0.268,
     "BITRUCK": 0.181,
     "FROTA": 0.223
   },
-  "SANTA BARBARA DO MONTE VERDE": {
+  "Santa Bárbara do Monte Verde": {
     "TRUCK": 0.213,
     "CARRETA": 0.133,
     "TOCO": 0.261,
     "BITRUCK": 0.176,
     "FROTA": 0.217
   },
-  "SANTA CRUZ DE MINAS": {
+  "Santa Cruz de Minas": {
     "TRUCK": 0.156,
     "CARRETA": 0.097,
     "TOCO": 0.192,
     "BITRUCK": 0.129,
     "FROTA": 0.161
   },
-  "SANTA CRUZ DE SALINAS": {
+  "Santa Cruz de Salinas": {
     "TRUCK": 0.462,
     "CARRETA": 0.291,
     "TOCO": 0.562,
     "BITRUCK": 0.385,
     "FROTA": 0.464
   },
-  "SANTA CRUZ DO ESCALVADO": {
+  "Santa Cruz do Escalvado": {
     "TRUCK": 0.159,
     "CARRETA": 0.099,
     "TOCO": 0.195,
     "BITRUCK": 0.13,
     "FROTA": 0.163
   },
-  "SANTA EFIGENIA DE MINAS": {
+  "Santa Efigênia de Minas": {
     "TRUCK": 0.219,
     "CARRETA": 0.137,
     "TOCO": 0.269,
     "BITRUCK": 0.181,
     "FROTA": 0.223
   },
-  "SANTA FE DE MINAS": {
+  "Santa Fé de Minas": {
     "TRUCK": 0.313,
     "CARRETA": 0.197,
     "TOCO": 0.382,
     "BITRUCK": 0.26,
     "FROTA": 0.316
   },
-  "SANTA HELENA DE MINAS": {
+  "Santa Helena de Minas": {
     "TRUCK": 0.411,
     "CARRETA": 0.259,
     "TOCO": 0.5,
     "BITRUCK": 0.342,
     "FROTA": 0.413
   },
-  "SANTA JULIANA": {
+  "Santa Juliana": {
     "TRUCK": 0.283,
     "CARRETA": 0.178,
     "TOCO": 0.346,
     "BITRUCK": 0.235,
     "FROTA": 0.286
   },
-  "SANTA LUZIA": {
+  "Santa Luzia": {
     "TRUCK": 0.053,
     "CARRETA": 0.032,
     "TOCO": 0.068,
     "BITRUCK": 0.042,
     "FROTA": 0.059
   },
-  "SANTA MARGARIDA": {
+  "Santa Margarida": {
     "TRUCK": 0.186,
     "CARRETA": 0.116,
     "TOCO": 0.228,
     "BITRUCK": 0.154,
     "FROTA": 0.19
   },
-  "SANTA MARIA DE ITABIRA": {
+  "Santa Maria de Itabira": {
     "TRUCK": 0.128,
     "CARRETA": 0.079,
     "TOCO": 0.158,
     "BITRUCK": 0.105,
     "FROTA": 0.133
   },
-  "SANTA MARIA DO SALTO": {
+  "Santa Maria do Salto": {
     "TRUCK": 0.524,
     "CARRETA": 0.33,
     "TOCO": 0.637,
     "BITRUCK": 0.436,
     "FROTA": 0.525
   },
-  "SANTA MARIA DO SUACUI": {
+  "Santa Maria do Suaçuí": {
     "TRUCK": 0.249,
     "CARRETA": 0.156,
     "TOCO": 0.305,
     "BITRUCK": 0.206,
     "FROTA": 0.253
   },
-  "SANTA RITA DE CALDAS": {
+  "Santa Rita de Caldas": {
     "TRUCK": 0.283,
     "CARRETA": 0.178,
     "TOCO": 0.346,
     "BITRUCK": 0.235,
     "FROTA": 0.286
   },
-  "SANTA RITA DE MINAS": {
+  "Santa Rita de Minas": {
     "TRUCK": 0.226,
     "CARRETA": 0.142,
     "TOCO": 0.277,
     "BITRUCK": 0.187,
     "FROTA": 0.23
   },
-  "SANTA RITA DO ITUETO": {
+  "Santa Rita do Itueto": {
     "TRUCK": 0.304,
     "CARRETA": 0.191,
     "TOCO": 0.37,
     "BITRUCK": 0.252,
     "FROTA": 0.307
   },
-  "SANTA RITA DE IBITIPOCA": {
+  "Santa Rita de Ibitipoca": {
     "TRUCK": 0.175,
     "CARRETA": 0.109,
     "TOCO": 0.215,
     "BITRUCK": 0.144,
     "FROTA": 0.179
   },
-  "SANTA RITA DE JACUTINGA": {
+  "Santa Rita de Jacutinga": {
     "TRUCK": 0.257,
     "CARRETA": 0.161,
     "TOCO": 0.313,
     "BITRUCK": 0.212,
     "FROTA": 0.26
   },
-  "SANTA RITA DO SAPUCAI": {
+  "Santa Rita do Sapucaí": {
     "TRUCK": 0.291,
     "CARRETA": 0.183,
     "TOCO": 0.355,
     "BITRUCK": 0.241,
     "FROTA": 0.294
   },
-  "SANTA ROSA DA SERRA": {
+  "Santa Rosa da Serra": {
     "TRUCK": 0.179,
     "CARRETA": 0.111,
     "TOCO": 0.219,
     "BITRUCK": 0.147,
     "FROTA": 0.183
   },
-  "SANTA VITORIA": {
+  "Santa Vitória": {
     "TRUCK": 0.457,
     "CARRETA": 0.288,
     "TOCO": 0.556,
     "BITRUCK": 0.38,
     "FROTA": 0.459
   },
-  "SANTANA DOS MONTES": {
+  "Santana dos Montes": {
     "TRUCK": 0.104,
     "CARRETA": 0.064,
     "TOCO": 0.129,
     "BITRUCK": 0.085,
     "FROTA": 0.109
   },
-  "SANTANA DA VARGEM": {
+  "Santana da Vargem": {
     "TRUCK": 0.18,
     "CARRETA": 0.112,
     "TOCO": 0.221,
     "BITRUCK": 0.148,
     "FROTA": 0.184
   },
-  "SANTANA DE CATAGUASES": {
+  "Santana de Cataguases": {
     "TRUCK": 0.225,
     "CARRETA": 0.141,
     "TOCO": 0.276,
     "BITRUCK": 0.186,
     "FROTA": 0.229
   },
-  "SANTANA DE PIRAPAMA": {
+  "Santana de Pirapama": {
     "TRUCK": 0.13,
     "CARRETA": 0.081,
     "TOCO": 0.161,
     "BITRUCK": 0.107,
     "FROTA": 0.135
   },
-  "SANTANA DO DESERTO": {
+  "Santana do Deserto": {
     "TRUCK": 0.211,
     "CARRETA": 0.132,
     "TOCO": 0.258,
     "BITRUCK": 0.174,
     "FROTA": 0.215
   },
-  "SANTANA DO GARAMBEU": {
+  "Santana do Garambéu": {
     "TRUCK": 0.179,
     "CARRETA": 0.111,
     "TOCO": 0.219,
     "BITRUCK": 0.147,
     "FROTA": 0.183
   },
-  "SANTANA DO JACARE": {
+  "Santana do Jacaré": {
     "TRUCK": 0.141,
     "CARRETA": 0.087,
     "TOCO": 0.174,
     "BITRUCK": 0.116,
     "FROTA": 0.146
   },
-  "SANTANA DO MANHUACU": {
+  "Santana do Manhuaçu": {
     "TRUCK": 0.224,
     "CARRETA": 0.14,
     "TOCO": 0.274,
     "BITRUCK": 0.185,
     "FROTA": 0.228
   },
-  "SANTANA DO PARAISO": {
+  "Santana do Paraíso": {
     "TRUCK": 0.176,
     "CARRETA": 0.109,
     "TOCO": 0.216,
     "BITRUCK": 0.145,
     "FROTA": 0.18
   },
-  "SANTANA DO RIACHO": {
+  "Santana do Riacho": {
     "TRUCK": 0.112,
     "CARRETA": 0.069,
     "TOCO": 0.138,
     "BITRUCK": 0.091,
     "FROTA": 0.117
   },
-  "SANTO ANTONIO DO RIO ABAIXO": {
+  "Santo Antônio do Rio Abaixo": {
     "TRUCK": 0.147,
     "CARRETA": 0.091,
     "TOCO": 0.181,
     "BITRUCK": 0.121,
     "FROTA": 0.152
   },
-  "SANTO ANTONIO DO AMPARO": {
+  "Santo Antônio do Amparo": {
     "TRUCK": 0.127,
     "CARRETA": 0.078,
     "TOCO": 0.156,
     "BITRUCK": 0.104,
     "FROTA": 0.132
   },
-  "SANTO ANTONIO DO AVENTUREIRO": {
+  "Santo Antônio do Aventureiro": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.285,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "SANTO ANTONIO DO GRAMA": {
+  "Santo Antônio do Grama": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.204,
     "BITRUCK": 0.137,
     "FROTA": 0.171
   },
-  "SANTO ANTONIO DO ITAMBE": {
+  "Santo Antônio do Itambé": {
     "TRUCK": 0.188,
     "CARRETA": 0.117,
     "TOCO": 0.231,
     "BITRUCK": 0.155,
     "FROTA": 0.192
   },
-  "SANTO ANTONIO DO JACINTO": {
+  "Santo Antônio do Jacinto": {
     "TRUCK": 0.537,
     "CARRETA": 0.339,
     "TOCO": 0.653,
     "BITRUCK": 0.447,
     "FROTA": 0.538
   },
-  "SANTO ANTONIO DO MONTE": {
+  "Santo Antônio do Monte": {
     "TRUCK": 0.133,
     "CARRETA": 0.082,
     "TOCO": 0.164,
     "BITRUCK": 0.109,
     "FROTA": 0.138
   },
-  "SANTO ANTONIO DO RETIRO": {
+  "Santo Antônio do Retiro": {
     "TRUCK": 0.431,
     "CARRETA": 0.272,
     "TOCO": 0.525,
     "BITRUCK": 0.359,
     "FROTA": 0.433
   },
-  "SANTO HIPOLITO": {
+  "Santo Hipólito": {
     "TRUCK": 0.158,
     "CARRETA": 0.098,
     "TOCO": 0.194,
     "BITRUCK": 0.13,
     "FROTA": 0.163
   },
-  "SANTOS DUMONT": {
+  "Santos Dumont": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.204,
     "BITRUCK": 0.137,
     "FROTA": 0.171
   },
-  "SAO BENTO ABADE": {
+  "São Bento Abade": {
     "TRUCK": 0.184,
     "CARRETA": 0.115,
     "TOCO": 0.226,
     "BITRUCK": 0.152,
     "FROTA": 0.188
   },
-  "SAO BRAS DO SUACUI": {
+  "São Brás do Suaçuí": {
     "TRUCK": 0.096,
     "CARRETA": 0.059,
     "TOCO": 0.119,
     "BITRUCK": 0.078,
     "FROTA": 0.101
   },
-  "SAO DOMINGOS DAS DORES": {
+  "São Domingos das Dores": {
     "TRUCK": 0.209,
     "CARRETA": 0.13,
     "TOCO": 0.256,
     "BITRUCK": 0.172,
     "FROTA": 0.213
   },
-  "SAO DOMINGOS DO PRATA": {
+  "São Domingos do Prata": {
     "TRUCK": 0.123,
     "CARRETA": 0.076,
     "TOCO": 0.151,
     "BITRUCK": 0.1,
     "FROTA": 0.127
   },
-  "SAO FELIX DE MINAS": {
+  "São Félix de Minas": {
     "TRUCK": 0.277,
     "CARRETA": 0.174,
     "TOCO": 0.338,
     "BITRUCK": 0.23,
     "FROTA": 0.281
   },
-  "SAO FRANCISCO DE PAULA": {
+  "São Francisco de Paula": {
     "TRUCK": 0.122,
     "CARRETA": 0.075,
     "TOCO": 0.151,
     "BITRUCK": 0.1,
     "FROTA": 0.127
   },
-  "SAO FRANCISCO DO GLORIA": {
+  "São Francisco do Glória": {
     "TRUCK": 0.239,
     "CARRETA": 0.149,
     "TOCO": 0.292,
     "BITRUCK": 0.198,
     "FROTA": 0.243
   },
-  "SAO FRANCISCO DE SALES": {
+  "São Francisco de Sales": {
     "TRUCK": 0.438,
     "CARRETA": 0.276,
     "TOCO": 0.533,
     "BITRUCK": 0.364,
     "FROTA": 0.44
   },
-  "SAO GERALDO": {
+  "São Geraldo": {
     "TRUCK": 0.178,
     "CARRETA": 0.111,
     "TOCO": 0.219,
     "BITRUCK": 0.147,
     "FROTA": 0.182
   },
-  "SAO GERALDO DO BAIXIO": {
+  "São Geraldo do Baixio": {
     "TRUCK": 0.276,
     "CARRETA": 0.173,
     "TOCO": 0.337,
     "BITRUCK": 0.229,
     "FROTA": 0.279
   },
-  "SAO GERALDO DA PIEDADE": {
+  "São Geraldo da Piedade": {
     "TRUCK": 0.231,
     "CARRETA": 0.144,
     "TOCO": 0.282,
     "BITRUCK": 0.191,
     "FROTA": 0.234
   },
-  "SAO GONCALO DO ABAETE": {
+  "São Gonçalo do Abaeté": {
     "TRUCK": 0.253,
     "CARRETA": 0.158,
     "TOCO": 0.309,
     "BITRUCK": 0.209,
     "FROTA": 0.257
   },
-  "SAO GONCALO DO PARA": {
+  "São Gonçalo do Pará": {
     "TRUCK": 0.09,
     "CARRETA": 0.055,
     "TOCO": 0.112,
     "BITRUCK": 0.073,
     "FROTA": 0.095
   },
-  "SAO GONCALO DO RIO ABAIXO": {
+  "São Gonçalo do Rio Abaixo": {
     "TRUCK": 0.09,
     "CARRETA": 0.055,
     "TOCO": 0.112,
     "BITRUCK": 0.073,
     "FROTA": 0.096
   },
-  "SAO GONCALO DO RIO PRETO": {
+  "São Gonçalo do Rio Preto": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.286,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "SAO GONCALO DO SAPUCAI": {
+  "São Gonçalo do Sapucaí": {
     "TRUCK": 0.214,
     "CARRETA": 0.134,
     "TOCO": 0.262,
     "BITRUCK": 0.177,
     "FROTA": 0.218
   },
-  "SAO GOTARDO": {
+  "São Gotardo": {
     "TRUCK": 0.198,
     "CARRETA": 0.124,
     "TOCO": 0.243,
     "BITRUCK": 0.163,
     "FROTA": 0.202
   },
-  "SAO JOAO BATISTA DO GLORIA": {
+  "São João Batista do Glória": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.264,
     "BITRUCK": 0.178,
     "FROTA": 0.22
   },
-  "SAO JOAO DA LAGOA": {
+  "São João da Lagoa": {
     "TRUCK": 0.286,
     "CARRETA": 0.179,
     "TOCO": 0.349,
     "BITRUCK": 0.237,
     "FROTA": 0.289
   },
-  "SAO JOAO DA PONTE": {
+  "São João da Ponte": {
     "TRUCK": 0.345,
     "CARRETA": 0.217,
     "TOCO": 0.42,
     "BITRUCK": 0.286,
     "FROTA": 0.348
   },
-  "SAO JOAO DAS MISSOES": {
+  "São João das Missões": {
     "TRUCK": 0.434,
     "CARRETA": 0.274,
     "TOCO": 0.528,
     "BITRUCK": 0.361,
     "FROTA": 0.436
   },
-  "SAO JOAO DEL REI": {
+  "São João del Rei": {
     "TRUCK": 0.154,
     "CARRETA": 0.096,
     "TOCO": 0.19,
     "BITRUCK": 0.127,
     "FROTA": 0.159
   },
-  "SAO JOAO DO MANHUACU": {
+  "São João do Manhuaçu": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "SAO JOAO DO ORIENTE": {
+  "São João do Oriente": {
     "TRUCK": 0.199,
     "CARRETA": 0.124,
     "TOCO": 0.244,
     "BITRUCK": 0.164,
     "FROTA": 0.203
   },
-  "SAO JOAO DO PACUI": {
+  "São João do Pacuí": {
     "TRUCK": 0.345,
     "CARRETA": 0.217,
     "TOCO": 0.42,
     "BITRUCK": 0.286,
     "FROTA": 0.348
   },
-  "SAO JOAO DO PARAISO": {
+  "São João do Paraíso": {
     "TRUCK": 0.479,
     "CARRETA": 0.302,
     "TOCO": 0.582,
     "BITRUCK": 0.399,
     "FROTA": 0.48
   },
-  "SAO JOAO EVANGELISTA": {
+  "São João Evangelista": {
     "TRUCK": 0.21,
     "CARRETA": 0.131,
     "TOCO": 0.258,
     "BITRUCK": 0.174,
     "FROTA": 0.215
   },
-  "SAO JOAO NEPOMUCENO": {
+  "São João Nepomuceno": {
     "TRUCK": 0.213,
     "CARRETA": 0.133,
     "TOCO": 0.261,
     "BITRUCK": 0.176,
     "FROTA": 0.217
   },
-  "SAO JOAQUIM DE BICAS": {
+  "São Joaquim de Bicas": {
     "TRUCK": 0.044,
     "CARRETA": 0.026,
     "TOCO": 0.056,
     "BITRUCK": 0.034,
     "FROTA": 0.049
   },
-  "SAO JOSE DA BARRA": {
+  "São José da Barra": {
     "TRUCK": 0.201,
     "CARRETA": 0.126,
     "TOCO": 0.247,
     "BITRUCK": 0.166,
     "FROTA": 0.206
   },
-  "SAO JOSE DA LAPA": {
+  "São José da Lapa": {
     "TRUCK": 0.055,
     "CARRETA": 0.033,
     "TOCO": 0.069,
     "BITRUCK": 0.043,
     "FROTA": 0.06
   },
-  "SAO JOSE DA SAFIRA": {
+  "São José da Safira": {
     "TRUCK": 0.274,
     "CARRETA": 0.172,
     "TOCO": 0.334,
     "BITRUCK": 0.227,
     "FROTA": 0.277
   },
-  "SAO JOSE DA VARGINHA": {
+  "São José da Varginha": {
     "TRUCK": 0.08,
     "CARRETA": 0.048,
     "TOCO": 0.099,
     "BITRUCK": 0.064,
     "FROTA": 0.085
   },
-  "SAO JOSE DO ALEGRE": {
+  "São José do Alegre": {
     "TRUCK": 0.274,
     "CARRETA": 0.172,
     "TOCO": 0.335,
     "BITRUCK": 0.227,
     "FROTA": 0.278
   },
-  "SAO JOSE DO DIVINO": {
+  "São José do Divino": {
     "TRUCK": 0.305,
     "CARRETA": 0.191,
     "TOCO": 0.372,
     "BITRUCK": 0.253,
     "FROTA": 0.308
   },
-  "SAO JOSE DO GOIABAL": {
+  "São José do Goiabal": {
     "TRUCK": 0.147,
     "CARRETA": 0.091,
     "TOCO": 0.181,
     "BITRUCK": 0.121,
     "FROTA": 0.152
   },
-  "SAO JOSE DO JACURI": {
+  "São José do Jacuri": {
     "TRUCK": 0.241,
     "CARRETA": 0.151,
     "TOCO": 0.294,
     "BITRUCK": 0.199,
     "FROTA": 0.244
   },
-  "SAO JOSE DO MANTIMENTO": {
+  "São José do Mantimento": {
     "TRUCK": 0.243,
     "CARRETA": 0.152,
     "TOCO": 0.297,
     "BITRUCK": 0.201,
     "FROTA": 0.247
   },
-  "SAO LOURENCO": {
+  "São Lourenço": {
     "TRUCK": 0.249,
     "CARRETA": 0.156,
     "TOCO": 0.304,
     "BITRUCK": 0.206,
     "FROTA": 0.252
   },
-  "SAO MIGUEL DO ANTA": {
+  "São Miguel do Anta": {
     "TRUCK": 0.178,
     "CARRETA": 0.111,
     "TOCO": 0.218,
     "BITRUCK": 0.147,
     "FROTA": 0.182
   },
-  "SAO PEDRO DA UNIAO": {
+  "São Pedro da União": {
     "TRUCK": 0.248,
     "CARRETA": 0.155,
     "TOCO": 0.303,
     "BITRUCK": 0.205,
     "FROTA": 0.252
   },
-  "SAO PEDRO DO SUACUI": {
+  "São Pedro do Suaçuí": {
     "TRUCK": 0.226,
     "CARRETA": 0.141,
     "TOCO": 0.276,
     "BITRUCK": 0.187,
     "FROTA": 0.23
   },
-  "SAO PEDRO DOS FERROS": {
+  "São Pedro dos Ferros": {
     "TRUCK": 0.159,
     "CARRETA": 0.099,
     "TOCO": 0.196,
     "BITRUCK": 0.131,
     "FROTA": 0.164
   },
-  "SAO ROMAO": {
+  "São Romão": {
     "TRUCK": 0.343,
     "CARRETA": 0.215,
     "TOCO": 0.418,
     "BITRUCK": 0.284,
     "FROTA": 0.345
   },
-  "SAO ROQUE DE MINAS": {
+  "São Roque de Minas": {
     "TRUCK": 0.202,
     "CARRETA": 0.126,
     "TOCO": 0.247,
     "BITRUCK": 0.167,
     "FROTA": 0.206
   },
-  "SAO SEBASTIAO DA VARGEM ALEGRE": {
+  "São Sebastião da Vargem Alegre": {
     "TRUCK": 0.2,
     "CARRETA": 0.125,
     "TOCO": 0.246,
     "BITRUCK": 0.165,
     "FROTA": 0.205
   },
-  "SAO SEBASTIAO DO ANTA": {
+  "São Sebastião do Anta": {
     "TRUCK": 0.216,
     "CARRETA": 0.135,
     "TOCO": 0.264,
     "BITRUCK": 0.178,
     "FROTA": 0.22
   },
-  "SAO SEBASTIAO DO MARANHAO": {
+  "São Sebastião do Maranhão": {
     "TRUCK": 0.263,
     "CARRETA": 0.165,
     "TOCO": 0.322,
     "BITRUCK": 0.218,
     "FROTA": 0.267
   },
-  "SAO SEBASTIAO DO OESTE": {
+  "São Sebastião do Oeste": {
     "TRUCK": 0.096,
     "CARRETA": 0.059,
     "TOCO": 0.119,
     "BITRUCK": 0.078,
     "FROTA": 0.101
   },
-  "SAO SEBASTIAO DO PARAISO": {
+  "São Sebastião do Paraíso": {
     "TRUCK": 0.251,
     "CARRETA": 0.157,
     "TOCO": 0.307,
     "BITRUCK": 0.208,
     "FROTA": 0.255
   },
-  "SAO SEBASTIAO DO RIO VERDE": {
+  "São Sebastião do Rio Verde": {
     "TRUCK": 0.259,
     "CARRETA": 0.162,
     "TOCO": 0.316,
     "BITRUCK": 0.214,
     "FROTA": 0.262
   },
-  "SAO SEBASTIAO DO RIO PRETO": {
+  "São Sebastião do Rio Preto": {
     "TRUCK": 0.143,
     "CARRETA": 0.089,
     "TOCO": 0.176,
     "BITRUCK": 0.118,
     "FROTA": 0.148
   },
-  "SAO TIAGO": {
+  "São Tiago": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.169,
     "BITRUCK": 0.113,
     "FROTA": 0.142
   },
-  "SAO TOMAS DE AQUINO": {
+  "São Tomás de Aquino": {
     "TRUCK": 0.266,
     "CARRETA": 0.167,
     "TOCO": 0.325,
@@ -5158,7 +5158,7 @@
     "BITRUCK": 0.179,
     "FROTA": 0.221
   },
-  "SAO VICENTE DE MINAS": {
+  "São Vicente de Minas": {
     "TRUCK": 0.206,
     "CARRETA": 0.129,
     "TOCO": 0.252,
@@ -5172,14 +5172,14 @@
     "BITRUCK": 0.251,
     "FROTA": 0.306
   },
-  "SARDOA": {
+  "Sardoá": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.286,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "SARZEDO": {
+  "Sarzedo": {
     "TRUCK": 0.037,
     "CARRETA": 0.021,
     "TOCO": 0.048,
@@ -5193,266 +5193,266 @@
     "BITRUCK": 0.124,
     "FROTA": 0.156
   },
-  "SENADOR AMARAL": {
+  "Senador Amaral": {
     "TRUCK": 0.271,
     "CARRETA": 0.17,
     "TOCO": 0.331,
     "BITRUCK": 0.225,
     "FROTA": 0.275
   },
-  "SENADOR CORTES": {
+  "Senador Cortes": {
     "TRUCK": 0.228,
     "CARRETA": 0.143,
     "TOCO": 0.279,
     "BITRUCK": 0.189,
     "FROTA": 0.232
   },
-  "SENADOR FIRMINO": {
+  "Senador Firmino": {
     "TRUCK": 0.154,
     "CARRETA": 0.096,
     "TOCO": 0.19,
     "BITRUCK": 0.127,
     "FROTA": 0.159
   },
-  "SENADOR MODESTINO GONCALVES": {
+  "Senador Modestino Gonçalves": {
     "TRUCK": 0.246,
     "CARRETA": 0.154,
     "TOCO": 0.301,
     "BITRUCK": 0.204,
     "FROTA": 0.25
   },
-  "SENHORA DE OLIVEIRA": {
+  "Senhora de Oliveira": {
     "TRUCK": 0.134,
     "CARRETA": 0.083,
     "TOCO": 0.165,
     "BITRUCK": 0.11,
     "FROTA": 0.139
   },
-  "SENHORA DO PORTO": {
+  "Senhora do Porto": {
     "TRUCK": 0.169,
     "CARRETA": 0.105,
     "TOCO": 0.208,
     "BITRUCK": 0.139,
     "FROTA": 0.174
   },
-  "SENHORA DOS REMEDIOS": {
+  "Senhora dos Remédios": {
     "TRUCK": 0.137,
     "CARRETA": 0.085,
     "TOCO": 0.169,
     "BITRUCK": 0.113,
     "FROTA": 0.142
   },
-  "SERICITA": {
+  "Sericita": {
     "TRUCK": 0.187,
     "CARRETA": 0.117,
     "TOCO": 0.229,
     "BITRUCK": 0.154,
     "FROTA": 0.191
   },
-  "SERITINGA": {
+  "Seritinga": {
     "TRUCK": 0.252,
     "CARRETA": 0.158,
     "TOCO": 0.308,
     "BITRUCK": 0.209,
     "FROTA": 0.256
   },
-  "SERRA AZUL DE MINAS": {
+  "Serra Azul de Minas": {
     "TRUCK": 0.237,
     "CARRETA": 0.148,
     "TOCO": 0.29,
     "BITRUCK": 0.196,
     "FROTA": 0.241
   },
-  "SERRA DA SAUDADE": {
+  "Serra da Saudade": {
     "TRUCK": 0.174,
     "CARRETA": 0.109,
     "TOCO": 0.214,
     "BITRUCK": 0.144,
     "FROTA": 0.179
   },
-  "SERRA DO SALITRE": {
+  "Serra do Salitre": {
     "TRUCK": 0.245,
     "CARRETA": 0.153,
     "TOCO": 0.299,
     "BITRUCK": 0.202,
     "FROTA": 0.248
   },
-  "SERRA DOS AIMORES": {
+  "Serra dos Aimorés": {
     "TRUCK": 0.403,
     "CARRETA": 0.254,
     "TOCO": 0.49,
     "BITRUCK": 0.335,
     "FROTA": 0.405
   },
-  "SERRANIA": {
+  "Serrania": {
     "TRUCK": 0.235,
     "CARRETA": 0.147,
     "TOCO": 0.287,
     "BITRUCK": 0.194,
     "FROTA": 0.238
   },
-  "SERRANOPOLIS DE MINAS": {
+  "Serranópolis de Minas": {
     "TRUCK": 0.396,
     "CARRETA": 0.25,
     "TOCO": 0.483,
     "BITRUCK": 0.329,
     "FROTA": 0.398
   },
-  "SERRANOS": {
+  "Serranos": {
     "TRUCK": 0.228,
     "CARRETA": 0.142,
     "TOCO": 0.278,
     "BITRUCK": 0.188,
     "FROTA": 0.231
   },
-  "SERRO": {
+  "Serro": {
     "TRUCK": 0.172,
     "CARRETA": 0.107,
     "TOCO": 0.211,
     "BITRUCK": 0.142,
     "FROTA": 0.177
   },
-  "SETE LAGOAS": {
+  "Sete Lagoas": {
     "TRUCK": 0.075,
     "CARRETA": 0.046,
     "TOCO": 0.094,
     "BITRUCK": 0.061,
     "FROTA": 0.081
   },
-  "SETUBINHA": {
+  "Setubinha": {
     "TRUCK": 0.333,
     "CARRETA": 0.209,
     "TOCO": 0.406,
     "BITRUCK": 0.276,
     "FROTA": 0.336
   },
-  "SILVEIRANIA": {
+  "Silveirânia": {
     "TRUCK": 0.178,
     "CARRETA": 0.111,
     "TOCO": 0.218,
     "BITRUCK": 0.147,
     "FROTA": 0.182
   },
-  "SILVIANOPOLIS": {
+  "Silvianópolis": {
     "TRUCK": 0.233,
     "CARRETA": 0.146,
     "TOCO": 0.286,
     "BITRUCK": 0.193,
     "FROTA": 0.237
   },
-  "SIMAO PEREIRA": {
+  "Simão Pereira": {
     "TRUCK": 0.205,
     "CARRETA": 0.128,
     "TOCO": 0.251,
     "BITRUCK": 0.169,
     "FROTA": 0.209
   },
-  "SIMONESIA": {
+  "Simonésia": {
     "TRUCK": 0.223,
     "CARRETA": 0.14,
     "TOCO": 0.273,
     "BITRUCK": 0.185,
     "FROTA": 0.227
   },
-  "SOBRALIA": {
+  "Sobrália": {
     "TRUCK": 0.215,
     "CARRETA": 0.134,
     "TOCO": 0.263,
     "BITRUCK": 0.177,
     "FROTA": 0.219
   },
-  "SOLEDADE DE MINAS": {
+  "Soledade de Minas": {
     "TRUCK": 0.242,
     "CARRETA": 0.151,
     "TOCO": 0.296,
     "BITRUCK": 0.2,
     "FROTA": 0.245
   },
-  "TABULEIRO": {
+  "Tabuleiro": {
     "TRUCK": 0.185,
     "CARRETA": 0.115,
     "TOCO": 0.226,
     "BITRUCK": 0.152,
     "FROTA": 0.189
   },
-  "TAIOBEIRAS": {
+  "Taiobeiras": {
     "TRUCK": 0.435,
     "CARRETA": 0.274,
     "TOCO": 0.529,
     "BITRUCK": 0.361,
     "FROTA": 0.436
   },
-  "TAPARUBA": {
+  "Taparuba": {
     "TRUCK": 0.265,
     "CARRETA": 0.166,
     "TOCO": 0.323,
     "BITRUCK": 0.219,
     "FROTA": 0.268
   },
-  "TAPIRA": {
+  "Tapira": {
     "TRUCK": 0.258,
     "CARRETA": 0.162,
     "TOCO": 0.315,
     "BITRUCK": 0.214,
     "FROTA": 0.262
   },
-  "TAPIRAI": {
+  "Tapiraí": {
     "TRUCK": 0.188,
     "CARRETA": 0.117,
     "TOCO": 0.23,
     "BITRUCK": 0.155,
     "FROTA": 0.192
   },
-  "TAQUARACU DE MINAS": {
+  "Taquaraçu de Minas": {
     "TRUCK": 0.073,
     "CARRETA": 0.044,
     "TOCO": 0.092,
     "BITRUCK": 0.059,
     "FROTA": 0.079
   },
-  "TARUMIRIM": {
+  "Tarumirim": {
     "TRUCK": 0.199,
     "CARRETA": 0.124,
     "TOCO": 0.244,
     "BITRUCK": 0.164,
     "FROTA": 0.203
   },
-  "TEIXEIRAS": {
+  "Teixeiras": {
     "TRUCK": 0.161,
     "CARRETA": 0.1,
     "TOCO": 0.198,
     "BITRUCK": 0.132,
     "FROTA": 0.165
   },
-  "TEOFILO OTONI": {
+  "Teófilo Otoni": {
     "TRUCK": 0.301,
     "CARRETA": 0.189,
     "TOCO": 0.368,
     "BITRUCK": 0.25,
     "FROTA": 0.304
   },
-  "TIMOTEO": {
+  "Timóteo": {
     "TRUCK": 0.16,
     "CARRETA": 0.099,
     "TOCO": 0.196,
     "BITRUCK": 0.131,
     "FROTA": 0.164
   },
-  "TIRADENTES": {
+  "Tiradentes": {
     "TRUCK": 0.159,
     "CARRETA": 0.099,
     "TOCO": 0.195,
     "BITRUCK": 0.131,
     "FROTA": 0.163
   },
-  "TIROS": {
+  "Tiros": {
     "TRUCK": 0.224,
     "CARRETA": 0.14,
     "TOCO": 0.274,
     "BITRUCK": 0.185,
     "FROTA": 0.228
   },
-  "TOCANTINS": {
+  "Tocantins": {
     "TRUCK": 0.197,
     "CARRETA": 0.123,
     "TOCO": 0.241,
@@ -5466,287 +5466,287 @@
     "BITRUCK": 0.218,
     "FROTA": 0.267
   },
-  "TOMBOS": {
+  "Tombos": {
     "TRUCK": 0.259,
     "CARRETA": 0.163,
     "TOCO": 0.317,
     "BITRUCK": 0.215,
     "FROTA": 0.263
   },
-  "TRES CORACOES": {
+  "Três Corações": {
     "TRUCK": 0.19,
     "CARRETA": 0.119,
     "TOCO": 0.233,
     "BITRUCK": 0.157,
     "FROTA": 0.195
   },
-  "TRES MARIAS": {
+  "Três Marias": {
     "TRUCK": 0.188,
     "CARRETA": 0.117,
     "TOCO": 0.231,
     "BITRUCK": 0.155,
     "FROTA": 0.192
   },
-  "TRES PONTAS": {
+  "Três Pontas": {
     "TRUCK": 0.185,
     "CARRETA": 0.115,
     "TOCO": 0.227,
     "BITRUCK": 0.153,
     "FROTA": 0.19
   },
-  "TUMIRITINGA": {
+  "Tumiritinga": {
     "TRUCK": 0.262,
     "CARRETA": 0.164,
     "TOCO": 0.321,
     "BITRUCK": 0.217,
     "FROTA": 0.266
   },
-  "TUPACIGUARA": {
+  "Tupaciguara": {
     "TRUCK": 0.38,
     "CARRETA": 0.239,
     "TOCO": 0.463,
     "BITRUCK": 0.316,
     "FROTA": 0.383
   },
-  "TURMALINA": {
+  "Turmalina": {
     "TRUCK": 0.316,
     "CARRETA": 0.198,
     "TOCO": 0.385,
     "BITRUCK": 0.262,
     "FROTA": 0.318
   },
-  "TURVOLANDIA": {
+  "Turvolândia": {
     "TRUCK": 0.229,
     "CARRETA": 0.143,
     "TOCO": 0.281,
     "BITRUCK": 0.19,
     "FROTA": 0.233
   },
-  "UBA": {
+  "Ubá": {
     "TRUCK": 0.185,
     "CARRETA": 0.115,
     "TOCO": 0.227,
     "BITRUCK": 0.153,
     "FROTA": 0.19
   },
-  "UBAI": {
+  "Ubaí": {
     "TRUCK": 0.33,
     "CARRETA": 0.207,
     "TOCO": 0.402,
     "BITRUCK": 0.274,
     "FROTA": 0.332
   },
-  "UBAPORANGA": {
+  "Ubaporanga": {
     "TRUCK": 0.208,
     "CARRETA": 0.13,
     "TOCO": 0.254,
     "BITRUCK": 0.171,
     "FROTA": 0.212
   },
-  "UBERABA": {
+  "Uberaba": {
     "TRUCK": 0.298,
     "CARRETA": 0.187,
     "TOCO": 0.364,
     "BITRUCK": 0.247,
     "FROTA": 0.302
   },
-  "UBERLANDIA": {
+  "Uberlândia": {
     "TRUCK": 0.334,
     "CARRETA": 0.21,
     "TOCO": 0.408,
     "BITRUCK": 0.278,
     "FROTA": 0.337
   },
-  "UMBURATIBA": {
+  "Umburatiba": {
     "TRUCK": 0.406,
     "CARRETA": 0.256,
     "TOCO": 0.494,
     "BITRUCK": 0.337,
     "FROTA": 0.408
   },
-  "UNAI": {
+  "Unaí": {
     "TRUCK": 0.385,
     "CARRETA": 0.242,
     "TOCO": 0.469,
     "BITRUCK": 0.32,
     "FROTA": 0.387
   },
-  "UNIAO DE MINAS": {
+  "União de Minas": {
     "TRUCK": 0.482,
     "CARRETA": 0.304,
     "TOCO": 0.586,
     "BITRUCK": 0.401,
     "FROTA": 0.483
   },
-  "URUANA DE MINAS": {
+  "Uruana de Minas": {
     "TRUCK": 0.406,
     "CARRETA": 0.256,
     "TOCO": 0.495,
     "BITRUCK": 0.338,
     "FROTA": 0.408
   },
-  "URUCANIA": {
+  "Urucânia": {
     "TRUCK": 0.156,
     "CARRETA": 0.097,
     "TOCO": 0.192,
     "BITRUCK": 0.128,
     "FROTA": 0.161
   },
-  "URUCUIA": {
+  "Urucuia": {
     "TRUCK": 0.401,
     "CARRETA": 0.252,
     "TOCO": 0.488,
     "BITRUCK": 0.333,
     "FROTA": 0.403
   },
-  "VARGEM ALEGRE": {
+  "Vargem Alegre": {
     "TRUCK": 0.19,
     "CARRETA": 0.118,
     "TOCO": 0.233,
     "BITRUCK": 0.157,
     "FROTA": 0.194
   },
-  "VARGEM GRANDE DO RIO PARDO": {
+  "Vargem Grande do Rio Pardo": {
     "TRUCK": 0.454,
     "CARRETA": 0.286,
     "TOCO": 0.552,
     "BITRUCK": 0.378,
     "FROTA": 0.456
   },
-  "VARGINHA": {
+  "Varginha": {
     "TRUCK": 0.202,
     "CARRETA": 0.126,
     "TOCO": 0.248,
     "BITRUCK": 0.167,
     "FROTA": 0.206
   },
-  "VARJAO DE MINAS": {
+  "Varjão de Minas": {
     "TRUCK": 0.258,
     "CARRETA": 0.161,
     "TOCO": 0.315,
     "BITRUCK": 0.213,
     "FROTA": 0.261
   },
-  "VARZEA DA PALMA": {
+  "Várzea da Palma": {
     "TRUCK": 0.224,
     "CARRETA": 0.14,
     "TOCO": 0.274,
     "BITRUCK": 0.185,
     "FROTA": 0.228
   },
-  "VARZELANDIA": {
+  "Varzelândia": {
     "TRUCK": 0.386,
     "CARRETA": 0.243,
     "TOCO": 0.47,
     "BITRUCK": 0.321,
     "FROTA": 0.388
   },
-  "VAZANTE": {
+  "Vazante": {
     "TRUCK": 0.315,
     "CARRETA": 0.198,
     "TOCO": 0.384,
     "BITRUCK": 0.261,
     "FROTA": 0.318
   },
-  "VERDELANDIA": {
+  "Verdelândia": {
     "TRUCK": 0.369,
     "CARRETA": 0.232,
     "TOCO": 0.449,
     "BITRUCK": 0.306,
     "FROTA": 0.371
   },
-  "VEREDINHA": {
+  "Veredinha": {
     "TRUCK": 0.325,
     "CARRETA": 0.204,
     "TOCO": 0.397,
     "BITRUCK": 0.27,
     "FROTA": 0.328
   },
-  "VARGEM BONITA": {
+  "Vargem Bonita": {
     "TRUCK": 0.198,
     "CARRETA": 0.124,
     "TOCO": 0.243,
     "BITRUCK": 0.163,
     "FROTA": 0.202
   },
-  "VERISSIMO": {
+  "Veríssimo": {
     "TRUCK": 0.322,
     "CARRETA": 0.202,
     "TOCO": 0.393,
     "BITRUCK": 0.267,
     "FROTA": 0.325
   },
-  "VERMELHO NOVO": {
+  "Vermelho Novo": {
     "TRUCK": 0.196,
     "CARRETA": 0.123,
     "TOCO": 0.241,
     "BITRUCK": 0.162,
     "FROTA": 0.2
   },
-  "VESPASIANO": {
+  "Vespasiano": {
     "TRUCK": 0.054,
     "CARRETA": 0.032,
     "TOCO": 0.068,
     "BITRUCK": 0.043,
     "FROTA": 0.06
   },
-  "VICOSA": {
+  "Viçosa": {
     "TRUCK": 0.166,
     "CARRETA": 0.103,
     "TOCO": 0.203,
     "BITRUCK": 0.136,
     "FROTA": 0.17
   },
-  "VIEIRAS": {
+  "Vieiras": {
     "TRUCK": 0.241,
     "CARRETA": 0.151,
     "TOCO": 0.294,
     "BITRUCK": 0.199,
     "FROTA": 0.244
   },
-  "VIRGEM DA LAPA": {
+  "Virgem da Lapa": {
     "TRUCK": 0.36,
     "CARRETA": 0.227,
     "TOCO": 0.439,
     "BITRUCK": 0.299,
     "FROTA": 0.363
   },
-  "VIRGINIA": {
+  "Virgínia": {
     "TRUCK": 0.275,
     "CARRETA": 0.172,
     "TOCO": 0.336,
     "BITRUCK": 0.228,
     "FROTA": 0.278
   },
-  "VIRGINOPOLIS": {
+  "Virginópolis": {
     "TRUCK": 0.208,
     "CARRETA": 0.13,
     "TOCO": 0.254,
     "BITRUCK": 0.171,
     "FROTA": 0.212
   },
-  "VIRGOLANDIA": {
+  "Virgolândia": {
     "TRUCK": 0.254,
     "CARRETA": 0.159,
     "TOCO": 0.311,
     "BITRUCK": 0.21,
     "FROTA": 0.258
   },
-  "VISCONDE DO RIO BRANCO": {
+  "Visconde do Rio Branco": {
     "TRUCK": 0.191,
     "CARRETA": 0.119,
     "TOCO": 0.234,
     "BITRUCK": 0.158,
     "FROTA": 0.195
   },
-  "VOLTA GRANDE": {
+  "Volta Grande": {
     "TRUCK": 0.262,
     "CARRETA": 0.164,
     "TOCO": 0.321,
     "BITRUCK": 0.217,
     "FROTA": 0.266
   },
-  "WENCESLAU BRAZ": {
+  "Wenceslau Braz": {
     "TRUCK": 0.31,
     "CARRETA": 0.194,
     "TOCO": 0.378,
