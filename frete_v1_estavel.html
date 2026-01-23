@@ -137,6 +137,10 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
 
 // Empresa → Cidade
 async function distanciaBaseCidade(cidade){
+  if (!cidadesCoords[cidade]) {
+    throw new Error("Cidade inválida: " + cidade);
+  }
+
   const [latCidade, lngCidade] = cidadesCoords[cidade];
 
   const r = await fetch(
@@ -148,8 +152,13 @@ async function distanciaBaseCidade(cidade){
   return j.routes[0].distance / 1000;
 }
 
+
 // Cidade → Cidade
 async function distanciaCidades(cidadeA, cidadeB){
+  if (!cidadesCoords[cidadeA] || !cidadesCoords[cidadeB]) {
+    throw new Error("Cidade inválida: " + cidadeA + " → " + cidadeB);
+  }
+
   const [latA, lngA] = cidadesCoords[cidadeA];
   const [latB, lngB] = cidadesCoords[cidadeB];
 
@@ -161,6 +170,7 @@ async function distanciaCidades(cidadeA, cidadeB){
   const j = await r.json();
   return j.routes[0].distance / 1000;
 }
+
 
 
 
@@ -206,6 +216,17 @@ document.getElementById("btnCalcular").classList.add("btn-destaque");
 async function otimizarRota(){
   const spinner=document.getElementById("spinner");
   spinner.style.display="flex";
+
+  try {
+    // 🔁 TODO o código atual da função fica aqui dentro
+  } catch (e) {
+    alert("Erro ao otimizar rota:\n" + e.message);
+    console.error(e);
+  } finally {
+    spinner.style.display="none";
+  }
+}
+
 
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
   let paradas=rows.map(r=>({
@@ -274,8 +295,11 @@ async function recalcularKM(){
   km += await distanciaBaseCidade(cidades[0]);
 
   // Entre cidades
-  for (let i = 0; i < cidades.length - 1; i++) {
-    km += await distancia(cidades[i], cidades[i + 1]);
+for (let i = 0; i < cidades.length - 1; i++) {
+  km += await distanciaCidades(cidades[i], cidades[i + 1]);
+}
+
+
   }
 
   // Última cidade → Empresa
