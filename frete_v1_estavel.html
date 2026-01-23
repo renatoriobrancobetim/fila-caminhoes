@@ -286,17 +286,24 @@ itens.push({
 
 
 
-let cidadesUnicas = new Set(
+const totalCompartimentos = litrosArr.length;
+const todosCompartimentosUsados = itens.length === totalCompartimentos;
+
+const cidadesUnicas = new Set(
   itens.map(i => normalizarCidade(i.cidade))
 );
+
+const todasCidadesIguais = cidadesUnicas.size === 1;
+
 let modalidade = "KM";
 let freteTotal = 0;
+
 
 // normaliza tipo do caminhão para bater com a tabela
 let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
 
-/* ===== FRETE TABELA ===== */
-if (cidadesUnicas.size === 1) {
+/* ===== FRETE TABELA (REGRA CORRETA) ===== */
+if (todosCompartimentosUsados && todasCidadesIguais) {
   const cidade = [...cidadesUnicas][0];
 
   if (
@@ -311,13 +318,19 @@ if (cidadesUnicas.size === 1) {
     itens.forEach(i => {
       freteTotal += i.litros * i.margem * valorPorLitro;
     });
+
+    // 🔒 Frete tabela não precisa otimizar rota
+    document.getElementById("btnOtimizar").style.display = "none";
   }
 }
 
 
+
 if (modalidade === "KM") {
   freteTotal = (km * dados.indice) + dados.taxa;
+  document.getElementById("btnOtimizar").style.display = "inline-block";
 }
+
 
 
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
