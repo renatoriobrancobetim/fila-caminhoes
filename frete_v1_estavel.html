@@ -134,8 +134,22 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
 });
 
 /* ================= DISTÂNCIA ================= */
+
+// Empresa → Cidade
 async function distanciaBaseCidade(cidade){
-  async function distanciaCidades(cidadeA, cidadeB){
+  const [latCidade, lngCidade] = cidadesCoords[cidade];
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${BASE_COORDS.lng},${BASE_COORDS.lat};${lngCidade},${latCidade}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
+
+// Cidade → Cidade
+async function distanciaCidades(cidadeA, cidadeB){
   const [latA, lngA] = cidadesCoords[cidadeA];
   const [latB, lngB] = cidadesCoords[cidadeB];
 
@@ -148,17 +162,6 @@ async function distanciaBaseCidade(cidade){
   return j.routes[0].distance / 1000;
 }
 
-  const [latCidade, lngCidade] = cidadesCoords[cidade];
-
-  const r = await fetch(
-    `https://router.project-osrm.org/route/v1/driving/` +
-    `${BASE_COORDS.lng},${BASE_COORDS.lat};${lngCidade},${latCidade}` +
-    `?overview=false`
-  );
-
-  const j = await r.json();
-  return j.routes[0].distance / 1000;
-}
 
 
 /* ================= TABELA ================= */
