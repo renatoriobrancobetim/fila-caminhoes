@@ -135,6 +135,19 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
 
 /* ================= DISTÂNCIA ================= */
 async function distanciaBaseCidade(cidade){
+  async function distanciaCidades(cidadeA, cidadeB){
+  const [latA, lngA] = cidadesCoords[cidadeA];
+  const [latB, lngB] = cidadesCoords[cidadeB];
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
+
   const [latCidade, lngCidade] = cidadesCoords[cidade];
 
   const r = await fetch(
@@ -198,18 +211,36 @@ async function otimizarRota(){
     cliente:r.querySelector("input[id^='cliente']").value
   })).filter(p=>p.cidade);
 
-  let rota=[], atual=BASE, restantes=[...paradas];
+  let rota = [];
+let restantes = [...paradas];
+let atualCidade = null;
 
-  while(restantes.length){
-    let menor=Infinity, escolhido=null;
-    for(const p of restantes){
-      const d=await distancia(atual,p.cidade);
-      if(d<menor){menor=d;escolhido=p;}
+
+while (restantes.length) {
+  let menor = Infinity;
+  let escolhido = null;
+
+  for (const p of restantes) {
+    let d;
+
+    if (!atualCidade) {
+      // Empresa → primeira cidade
+      d = await distanciaBaseCidade(p.cidade);
+    } else {
+      // Cidade → cidade
+      d = await distanciaCidades(atualCidade, p.cidade);
     }
-    rota.push(escolhido);
-    restantes=restantes.filter(p=>p!==escolhido);
-    atual=escolhido.cidade;
+
+    if (d < menor) {
+      menor = d;
+      escolhido = p;
+    }
   }
+
+  rota.push(escolhido);
+  restantes = restantes.filter(p => p !== escolhido);
+  atualCidade = escolhido.cidade;
+}
 
   rota.forEach(p=>document.querySelector("#freteTable").appendChild(p.row));
 
@@ -259,11 +290,15 @@ async function desenharMapa(rota){
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapa);
   }
   if(rotaLayer) mapa.removeLayer(rotaLayer);
+  const pontos = [
+  [BASE_COORDS.lat, BASE_COORDS.lng],
+  ...rota.map(r => {
+    const [lat, lng] = cidadesCoords[r.cidade];
+    return [lat, lng];
+  }),
+  [BASE_COORDS.lat, BASE_COORDS.lng]
+];
 
-  const pontos=[BASE,...rota.map(r=>r.cidade),BASE].map(c=>{
-    const [lat,lng]=cidadesCoords[c];
-    return [lat,lng];
-  });
 
   mapa.fitBounds(pontos);
 
