@@ -246,8 +246,8 @@ async function desenharMapa(rota){
 /* ================= CALCULAR FRETE ================= */
 function calcular(){
   const tipo=document.getElementById("tipo").value;
-  const km=parseFloat(document.getElementById("kmTotal").value);
-  if(!km){alert("KM não calculado");return;}
+  const km = parseFloat(document.getElementById("kmTotal").value || 0);
+
 
   const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
   const litrosArr=compartimentos[tipo];
