@@ -168,6 +168,9 @@ function gerarTabela(){
 
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
+  document.getElementById("btnCalcular").disabled = false;
+document.getElementById("btnCalcular").classList.add("btn-destaque");
+
 }
 
 /* ================= OTIMIZAR ROTA ================= */
