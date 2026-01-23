@@ -258,11 +258,12 @@ function calcular(){
 
   let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
 
-  rows.forEach(r=>{
-const cidadeInput = r.querySelector(".cidade");
-if (!cidadeInput.value) return;
+rows.forEach(r=>{
+  const cidadeInput = r.querySelector(".cidade");
+  if (!cidadeInput.value) return;
 
-const c = r.querySelector("input[id^='cliente']");
+  const c = r.querySelector("input[id^='cliente']") || { value: "" };
+
 
 
   const idx=parseInt(c.id.replace("cliente",""));
@@ -287,7 +288,10 @@ itens.push({
 
 
 const totalCompartimentos = litrosArr.length;
-const todosCompartimentosUsados = itens.length === totalCompartimentos;
+const todosCompartimentosUsados =
+  document.querySelectorAll(".cidade").length ===
+  [...document.querySelectorAll(".cidade")].filter(i => i.value.trim() !== "").length;
+
 
 const cidadesUnicas = new Set(
   itens.map(i => normalizarCidade(i.cidade))
