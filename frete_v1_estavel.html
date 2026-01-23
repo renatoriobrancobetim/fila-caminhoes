@@ -326,10 +326,12 @@ if (todosCompartimentosUsados && todasCidadesIguais) {
 
 
 
-if (modalidade === "KM") {
+if (modalidade !== "TABELA") {
+  modalidade = "KM";
   freteTotal = (km * dados.indice) + dados.taxa;
   document.getElementById("btnOtimizar").style.display = "inline-block";
 }
+
 
 
 
