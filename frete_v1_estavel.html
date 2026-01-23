@@ -289,21 +289,23 @@ let freteTotal = 0;
 // normaliza tipo do caminhão para bater com a tabela
 let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
 
+/* ===== FRETE TABELA ===== */
 if (cidadesUnicas.size === 1) {
   const cidade = [...cidadesUnicas][0];
 
-if (
-  tabelaFrete[cidade] &&
-  tabelaFrete[cidade][tipoTabela] !== undefined
-) {
-  modalidade = "TABELA";
+  if (
+    tabelaFrete[cidade] &&
+    tabelaFrete[cidade][tipoTabela] !== undefined
+  ) {
+    modalidade = "TABELA";
 
-  const valorPorLitro = tabelaFrete[cidade][tipoTabela];
-  freteTotal = 0;
+    const valorPorLitro = tabelaFrete[cidade][tipoTabela];
+    freteTotal = 0;
 
-  itens.forEach(i => {
-    freteTotal += i.litros * i.margem * valorPorLitro;
-  });
+    itens.forEach(i => {
+      freteTotal += i.litros * i.margem * valorPorLitro;
+    });
+  }
 }
 
 
