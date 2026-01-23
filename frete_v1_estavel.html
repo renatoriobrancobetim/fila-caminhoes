@@ -367,8 +367,16 @@ html += `
 `;
 
   itens.forEach(i=>{
-    const total=i.litros*i.margem*freteUnitBase;
-    const unit=total/i.litros;
+ let unit, total;
+
+if (modalidade === "TABELA") {
+  unit = tabelaFrete[normalizarCidade(i.cidade)][tipoTabela];
+  total = i.litros * i.margem * unit;
+} else {
+  unit = freteUnitBase;
+  total = i.litros * i.margem * freteUnitBase;
+}
+
     document.getElementById("unit"+i.idx).innerText=moeda3(unit);
     document.getElementById("frete"+i.idx).innerText=moeda(total);
 
