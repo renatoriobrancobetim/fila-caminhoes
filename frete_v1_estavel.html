@@ -5,10 +5,8 @@
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- CSS EXTERNO -->
 <link rel="stylesheet" href="style.css">
 
-<!-- LEAFLET -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
@@ -66,33 +64,26 @@
 <datalist id="cidadesMG"></datalist>
 
 <script>
-/* ================= UTIL ================= */
 function normalizarCidade(nome){
-  return nome
-    .normalize("NFD")
+  return nome.normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^A-Za-z\s]/g, "")
     .trim()
     .toUpperCase();
 }
 
-/* ================= VARIÁVEIS ================= */
 const BASE="BETIM";
 let cidadesCoords={}, mapa, rotaLayer;
-
-/* ================= FRETE TABELA ================= */
-let tabelaFrete = {};
+let tabelaFrete={};
 
 fetch("tabela-frete.json")
-  .then(r => r.json())
-  .then(d => {
-    Object.keys(d).forEach(cidade => {
-      tabelaFrete[normalizarCidade(cidade)] = d[cidade];
+  .then(r=>r.json())
+  .then(d=>{
+    Object.keys(d).forEach(c=>{
+      tabelaFrete[normalizarCidade(c)] = d[c];
     });
   });
 
-
-/* ================= CONFIG ================= */
 const baseFrete={
   FROTA:{indice:5.8402,taxa:669.32},
   BITRUCK:{indice:3.5686,taxa:364.71},
@@ -115,7 +106,6 @@ const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const moeda3=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
 const numero=v=>v.toLocaleString("pt-BR");
 
-/* ================= CIDADES ================= */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
@@ -126,297 +116,79 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   });
 });
 
-/* ================= DISTÂNCIA ================= */
-async function distancia(a,b){
-  const [la,lo]=cidadesCoords[a];
-  const [lb,lblo]=cidadesCoords[b];
-  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${lo},${la};${lblo},${lb}?overview=false`);
-  const j=await r.json();
-  return j.routes[0].distance/1000;
-}
-
-/* ================= TABELA ================= */
+/* ===== GERAR TABELA ===== */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
 
-  let html=`<table id="freteTable">
-    <tr>
-      <th>CLIENTE</th>
-      <th>CIDADE</th>
-      <th>HORÁRIO</th>
-      <th>QTDE (L)</th>
-      <th>AJUSTE DE MARGEM</th>
-      <th>R$/L</th>
-      <th>TOTAL</th>
-      <th>VENDEDOR</th>
-    </tr>`;
+  let html=`<table id="freteTable"><tr>
+    <th>CLIENTE</th><th>CIDADE</th><th>HORÁRIO</th>
+    <th>QTDE (L)</th><th>AJUSTE</th><th>R$/L</th><th>TOTAL</th><th>VENDEDOR</th>
+  </tr>`;
 
   compartimentos[tipo].forEach((l,i)=>{
-    html+=`
-    <tr data-row>
-      <td><input id="cliente${i}" class="uppercase"></td>
-      <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
+    html+=`<tr data-row>
+      <td><input id="cliente${i}"></td>
+      <td><input id="cidade${i}" class="cidade" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
-      <td><input id="margem${i}" type="number" step="0.01" value="1.00" style="width:70px;text-align:center"></td>
+      <td><input id="margem${i}" type="number" value="1"></td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
-      <td><input id="vendedor${i}" class="uppercase"></td>
+      <td><input id="vendedor${i}"></td>
     </tr>`;
   });
 
-  html+="</table>";
-  document.getElementById("tabela").innerHTML=html;
-  document.getElementById("btnCalcular").disabled = false;
-document.getElementById("btnCalcular").classList.add("btn-destaque");
-
-}
-
-/* ================= OTIMIZAR ROTA ================= */
-async function otimizarRota(){
-  const spinner=document.getElementById("spinner");
-  spinner.style.display="flex";
-
-  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
-  let paradas=rows.map(r=>({
-    row:r,
-    cidade:r.querySelector(".cidade").value,
-    cliente:r.querySelector("input[id^='cliente']").value
-  })).filter(p=>p.cidade);
-
-  let rota=[], atual=BASE, restantes=[...paradas];
-
-  while(restantes.length){
-    let menor=Infinity, escolhido=null;
-    for(const p of restantes){
-      const d=await distancia(atual,p.cidade);
-      if(d<menor){menor=d;escolhido=p;}
-    }
-    rota.push(escolhido);
-    restantes=restantes.filter(p=>p!==escolhido);
-    atual=escolhido.cidade;
-  }
-
-  rota.forEach(p=>document.querySelector("#freteTable").appendChild(p.row));
-
-  await recalcularKM();
-  await desenharMapa(rota);
-
-  spinner.style.display="none";
-  document.querySelectorAll("input").forEach(i=>i.disabled=true);
-  document.getElementById("btnOtimizar").style.display="none";
+  document.getElementById("tabela").innerHTML=html+"</table>";
   document.getElementById("btnCalcular").disabled=false;
-  document.getElementById("btnCalcular").classList.add("btn-destaque");
 }
 
-/* ================= KM ================= */
-async function recalcularKM(){
-  const cidades=[...document.querySelectorAll(".cidade")].map(i=>i.value).filter(v=>v);
-  let km=0,origem=BASE;
-  for(const c of cidades){ km+=await distancia(origem,c); origem=c; }
-  km+=await distancia(origem,BASE);
-  document.getElementById("kmTotal").value=km.toFixed(2);
-}
-
-/* ================= MAPA ================= */
-async function desenharMapa(rota){
-  document.getElementById("mapaRota").style.display="block";
-  if(!mapa){
-    mapa=L.map("mapaRota");
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapa);
-  }
-  if(rotaLayer) mapa.removeLayer(rotaLayer);
-
-  const pontos=[BASE,...rota.map(r=>r.cidade),BASE].map(c=>{
-    const [lat,lng]=cidadesCoords[c];
-    return [lat,lng];
-  });
-
-  mapa.fitBounds(pontos);
-
-  pontos.forEach((p,i)=>{
-    let label=i===0||i===pontos.length-1?"BASE - BETIM":rota[i-1].cliente||rota[i-1].cidade;
-    L.marker(p).addTo(mapa).bindPopup(label);
-  });
-
-  const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
-  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
-  const j=await r.json();
-  rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
-}
-
-/* ================= CALCULAR FRETE ================= */
+/* ===== CALCULAR FRETE (REGRA FINAL) ===== */
 function calcular(){
   const tipo=document.getElementById("tipo").value;
-  const km = parseFloat(document.getElementById("kmTotal").value || 0);
-
-
-  const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
   const litrosArr=compartimentos[tipo];
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
-
-  rows.forEach(r=>{
-const cidadeInput = r.querySelector(".cidade");
-if (!cidadeInput.value) return;
-
-const c = r.querySelector("input[id^='cliente']");
-
-
-  const idx=parseInt(c.id.replace("cliente",""));
-  const litros=litrosArr[idx];
-  const margem=parseFloat(document.getElementById("margem"+idx).value||1);
-
-  litrosUsados+=litros;
-  litrosPonderadosTotal+=litros*margem;
-
-itens.push({
-  idx,
-  cliente: c.value.toUpperCase(),
-  cidade: document.getElementById("cidade"+idx).value.trim(),
-  horario: document.getElementById("horario"+idx).value || "-",
-  vendedor: document.getElementById("vendedor"+idx).value || "-",
-  litros,
-  margem
-});
-
-});
-
-
-
-let cidadesUnicas = new Set(
-  itens.map(i => normalizarCidade(i.cidade))
-);
-let modalidade = "KM";
-let freteTotal = 0;
-
-// normaliza tipo do caminhão para bater com a tabela
-let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
-
-/* ===== FRETE TABELA ===== */
-if (cidadesUnicas.size === 1) {
-  const cidade = [...cidadesUnicas][0];
-
-  if (
-    tabelaFrete[cidade] &&
-    tabelaFrete[cidade][tipoTabela] !== undefined
-  ) {
-    modalidade = "TABELA";
-
-    const valorPorLitro = tabelaFrete[cidade][tipoTabela];
-    freteTotal = 0;
-
-    itens.forEach(i => {
-      freteTotal += i.litros * i.margem * valorPorLitro;
+  let itens=[];
+  rows.forEach((r,i)=>{
+    const cidade=r.querySelector(".cidade").value;
+    if(!cidade) return;
+    itens.push({
+      litros:litrosArr[i],
+      margem:parseFloat(document.getElementById("margem"+i).value||1),
+      cidade
     });
-  }
-}
-
-
-if (modalidade === "KM") {
-  freteTotal = (km * dados.indice) + dados.taxa;
-}
-
-
-  const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
-  const cargaParcial=litrosUsados<capacidadeTotal;
-  const freteUnitBase=freteTotal/litrosPonderadosTotal;
-
-let html = `
-<div class="resumo-box">
-  <h3>
-    RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
-
-    ${
-      modalidade === "TABELA"
-        ? '<span class="badge-frete badge-tabela">FRETE TABELA</span>'
-        : '<span class="badge-frete badge-km">FRETE KM</span>'
-    }
-
-    ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
-  </h3>
-`;
-
-html += `
-<table>
-  <tr>
-    <th>CLIENTE</th>
-    <th>CIDADE</th>
-    <th>HORÁRIO</th>
-    <th>AJUSTE</th>
-    <th>FRETE (R$/L)</th>
-    <th>QUANTIDADE</th>
-    <th>TOTAL</th>
-    <th>VENDEDOR</th>
-  </tr>
-`;
-
-  itens.forEach(i=>{
-    const total=i.litros*i.margem*freteUnitBase;
-    const unit=total/i.litros;
-    document.getElementById("unit"+i.idx).innerText=moeda3(unit);
-    document.getElementById("frete"+i.idx).innerText=moeda(total);
-
-    html+=`
-      <tr>
-        <td>${i.cliente}</td>
-        <td>${i.cidade}</td>
-        <td>${i.horario}</td>
-        <td>${i.margem.toFixed(2)}</td>
-        <td>${moeda3(unit)}</td>
-        <td>${numero(i.litros)}</td>
-        <td>${moeda(total)}</td>
-        <td>${i.vendedor}</td>
-      </tr>`;
   });
 
-  html+=`
-    <tr class="total-row">
-      <td colspan="5">TOTAIS</td>
-      <td>${numero(litrosUsados)}</td>
-      <td>${moeda(freteTotal)}</td>
-      <td>-</td>
-    </tr>
-    </table>
-  `;
-// ===== MÉTRICAS PARA RESUMO FINAL =====
-const m3Total = (litrosUsados / 1000).toFixed(1);
-const freteUnitMedio = freteTotal / litrosUsados;
+  const cidadesUnicas=new Set(itens.map(i=>normalizarCidade(i.cidade)));
+  const todosCompartimentosUsados = itens.length === litrosArr.length;
+  const todasCidadesIguais = cidadesUnicas.size === 1;
 
-let kmLabel = modalidade === "TABELA"
-  ? "FRETE TABELA"
-  : `${numero(km)} km`;
+  let modalidade="KM";
+  let freteTotal=0;
 
-let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
-let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
+  if(todosCompartimentosUsados && todasCidadesIguais){
+    const cidade=[...cidadesUnicas][0];
+    const tipoTabela=tipo.startsWith("TRUCK")?"TRUCK":tipo;
+    if(tabelaFrete[cidade]?.[tipoTabela]!==undefined){
+      modalidade="TABELA";
+      const valor=tabelaFrete[cidade][tipoTabela];
+      itens.forEach(i=>freteTotal+=i.litros*i.margem*valor);
+    }
+  }
 
-html += `
-<table style="margin-top:18px">
-  <tr class="total-row">
-    <td>KM TOTAL</td>
-    <td>ÍNDICE</td>
-    <td>TAXA</td>
-    <td>M³ TOTAL</td>
-    <td>FRETE UNIT. MÉDIO</td>
-    <td>FRETE TOTAL</td>
-  </tr>
-  <tr>
-    <td><b>${kmLabel}</b></td>
-    <td>${indiceLabel}</td>
-    <td>${taxaLabel}</td>
-    <td>${m3Total}</td>
-    <td>${moeda3(freteUnitMedio)}</td>
-    <td><b>${moeda(freteTotal)}</b></td>
-  </tr>
-</table>
-</div>
-`;
+  document.getElementById("btnOtimizar").style.display =
+    modalidade==="TABELA"?"none":"inline-block";
 
-  document.getElementById("resumo").innerHTML=html;
+  if(modalidade==="KM"){
+    const km=parseFloat(document.getElementById("kmTotal").value||0);
+    const d=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
+    freteTotal=(km*d.indice)+d.taxa;
+  }
+
+  document.getElementById("resumo").innerHTML =
+    `<h3>${modalidade==="TABELA"?"FRETE TABELA":"FRETE KM"} — ${moeda(freteTotal)}</h3>`;
 }
 </script>
-
 </body>
 </html>
