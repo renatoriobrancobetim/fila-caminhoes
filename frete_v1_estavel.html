@@ -292,14 +292,20 @@ let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
 if (cidadesUnicas.size === 1) {
   const cidade = [...cidadesUnicas][0];
 
-  if (
-    tabelaFrete[cidade] &&
-    tabelaFrete[cidade][tipoTabela] !== undefined
-  ) {
-    modalidade = "TABELA";
-    freteTotal = tabelaFrete[cidade][tipoTabela];
-  }
+if (
+  tabelaFrete[cidade] &&
+  tabelaFrete[cidade][tipoTabela] !== undefined
+) {
+  modalidade = "TABELA";
+
+  const valorPorLitro = tabelaFrete[cidade][tipoTabela];
+  freteTotal = 0;
+
+  itens.forEach(i => {
+    freteTotal += i.litros * i.margem * valorPorLitro;
+  });
 }
+
 
 if (modalidade === "KM") {
   freteTotal = (km * dados.indice) + dados.taxa;
