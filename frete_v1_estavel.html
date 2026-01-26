@@ -99,11 +99,19 @@ fetch("tabela-frete.json")
     });
 
     tabelaFreteCarregada = true;
-    console.log("Tabela de frete carregada:", tabelaFrete);
+    console.log("Tabela de frete carregada");
+
+    // 🔓 Libera cálculo somente após tabela pronta
+    const btnCalcular = document.getElementById("btnCalcular");
+    if (btnCalcular) {
+      btnCalcular.disabled = false;
+    }
   })
   .catch(err => {
     console.error("Erro ao carregar tabela de frete", err);
+    alert("Erro ao carregar tabela de frete. Verifique o arquivo tabela-frete.json");
   });
+
 
 
 
@@ -217,9 +225,10 @@ function gerarTabela(){
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
 
-// Primeiro: NÃO pode calcular ainda
+// NÃO libera calcular aqui
 document.getElementById("btnCalcular").disabled = true;
 document.getElementById("btnCalcular").classList.remove("btn-destaque");
+
 
 // Agora: destaque visual no Otimizar
 const btnOtimizar = document.getElementById("btnOtimizar");
@@ -367,11 +376,6 @@ async function desenharMapa(rota){
 /* ================= CALCULAR FRETE ================= */
 async function calcular(){
 
-  // PASSO 2 — garante que a tabela de frete foi carregada
-  if (!tabelaFreteCarregada) {
-    alert("Tabela de frete ainda está carregando. Aguarde alguns segundos.");
-    return;
-  }
 
   const tipo = document.getElementById("tipo").value;
 
