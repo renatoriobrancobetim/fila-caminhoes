@@ -207,8 +207,21 @@ function gerarTabela(){
 
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
-  document.getElementById("btnCalcular").disabled = false;
+// Regra correta: primeiro otimizar rota
+document.getElementById("btnCalcular").disabled = true;
+document.getElementById("btnCalcular").classList.remove("btn-destaque");
+
+// Destaque vai para Otimizar Rota
+document.getElementById("btnOtimizar").classList.add("btn-destaque");
+
+  // Remove destaque do otimizar
+document.getElementById("btnOtimizar").classList.remove("btn-destaque");
+document.getElementById("btnOtimizar").style.display = "none";
+
+// Agora sim libera o cálculo do frete
+document.getElementById("btnCalcular").disabled = false;
 document.getElementById("btnCalcular").classList.add("btn-destaque");
+
 
 }
 
