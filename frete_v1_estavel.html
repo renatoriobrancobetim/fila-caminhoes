@@ -420,27 +420,26 @@ let freteTotal = 0;
 // normaliza tipo do caminhão para bater com a tabela
 let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
 
-/* ===== FRETE TABELA (REGRA CORRETA) ===== */
-if (todosCompartimentosUsados && todasCidadesIguais) {
-  const cidade = [...cidadesUnicas][0];
+/* ===== DETECÇÃO SEGURA DE FRETE TABELA ===== */
+const cidadeTabela = [...cidadesUnicas][0];
 
-  if (
-    tabelaFrete[cidade] &&
-    tabelaFrete[cidade][tipoTabela] !== undefined
-  ) {
-    modalidade = "TABELA";
+const usarFreteTabela =
+  todosCompartimentosUsados &&
+  todasCidadesIguais &&
+  tabelaFrete[cidadeTabela] &&
+  tabelaFrete[cidadeTabela][tipoTabela] !== undefined;
 
-    const valorPorLitro = tabelaFrete[cidade][tipoTabela];
-    freteTotal = 0;
+if (usarFreteTabela) {
+  modalidade = "TABELA";
 
-    itens.forEach(i => {
-      freteTotal += i.litros * i.margem * valorPorLitro;
-    });
+  const valorPorLitro = tabelaFrete[cidadeTabela][tipoTabela];
+  freteTotal = 0;
 
-    // 🔒 Frete tabela não precisa otimizar rota
-    document.getElementById("btnOtimizar").style.display = "none";
-  }
+  itens.forEach(i => {
+    freteTotal += i.litros * i.margem * valorPorLitro;
+  });
 }
+
 
 
 
