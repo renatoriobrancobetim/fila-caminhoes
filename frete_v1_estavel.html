@@ -378,8 +378,16 @@ async function desenharMapa(rota){
 
 /* ================= CALCULAR FRETE ================= */
 async function calcular(){
-let modalidade = "KM";
-let freteTotal = 0;
+  let modalidade = "KM";
+  let freteTotal = 0;
+
+  const spinner = document.getElementById("spinner");
+  const spinnerText = document.getElementById("spinnerText");
+
+  spinnerText.innerText = "Calculando frete…";
+  spinner.style.display = "flex";
+
+
 
 
   const tipo = document.getElementById("tipo").value;
