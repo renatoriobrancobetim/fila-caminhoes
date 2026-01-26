@@ -97,14 +97,14 @@ fetch("tabela-frete.json")
     Object.keys(d).forEach(cidade => {
       tabelaFrete[normalizarCidade(cidade)] = d[cidade];
     });
-if (!tabelaFreteCarregada) {
-  alert("Tabela de frete ainda está carregando. Tente novamente em 1 segundo.");
-  return;
-}
 
     tabelaFreteCarregada = true;
-    console.log("Tabela de frete carregada com sucesso");
+    console.log("Tabela de frete carregada:", tabelaFrete);
+  })
+  .catch(err => {
+    console.error("Erro ao carregar tabela de frete", err);
   });
+
 
 
 
@@ -366,10 +366,18 @@ async function desenharMapa(rota){
 
 /* ================= CALCULAR FRETE ================= */
 async function calcular(){
-  const tipo=document.getElementById("tipo").value;
+
+  // PASSO 2 — garante que a tabela de frete foi carregada
+  if (!tabelaFreteCarregada) {
+    alert("Tabela de frete ainda está carregando. Aguarde alguns segundos.");
+    return;
+  }
+
+  const tipo = document.getElementById("tipo").value;
 
   // 🔧 GARANTE que o KM seja calculado antes do frete
   await recalcularKM();
+
 
   const km = parseFloat(document.getElementById("kmTotal").value || 0);
 
@@ -410,41 +418,31 @@ itens.push({
 
 
 
-const todosCompartimentosUsados =
-  itens.length === litrosArr.length;
+const todosCompartimentosUsados = itens.length === litrosArr.length;
 
+const cidadesNormalizadas = itens.map(i => normalizarCidade(i.cidade));
+const cidadeTabela = cidadesNormalizadas[0];
 
+const todasCidadesIguais = cidadesNormalizadas.every(c => c === cidadeTabela);
 
-const cidadesUnicas = new Set(
-  itens.map(i => normalizarCidade(i.cidade))
-);
-
-const todasCidadesIguais = cidadesUnicas.size === 1;
-
-let modalidade = "KM";
-let freteTotal = 0;
-
-
-// normaliza tipo do caminhão para bater com a tabela
-let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
-
-/* ===== DETECÇÃO SEGURA DE FRETE TABELA ===== */
-const cidadeTabela = [...cidadesUnicas][0];
+const tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
 
 const usarFreteTabela =
+  tabelaFreteCarregada &&
   todosCompartimentosUsados &&
   todasCidadesIguais &&
   tabelaFrete[cidadeTabela] &&
   tabelaFrete[cidadeTabela][tipoTabela] !== undefined;
 
-  console.log("DEBUG FRETE TABELA", {
+console.log("DEBUG FRETE TABELA FINAL", {
+  tabelaFreteCarregada,
   todosCompartimentosUsados,
   todasCidadesIguais,
   cidadeTabela,
   tipoTabela,
-  existeCidade: !!tabelaFrete[cidadeTabela],
-  existeTipo: tabelaFrete[cidadeTabela]?.[tipoTabela]
+  valorTabela: tabelaFrete[cidadeTabela]?.[tipoTabela]
 });
+
 
 
 if (usarFreteTabela) {
