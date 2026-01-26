@@ -384,10 +384,14 @@ async function calcular(){
   const spinner = document.getElementById("spinner");
   const spinnerText = document.getElementById("spinnerText");
 
-  spinnerText.innerText = "Calculando frete…";
-  spinner.style.display = "flex";
+spinnerText.innerText = "Calculando frete…";
+spinner.style.display = "flex";
 
-  try {
+// 👇 LINHA CRÍTICA (FORÇA O RENDER)
+await new Promise(requestAnimationFrame);
+
+try {
+
 
 
   const tipo = document.getElementById("tipo").value;
@@ -583,8 +587,15 @@ html += `
 </div>
 `;
 
-  document.getElementById("resumo").innerHTML=html;
+document.getElementById("resumo").innerHTML = html;
+
+} catch (e) {
+  alert("Erro ao calcular frete:\n" + e.message);
+  console.error(e);
+} finally {
+  spinner.style.display = "none";
 }
+
 </script>
 
 </body>
