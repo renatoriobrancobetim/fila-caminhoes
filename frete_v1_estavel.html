@@ -213,71 +213,66 @@ document.getElementById("btnCalcular").classList.add("btn-destaque");
 }
 
 /* ================= OTIMIZAR ROTA ================= */
+
 async function otimizarRota(){
-  const spinner=document.getElementById("spinner");
-  spinner.style.display="flex";
+  const spinner = document.getElementById("spinner");
+  spinner.style.display = "flex";
 
   try {
+    const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
- catch (e) {
+    const paradas = rows
+      .map(r => ({
+        row: r,
+        cidade: r.querySelector(".cidade").value,
+        cliente: r.querySelector("input[id^='cliente']").value
+      }))
+      .filter(p => p.cidade);
+
+    let rota = [];
+    let restantes = [...paradas];
+    let atualCidade = null;
+
+    while (restantes.length) {
+      let menor = Infinity;
+      let escolhido = null;
+
+      for (const p of restantes) {
+        const d = !atualCidade
+          ? await distanciaBaseCidade(p.cidade)
+          : await distanciaCidades(atualCidade, p.cidade);
+
+        if (d < menor) {
+          menor = d;
+          escolhido = p;
+        }
+      }
+
+      rota.push(escolhido);
+      restantes = restantes.filter(p => p !== escolhido);
+      atualCidade = escolhido.cidade;
+    }
+
+    rota.forEach(p =>
+      document.querySelector("#freteTable").appendChild(p.row)
+    );
+
+    await recalcularKM();
+    await desenharMapa(rota);
+
+    document.querySelectorAll("input").forEach(i => i.disabled = true);
+    document.getElementById("btnOtimizar").style.display = "none";
+    document.getElementById("btnCalcular").disabled = false;
+    document.getElementById("btnCalcular").classList.add("btn-destaque");
+
+  } catch (e) {
     alert("Erro ao otimizar rota:\n" + e.message);
     console.error(e);
   } finally {
-    spinner.style.display="none";
+    spinner.style.display = "none";
   }
 }
 
-
-
-  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
-  let paradas=rows.map(r=>({
-    row:r,
-    cidade:r.querySelector(".cidade").value,
-    cliente:r.querySelector("input[id^='cliente']").value
-  })).filter(p=>p.cidade);
-
-  let rota = [];
-let restantes = [...paradas];
-let atualCidade = null;
-
-
-while (restantes.length) {
-  let menor = Infinity;
-  let escolhido = null;
-
-  for (const p of restantes) {
-    let d;
-
-    if (!atualCidade) {
-      // Empresa → primeira cidade
-      d = await distanciaBaseCidade(p.cidade);
-    } else {
-      // Cidade → cidade
-      d = await distanciaCidades(atualCidade, p.cidade);
-    }
-
-    if (d < menor) {
-      menor = d;
-      escolhido = p;
-    }
-  }
-
-  rota.push(escolhido);
-  restantes = restantes.filter(p => p !== escolhido);
-  atualCidade = escolhido.cidade;
-}
-
-  rota.forEach(p=>document.querySelector("#freteTable").appendChild(p.row));
-
-  await recalcularKM();
-  await desenharMapa(rota);
-
-  spinner.style.display="none";
-  document.querySelectorAll("input").forEach(i=>i.disabled=true);
-  document.getElementById("btnOtimizar").style.display="none";
-  document.getElementById("btnCalcular").disabled=false;
-  document.getElementById("btnCalcular").classList.add("btn-destaque");
-}
 
 /* ================= KM ================= */
 async function recalcularKM(){
