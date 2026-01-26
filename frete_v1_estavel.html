@@ -208,14 +208,19 @@ function gerarTabela(){
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
 
-  // REGRA: primeiro otimizar rota
+// Primeiro: NÃO pode calcular ainda
 document.getElementById("btnCalcular").disabled = true;
 document.getElementById("btnCalcular").classList.remove("btn-destaque");
 
-// Destaque inicial vai para Otimizar Rota
-document.getElementById("btnOtimizar").style.display = "inline-block";
-document.getElementById("btnOtimizar").classList.add("btn-destaque");
+// Agora: destaque visual no Otimizar
+const btnOtimizar = document.getElementById("btnOtimizar");
+btnOtimizar.style.display = "inline-block";
+btnOtimizar.disabled = false;
 
+// ⚠️ FORÇA o repaint visual
+btnOtimizar.classList.remove("btn-destaque");
+void btnOtimizar.offsetWidth; // <-- linha mágica
+btnOtimizar.classList.add("btn-destaque");
 
 
 
