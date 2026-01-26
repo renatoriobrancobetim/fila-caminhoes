@@ -401,10 +401,9 @@ itens.push({
 
 
 
-const totalCompartimentos = litrosArr.length;
 const todosCompartimentosUsados =
-  document.querySelectorAll(".cidade").length ===
-  [...document.querySelectorAll(".cidade")].filter(i => i.value.trim() !== "").length;
+  itens.length === litrosArr.length;
+
 
 
 const cidadesUnicas = new Set(
@@ -428,6 +427,16 @@ const usarFreteTabela =
   todasCidadesIguais &&
   tabelaFrete[cidadeTabela] &&
   tabelaFrete[cidadeTabela][tipoTabela] !== undefined;
+
+  console.log("DEBUG FRETE TABELA", {
+  todosCompartimentosUsados,
+  todasCidadesIguais,
+  cidadeTabela,
+  tipoTabela,
+  existeCidade: !!tabelaFrete[cidadeTabela],
+  existeTipo: tabelaFrete[cidadeTabela]?.[tipoTabela]
+});
+
 
 if (usarFreteTabela) {
   modalidade = "TABELA";
