@@ -91,7 +91,7 @@ let cidadesCoords={}, mapa, rotaLayer;
 let tabelaFrete = {};
 let tabelaFreteCarregada = false;
 
-fetch("tabela-frete.json")
+fetch("./tabela-frete.json")
   .then(r => r.json())
   .then(d => {
     Object.keys(d).forEach(cidade => {
