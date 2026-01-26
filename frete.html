@@ -89,14 +89,31 @@ let cidadesCoords={}, mapa, rotaLayer;
 
 /* ================= FRETE TABELA ================= */
 let tabelaFrete = {};
+let tabelaFreteCarregada = false;
 
-fetch("tabela-frete.json")
+fetch("./tabela-frete.json")
   .then(r => r.json())
   .then(d => {
     Object.keys(d).forEach(cidade => {
       tabelaFrete[normalizarCidade(cidade)] = d[cidade];
     });
+
+    tabelaFreteCarregada = true;
+    console.log("Tabela de frete carregada");
+
+    // 🔓 Libera cálculo somente após tabela pronta
+    const btnCalcular = document.getElementById("btnCalcular");
+    if (btnCalcular) {
+      btnCalcular.disabled = false;
+    }
+  })
+  .catch(err => {
+    console.error("Erro ao carregar tabela de frete", err);
+    alert("Erro ao carregar tabela de frete. Verifique o arquivo tabela-frete.json");
   });
+
+
+
 
 
 /* ================= CONFIG ================= */
@@ -208,9 +225,10 @@ function gerarTabela(){
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
 
-// Primeiro: NÃO pode calcular ainda
+// NÃO libera calcular aqui
 document.getElementById("btnCalcular").disabled = true;
 document.getElementById("btnCalcular").classList.remove("btn-destaque");
+
 
 // Agora: destaque visual no Otimizar
 const btnOtimizar = document.getElementById("btnOtimizar");
@@ -357,10 +375,15 @@ async function desenharMapa(rota){
 
 /* ================= CALCULAR FRETE ================= */
 async function calcular(){
-  const tipo=document.getElementById("tipo").value;
+let modalidade = "KM";
+let freteTotal = 0;
+
+
+  const tipo = document.getElementById("tipo").value;
 
   // 🔧 GARANTE que o KM seja calculado antes do frete
   await recalcularKM();
+
 
   const km = parseFloat(document.getElementById("kmTotal").value || 0);
 
@@ -401,46 +424,44 @@ itens.push({
 
 
 
-const totalCompartimentos = litrosArr.length;
-const todosCompartimentosUsados =
-  document.querySelectorAll(".cidade").length ===
-  [...document.querySelectorAll(".cidade")].filter(i => i.value.trim() !== "").length;
+const todosCompartimentosUsados = itens.length === litrosArr.length;
+
+const cidadesNormalizadas = itens.map(i => normalizarCidade(i.cidade));
+const cidadeTabela = cidadesNormalizadas[0];
+
+const todasCidadesIguais = cidadesNormalizadas.every(c => c === cidadeTabela);
+
+const tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
+
+const usarFreteTabela =
+  tabelaFreteCarregada &&
+  todosCompartimentosUsados &&
+  todasCidadesIguais &&
+  tabelaFrete[cidadeTabela] &&
+  tabelaFrete[cidadeTabela][tipoTabela] !== undefined;
+
+console.log("DEBUG FRETE TABELA FINAL", {
+  tabelaFreteCarregada,
+  todosCompartimentosUsados,
+  todasCidadesIguais,
+  cidadeTabela,
+  tipoTabela,
+  valorTabela: tabelaFrete[cidadeTabela]?.[tipoTabela]
+});
 
 
-const cidadesUnicas = new Set(
-  itens.map(i => normalizarCidade(i.cidade))
-);
 
-const todasCidadesIguais = cidadesUnicas.size === 1;
+if (usarFreteTabela) {
+  modalidade = "TABELA";
 
-let modalidade = "KM";
-let freteTotal = 0;
+  const valorPorLitro = tabelaFrete[cidadeTabela][tipoTabela];
+  freteTotal = 0;
 
-
-// normaliza tipo do caminhão para bater com a tabela
-let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
-
-/* ===== FRETE TABELA (REGRA CORRETA) ===== */
-if (todosCompartimentosUsados && todasCidadesIguais) {
-  const cidade = [...cidadesUnicas][0];
-
-  if (
-    tabelaFrete[cidade] &&
-    tabelaFrete[cidade][tipoTabela] !== undefined
-  ) {
-    modalidade = "TABELA";
-
-    const valorPorLitro = tabelaFrete[cidade][tipoTabela];
-    freteTotal = 0;
-
-    itens.forEach(i => {
-      freteTotal += i.litros * i.margem * valorPorLitro;
-    });
-
-    // 🔒 Frete tabela não precisa otimizar rota
-    document.getElementById("btnOtimizar").style.display = "none";
-  }
+  itens.forEach(i => {
+    freteTotal += i.litros * i.margem * valorPorLitro;
+  });
 }
+
 
 
 
