@@ -207,20 +207,17 @@ function gerarTabela(){
 
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
-// Regra correta: primeiro otimizar rota
+
+  // REGRA: primeiro otimizar rota
 document.getElementById("btnCalcular").disabled = true;
 document.getElementById("btnCalcular").classList.remove("btn-destaque");
 
-// Destaque vai para Otimizar Rota
+// Destaque inicial vai para Otimizar Rota
+document.getElementById("btnOtimizar").style.display = "inline-block";
 document.getElementById("btnOtimizar").classList.add("btn-destaque");
 
-  // Remove destaque do otimizar
-document.getElementById("btnOtimizar").classList.remove("btn-destaque");
-document.getElementById("btnOtimizar").style.display = "none";
 
-// Agora sim libera o cálculo do frete
-document.getElementById("btnCalcular").disabled = false;
-document.getElementById("btnCalcular").classList.add("btn-destaque");
+
 
 
 }
@@ -273,10 +270,16 @@ async function otimizarRota(){
     await recalcularKM();
     await desenharMapa(rota);
 
-    document.querySelectorAll("input").forEach(i => i.disabled = true);
-    document.getElementById("btnOtimizar").style.display = "none";
-    document.getElementById("btnCalcular").disabled = false;
-    document.getElementById("btnCalcular").classList.add("btn-destaque");
+document.querySelectorAll("input").forEach(i => i.disabled = true);
+
+// Otimizar some
+document.getElementById("btnOtimizar").style.display = "none";
+document.getElementById("btnOtimizar").classList.remove("btn-destaque");
+
+// Agora libera Calcular Frete
+document.getElementById("btnCalcular").disabled = false;
+document.getElementById("btnCalcular").classList.add("btn-destaque");
+
 
   } catch (e) {
     alert("Erro ao otimizar rota:\n" + e.message);
