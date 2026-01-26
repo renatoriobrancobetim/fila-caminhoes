@@ -32,12 +32,12 @@
         <label>Tipo de Caminhão</label>
         <select id="tipo" onchange="gerarTabela()">
           <option value="">Selecione</option>
-          <option value="FROTA">FROTA</option>
-          <option value="BITRUCK">BITRUCK</option>
+          <option value="TOCO">TOCO</option>
           <option value="TRUCK_555">TRUCK 555</option>
           <option value="TRUCK_5532">TRUCK 5532</option>
           <option value="TRUCK_53232">TRUCK 53232</option>
-          <option value="TOCO">TOCO</option>
+          <option value="BITRUCK">BITRUCK</option>
+          <option value="FROTA">FROTA</option>
           <option value="CARRETA">CARRETA</option>
         </select>
       </div>
@@ -66,33 +66,63 @@
 <datalist id="cidadesMG"></datalist>
 
 <script>
-const BASE="BETIM";
+/* ================= UTIL ================= */
+function normalizarCidade(nome){
+  return nome
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z\s]/g, "")
+    .trim()
+    .toUpperCase();
+}
+
+/* ================= VARIÁVEIS ================= */
+/* ================= VARIÁVEIS ================= */
+// BASE agora é coordenada fixa da empresa
+const BASE_COORDS = {
+  lat: -19.95959,
+  lng: -44.08838
+};
+
 let cidadesCoords={}, mapa, rotaLayer;
 
-/* ===== CONFIG ===== */
+
+/* ================= FRETE TABELA ================= */
+let tabelaFrete = {};
+
+fetch("tabela-frete.json")
+  .then(r => r.json())
+  .then(d => {
+    Object.keys(d).forEach(cidade => {
+      tabelaFrete[normalizarCidade(cidade)] = d[cidade];
+    });
+  });
+
+
+/* ================= CONFIG ================= */
 const baseFrete={
   FROTA:{indice:5.8402,taxa:669.32},
-  BITRUCK:{indice:3.5686,taxa:364.71},
+  BITRUCK:{indice:4.9381,taxa:414.93},
   TRUCK:{indice:4.4266,taxa:412.57},
-  TOCO:{indice:4.9381,taxa:414.93},
+  TOCO:{indice:3.5686,taxa:364.71},
   CARRETA:{indice:5.6203,taxa:460.29}
 };
 
 const compartimentos={
-  FROTA:[5000,5000,5000,2500,2500,2500],
-  BITRUCK:[5000,5000,5000],
+  TOCO:[5000,3000,2000],
   TRUCK_555:[5000,5000,5000],
   TRUCK_5532:[5000,5000,3000,2000],
   TRUCK_53232:[5000,3000,2000,3000,2000],
-  TOCO:[5000,3000,2000],
+  BITRUCK:[5000,5000,5000,5000],
+  FROTA:[5000,5000,5000,2500,2500,2500],
   CARRETA:[5000,5000,5000,5000,5000,5000]
 };
 
 const moeda=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const moeda4=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
+const moeda3=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:4});
 const numero=v=>v.toLocaleString("pt-BR");
 
-/* ===== CIDADES ===== */
+/* ================= CIDADES ================= */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
@@ -103,16 +133,48 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   });
 });
 
-/* ===== DISTÂNCIA ===== */
-async function distancia(a,b){
-  const [la,lo]=cidadesCoords[a];
-  const [lb,lblo]=cidadesCoords[b];
-  const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${lo},${la};${lblo},${lb}?overview=false`);
-  const j=await r.json();
-  return j.routes[0].distance/1000;
+/* ================= DISTÂNCIA ================= */
+
+// Empresa → Cidade
+async function distanciaBaseCidade(cidade){
+  if (!cidadesCoords[cidade]) {
+    throw new Error("Cidade inválida: " + cidade);
+  }
+
+  const [latCidade, lngCidade] = cidadesCoords[cidade];
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${BASE_COORDS.lng},${BASE_COORDS.lat};${lngCidade},${latCidade}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
 }
 
-/* ===== TABELA ===== */
+
+// Cidade → Cidade
+async function distanciaCidades(cidadeA, cidadeB){
+  if (!cidadesCoords[cidadeA] || !cidadesCoords[cidadeB]) {
+    throw new Error("Cidade inválida: " + cidadeA + " → " + cidadeB);
+  }
+
+  const [latA, lngA] = cidadesCoords[cidadeA];
+  const [latB, lngB] = cidadesCoords[cidadeB];
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
+
+
+
+
+/* ================= TABELA ================= */
 function gerarTabela(){
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
@@ -123,6 +185,7 @@ function gerarTabela(){
       <th>CIDADE</th>
       <th>HORÁRIO</th>
       <th>QTDE (L)</th>
+      <th>AJUSTE DE MARGEM</th>
       <th>R$/L</th>
       <th>TOTAL</th>
       <th>VENDEDOR</th>
@@ -135,6 +198,7 @@ function gerarTabela(){
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
+      <td><input id="margem${i}" type="number" step="0.01" value="1.00" style="width:70px;text-align:center"></td>
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
       <td><input id="vendedor${i}" class="uppercase"></td>
@@ -143,59 +207,124 @@ function gerarTabela(){
 
   html+="</table>";
   document.getElementById("tabela").innerHTML=html;
+
+// Primeiro: NÃO pode calcular ainda
+document.getElementById("btnCalcular").disabled = true;
+document.getElementById("btnCalcular").classList.remove("btn-destaque");
+
+// Agora: destaque visual no Otimizar
+const btnOtimizar = document.getElementById("btnOtimizar");
+btnOtimizar.style.display = "inline-block";
+btnOtimizar.disabled = false;
+
+// ⚠️ FORÇA o repaint visual
+btnOtimizar.classList.remove("btn-destaque");
+void btnOtimizar.offsetWidth; // <-- linha mágica
+btnOtimizar.classList.add("btn-destaque");
+
+
+
+
 }
 
-/* ===== OTIMIZAR ROTA ===== */
+/* ================= OTIMIZAR ROTA ================= */
+
 async function otimizarRota(){
-  const spinner=document.getElementById("spinner");
-  spinner.style.display="flex";
+  const spinner = document.getElementById("spinner");
+  spinner.style.display = "flex";
 
-  const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
-  let paradas=rows.map(r=>({
-    row:r,
-    cidade:r.querySelector(".cidade").value,
-    cliente:r.querySelector("input[id^='cliente']").value
-  })).filter(p=>p.cidade);
+  try {
+    const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  let rota=[], atual=BASE, restantes=[...paradas];
+    const paradas = rows
+      .map(r => ({
+        row: r,
+        cidade: r.querySelector(".cidade").value,
+        cliente: r.querySelector("input[id^='cliente']").value
+      }))
+      .filter(p => p.cidade);
 
-  while(restantes.length){
-    let menor=Infinity, escolhido=null;
-    for(const p of restantes){
-      const d=await distancia(atual,p.cidade);
-      if(d<menor){menor=d;escolhido=p;}
+    let rota = [];
+    let restantes = [...paradas];
+    let atualCidade = null;
+
+    while (restantes.length) {
+      let menor = Infinity;
+      let escolhido = null;
+
+      for (const p of restantes) {
+        const d = !atualCidade
+          ? await distanciaBaseCidade(p.cidade)
+          : await distanciaCidades(atualCidade, p.cidade);
+
+        if (d < menor) {
+          menor = d;
+          escolhido = p;
+        }
+      }
+
+      rota.push(escolhido);
+      restantes = restantes.filter(p => p !== escolhido);
+      atualCidade = escolhido.cidade;
     }
-    rota.push(escolhido);
-    restantes=restantes.filter(p=>p!==escolhido);
-    atual=escolhido.cidade;
+
+    rota.forEach(p =>
+      document.querySelector("#freteTable").appendChild(p.row)
+    );
+
+    await recalcularKM();
+    await desenharMapa(rota);
+
+document.querySelectorAll("input").forEach(i => i.disabled = true);
+
+// Otimizar some
+document.getElementById("btnOtimizar").style.display = "none";
+document.getElementById("btnOtimizar").classList.remove("btn-destaque");
+
+// Agora libera Calcular Frete
+document.getElementById("btnCalcular").disabled = false;
+document.getElementById("btnCalcular").classList.add("btn-destaque");
+
+
+  } catch (e) {
+    alert("Erro ao otimizar rota:\n" + e.message);
+    console.error(e);
+  } finally {
+    spinner.style.display = "none";
   }
-
-  rota.forEach(p=>document.querySelector("#freteTable").appendChild(p.row));
-
-  await recalcularKM();
-  await desenharMapa(rota);
-
-  spinner.style.display="none";
-
-  document.querySelectorAll("input").forEach(i=>i.disabled=true);
-  document.getElementById("btnOtimizar").style.display="none";
-  document.getElementById("btnCalcular").disabled=false;
-  document.getElementById("btnCalcular").classList.add("btn-destaque");
 }
 
-/* ===== KM ===== */
+
+/* ================= KM ================= */
 async function recalcularKM(){
-  const cidades=[...document.querySelectorAll(".cidade")].map(i=>i.value).filter(v=>v);
-  let km=0,origem=BASE;
-  for(const c of cidades){
-    km+=await distancia(origem,c);
-    origem=c;
+  const cidades = [...document.querySelectorAll(".cidade")]
+    .map(i => i.value)
+    .filter(v => v);
+
+  if (cidades.length === 0) {
+    document.getElementById("kmTotal").value = "0.00";
+    return;
   }
-  km+=await distancia(origem,BASE);
-  document.getElementById("kmTotal").value=km.toFixed(2);
+
+  let km = 0;
+
+  // Empresa → primeira cidade
+  km += await distanciaBaseCidade(cidades[0]);
+
+  // Entre cidades
+for (let i = 0; i < cidades.length - 1; i++) {
+  km += await distanciaCidades(cidades[i], cidades[i + 1]);
 }
 
-/* ===== MAPA ===== */
+
+  // Última cidade → Empresa
+  km += await distanciaBaseCidade(cidades[cidades.length - 1]);
+
+  document.getElementById("kmTotal").value = km.toFixed(2);
+}
+
+
+/* ================= MAPA ================= */
 async function desenharMapa(rota){
   document.getElementById("mapaRota").style.display="block";
   if(!mapa){
@@ -203,11 +332,15 @@ async function desenharMapa(rota){
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapa);
   }
   if(rotaLayer) mapa.removeLayer(rotaLayer);
+  const pontos = [
+  [BASE_COORDS.lat, BASE_COORDS.lng],
+  ...rota.map(r => {
+    const [lat, lng] = cidadesCoords[r.cidade];
+    return [lat, lng];
+  }),
+  [BASE_COORDS.lat, BASE_COORDS.lng]
+];
 
-  const pontos=[BASE,...rota.map(r=>r.cidade),BASE].map(c=>{
-    const [lat,lng]=cidadesCoords[c];
-    return [lat,lng];
-  });
 
   mapa.fitBounds(pontos);
 
@@ -219,106 +352,204 @@ async function desenharMapa(rota){
   const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
   const j=await r.json();
-
   rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
 }
 
-/* ===== CALCULAR FRETE ===== */
-function calcular(){
+/* ================= CALCULAR FRETE ================= */
+async function calcular(){
   const tipo=document.getElementById("tipo").value;
-  const km=parseFloat(document.getElementById("kmTotal").value);
-  if(!km){alert("KM não calculado");return;}
+
+  // 🔧 GARANTE que o KM seja calculado antes do frete
+  await recalcularKM();
+
+  const km = parseFloat(document.getElementById("kmTotal").value || 0);
+
+
 
   const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
   const litrosArr=compartimentos[tipo];
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  let itens=[], litrosUsados=0;
+  let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
 
-  rows.forEach(r=>{
-    const c=r.querySelector("input[id^='cliente']");
-    if(!c.value) return;
-    const idx=parseInt(c.id.replace("cliente",""));
-    const litros=litrosArr[idx];
-    litrosUsados+=litros;
-    itens.push({
-      idx,
-      cliente:c.value.toUpperCase(),
-      cidade:document.getElementById("cidade"+idx).value,
-      horario:document.getElementById("horario"+idx).value||"-",
-      vendedor:document.getElementById("vendedor"+idx).value||"-",
-      litros
+rows.forEach(r=>{
+  const cidadeInput = r.querySelector(".cidade");
+  if (!cidadeInput.value) return;
+
+  const c = r.querySelector("input[id^='cliente']") || { value: "" };
+
+
+
+  const idx=parseInt(c.id.replace("cliente",""));
+  const litros=litrosArr[idx];
+  const margem=parseFloat(document.getElementById("margem"+idx).value||1);
+
+  litrosUsados+=litros;
+  litrosPonderadosTotal+=litros*margem;
+
+itens.push({
+  idx,
+  cliente: c.value.toUpperCase(),
+  cidade: document.getElementById("cidade"+idx).value.trim(),
+  horario: document.getElementById("horario"+idx).value || "-",
+  vendedor: document.getElementById("vendedor"+idx).value || "-",
+  litros,
+  margem
+});
+
+});
+
+
+
+const totalCompartimentos = litrosArr.length;
+const todosCompartimentosUsados =
+  document.querySelectorAll(".cidade").length ===
+  [...document.querySelectorAll(".cidade")].filter(i => i.value.trim() !== "").length;
+
+
+const cidadesUnicas = new Set(
+  itens.map(i => normalizarCidade(i.cidade))
+);
+
+const todasCidadesIguais = cidadesUnicas.size === 1;
+
+let modalidade = "KM";
+let freteTotal = 0;
+
+
+// normaliza tipo do caminhão para bater com a tabela
+let tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
+
+/* ===== FRETE TABELA (REGRA CORRETA) ===== */
+if (todosCompartimentosUsados && todasCidadesIguais) {
+  const cidade = [...cidadesUnicas][0];
+
+  if (
+    tabelaFrete[cidade] &&
+    tabelaFrete[cidade][tipoTabela] !== undefined
+  ) {
+    modalidade = "TABELA";
+
+    const valorPorLitro = tabelaFrete[cidade][tipoTabela];
+    freteTotal = 0;
+
+    itens.forEach(i => {
+      freteTotal += i.litros * i.margem * valorPorLitro;
     });
-  });
 
+    // 🔒 Frete tabela não precisa otimizar rota
+    document.getElementById("btnOtimizar").style.display = "none";
+  }
+}
+
+
+
+if (modalidade !== "TABELA" && km > 0) {
+  modalidade = "KM";
+  freteTotal = (km * dados.indice) + dados.taxa;
+}
+  
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
+  const freteUnitBase=freteTotal/litrosPonderadosTotal;
 
-  const freteTotal=(km*dados.indice)+dados.taxa;
-  const unit=freteTotal/litrosUsados;
+let html = `
+<div class="resumo-box">
+  <h3>
+    RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
 
-  let html=`<div class="resumo-box">
-    <h3>
-      RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
-      ${cargaParcial?'<span class="badge-parcial">CARGA PARCIAL</span>':''}
-    </h3>`;
+    ${
+      modalidade === "TABELA"
+        ? '<span class="badge-frete badge-tabela">FRETE TABELA</span>'
+        : '<span class="badge-frete badge-km">FRETE KM</span>'
+    }
 
-  html+=`
-  <table>
-    <tr>
-      <th>CLIENTE</th>
-      <th>CIDADE</th>
-      <th>HORÁRIO</th>
-      <th>FRETE (R$/L)</th>
-      <th>QUANTIDADE</th>
-      <th>TOTAL</th>
-      <th>VENDEDOR</th>
-    </tr>`;
+    ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
+  </h3>
+`;
+
+html += `
+<table>
+  <tr>
+    <th>CLIENTE</th>
+    <th>CIDADE</th>
+    <th>HORÁRIO</th>
+    <th>AJUSTE</th>
+    <th>FRETE (R$/L)</th>
+    <th>QUANTIDADE</th>
+    <th>TOTAL</th>
+    <th>VENDEDOR</th>
+  </tr>
+`;
 
   itens.forEach(i=>{
-    const total=i.litros*unit;
-    document.getElementById("unit"+i.idx).innerText=moeda4(unit);
+ let unit, total;
+
+if (modalidade === "TABELA") {
+  unit = tabelaFrete[normalizarCidade(i.cidade)][tipoTabela];
+  total = i.litros * i.margem * unit;
+} else {
+  unit = freteUnitBase;
+  total = i.litros * i.margem * freteUnitBase;
+}
+
+    document.getElementById("unit"+i.idx).innerText=moeda3(unit);
     document.getElementById("frete"+i.idx).innerText=moeda(total);
+
     html+=`
-    <tr>
-      <td>${i.cliente}</td>
-      <td>${i.cidade}</td>
-      <td>${i.horario}</td>
-      <td>${moeda4(unit)}</td>
-      <td>${numero(i.litros)}</td>
-      <td>${moeda(total)}</td>
-      <td>${i.vendedor}</td>
-    </tr>`;
+      <tr>
+        <td>${i.cliente}</td>
+        <td>${i.cidade}</td>
+        <td>${i.horario}</td>
+        <td>${i.margem.toFixed(2)}</td>
+        <td>${moeda3(unit)}</td>
+        <td>${numero(i.litros)}</td>
+        <td>${moeda(total)}</td>
+        <td>${i.vendedor}</td>
+      </tr>`;
   });
 
   html+=`
     <tr class="total-row">
-      <td colspan="4">TOTAIS</td>
+      <td colspan="5">TOTAIS</td>
       <td>${numero(litrosUsados)}</td>
       <td>${moeda(freteTotal)}</td>
       <td>-</td>
     </tr>
-  </table>
+    </table>
+  `;
+// ===== MÉTRICAS PARA RESUMO FINAL =====
+const m3Total = (litrosUsados / 1000).toFixed(1);
+const freteUnitMedio = freteTotal / litrosUsados;
 
-  <table style="margin-top:18px">
-    <tr class="total-row">
-      <td>KM TOTAL</td>
-      <td>ÍNDICE</td>
-      <td>TAXA</td>
-      <td>M³ TOTAL</td>
-      <td>FRETE UNIT. MÉDIO</td>
-      <td>FRETE TOTAL</td>
-    </tr>
-    <tr>
-      <td>${numero(km)}</td>
-      <td>${dados.indice.toFixed(4)}</td>
-      <td>${moeda(dados.taxa)}</td>
-      <td>${(litrosUsados/1000).toFixed(1)}</td>
-      <td>${moeda4(unit)}</td>
-      <td><b>${moeda(freteTotal)}</b></td>
-    </tr>
-  </table>
-  </div>`;
+let kmLabel = modalidade === "TABELA"
+  ? "FRETE TABELA"
+  : `${numero(km)} km`;
+
+let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
+let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
+
+html += `
+<table style="margin-top:18px">
+  <tr class="total-row">
+    <td>KM TOTAL</td>
+    <td>ÍNDICE</td>
+    <td>TAXA</td>
+    <td>M³ TOTAL</td>
+    <td>FRETE UNIT. MÉDIO</td>
+    <td>FRETE TOTAL</td>
+  </tr>
+  <tr>
+    <td><b>${kmLabel}</b></td>
+    <td>${indiceLabel}</td>
+    <td>${taxaLabel}</td>
+    <td>${m3Total}</td>
+    <td>${moeda3(freteUnitMedio)}</td>
+    <td><b>${moeda(freteTotal)}</b></td>
+  </tr>
+</table>
+</div>
+`;
 
   document.getElementById("resumo").innerHTML=html;
 }
