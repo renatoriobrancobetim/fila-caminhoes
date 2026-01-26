@@ -89,6 +89,7 @@ let cidadesCoords={}, mapa, rotaLayer;
 
 /* ================= FRETE TABELA ================= */
 let tabelaFrete = {};
+let tabelaFreteCarregada = false;
 
 fetch("tabela-frete.json")
   .then(r => r.json())
@@ -96,7 +97,15 @@ fetch("tabela-frete.json")
     Object.keys(d).forEach(cidade => {
       tabelaFrete[normalizarCidade(cidade)] = d[cidade];
     });
+if (!tabelaFreteCarregada) {
+  alert("Tabela de frete ainda está carregando. Tente novamente em 1 segundo.");
+  return;
+}
+
+    tabelaFreteCarregada = true;
+    console.log("Tabela de frete carregada com sucesso");
   });
+
 
 
 /* ================= CONFIG ================= */
