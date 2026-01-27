@@ -503,10 +503,8 @@ const blocoDestaque = `
 </div>
 `;
 
- let html = `
-${blocoDestaque}
+let html = `
 <div class="resumo-box">
-
   <h3>
     RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
 
@@ -518,7 +516,16 @@ ${blocoDestaque}
 
     ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
   </h3>
+
+  <div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
+    <div class="frete-destaque-label">FRETE TOTAL</div>
+    <div class="frete-destaque-valor">${moeda(freteTotal)}</div>
+    <div class="frete-destaque-info">
+      ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
+    </div>
+  </div>
 `;
+
 
 html += `
 <table>
