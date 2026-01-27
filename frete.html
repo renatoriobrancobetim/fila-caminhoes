@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+
 
 <!-- CSS EXTERNO -->
 <link rel="stylesheet" href="style.css">
@@ -489,6 +491,11 @@ if (modalidade !== "TABELA" && km > 0) {
   const cargaParcial=litrosUsados<capacidadeTotal;
   const freteUnitBase=freteTotal/litrosPonderadosTotal;
 
+const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
+
+// ================= BLOCO FRETE REAL (HTML) =================
+
+
 let html = `
 <div class="resumo-box">
   <h3>
@@ -502,7 +509,9 @@ let html = `
 
     ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
   </h3>
+
 `;
+
 
 html += `
 <table>
@@ -557,13 +566,25 @@ if (modalidade === "TABELA") {
 // ===== MÉTRICAS PARA RESUMO FINAL =====
 const m3Total = (litrosUsados / 1000).toFixed(1);
 const freteUnitMedio = freteTotal / litrosUsados;
-
+ 
 let kmLabel = modalidade === "TABELA"
   ? "FRETE TABELA"
   : `${numero(km)} km`;
 
 let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
 let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
+
+const observacaoFrete = `
+<div class="frete-observacao">
+  ${
+    modalidade === "TABELA"
+      ? "Frete calculado por <b>tabela oficial</b>"
+      : "Frete calculado por <b>quilometragem rodada</b>"
+  }
+  ${cargaParcial ? " • <span class='parcial'>Carga parcial</span>" : ""}
+</div>
+`;
+
 
 html += `
 <table style="margin-top:18px">
@@ -584,10 +605,73 @@ html += `
     <td><b>${moeda(freteTotal)}</b></td>
   </tr>
 </table>
+`;
+ html += `
+<div class="divider-frete"></div>
+
+<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}" style="margin-top:16px">
+  <div class="frete-destaque-label">
+    FRETE TOTAL ${cargaParcial ? "(CARGA PARCIAL)" : ""}
+  </div>
+
+  <div 
+    class="frete-destaque-valor animado"
+    id="freteReal"
+    data-valor="${freteTotal}">
+    R$ 0,00
+  </div>
 </div>
 `;
 
+
 document.getElementById("resumo").innerHTML = html;
+// 🔔 PASSO 3 — dispara animação após render do HTML
+requestAnimationFrame(() => {
+  animarFretes({
+    real: freteTotal,
+    parcial: cargaParcial
+  });
+});
+
+
+
+ function animarFretes({ real, parcial }) {
+  const el = document.getElementById("freteReal");
+  if (!el) return;
+
+  if (parcial) {
+    el.classList.add("parcial");
+  }
+
+  animarNumero(el, real, parcial ? 1300 : 900);
+}
+
+function animarNumero(el, valorFinal, duracao) {
+  const inicio = performance.now();
+
+  function easeOut(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function step(agora) {
+    const progresso = Math.min((agora - inicio) / duracao, 1);
+    const valorAtual = valorFinal * easeOut(progresso);
+
+    el.innerText = valorAtual.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+
+    if (progresso < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+
+
 
 } catch (e) {
   alert("Erro ao calcular frete:\n" + e.message);
@@ -595,6 +679,44 @@ document.getElementById("resumo").innerHTML = html;
 } finally {
   spinner.style.display = "none";
 }
+}
+function animarFrete(valorFinal) {
+  const el = document.getElementById("freteAnimado");
+  if (!el) return;
+  const isParcial = document
+  .querySelector(".frete-destaque")
+  ?.classList.contains("parcial");
+
+  el.classList.add("animando");
+
+
+  const duracao = isParcial ? 1300 : 900;
+ // ms
+  const inicio = performance.now();
+
+  function step(agora) {
+    const linear = Math.min((agora - inicio) / duracao, 1);
+const progresso = isParcial
+  ? Math.sqrt(linear)              // ease-out suave e contínuo
+  : 1 - Math.pow(1 - linear, 3);   // ease-out padrão
+
+
+    const valorAtual = valorFinal * progresso;
+
+    el.innerText = valorAtual.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+
+   if (progresso < 1) {
+  requestAnimationFrame(step);
+} else {
+  el.classList.remove("animando"); // para o brilho ao final
+}
+
+  }
+
+  requestAnimationFrame(step);
 }
 
 </script>
