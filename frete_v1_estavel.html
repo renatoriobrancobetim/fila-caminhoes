@@ -496,7 +496,13 @@ const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-d
 const blocoDestaque = `
 <div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
   <div class="frete-destaque-label">FRETE TOTAL</div>
-  <div class="frete-destaque-valor">${moeda(freteTotal)}</div>
+  <div 
+  class="frete-destaque-valor" 
+  id="freteAnimado"
+  data-value="${freteTotal}">
+  R$ 0,00
+</div>
+
   <div class="frete-destaque-info">
     ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
   </div>
@@ -611,6 +617,7 @@ html += `
 `;
 
 document.getElementById("resumo").innerHTML = html;
+animarFrete(freteTotal);
 
 } catch (e) {
   alert("Erro ao calcular frete:\n" + e.message);
@@ -618,6 +625,29 @@ document.getElementById("resumo").innerHTML = html;
 } finally {
   spinner.style.display = "none";
 }
+}
+function animarFrete(valorFinal) {
+  const el = document.getElementById("freteAnimado");
+  if (!el) return;
+
+  const duracao = 900; // ms
+  const inicio = performance.now();
+
+  function step(agora) {
+    const progresso = Math.min((agora - inicio) / duracao, 1);
+    const valorAtual = valorFinal * progresso;
+
+    el.innerText = valorAtual.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+
+    if (progresso < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
 }
 
 </script>
