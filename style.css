@@ -410,3 +410,22 @@ th{
     box-shadow: 0 0 0 rgba(198, 40, 40, 0);
   }
 }
+/* === CARGA PARCIAL === */
+.frete-destaque.parcial .frete-destaque-valor.animando {
+  animation: pulsePartial 1.4s ease-in-out infinite;
+}
+
+@keyframes pulsePartial {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 0 rgba(255, 152, 0, 0);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.025);
+    box-shadow: 0 0 20px rgba(255, 152, 0, 0.45);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 0 rgba(255, 152, 0, 0);
+  }
+}
