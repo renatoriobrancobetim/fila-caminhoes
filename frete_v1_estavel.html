@@ -491,8 +491,22 @@ if (modalidade !== "TABELA" && km > 0) {
   const cargaParcial=litrosUsados<capacidadeTotal;
   const freteUnitBase=freteTotal/litrosPonderadosTotal;
 
-let html = `
+const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
+
+const blocoDestaque = `
+<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
+  <div class="frete-destaque-label">FRETE TOTAL</div>
+  <div class="frete-destaque-valor">${moeda(freteTotal)}</div>
+  <div class="frete-destaque-info">
+    ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
+  </div>
+</div>
+`;
+
+ let html = `
+${blocoDestaque}
 <div class="resumo-box">
+
   <h3>
     RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
 
