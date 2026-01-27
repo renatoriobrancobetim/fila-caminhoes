@@ -523,22 +523,6 @@ let html = `
     ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
   </h3>
 
-<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
-  <div class="frete-destaque-label">
-    FRETE REAL ${cargaParcial ? "(CARGA PARCIAL)" : ""}
-  </div>
-
-  <div 
-    class="frete-destaque-valor animado"
-    id="freteReal"
-    data-valor="${freteTotal}">
-    R$ 0,00
-  </div>
-
-  
-</div>
-
-
 `;
 
 
@@ -634,6 +618,18 @@ html += `
     <td><b>${moeda(freteTotal)}</b></td>
   </tr>
 </table>
+<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}" style="margin-top:16px">
+  <div class="frete-destaque-label">
+    FRETE REAL ${cargaParcial ? "(CARGA PARCIAL)" : ""}
+  </div>
+
+  <div 
+    class="frete-destaque-valor animado"
+    id="freteReal"
+    data-valor="${freteTotal}">
+    R$ 0,00
+  </div>
+</div>
 
 ${observacaoFrete}
 </div>
