@@ -618,6 +618,9 @@ html += `
     <td><b>${moeda(freteTotal)}</b></td>
   </tr>
 </table>
+  html += `
+<div class="divider-frete"></div>
+`;
 <div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}" style="margin-top:16px">
   <div class="frete-destaque-label">
     FRETE REAL ${cargaParcial ? "(CARGA PARCIAL)" : ""}
@@ -634,6 +637,8 @@ html += `
 ${observacaoFrete}
 </div>
 `;
+
+
 html += blocoFreteReal;
 
 
