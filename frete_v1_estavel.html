@@ -508,16 +508,15 @@ let html = `
     ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
   </h3>
 
-<div class="frete-destaque 
-  ${modalidade === "TABELA" ? "" : "km"} 
-  ${cargaParcial ? "parcial" : ""}">
-
-  <div class="frete-destaque-label">FRETE TOTAL</div>
+<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
+  <div class="frete-destaque-label">
+    FRETE REAL ${cargaParcial ? "(CARGA PARCIAL)" : ""}
+  </div>
 
   <div 
-    class="frete-destaque-valor" 
-    id="freteAnimado"
-    data-value="${freteTotal}">
+    class="frete-destaque-valor animado"
+    id="freteReal"
+    data-valor="${freteTotal}">
     R$ 0,00
   </div>
 
@@ -525,6 +524,21 @@ let html = `
     ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
   </div>
 </div>
+
+${cargaParcial ? `
+<div class="frete-comparacao">
+  <div class="frete-cheio">
+    <span>Se fosse carga cheia</span>
+    <strong id="freteCheio" data-valor="0">R$ 0,00</strong>
+  </div>
+
+  <div class="frete-diferenca">
+    Diferença:
+    <strong id="freteDiferenca" data-valor="0">R$ 0,00</strong>
+  </div>
+</div>
+` : ""}
+
 
 `;
 
@@ -582,6 +596,14 @@ if (modalidade === "TABELA") {
 // ===== MÉTRICAS PARA RESUMO FINAL =====
 const m3Total = (litrosUsados / 1000).toFixed(1);
 const freteUnitMedio = freteTotal / litrosUsados;
+  let freteCheioSimulado = 0;
+let diferencaFrete = 0;
+
+if (cargaParcial) {
+  freteCheioSimulado = freteUnitMedio * capacidadeTotal;
+  diferencaFrete = freteCheioSimulado - freteTotal;
+}
+
 
 let kmLabel = modalidade === "TABELA"
   ? "FRETE TABELA"
@@ -613,7 +635,67 @@ html += `
 `;
 
 document.getElementById("resumo").innerHTML = html;
-animarFrete(freteTotal);
+animarFretes({
+  real: freteTotal,
+  cheio: freteCheioSimulado,
+  diferenca: diferencaFrete,
+  parcial: cargaParcial
+});
+
+  function animarFretes({ real, cheio, diferenca, parcial }) {
+
+  const elReal = document.getElementById("freteReal");
+  const elCheio = document.getElementById("freteCheio");
+  const elDiff  = document.getElementById("freteDiferenca");
+
+  animarNumero(elReal, real, 800, "easeOut");
+
+  if (!parcial) return;
+
+  setTimeout(() => {
+    animarNumero(elCheio, cheio, 700, "easeOut");
+  }, 400);
+
+  setTimeout(() => {
+    animarNumero(elDiff, diferenca, 600, "easeOut", true);
+  }, 800);
+}
+
+  function animarNumero(el, valorFinal, duracao, easing = "linear", destaque = false) {
+  if (!el) return;
+
+  const inicio = performance.now();
+  const inicioValor = 0;
+
+  if (destaque) {
+    el.classList.add("pulse");
+  }
+
+  function easeOut(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function step(agora) {
+    const progresso = Math.min((agora - inicio) / duracao, 1);
+    const fator = easing === "easeOut" ? easeOut(progresso) : progresso;
+    const valorAtual = inicioValor + (valorFinal * fator);
+
+    el.innerText = valorAtual.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+
+    if (progresso < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.classList.remove("pulse");
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+
 
 } catch (e) {
   alert("Erro ao calcular frete:\n" + e.message);
