@@ -371,3 +371,42 @@ th{
   font-size: 14px;
   color: #333;
 }
+/* Destaque animado */
+.frete-destaque-valor.animando {
+  animation: pulseGlow 1.2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 150, 136, 0);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 18px rgba(0, 150, 136, 0.45);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 150, 136, 0);
+  }
+}
+
+/* Variante KM (vermelho mais sóbrio) */
+.frete-destaque.km .frete-destaque-valor.animando {
+  animation: pulseGlowKm 1.2s ease-in-out infinite;
+}
+
+@keyframes pulseGlowKm {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(198, 40, 40, 0);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 18px rgba(198, 40, 40, 0.45);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(198, 40, 40, 0);
+  }
+}
