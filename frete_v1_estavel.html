@@ -493,6 +493,21 @@ if (modalidade !== "TABELA" && km > 0) {
 
 const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
 
+// ================= BLOCO FRETE REAL (HTML) =================
+const blocoFreteReal = `
+<div class="frete-real-box ${cargaParcial ? "parcial" : ""}">
+  <div class="frete-real-label">
+    FRETE REAL ${cargaParcial ? "(CARGA PARCIAL)" : ""}
+  </div>
+
+  <div
+    class="frete-real-valor animado"
+    id="freteReal"
+    data-valor="${freteTotal}">
+    R$ 0,00
+  </div>
+</div>
+`;
 
 let html = `
 <div class="resumo-box">
@@ -623,14 +638,19 @@ html += `
 ${observacaoFrete}
 </div>
 `;
+html += blocoFreteReal;
 
 
 
 document.getElementById("resumo").innerHTML = html;
-animarFretes({
-  real: freteTotal,
-  parcial: cargaParcial
+// 🔔 PASSO 3 — dispara animação após render do HTML
+requestAnimationFrame(() => {
+  animarFretes({
+    real: freteTotal,
+    parcial: cargaParcial
+  });
 });
+
 
 
  function animarFretes({ real, parcial }) {
