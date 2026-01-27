@@ -580,21 +580,25 @@ if (modalidade === "TABELA") {
 // ===== MÉTRICAS PARA RESUMO FINAL =====
 const m3Total = (litrosUsados / 1000).toFixed(1);
 const freteUnitMedio = freteTotal / litrosUsados;
-  let freteCheioSimulado = 0;
-let diferencaFrete = 0;
-
-if (cargaParcial) {
-  freteCheioSimulado = freteUnitMedio * capacidadeTotal;
-  diferencaFrete = freteCheioSimulado - freteTotal;
-}
-
-
+ 
 let kmLabel = modalidade === "TABELA"
   ? "FRETE TABELA"
   : `${numero(km)} km`;
 
 let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
 let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
+
+const observacaoFrete = `
+<div class="frete-observacao">
+  ${
+    modalidade === "TABELA"
+      ? "Frete calculado por <b>tabela oficial</b>"
+      : "Frete calculado por <b>quilometragem rodada</b>"
+  }
+  ${cargaParcial ? " • <span class='parcial'>Carga parcial</span>" : ""}
+</div>
+`;
+
 
 html += `
 <table style="margin-top:18px">
@@ -614,13 +618,12 @@ html += `
     <td>${moeda3(freteUnitMedio)}</td>
     <td><b>${moeda(freteTotal)}</b></td>
   </tr>
-  </table>
-</div>
-`;
 </table>
+
 ${observacaoFrete}
 </div>
 `;
+
 
 
 document.getElementById("resumo").innerHTML = html;
@@ -631,27 +634,18 @@ animarFretes({
 
 
  function animarFretes({ real, parcial }) {
-
-  const elReal = document.getElementById("freteReal");
-
-  // 🔹 Se for carga parcial, anima com leve destaque diferente
-  if (parcial) {
-    elReal.classList.add("parcial");
-  }
-
-  animarNumero(elReal, real, 900, "easeOut");
-}
-
-
-  function animarNumero(el, valorFinal, duracao, easing = "linear", destaque = false) {
+  const el = document.getElementById("freteReal");
   if (!el) return;
 
-  const inicio = performance.now();
-  const inicioValor = 0;
-
-  if (destaque) {
-    el.classList.add("pulse");
+  if (parcial) {
+    el.classList.add("parcial");
   }
+
+  animarNumero(el, real, parcial ? 1300 : 900);
+}
+
+function animarNumero(el, valorFinal, duracao) {
+  const inicio = performance.now();
 
   function easeOut(t) {
     return 1 - Math.pow(1 - t, 3);
@@ -659,8 +653,7 @@ animarFretes({
 
   function step(agora) {
     const progresso = Math.min((agora - inicio) / duracao, 1);
-    const fator = easing === "easeOut" ? easeOut(progresso) : progresso;
-    const valorAtual = inicioValor + (valorFinal * fator);
+    const valorAtual = valorFinal * easeOut(progresso);
 
     el.innerText = valorAtual.toLocaleString("pt-BR", {
       style: "currency",
@@ -669,13 +662,12 @@ animarFretes({
 
     if (progresso < 1) {
       requestAnimationFrame(step);
-    } else {
-      el.classList.remove("pulse");
     }
   }
 
   requestAnimationFrame(step);
 }
+
 
 
 
