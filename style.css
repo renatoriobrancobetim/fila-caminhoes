@@ -432,5 +432,16 @@ th{
 .frete-destaque-valor.parcial {
   color: #e65100; /* laranja mais fechado */
 }
+.frete-observacao {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #555;
+  text-align: right;
+}
+
+.frete-observacao .parcial {
+  color: #e65100;
+  font-weight: 600;
+}
 
 
