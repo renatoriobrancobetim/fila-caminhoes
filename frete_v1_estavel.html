@@ -622,12 +622,16 @@ animarFrete(freteTotal);
 function animarFrete(valorFinal) {
   const el = document.getElementById("freteAnimado");
   if (!el) return;
+  el.classList.add("animando");
+
 
   const duracao = 900; // ms
   const inicio = performance.now();
 
   function step(agora) {
-    const progresso = Math.min((agora - inicio) / duracao, 1);
+    const linear = Math.min((agora - inicio) / duracao, 1);
+const progresso = 1 - Math.pow(1 - linear, 3); // ease-out
+
     const valorAtual = valorFinal * progresso;
 
     el.innerText = valorAtual.toLocaleString("pt-BR", {
@@ -635,9 +639,12 @@ function animarFrete(valorFinal) {
       currency: "BRL"
     });
 
-    if (progresso < 1) {
-      requestAnimationFrame(step);
-    }
+   if (progresso < 1) {
+  requestAnimationFrame(step);
+} else {
+  el.classList.remove("animando"); // para o brilho ao final
+}
+
   }
 
   requestAnimationFrame(step);
