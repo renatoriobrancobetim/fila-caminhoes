@@ -623,29 +623,22 @@ html += `
 document.getElementById("resumo").innerHTML = html;
 animarFretes({
   real: freteTotal,
-  cheio: freteCheioSimulado,
-  diferenca: diferencaFrete,
   parcial: cargaParcial
 });
 
-  function animarFretes({ real, cheio, diferenca, parcial }) {
+
+ function animarFretes({ real, parcial }) {
 
   const elReal = document.getElementById("freteReal");
-  const elCheio = document.getElementById("freteCheio");
-  const elDiff  = document.getElementById("freteDiferenca");
 
-  animarNumero(elReal, real, 800, "easeOut");
+  // 🔹 Se for carga parcial, anima com leve destaque diferente
+  if (parcial) {
+    elReal.classList.add("parcial");
+  }
 
-  if (!parcial) return;
-
-  setTimeout(() => {
-    animarNumero(elCheio, cheio, 700, "easeOut");
-  }, 400);
-
-  setTimeout(() => {
-    animarNumero(elDiff, diferenca, 600, "easeOut", true);
-  }, 800);
+  animarNumero(elReal, real, 900, "easeOut");
 }
+
 
   function animarNumero(el, valorFinal, duracao, easing = "linear", destaque = false) {
   if (!el) return;
