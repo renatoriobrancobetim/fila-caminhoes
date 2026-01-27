@@ -508,7 +508,10 @@ let html = `
     ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
   </h3>
 
-<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
+<div class="frete-destaque 
+  ${modalidade === "TABELA" ? "" : "km"} 
+  ${cargaParcial ? "parcial" : ""}">
+
   <div class="frete-destaque-label">FRETE TOTAL</div>
 
   <div 
@@ -622,15 +625,23 @@ animarFrete(freteTotal);
 function animarFrete(valorFinal) {
   const el = document.getElementById("freteAnimado");
   if (!el) return;
+  const isParcial = document
+  .querySelector(".frete-destaque")
+  ?.classList.contains("parcial");
+
   el.classList.add("animando");
 
 
-  const duracao = 900; // ms
+  const duracao = isParcial ? 1300 : 900;
+ // ms
   const inicio = performance.now();
 
   function step(agora) {
     const linear = Math.min((agora - inicio) / duracao, 1);
-const progresso = 1 - Math.pow(1 - linear, 3); // ease-out
+const progresso = isParcial
+  ? Math.sqrt(linear)              // ease-out suave e contínuo
+  : 1 - Math.pow(1 - linear, 3);   // ease-out padrão
+
 
     const valorAtual = valorFinal * progresso;
 
