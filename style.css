@@ -431,5 +431,6 @@ th{
 }
 .frete-destaque-valor.parcial {
   color: #f57c00;
-  text-shadow: 0 0 12px rgba(245, 124, 0, 0.45);
+  text-shadow: none;
 }
+
