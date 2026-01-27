@@ -520,9 +520,7 @@ let html = `
     R$ 0,00
   </div>
 
-  <div class="frete-destaque-info">
-    ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
-  </div>
+  
 </div>
 
 
@@ -616,9 +614,14 @@ html += `
     <td>${moeda3(freteUnitMedio)}</td>
     <td><b>${moeda(freteTotal)}</b></td>
   </tr>
-</table>
+  </table>
 </div>
 `;
+</table>
+${observacaoFrete}
+</div>
+`;
+
 
 document.getElementById("resumo").innerHTML = html;
 animarFretes({
