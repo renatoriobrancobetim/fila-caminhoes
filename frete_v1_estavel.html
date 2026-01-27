@@ -493,21 +493,6 @@ if (modalidade !== "TABELA" && km > 0) {
 
 const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
 
-const blocoDestaque = `
-<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
-  <div class="frete-destaque-label">FRETE TOTAL</div>
-  <div 
-  class="frete-destaque-valor" 
-  id="freteAnimado"
-  data-value="${freteTotal}">
-  R$ 0,00
-</div>
-
-  <div class="frete-destaque-info">
-    ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
-  </div>
-</div>
-`;
 
 let html = `
 <div class="resumo-box">
@@ -523,13 +508,21 @@ let html = `
     ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
   </h3>
 
-  <div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
-    <div class="frete-destaque-label">FRETE TOTAL</div>
-    <div class="frete-destaque-valor">${moeda(freteTotal)}</div>
-    <div class="frete-destaque-info">
-      ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
-    </div>
+<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}">
+  <div class="frete-destaque-label">FRETE TOTAL</div>
+
+  <div 
+    class="frete-destaque-valor" 
+    id="freteAnimado"
+    data-value="${freteTotal}">
+    R$ 0,00
   </div>
+
+  <div class="frete-destaque-info">
+    ${modalidade === "TABELA" ? "Frete Tabela" : "Frete por KM"} • ${numero(litrosUsados)} L
+  </div>
+</div>
+
 `;
 
 
