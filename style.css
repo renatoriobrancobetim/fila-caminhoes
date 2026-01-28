@@ -477,4 +477,31 @@ th{
     transform: translateY(0);
   }
 }
+.info-dispersao {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-left: 4px solid #f9a825;
+  background: #fff8e1;
+  font-size: 14px;
+  color: #5d4037;
+}
+
+.info-dispersao-titulo {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.info-dispersao ul {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+.info-dispersao li {
+  margin-bottom: 4px;
+}
+
+.info-dispersao span {
+  color: #6d4c41;
+  font-weight: 500;
+}
 
