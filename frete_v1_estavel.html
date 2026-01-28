@@ -66,6 +66,11 @@
 
     <div class="footer">© Renato Monteiro</div>
   </div>
+  <!-- AVISO DE DISPERSÃO -->
+<div id="avisoDispersao" class="aviso-dispersao" style="display:none;">
+  ⚠️ Dispersão superior a <b>70 km</b> ou mais entre cidades da rota!
+</div>
+
 </div>
 
 <datalist id="cidadesMG"></datalist>
@@ -245,10 +250,10 @@ btnOtimizar.classList.remove("btn-destaque");
 void btnOtimizar.offsetWidth; // <-- linha mágica
 btnOtimizar.classList.add("btn-destaque");
 
-
-
-
 }
+  // Esconde aviso de dispersão ao reiniciar
+document.getElementById("avisoDispersao").style.display = "none";
+
 
 /* ================= OTIMIZAR ROTA ================= */
 
@@ -293,6 +298,10 @@ if (d >= 70 && !alertaDispersaoExibido) {
           escolhido = p;
         }
       }
+// 🚨 REGRA DE DISPERSÃO VISUAL (>= 70 km)
+if (menor >= 70) {
+  document.getElementById("avisoDispersao").style.display = "block";
+}
 
       rota.push(escolhido);
       restantes = restantes.filter(p => p !== escolhido);
