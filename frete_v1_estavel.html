@@ -365,6 +365,23 @@ for (let i = 0; i < cidades.length - 1; i++) {
 
 
 /* ================= MAPA ================= */
+  async function desenharTrecho(latA, lngA, latB, lngB, cor) {
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=full&geometries=geojson`
+  );
+
+  const j = await r.json();
+
+  L.geoJSON(j.routes[0].geometry, {
+    style: {
+      color: cor,
+      weight: 5,
+      opacity: 0.9
+    }
+  }).addTo(mapa);
+}
+/* ================= MAPA ================= */
 async function desenharMapa(rota){
   document.getElementById("mapaRota").style.display="block";
   if(!mapa){
@@ -383,6 +400,58 @@ async function desenharMapa(rota){
 
 
   mapa.fitBounds(pontos);
+// Remove rota anterior
+if (rotaLayer) {
+  mapa.eachLayer(l => {
+    if (l instanceof L.GeoJSON) {
+      mapa.removeLayer(l);
+    }
+  });
+}
+
+// Desenha BASE → 1ª cidade (sempre verde, sem regra)
+const primeira = rota[0];
+const [lat1, lng1] = cidadesCoords[primeira.cidade];
+
+await desenharTrecho(
+  BASE_COORDS.lat,
+  BASE_COORDS.lng,
+  lat1,
+  lng1,
+  "#2e7d32" // verde
+);
+
+// Desenha cidade → cidade com regra de dispersão
+for (let i = 0; i < rota.length - 1; i++) {
+  const atual = rota[i];
+  const proxima = rota[i + 1];
+
+  const [latA, lngA] = cidadesCoords[atual.cidade];
+  const [latB, lngB] = cidadesCoords[proxima.cidade];
+
+  const distancia = await distanciaCidades(
+    atual.cidade,
+    proxima.cidade
+  );
+
+  const cor = distancia >= 70
+    ? "#c62828" // 🔴 dispersão
+    : "#2e7d32"; // 🟢 normal
+
+  await desenharTrecho(latA, lngA, latB, lngB, cor);
+}
+
+// Desenha última cidade → BASE (opcional, verde)
+const ultima = rota[rota.length - 1];
+const [latU, lngU] = cidadesCoords[ultima.cidade];
+
+await desenharTrecho(
+  latU,
+  lngU,
+  BASE_COORDS.lat,
+  BASE_COORDS.lng,
+  "#2e7d32"
+);
 
   pontos.forEach((p,i)=>{
     let label=i===0||i===pontos.length-1?"BASE - BETIM":rota[i-1].cliente||rota[i-1].cidade;
@@ -392,7 +461,7 @@ async function desenharMapa(rota){
   const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
   const j=await r.json();
-  rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
+  
 }
 
 /* ================= CALCULAR FRETE ================= */
