@@ -93,6 +93,7 @@ const BASE_COORDS = {
 
 let cidadesCoords={}, mapa, rotaLayer;
 
+let infoDispersaoHTML = "";
 
 
 /* ================= FRETE TABELA ================= */
@@ -247,6 +248,8 @@ btnOtimizar.disabled = false;
 btnOtimizar.classList.remove("btn-destaque");
 void btnOtimizar.offsetWidth; // <-- linha mágica
 btnOtimizar.classList.add("btn-destaque");
+// ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
+infoDispersaoHTML = "";
 
 }
   
@@ -309,7 +312,8 @@ if (atualCidade && d >= 70) {
 // Monta mensagem informativa de dispersão
 
 // ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
-let infoDispersaoHTML = "";
+infoDispersaoHTML = "";
+
 
 if (dispersoes.length > 0) {
   infoDispersaoHTML = `
