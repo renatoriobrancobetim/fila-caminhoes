@@ -284,14 +284,7 @@ async function otimizarRota(){
 const d = !atualCidade
   ? await distanciaBaseCidade(p.cidade)
   : await distanciaCidades(atualCidade, p.cidade);
-// Guarda dispersão SOMENTE entre cidades (nunca BASE)
-if (atualCidade && d >= 70) {
-  dispersoes.push({
-    de: atualCidade,
-    para: p.cidade,
-    km: d.toFixed(1)
-  });
-}
+
 
 
         if (d < menor) {
@@ -309,7 +302,24 @@ if (atualCidade && d >= 70) {
     rota.forEach(p =>
       document.querySelector("#freteTable").appendChild(p.row)
     );
-// Monta mensagem informativa de dispersão
+// ================= DISPERSÃO REAL (PÓS-ROTA OTIMIZADA) =================
+dispersoes = [];
+
+for (let i = 0; i < rota.length - 1; i++) {
+  const cidadeA = rota[i].cidade;
+  const cidadeB = rota[i + 1].cidade;
+
+  const d = await distanciaCidades(cidadeA, cidadeB);
+
+  if (d >= 70) {
+    dispersoes.push({
+      de: cidadeA,
+      para: cidadeB,
+      km: d.toFixed(1)
+    });
+  }
+}
+
 
 // ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
 infoDispersaoHTML = "";
