@@ -303,10 +303,7 @@ if (atualCidade && menor >= 70) {
           escolhido = p;
         }
       }
-// 🚨 REGRA DE DISPERSÃO VISUAL (>= 70 km)
-if (menor >= 70) {
-  document.getElementById("avisoDispersao").style.display = "block";
-}
+
 
       rota.push(escolhido);
       restantes = restantes.filter(p => p !== escolhido);
