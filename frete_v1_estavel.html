@@ -69,6 +69,7 @@
 </div>
 
 <datalist id="cidadesMG"></datalist>
+<datalist id="clientesDL"></datalist>
 
 <script>
 /* ================= UTIL ================= */
@@ -132,6 +133,18 @@ fetch("./tabela-frete.json")
     alert("Erro ao carregar tabela de frete. Verifique o arquivo tabela-frete.json");
   });
 
+function preencherCidadePorCliente(idx) {
+  const clienteInput = document.getElementById("cliente" + idx);
+  const cidadeInput  = document.getElementById("cidade" + idx);
+
+  if (!clienteInput || !cidadeInput) return;
+
+  const chave = normalizarCidade(clienteInput.value);
+
+  if (clientesCoords[chave] && clientesCoords[chave].cidade) {
+    cidadeInput.value = clientesCoords[chave].cidade;
+  }
+}
 
 
 
@@ -175,6 +188,29 @@ fetch("clientes_validos.json")
         cidade: c.cidade
       };
     });
+/* ================= CLIENTES ================= */
+let clientesCoords = {};
+
+fetch("clientes_validos.json")
+  .then(r => r.json())
+  .then(d => {
+    Object.keys(d).forEach(nome => {
+      clientesCoords[normalizarCidade(nome)] = d[nome];
+    });
+
+    // popula datalist de clientes
+    const dl = document.getElementById("clientesDL");
+    Object.keys(d).forEach(nome => {
+      const opt = document.createElement("option");
+      opt.value = nome;
+      dl.appendChild(opt);
+    });
+
+    console.log("Clientes carregados:", Object.keys(clientesCoords).length);
+  })
+  .catch(err => {
+    console.warn("Clientes não carregados, fallback por cidade ativo");
+  });
 
     console.log("Clientes com coordenadas carregados:", Object.keys(clientesCoords).length);
   })
@@ -260,7 +296,15 @@ function gerarTabela(){
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
     <tr data-row>
-      <td><input id="cliente${i}" class="uppercase"></td>
+      <td>
+  <input 
+    id="cliente${i}" 
+    class="uppercase"
+    list="clientesDL"
+    onchange="preencherCidadePorCliente(${i})"
+  >
+</td>
+
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
