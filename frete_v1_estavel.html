@@ -248,10 +248,7 @@ void btnOtimizar.offsetWidth; // <-- linha mágica
 btnOtimizar.classList.add("btn-destaque");
 
 }
-  // Esconde aviso de dispersão ao reiniciar
-document.getElementById("avisoDispersao").style.display = "none";
-
-
+  
 /* ================= OTIMIZAR ROTA ================= */
 
 async function otimizarRota(){
@@ -290,11 +287,6 @@ if (atualCidade && d >= 70) {
     para: p.cidade,
     km: d.toFixed(1)
   });
-}
-
-// 🚨 AVISO VISUAL DE DISPERSÃO (somente cidade → cidade)
-if (atualCidade && menor >= 70) {
-  document.getElementById("avisoDispersao").style.display = "block";
 }
 
 
