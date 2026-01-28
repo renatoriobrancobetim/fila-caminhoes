@@ -258,7 +258,7 @@ document.getElementById("avisoDispersao").style.display = "none";
 /* ================= OTIMIZAR ROTA ================= */
 
 async function otimizarRota(){
-  let alertaDispersaoExibido = false;
+
   const spinner = document.getElementById("spinner");
   spinner.style.display = "flex";
 
@@ -286,10 +286,9 @@ const d = !atualCidade
   ? await distanciaBaseCidade(p.cidade)
   : await distanciaCidades(atualCidade, p.cidade);
 
-// 🚨 ALERTA DE DISPERSÃO
-if (d >= 70 && !alertaDispersaoExibido) {
-  alert("⚠️ Dispersão superior a 70km ou mais!");
-  alertaDispersaoExibido = true;
+// 🚨 AVISO VISUAL DE DISPERSÃO (somente cidade → cidade)
+if (atualCidade && menor >= 70) {
+  document.getElementById("avisoDispersao").style.display = "block";
 }
 
 
