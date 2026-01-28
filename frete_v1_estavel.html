@@ -66,10 +66,7 @@
 
     <div class="footer">© Renato Monteiro</div>
   </div>
-  <!-- AVISO DE DISPERSÃO -->
-<div id="avisoDispersao" class="aviso-dispersao" style="display:none;">
-  ⚠️ Dispersão superior a <b>70 km</b> ou mais entre cidades da rota!
-</div>
+
 
 </div>
 
@@ -258,9 +255,10 @@ document.getElementById("avisoDispersao").style.display = "none";
 /* ================= OTIMIZAR ROTA ================= */
 
 async function otimizarRota(){
-
+  let dispersoes = [];
   const spinner = document.getElementById("spinner");
   spinner.style.display = "flex";
+
 
   try {
     const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
@@ -285,6 +283,14 @@ async function otimizarRota(){
 const d = !atualCidade
   ? await distanciaBaseCidade(p.cidade)
   : await distanciaCidades(atualCidade, p.cidade);
+// Guarda dispersão SOMENTE entre cidades (nunca BASE)
+if (atualCidade && d >= 70) {
+  dispersoes.push({
+    de: atualCidade,
+    para: p.cidade,
+    km: d.toFixed(1)
+  });
+}
 
 // 🚨 AVISO VISUAL DE DISPERSÃO (somente cidade → cidade)
 if (atualCidade && menor >= 70) {
@@ -310,6 +316,21 @@ if (menor >= 70) {
     rota.forEach(p =>
       document.querySelector("#freteTable").appendChild(p.row)
     );
+// Monta mensagem informativa de dispersão
+let infoDispersaoHTML = "";
+
+if (dispersoes.length > 0) {
+  infoDispersaoHTML = `
+    <div class="info-dispersao">
+      <b>ℹ️ Dispersão identificada entre os trechos:</b>
+      <ul>
+        ${dispersoes.map(d =>
+          `<li>${d.de} → ${d.para} (${d.km} km)</li>`
+        ).join("")}
+      </ul>
+    </div>
+  `;
+}
 
     await recalcularKM();
     await desenharMapa(rota);
@@ -648,6 +669,8 @@ if (modalidade === "TABELA") {
     </tr>
     </table>
   `;
+  html += infoDispersaoHTML || "";
+
 // ===== MÉTRICAS PARA RESUMO FINAL =====
 const m3Total = (litrosUsados / 1000).toFixed(1);
 const freteUnitMedio = freteTotal / litrosUsados;
