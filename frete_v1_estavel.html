@@ -106,6 +106,45 @@ const BASE_COORDS = {
 };
 
 let cidadesCoords={}, mapa, rotaLayer;
+function buscarCliente(input, idx) {
+  const termo = normalizarCidade(input.value);
+  const box = document.getElementById("autocomplete" + idx);
+
+  box.innerHTML = "";
+  box.style.display = "none";
+
+  if (termo.length < 2) return;
+
+  const resultados = Object.keys(clientesCoords)
+    .filter(nome => nome.includes(termo))
+    .slice(0, 8); // limite visual
+
+  if (resultados.length === 0) return;
+
+  resultados.forEach(nome => {
+    const div = document.createElement("div");
+    div.className = "autocomplete-item";
+    div.innerText = nome;
+
+    div.onclick = () => selecionarCliente(nome, idx);
+
+    box.appendChild(div);
+  });
+
+  box.style.display = "block";
+}
+function selecionarCliente(nome, idx) {
+  const clienteInput = document.getElementById("cliente" + idx);
+  const cidadeInput  = document.getElementById("cidade" + idx);
+  const box          = document.getElementById("autocomplete" + idx);
+
+  clienteInput.value = nome;
+  box.style.display = "none";
+
+  if (clientesCoords[nome] && clientesCoords[nome].cidade) {
+    cidadeInput.value = clientesCoords[nome].cidade;
+  }
+}
 
 
 /* ================= FRETE TABELA ================= */
@@ -297,13 +336,16 @@ function gerarTabela(){
     html+=`
     <tr data-row>
       <td>
+ <td style="position:relative">
   <input 
     id="cliente${i}" 
     class="uppercase"
-    list="clientesDL"
-    onchange="preencherCidadePorCliente(${i})"
+    autocomplete="off"
+    oninput="buscarCliente(this, ${i})"
   >
+  <div class="autocomplete-box" id="autocomplete${i}"></div>
 </td>
+
 
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
@@ -831,6 +873,13 @@ const progresso = isParcial
 
   requestAnimationFrame(step);
 }
+document.addEventListener("click", e => {
+  if (!e.target.classList.contains("uppercase")) {
+    document.querySelectorAll(".autocomplete-box").forEach(b => {
+      b.style.display = "none";
+    });
+  }
+});
 
 </script>
 
