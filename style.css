@@ -456,4 +456,25 @@ th{
     transparent
   );
 }
+.aviso-dispersao {
+  margin: 14px 0;
+  padding: 12px 16px;
+  border-left: 5px solid #d32f2f;
+  background: #fdecea;
+  color: #b71c1c;
+  font-weight: 600;
+  border-radius: 6px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
