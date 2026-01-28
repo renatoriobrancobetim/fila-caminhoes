@@ -69,7 +69,6 @@
 </div>
 
 <datalist id="cidadesMG"></datalist>
-<datalist id="clientesDL"></datalist>
 
 <script>
 /* ================= UTIL ================= */
@@ -91,9 +90,12 @@ function obterCoordenadas(cliente, cidadeFallback) {
   }
 
   // 2️⃣ fallback: cidade
-  if (cidadesCoords[cidadeFallback]) {
+  const cidadeNorm = normalizarCidade(cidadeFallback);
+if (cidadesCoords[cidadeNorm]) {
+
     const [lat, lng] = cidadesCoords[cidadeFallback];
-    return { lat, lng };
+    const [lat, lng] = cidadesCoords[cidadeNorm];
+
   }
 
   throw new Error("Coordenadas não encontradas para: " + cliente);
@@ -213,20 +215,7 @@ const numero=v=>v.toLocaleString("pt-BR");
 
 /* ================= CIDADES ================= */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
-  /* ================= CLIENTES ================= */
-let clientesCoords = {};
-
-fetch("clientes_validos.json")
-  .then(r => r.json())
-  .then(d => {
-    d.forEach(c => {
-      const chave = normalizarCidade(c.cliente);
-      clientesCoords[chave] = {
-        lat: c.lat,
-        lng: c.lng,
-        cidade: c.cidade
-      };
-    });
+ 
 /* ================= CLIENTES ================= */
 let clientesCoords = {};
 
@@ -334,9 +323,16 @@ function gerarTabela(){
 
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
-    <tr data-row>
-      <td>
- <td style="position:relative">
+<td style="position:relative">
+  <input 
+    id="cliente${i}" 
+    class="uppercase"
+    autocomplete="off"
+    oninput="buscarCliente(this, ${i})"
+  >
+  <div class="autocomplete-box" id="autocomplete${i}"></div>
+</td>
+
   <input 
     id="cliente${i}" 
     class="uppercase"
