@@ -66,6 +66,8 @@
 
     <div class="footer">© Renato Monteiro</div>
   </div>
+
+
 </div>
 
 <datalist id="cidadesMG"></datalist>
@@ -90,6 +92,8 @@ const BASE_COORDS = {
 };
 
 let cidadesCoords={}, mapa, rotaLayer;
+
+let infoDispersaoHTML = "";
 
 
 /* ================= FRETE TABELA ================= */
@@ -244,17 +248,18 @@ btnOtimizar.disabled = false;
 btnOtimizar.classList.remove("btn-destaque");
 void btnOtimizar.offsetWidth; // <-- linha mágica
 btnOtimizar.classList.add("btn-destaque");
-
-
-
+// ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
+infoDispersaoHTML = "";
 
 }
-
+  
 /* ================= OTIMIZAR ROTA ================= */
 
 async function otimizarRota(){
+  let dispersoes = [];
   const spinner = document.getElementById("spinner");
   spinner.style.display = "flex";
+
 
   try {
     const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
@@ -276,15 +281,18 @@ async function otimizarRota(){
       let escolhido = null;
 
       for (const p of restantes) {
-        const d = !atualCidade
-          ? await distanciaBaseCidade(p.cidade)
-          : await distanciaCidades(atualCidade, p.cidade);
+const d = !atualCidade
+  ? await distanciaBaseCidade(p.cidade)
+  : await distanciaCidades(atualCidade, p.cidade);
+
+
 
         if (d < menor) {
           menor = d;
           escolhido = p;
         }
       }
+
 
       rota.push(escolhido);
       restantes = restantes.filter(p => p !== escolhido);
@@ -294,6 +302,43 @@ async function otimizarRota(){
     rota.forEach(p =>
       document.querySelector("#freteTable").appendChild(p.row)
     );
+// ================= DISPERSÃO REAL (PÓS-ROTA OTIMIZADA) =================
+dispersoes = [];
+
+for (let i = 0; i < rota.length - 1; i++) {
+  const cidadeA = rota[i].cidade;
+  const cidadeB = rota[i + 1].cidade;
+
+  const d = await distanciaCidades(cidadeA, cidadeB);
+
+  if (d >= 70) {
+    dispersoes.push({
+      de: cidadeA,
+      para: cidadeB,
+      km: d.toFixed(1)
+    });
+  }
+}
+
+
+// ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
+infoDispersaoHTML = "";
+
+
+if (dispersoes.length > 0) {
+  infoDispersaoHTML = `
+    <div class="info-dispersao">
+      <div class="info-dispersao-titulo">
+        ℹ️ Dispersão identificada entre os trechos da rota:
+      </div>
+      <ul>
+        ${dispersoes.map(d =>
+          `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
+        ).join("")}
+      </ul>
+    </div>
+  `;
+}
 
     await recalcularKM();
     await desenharMapa(rota);
@@ -348,6 +393,23 @@ for (let i = 0; i < cidades.length - 1; i++) {
 
 
 /* ================= MAPA ================= */
+  async function desenharTrecho(latA, lngA, latB, lngB, cor) {
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=full&geometries=geojson`
+  );
+
+  const j = await r.json();
+
+  L.geoJSON(j.routes[0].geometry, {
+    style: {
+      color: cor,
+      weight: 5,
+      opacity: 0.9
+    }
+  }).addTo(mapa);
+}
+/* ================= MAPA ================= */
 async function desenharMapa(rota){
   document.getElementById("mapaRota").style.display="block";
   if(!mapa){
@@ -366,6 +428,58 @@ async function desenharMapa(rota){
 
 
   mapa.fitBounds(pontos);
+// Remove rota anterior
+if (rotaLayer) {
+  mapa.eachLayer(l => {
+    if (l instanceof L.GeoJSON) {
+      mapa.removeLayer(l);
+    }
+  });
+}
+
+// Desenha BASE → 1ª cidade (sempre verde, sem regra)
+const primeira = rota[0];
+const [lat1, lng1] = cidadesCoords[primeira.cidade];
+
+await desenharTrecho(
+  BASE_COORDS.lat,
+  BASE_COORDS.lng,
+  lat1,
+  lng1,
+  "#2e7d32" // verde
+);
+
+// Desenha cidade → cidade com regra de dispersão
+for (let i = 0; i < rota.length - 1; i++) {
+  const atual = rota[i];
+  const proxima = rota[i + 1];
+
+  const [latA, lngA] = cidadesCoords[atual.cidade];
+  const [latB, lngB] = cidadesCoords[proxima.cidade];
+
+  const distancia = await distanciaCidades(
+    atual.cidade,
+    proxima.cidade
+  );
+
+  const cor = distancia >= 70
+    ? "#c62828" // 🔴 dispersão
+    : "#2e7d32"; // 🟢 normal
+
+  await desenharTrecho(latA, lngA, latB, lngB, cor);
+}
+
+// Desenha última cidade → BASE (opcional, verde)
+const ultima = rota[rota.length - 1];
+const [latU, lngU] = cidadesCoords[ultima.cidade];
+
+await desenharTrecho(
+  latU,
+  lngU,
+  BASE_COORDS.lat,
+  BASE_COORDS.lng,
+  "#2e7d32"
+);
 
   pontos.forEach((p,i)=>{
     let label=i===0||i===pontos.length-1?"BASE - BETIM":rota[i-1].cliente||rota[i-1].cidade;
@@ -375,7 +489,7 @@ async function desenharMapa(rota){
   const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
   const j=await r.json();
-  rotaLayer=L.geoJSON(j.routes[0].geometry,{style:{color:"#c62828",weight:5}}).addTo(mapa);
+  
 }
 
 /* ================= CALCULAR FRETE ================= */
@@ -563,6 +677,8 @@ if (modalidade === "TABELA") {
     </tr>
     </table>
   `;
+  
+
 // ===== MÉTRICAS PARA RESUMO FINAL =====
 const m3Total = (litrosUsados / 1000).toFixed(1);
 const freteUnitMedio = freteTotal / litrosUsados;
@@ -606,23 +722,7 @@ html += `
   </tr>
 </table>
 `;
- html += `
-<div class="divider-frete"></div>
-
-<div class="frete-destaque ${modalidade === "TABELA" ? "" : "km"}" style="margin-top:16px">
-  <div class="frete-destaque-label">
-    FRETE TOTAL ${cargaParcial ? "(CARGA PARCIAL)" : ""}
-  </div>
-
-  <div 
-    class="frete-destaque-valor animado"
-    id="freteReal"
-    data-valor="${freteTotal}">
-    R$ 0,00
-  </div>
-</div>
-`;
-
+html += infoDispersaoHTML || "";
 
 document.getElementById("resumo").innerHTML = html;
 // 🔔 PASSO 3 — dispara animação após render do HTML
