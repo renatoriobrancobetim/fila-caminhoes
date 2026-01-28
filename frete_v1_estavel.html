@@ -81,8 +81,23 @@ function normalizarCidade(nome){
     .toUpperCase();
 }
 
-/* ================= VARIÁVEIS ================= */
-/* ================= VARIÁVEIS ================= */
+function obterCoordenadas(cliente, cidadeFallback) {
+  const chaveCliente = normalizarCidade(cliente);
+
+  // 1️⃣ prioridade: cliente
+  if (clientesCoords[chaveCliente]) {
+    return clientesCoords[chaveCliente];
+  }
+
+  // 2️⃣ fallback: cidade
+  if (cidadesCoords[cidadeFallback]) {
+    const [lat, lng] = cidadesCoords[cidadeFallback];
+    return { lat, lng };
+  }
+
+  throw new Error("Coordenadas não encontradas para: " + cliente);
+}
+
 // BASE agora é coordenada fixa da empresa
 const BASE_COORDS = {
   lat: -19.95959,
@@ -146,6 +161,27 @@ const numero=v=>v.toLocaleString("pt-BR");
 
 /* ================= CIDADES ================= */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
+  /* ================= CLIENTES ================= */
+let clientesCoords = {};
+
+fetch("clientes_validos.json")
+  .then(r => r.json())
+  .then(d => {
+    d.forEach(c => {
+      const chave = normalizarCidade(c.cliente);
+      clientesCoords[chave] = {
+        lat: c.lat,
+        lng: c.lng,
+        cidade: c.cidade
+      };
+    });
+
+    console.log("Clientes com coordenadas carregados:", Object.keys(clientesCoords).length);
+  })
+  .catch(e => {
+    console.error("Erro ao carregar clientes_validos.json", e);
+  });
+
   cidadesCoords=d;
   const dl=document.getElementById("cidadesMG");
   Object.keys(d).forEach(c=>{
@@ -170,6 +206,14 @@ async function distanciaBaseCidade(cidade){
     `${BASE_COORDS.lng},${BASE_COORDS.lat};${lngCidade},${latCidade}?overview=false`
   );
 
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
+async function distanciaPontos(latA, lngA, latB, lngB){
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=false`
+  );
   const j = await r.json();
   return j.routes[0].distance / 1000;
 }
@@ -259,26 +303,50 @@ async function otimizarRota(){
   try {
     const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-    const paradas = rows
-      .map(r => ({
-        row: r,
-        cidade: r.querySelector(".cidade").value,
-        cliente: r.querySelector("input[id^='cliente']").value
-      }))
-      .filter(p => p.cidade);
+const paradas = rows
+  .map(r => {
+    const cliente = r.querySelector("input[id^='cliente']").value;
+    const cidade  = r.querySelector(".cidade").value;
+
+    if (!cidade && !cliente) return null;
+
+    const coord = obterCoordenadas(cliente, cidade);
+
+    return {
+      row: r,
+      cliente,
+      cidade,
+      lat: coord.lat,
+      lng: coord.lng
+    };
+  })
+  .filter(p => p);
+
 
     let rota = [];
     let restantes = [...paradas];
-    let atualCidade = null;
+   let atualPonto = null;
+
 
     while (restantes.length) {
       let menor = Infinity;
       let escolhido = null;
 
       for (const p of restantes) {
-        const d = !atualCidade
-          ? await distanciaBaseCidade(p.cidade)
-          : await distanciaCidades(atualCidade, p.cidade);
+ const d = !atualPonto
+  ? await distanciaPontos(
+      BASE_COORDS.lat,
+      BASE_COORDS.lng,
+      p.lat,
+      p.lng
+    )
+  : await distanciaPontos(
+      atualPonto.lat,
+      atualPonto.lng,
+      p.lat,
+      p.lng
+    );
+
 
         if (d < menor) {
           menor = d;
@@ -288,7 +356,8 @@ async function otimizarRota(){
 
       rota.push(escolhido);
       restantes = restantes.filter(p => p !== escolhido);
-      atualCidade = escolhido.cidade;
+     atualPonto = escolhido;
+
     }
 
     rota.forEach(p =>
@@ -358,8 +427,8 @@ async function desenharMapa(rota){
   const pontos = [
   [BASE_COORDS.lat, BASE_COORDS.lng],
   ...rota.map(r => {
-    const [lat, lng] = cidadesCoords[r.cidade];
-    return [lat, lng];
+ return [r.lat, r.lng];
+
   }),
   [BASE_COORDS.lat, BASE_COORDS.lng]
 ];
