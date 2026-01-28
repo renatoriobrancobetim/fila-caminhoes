@@ -321,6 +321,23 @@ if (dispersoes.length > 0) {
     </div>
   `;
 }
+// ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
+let infoDispersaoHTML = "";
+
+if (dispersoes.length > 0) {
+  infoDispersaoHTML = `
+    <div class="info-dispersao">
+      <div class="info-dispersao-titulo">
+        ℹ️ Dispersão identificada entre os trechos da rota:
+      </div>
+      <ul>
+        ${dispersoes.map(d =>
+          `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
+        ).join("")}
+      </ul>
+    </div>
+  `;
+}
 
     await recalcularKM();
     await desenharMapa(rota);
