@@ -307,20 +307,7 @@ if (atualCidade && d >= 70) {
       document.querySelector("#freteTable").appendChild(p.row)
     );
 // Monta mensagem informativa de dispersão
-let infoDispersaoHTML = "";
 
-if (dispersoes.length > 0) {
-  infoDispersaoHTML = `
-    <div class="info-dispersao">
-      <b>ℹ️ Dispersão identificada entre os trechos:</b>
-      <ul>
-        ${dispersoes.map(d =>
-          `<li>${d.de} → ${d.para} (${d.km} km)</li>`
-        ).join("")}
-      </ul>
-    </div>
-  `;
-}
 // ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
 let infoDispersaoHTML = "";
 
