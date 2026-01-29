@@ -94,27 +94,27 @@ let marcadores = [];
 
 async function carregarClientes() {
   try {
-    console.log("Carregando clientes…");
-
     const [resDistribuidora, resDerivados] = await Promise.all([
       fetch("./clientes_distribuidora.json"),
       fetch("./clientes_derivados.json")
     ]);
 
-    if (!resDistribuidora.ok || !resDerivados.ok) {
-      throw new Error("Erro ao carregar arquivos de clientes");
-    }
-
     const distribuidora = await resDistribuidora.json();
     const derivados = await resDerivados.json();
 
     const clientesDistribuidora = distribuidora.map(c => ({
-      ...c,
+      cliente: c.cliente || c.NOME || "",
+      cidade: c.cidade || c.CIDADE || "",
+      lat: Number(c.lat || c.LATITUDE),
+      lng: Number(c.lng || c.LONGITUDE),
       categoria: "Distribuidora"
     }));
 
     const clientesDerivados = derivados.map(c => ({
-      ...c,
+      cliente: c.cliente,
+      cidade: c.cidade,
+      lat: Number(c.lat),
+      lng: Number(c.lng),
       categoria: "Derivados"
     }));
 
@@ -122,8 +122,6 @@ async function carregarClientes() {
       ...clientesDistribuidora,
       ...clientesDerivados
     ];
-
-    console.log("Total de clientes:", clientesData.length);
 
     popularFiltroCidade(clientesData);
     desenharClientes(clientesData);
@@ -133,6 +131,7 @@ async function carregarClientes() {
     alert("Erro ao carregar clientes");
   }
 }
+
 
 
 
