@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa de Clientes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- LEAFLET -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+    }
+
+    .header {
+      background: #0d47a1;
+      color: #fff;
+      padding: 14px 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #mapaClientes {
+      height: calc(100vh - 56px);
+      width: 100%;
+    }
+
+    .popup-cliente {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .popup-cliente b {
+      display: block;
+      margin-bottom: 4px;
+      color: #0d47a1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    🗺️ Mapa de Clientes
+  </div>
+
+  <div id="mapaClientes"></div>
+
+  <script>
+    /* ================= VARIÁVEIS ================= */
+    let mapaClientes;
+
+    /* ================= INIT MAPA ================= */
+    function initMapaClientes() {
+      mapaClientes = L.map("mapaClientes").setView(
+        [-19.9, -44.1], // MG central
+        7
+      );
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap"
+      }).addTo(mapaClientes);
+    }
+
+    /* ================= CARREGAR CLIENTES ================= */
+    async function carregarClientes() {
+      try {
+        const res = await fetch("clientes_validos.json");
+        const clientes = await res.json();
+
+        let bounds = [];
+
+        clientes.forEach(c => {
+          if (!c.lat || !c.lng) return;
+
+          const marker = L.marker([c.lat, c.lng]).addTo(mapaClientes);
+
+          marker.bindPopup(`
+            <div class="popup-cliente">
+              <b>${c.cliente}</b>
+              ${c.cidade}
+            </div>
+          `);
+
+          bounds.push([c.lat, c.lng]);
+        });
+
+        if (bounds.length > 0) {
+          mapaClientes.fitBounds(bounds);
+        }
+
+      } catch (e) {
+        alert("Erro ao carregar clientes_validos.json");
+        console.error(e);
+      }
+    }
+
+    /* ================= START ================= */
+    initMapaClientes();
+    carregarClientes();
+  </script>
+
+</body>
+</html>
