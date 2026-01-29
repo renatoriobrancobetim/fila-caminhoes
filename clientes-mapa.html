@@ -201,31 +201,35 @@ function desenharClientes(lista) {
   limparMarcadores();
 
   lista.forEach(c => {
-    if (!c.lat || !c.lng) return;
+    if (
+      c.lat == null ||
+      c.lng == null ||
+      isNaN(c.lat) ||
+      isNaN(c.lng)
+    ) return;
 
     const icone =
-  c.categoria === "Distribuidora"
-    ? iconeDistribuidora
-    : iconeDerivados;
+      c.categoria === "Distribuidora"
+        ? iconeDistribuidora
+        : iconeDerivados;
 
-const marker = L.marker(
-  [c.lat, c.lng],
-  { icon: icone }
-).addTo(mapaClientes);
+    const marker = L.marker(
+      [c.lat, c.lng],
+      { icon: icone }
+    ).addTo(mapaClientes);
 
-
-marker.bindPopup(`
-  <div class="popup-cliente">
-    <b>${c.cliente}</b>
-    ${c.cidade}<br>
-    <small><b>Categoria:</b> ${c.categoria}</small>
-  </div>
-`);
-
+    marker.bindPopup(`
+      <div class="popup-cliente">
+        <b>${c.cliente}</b>
+        ${c.cidade}<br>
+        <small><b>Categoria:</b> ${c.categoria}</small>
+      </div>
+    `);
 
     marcadores.push(marker);
   });
 }
+
 function popularFiltroCidade(lista) {
   const select = document.getElementById("filtroCidade");
 
