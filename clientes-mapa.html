@@ -91,14 +91,17 @@ async function carregarClientes() {
     console.log("Iniciando carga de clientes…");
 
     const res = await fetch("./clientes_validos.json");
-
     if (!res.ok) {
       throw new Error("HTTP " + res.status);
     }
 
     const json = await res.json();
-clientesData = Array.isArray(json) ? json : Object.values(json);
-
+    clientesData = json.map(c => ({
+      cliente: c.CLIENTE,
+      cidade: c.CIDADE,
+      lat: parseFloat(c.LATITUDE),
+      lng: parseFloat(c.LONGITUDE)
+    }));
 
     console.log("Clientes carregados:", clientesData.length);
 
@@ -110,6 +113,7 @@ clientesData = Array.isArray(json) ? json : Object.values(json);
     alert("Erro ao carregar clientes_validos.json");
   }
 }
+
 
 document.getElementById("buscaCliente").addEventListener("input", aplicarFiltros);
 document.getElementById("filtroCidade").addEventListener("change", aplicarFiltros);
