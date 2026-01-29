@@ -136,9 +136,15 @@ async function carregarClientes() {
 
 
 
-document.getElementById("buscaCliente").addEventListener("input", aplicarFiltros);
-document.getElementById("filtroCidade").addEventListener("change", aplicarFiltros);
-document.getElementById("buscaCliente").addEventListener("input", aplicarFiltro
+document.getElementById("buscaCliente")
+  .addEventListener("input", aplicarFiltros);
+
+document.getElementById("filtroCidade")
+  .addEventListener("change", aplicarFiltros);
+
+document.getElementById("filtroCategoria")
+  .addEventListener("change", aplicarFiltros);
+
 function aplicarFiltros() {
   const texto = document
     .getElementById("buscaCliente")
