@@ -69,7 +69,9 @@
   <script>
     /* ================= VARIÁVEIS ================= */
     let mapaClientes;
-
+    let mapaClientes;
+    let clientesData = [];
+    let marcadores = [];
     /* ================= INIT MAPA ================= */
     function initMapaClientes() {
       mapaClientes = L.map("mapaClientes").setView(
@@ -127,6 +129,40 @@ function aplicarFiltros() {
   desenharClientes(filtrados);
 }
 
+function limparMarcadores() {
+  marcadores.forEach(m => mapaClientes.removeLayer(m));
+  marcadores = [];
+}
+function desenharClientes(lista) {
+  limparMarcadores();
+
+  lista.forEach(c => {
+    if (!c.lat || !c.lng) return;
+
+    const marker = L.marker([c.lat, c.lng]).addTo(mapaClientes);
+
+    marker.bindPopup(`
+      <div class="popup-cliente">
+        <b>${c.cliente}</b>
+        ${c.cidade}
+      </div>
+    `);
+
+    marcadores.push(marker);
+  });
+}
+function popularFiltroCidade(lista) {
+  const select = document.getElementById("filtroCidade");
+
+  const cidades = [...new Set(lista.map(c => c.cidade))].sort();
+
+  cidades.forEach(cidade => {
+    const opt = document.createElement("option");
+    opt.value = cidade;
+    opt.textContent = cidade;
+    select.appendChild(opt);
+  });
+}
 
     /* ================= START ================= */
     initMapaClientes();
