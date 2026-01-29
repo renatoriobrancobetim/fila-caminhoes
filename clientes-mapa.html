@@ -109,7 +109,11 @@ async function carregarClientes() {
       fetch("./clientes_derivados.json")
     ]);
 
-    const distribuidora = await resDistribuidora.json();
+    const jsonDistribuidora = await resDistribuidora.json();
+const distribuidora = Array.isArray(jsonDistribuidora)
+  ? jsonDistribuidora
+  : jsonDistribuidora.clientes || [];
+
     const derivados = await resDerivados.json();
 
 const clientesDistribuidora = distribuidora.map(c => ({
