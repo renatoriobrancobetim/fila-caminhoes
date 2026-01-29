@@ -116,13 +116,19 @@ const distribuidora = Array.isArray(jsonDistribuidora)
 
     const derivados = await resDerivados.json();
 
-const clientesDistribuidora = distribuidora.map(c => ({
-  cliente: c.CLIENTE?.trim() || "",
-  cidade: c.CIDADE?.trim() || "",
-  lat: normalizarCoordenada(c.LATITUDE),
-  lng: normalizarCoordenada(c.LONGITUDE),
-  categoria: "Distribuidora"
-}));
+const clientesDistribuidora = distribuidora.map(c => {
+  const lat = normalizarCoordenada(c.LONGITUDE);
+  const lng = normalizarCoordenada(c.LATITUDE);
+
+  return {
+    cliente: c.CLIENTE?.trim() || "",
+    cidade: c.CIDADE?.trim() || "",
+    lat,
+    lng,
+    categoria: "Distribuidora"
+  };
+});
+
 
 
 
