@@ -53,6 +53,12 @@
     🗺️ Mapa de Clientes
   </div>
 <div class="filtros">
+  <select id="filtroCategoria">
+  <option value="">Todas as categorias</option>
+  <option value="Distribuidora">Distribuidora</option>
+  <option value="Derivados">Derivados</option>
+</select>
+
   <input 
     type="text" 
     id="buscaCliente"
@@ -88,31 +94,46 @@ let marcadores = [];
 
 async function carregarClientes() {
   try {
-    console.log("Iniciando carga de clientes…");
+    console.log("Carregando clientes…");
 
-    const res = await fetch("./clientes_distribuidora.json");
-    if (!res.ok) {
-      throw new Error("HTTP " + res.status);
+    const [resDistribuidora, resDerivados] = await Promise.all([
+      fetch("./clientes_distribuidora.json"),
+      fetch("./clientes_derivados.json")
+    ]);
+
+    if (!resDistribuidora.ok || !resDerivados.ok) {
+      throw new Error("Erro ao carregar arquivos de clientes");
     }
 
-    const json = await res.json();
-    clientesData = json.map(c => ({
-      cliente: c.CLIENTE,
-      cidade: c.CIDADE,
-      lat: parseFloat(c.LATITUDE),
-      lng: parseFloat(c.LONGITUDE)
+    const distribuidora = await resDistribuidora.json();
+    const derivados = await resDerivados.json();
+
+    const clientesDistribuidora = distribuidora.map(c => ({
+      ...c,
+      categoria: "Distribuidora"
     }));
 
-    console.log("Clientes carregados:", clientesData.length);
+    const clientesDerivados = derivados.map(c => ({
+      ...c,
+      categoria: "Derivados"
+    }));
+
+    clientesData = [
+      ...clientesDistribuidora,
+      ...clientesDerivados
+    ];
+
+    console.log("Total de clientes:", clientesData.length);
 
     popularFiltroCidade(clientesData);
     desenharClientes(clientesData);
 
   } catch (e) {
-    console.error("Falha ao carregar clientes_distribuidora.json:", e);
-    alert("Erro ao carregar clientes_distribuidora.json");
+    console.error("Erro ao carregar clientes:", e);
+    alert("Erro ao carregar clientes");
   }
 }
+
 
 
 document.getElementById("buscaCliente").addEventListener("input", aplicarFiltros);
@@ -125,15 +146,25 @@ function aplicarFiltros() {
     .toLowerCase();
 
   const cidade = document.getElementById("filtroCidade").value;
+  const categoria = document.getElementById("filtroCategoria").value;
 
   const filtrados = clientesData.filter(c => {
-    const nomeOk = c.cliente.toLowerCase().includes(texto);
-    const cidadeOk = !cidade || c.cidade === cidade;
-    return nomeOk && cidadeOk;
+    const nomeOk =
+      c.cliente &&
+      c.cliente.toLowerCase().includes(texto);
+
+    const cidadeOk =
+      !cidade || c.cidade === cidade;
+
+    const categoriaOk =
+      !categoria || c.categoria === categoria;
+
+    return nomeOk && cidadeOk && categoriaOk;
   });
 
   desenharClientes(filtrados);
 }
+
 
 function limparMarcadores() {
   marcadores.forEach(m => mapaClientes.removeLayer(m));
@@ -147,12 +178,14 @@ function desenharClientes(lista) {
 
     const marker = L.marker([c.lat, c.lng]).addTo(mapaClientes);
 
-    marker.bindPopup(`
-      <div class="popup-cliente">
-        <b>${c.cliente}</b>
-        ${c.cidade}
-      </div>
-    `);
+marker.bindPopup(`
+  <div class="popup-cliente">
+    <b>${c.cliente}</b>
+    ${c.cidade}<br>
+    <small><b>Categoria:</b> ${c.categoria}</small>
+  </div>
+`);
+
 
     marcadores.push(marker);
   });
