@@ -89,6 +89,16 @@ let marcadores = [];
         attribution: "© OpenStreetMap"
       }).addTo(mapaClientes);
     }
+function normalizarCoordenada(valor) {
+  if (!valor) return NaN;
+
+  return Number(
+    String(valor)
+      .trim()
+      .replace(/\s+/g, "")   // remove espaços
+      .replace(",", ".")     // vírgula → ponto
+  );
+}
 
     /* ================= CARREGAR CLIENTES ================= */
 
@@ -105,10 +115,11 @@ async function carregarClientes() {
 const clientesDistribuidora = distribuidora.map(c => ({
   cliente: c.CLIENTE?.trim() || "",
   cidade: c.CIDADE?.trim() || "",
-  lat: Number(String(c.LATITUDE).replace(",", ".")),
-  lng: Number(String(c.LONGITUDE).replace(",", ".")),
+  lat: normalizarCoordenada(c.LATITUDE),
+  lng: normalizarCoordenada(c.LONGITUDE),
   categoria: "Distribuidora"
 }));
+
 
 
 
