@@ -102,13 +102,14 @@ async function carregarClientes() {
     const distribuidora = await resDistribuidora.json();
     const derivados = await resDerivados.json();
 
-    const clientesDistribuidora = distribuidora.map(c => ({
-      cliente: c.cliente || c.NOME || "",
-      cidade: c.cidade || c.CIDADE || "",
-      lat: Number(c.lat || c.LATITUDE),
-      lng: Number(c.lng || c.LONGITUDE),
-      categoria: "Distribuidora"
-    }));
+ const clientesDistribuidora = distribuidora.map(c => ({
+  cliente: c.CLIENTE?.trim() || "",
+  cidade: c.CIDADE?.trim() || "",
+  lat: Number(c.LATITUDE),
+  lng: Number(c.LONGITUDE),
+  categoria: "Distribuidora"
+}));
+
 
     const clientesDerivados = derivados.map(c => ({
       cliente: c.cliente,
@@ -122,6 +123,12 @@ async function carregarClientes() {
       ...clientesDistribuidora,
       ...clientesDerivados
     ];
+clientesData = clientesData.filter(c =>
+  c.cliente &&
+  c.cidade &&
+  !isNaN(c.lat) &&
+  !isNaN(c.lng)
+);
 
     popularFiltroCidade(clientesData);
     desenharClientes(clientesData);
