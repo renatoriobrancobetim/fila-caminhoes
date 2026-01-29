@@ -52,6 +52,17 @@
   <div class="header">
     🗺️ Mapa de Clientes
   </div>
+<div class="filtros">
+  <input 
+    type="text" 
+    id="buscaCliente"
+    placeholder="Buscar cliente pelo nome…"
+  >
+
+  <select id="filtroCidade">
+    <option value="">Todas as cidades</option>
+  </select>
+</div>
 
   <div id="mapaClientes"></div>
 
@@ -72,37 +83,52 @@
     }
 
     /* ================= CARREGAR CLIENTES ================= */
-    async function carregarClientes() {
-      try {
-        const res = await fetch("clientes_validos.json");
-        const clientes = await res.json();
+ async function carregarClientes() {
+  try {
+    const res = await fetch("clientes_validos.json");
+    clientesData = await res.json();
 
-        let bounds = [];
+    popularFiltroCidade(clientesData);
+    desenharClientes(clientesData);
 
-        clientes.forEach(c => {
-          if (!c.lat || !c.lng) return;
+  } catch (e) {
+    alert("Erro ao carregar clientes_validos.json");
+    console.error(e);
+  }
+}
+async function carregarClientes() {
+  try {
+    const res = await fetch("clientes_validos.json");
+    clientesData = await res.json();
 
-          const marker = L.marker([c.lat, c.lng]).addTo(mapaClientes);
+    popularFiltroCidade(clientesData);
+    desenharClientes(clientesData);
 
-          marker.bindPopup(`
-            <div class="popup-cliente">
-              <b>${c.cliente}</b>
-              ${c.cidade}
-            </div>
-          `);
+  } catch (e) {
+    alert("Erro ao carregar clientes_validos.json");
+    console.error(e);
+  }
+}
+document.getElementById("buscaCliente").addEventListener("input", aplicarFiltros);
+document.getElementById("filtroCidade").addEventListener("change", aplicarFiltros);
 
-          bounds.push([c.lat, c.lng]);
-        });
+function aplicarFiltros() {
+  const texto = document
+    .getElementById("buscaCliente")
+    .value
+    .toLowerCase();
 
-        if (bounds.length > 0) {
-          mapaClientes.fitBounds(bounds);
-        }
+  const cidade = document.getElementById("filtroCidade").value;
 
-      } catch (e) {
-        alert("Erro ao carregar clientes_validos.json");
-        console.error(e);
-      }
-    }
+  const filtrados = clientesData.filter(c => {
+    const nomeOk = c.cliente.toLowerCase().includes(texto);
+    const cidadeOk = !cidade || c.cidade === cidade;
+    return nomeOk && cidadeOk;
+  });
+
+  desenharClientes(filtrados);
+}
+
 
     /* ================= START ================= */
     initMapaClientes();
