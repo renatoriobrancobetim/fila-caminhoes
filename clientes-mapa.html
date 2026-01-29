@@ -96,7 +96,9 @@ async function carregarClientes() {
       throw new Error("HTTP " + res.status);
     }
 
-    clientesData = await res.json();
+    const json = await res.json();
+clientesData = Array.isArray(json) ? json : Object.values(json);
+
 
     console.log("Clientes carregados:", clientesData.length);
 
