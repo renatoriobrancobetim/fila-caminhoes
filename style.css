@@ -504,4 +504,19 @@ th{
   color: #6d4c41;
   font-weight: 500;
 }
+.filtros {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.filtros input,
+.filtros select {
+  padding: 8px;
+  font-size: 14px;
+  width: 100%;
+  max-width: 260px;
+}
 
