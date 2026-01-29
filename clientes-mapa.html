@@ -83,32 +83,30 @@
     }
 
     /* ================= CARREGAR CLIENTES ================= */
- async function carregarClientes() {
-  try {
-    const res = await fetch("clientes_validos.json");
-    clientesData = await res.json();
 
-    popularFiltroCidade(clientesData);
-    desenharClientes(clientesData);
-
-  } catch (e) {
-    alert("Erro ao carregar clientes_validos.json");
-    console.error(e);
-  }
-}
 async function carregarClientes() {
   try {
-    const res = await fetch("clientes_validos.json");
+    console.log("Iniciando carga de clientes…");
+
+    const res = await fetch("./clientes_validos.json");
+
+    if (!res.ok) {
+      throw new Error("HTTP " + res.status);
+    }
+
     clientesData = await res.json();
+
+    console.log("Clientes carregados:", clientesData.length);
 
     popularFiltroCidade(clientesData);
     desenharClientes(clientesData);
 
   } catch (e) {
+    console.error("Falha ao carregar clientes_validos.json:", e);
     alert("Erro ao carregar clientes_validos.json");
-    console.error(e);
   }
 }
+
 document.getElementById("buscaCliente").addEventListener("input", aplicarFiltros);
 document.getElementById("filtroCidade").addEventListener("change", aplicarFiltros);
 
