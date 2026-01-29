@@ -102,13 +102,14 @@ async function carregarClientes() {
     const distribuidora = await resDistribuidora.json();
     const derivados = await resDerivados.json();
 
- const clientesDistribuidora = distribuidora.map(c => ({
+const clientesDistribuidora = distribuidora.map(c => ({
   cliente: c.CLIENTE?.trim() || "",
   cidade: c.CIDADE?.trim() || "",
-  lat: Number(c.LATITUDE),
-  lng: Number(c.LONGITUDE),
+  lat: Number(String(c.LATITUDE).replace(",", ".")),
+  lng: Number(String(c.LONGITUDE).replace(",", ".")),
   categoria: "Distribuidora"
 }));
+
 
 
     const clientesDerivados = derivados.map(c => ({
