@@ -191,6 +191,10 @@ function desenharZonasLogisticas() {
 
   // 🔴 Zona Crítica – acima de 120 km (visual)
   zonaCritica = L.circle(
+    zonaPrimaria.bringToBack();
+zonaSecundaria.bringToBack();
+zonaCritica.bringToBack();
+
     [BASE_COORDS.lat, BASE_COORDS.lng],
     {
       radius: 200000, // visual de alerta
@@ -202,6 +206,9 @@ function desenharZonasLogisticas() {
     }
   ).addTo(mapaClientes);
 }
+L.marker([BASE_COORDS.lat, BASE_COORDS.lng])
+  .addTo(mapaClientes)
+  .bindPopup("<b>BASE LOGÍSTICA</b>");
 
     /* ================= CARREGAR CLIENTES ================= */
 
@@ -347,7 +354,10 @@ function limparMarcadores() {
 document.getElementById("toggleHeatDerivados")
   .addEventListener("change", function () {
     if (this.checked) {
-      mapaClientes.addLayer(heatDerivados);
+      if (heatDerivados) {
+  mapaClientes.addLayer(heatDerivados);
+}
+
     } else {
       mapaClientes.removeLayer(heatDerivados);
     }
