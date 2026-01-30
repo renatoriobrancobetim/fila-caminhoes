@@ -45,6 +45,20 @@
       color: #0d47a1;
     }
   </style>
+  <!-- MARKER CLUSTER -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+/>
+
+<script
+  src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js">
+</script>
+
 </head>
 
 <body>
@@ -74,9 +88,10 @@
 
   <script>
     /* ================= VARIÁVEIS ================= */
- let mapaClientes;
+let mapaClientes;
 let clientesData = [];
-let marcadores = [];
+let clusterClientes;
+
 
     /* ================= INIT MAPA ================= */
     function initMapaClientes() {
@@ -88,6 +103,14 @@ let marcadores = [];
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap"
       }).addTo(mapaClientes);
+      clusterClientes = L.markerClusterGroup({
+  showCoverageOnHover: false,
+  spiderfyOnMaxZoom: true,
+  disableClusteringAtZoom: 15
+});
+
+mapaClientes.addLayer(clusterClientes);
+
     }
 function normalizarCoordenada(valor) {
   if (!valor) return NaN;
@@ -193,9 +216,11 @@ function aplicarFiltros() {
 
 
 function limparMarcadores() {
-  marcadores.forEach(m => mapaClientes.removeLayer(m));
-  marcadores = [];
+  if (clusterClientes) {
+    clusterClientes.clearLayers();
+  }
 }
+
     
 /* ================= ÍCONES POR CATEGORIA ================= */
 
@@ -237,7 +262,7 @@ function desenharClientes(lista) {
     const marker = L.marker(
       [c.lat, c.lng],
       { icon: icone }
-    ).addTo(mapaClientes);
+    );
 
     marker.bindPopup(`
       <div class="popup-cliente">
@@ -247,9 +272,10 @@ function desenharClientes(lista) {
       </div>
     `);
 
-    marcadores.push(marker);
+    clusterClientes.addLayer(marker);
   });
 }
+
 
 function popularFiltroCidade(lista) {
   const select = document.getElementById("filtroCidade");
