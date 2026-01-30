@@ -189,22 +189,24 @@ function desenharZonasLogisticas() {
     }
   ).addTo(mapaClientes);
 
-  // 🔴 Zona Crítica – acima de 120 km (visual)
-  zonaCritica = L.circle(
-    zonaPrimaria.bringToBack();
+// 🔴 Zona Crítica – acima de 120 km (visual)
+zonaCritica = L.circle(
+  [BASE_COORDS.lat, BASE_COORDS.lng],
+  {
+    radius: 200000,
+    color: "#c62828",
+    fillColor: "#ef9a9a",
+    fillOpacity: 0.08,
+    weight: 2,
+    dashArray: "6,4"
+  }
+).addTo(mapaClientes);
+
+// 🔽 GARANTE QUE AS ZONAS FIQUEM NO FUNDO
+zonaPrimaria.bringToBack();
 zonaSecundaria.bringToBack();
 zonaCritica.bringToBack();
 
-    [BASE_COORDS.lat, BASE_COORDS.lng],
-    {
-      radius: 200000, // visual de alerta
-      color: "#c62828",
-      fillColor: "#ef9a9a",
-      fillOpacity: 0.08,
-      weight: 2,
-      dashArray: "6,4"
-    }
-  ).addTo(mapaClientes);
 }
 L.marker([BASE_COORDS.lat, BASE_COORDS.lng])
   .addTo(mapaClientes)
