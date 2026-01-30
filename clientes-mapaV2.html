@@ -139,13 +139,16 @@ const distribuidora = Array.isArray(jsonDistribuidora)
 
     const derivados = await resDerivados.json();
 
+const distribuidora = await resDistribuidora.json();
+
 const clientesDistribuidora = distribuidora.map(c => ({
   cliente: c.cliente,
   cidade: c.cidade,
   lat: Number(c.lat),
   lng: Number(c.lng),
-  categoria: c.categoria || "Distribuidora"
+  categoria: "Distribuidora"
 }));
+
 
 
     const clientesDerivados = derivados.map(c => ({
@@ -262,20 +265,21 @@ function desenharClientes(lista) {
         ? iconeDistribuidora
         : iconeDerivados;
 
-    const marker = L.marker(
-      [c.lat, c.lng],
-      { icon: icone }
-    ).addTo(mapaClientes);
+const marker = L.marker(
+  [c.lat, c.lng],
+  { icon: icone }
+);
 
-    marker.bindPopup(`
-      <div class="popup-cliente">
-        <b>${c.cliente}</b>
-        ${c.cidade}<br>
-        <small><b>Categoria:</b> ${c.categoria}</small>
-      </div>
-    `);
+marker.bindPopup(`
+  <div class="popup-cliente">
+    <b>${c.cliente}</b>
+    ${c.cidade}<br>
+    <small><b>Categoria:</b> ${c.categoria}</small>
+  </div>
+`);
 
-    marcadores.push(marker);
+clusterClientes.addLayer(marker);
+
 
     // 👇 adiciona ponto aos limites
     bounds.extend([c.lat, c.lng]);
