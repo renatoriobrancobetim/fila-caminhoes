@@ -13,6 +13,8 @@
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
   </script>
+<!-- LEAFLET HEAT -->
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 
   <style>
     body {
@@ -28,6 +30,7 @@
       font-size: 18px;
       font-weight: bold;
     }
+    
 
     #mapaClientes {
       height: calc(100vh - 56px);
@@ -45,6 +48,7 @@
       color: #0d47a1;
     }
   </style>
+
   <!-- MARKER CLUSTER -->
 <link
   rel="stylesheet"
@@ -66,12 +70,26 @@
   <div class="header">
     🗺️ Mapa de Clientes
   </div>
+  <div id="contadorClientes" style="
+  padding:10px 20px;
+  background:#ffffff;
+  border-bottom:1px solid #ddd;
+  font-size:14px;
+">
+  🔵 Distribuidora: <b id="countDistribuidora">0</b> &nbsp;|&nbsp;
+  🟢 Derivados: <b id="countDerivados">0</b>
+</div>
 <div class="filtros">
-  <select id="filtroCategoria">
-  <option value="">Todas as categorias</option>
-  <option value="Distribuidora">Distribuidora</option>
-  <option value="Derivados">Derivados</option>
-</select>
+
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleDistribuidora" checked>
+  Distribuidora
+</label>
+
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleDerivados" checked>
+  Derivados
+</label>
 
   <input 
     type="text" 
@@ -83,6 +101,15 @@
     <option value="">Todas as cidades</option>
   </select>
 </div>
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleHeatDistribuidora">
+  🔥 Heatmap Distribuidora
+</label>
+
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleHeatDerivados">
+  🔥 Heatmap Derivados
+</label>
 
   <div id="mapaClientes"></div>
 
@@ -91,6 +118,8 @@
 let mapaClientes;
 let clientesData = [];
 let clusterClientes;
+let heatDistribuidora;
+let heatDerivados;
 
 
     /* ================= INIT MAPA ================= */
@@ -166,7 +195,29 @@ clientesData = clientesData.filter(c =>
   !isNaN(c.lat) &&
   !isNaN(c.lng)
 );
+// 🔥 CRIA HEATMAP DISTRIBUIDORA
+const pontosDistribuidora = clientesData
+  .filter(c => c.categoria === "Distribuidora")
+  .map(c => [c.lat, c.lng, 1]);
 
+heatDistribuidora = L.heatLayer(pontosDistribuidora, {
+  radius: 25,
+  blur: 18,
+  maxZoom: 15
+});
+
+// 🔥 CRIA HEATMAP DERIVADOS
+const pontosDerivados = clientesData
+  .filter(c => c.categoria === "Derivados")
+  .map(c => [c.lat, c.lng, 1]);
+
+heatDerivados = L.heatLayer(pontosDerivados, {
+  radius: 25,
+  blur: 18,
+  maxZoom: 15
+});
+
+    
     popularFiltroCidade(clientesData);
     desenharClientes(clientesData);
 
@@ -176,26 +227,31 @@ clientesData = clientesData.filter(c =>
   }
 }
 
-
-
-
 document.getElementById("buscaCliente")
   .addEventListener("input", aplicarFiltros);
 
 document.getElementById("filtroCidade")
   .addEventListener("change", aplicarFiltros);
-
-document.getElementById("filtroCategoria")
+document.getElementById("toggleDistribuidora")
   .addEventListener("change", aplicarFiltros);
+
+document.getElementById("toggleDerivados")
+  .addEventListener("change", aplicarFiltros);
+
 
 function aplicarFiltros() {
   const texto = document
     .getElementById("buscaCliente")
     .value
     .toLowerCase();
+const showDistribuidora =
+  document.getElementById("toggleDistribuidora").checked;
+
+const showDerivados =
+  document.getElementById("toggleDerivados").checked;
 
   const cidade = document.getElementById("filtroCidade").value;
-  const categoria = document.getElementById("filtroCategoria").value;
+  
 
   const filtrados = clientesData.filter(c => {
     const nomeOk =
@@ -205,13 +261,15 @@ function aplicarFiltros() {
     const cidadeOk =
       !cidade || c.cidade === cidade;
 
-    const categoriaOk =
-      !categoria || c.categoria === categoria;
+  const categoriaOk =
+  (c.categoria === "Distribuidora" && showDistribuidora) ||
+  (c.categoria === "Derivados" && showDerivados);
+
 
     return nomeOk && cidadeOk && categoriaOk;
   });
-
-  desenharClientes(filtrados);
+  atualizarContadores(filtrados);
+    desenharClientes(filtrados);
 }
 
 
@@ -221,7 +279,24 @@ function limparMarcadores() {
   }
 }
 
-    
+    document.getElementById("toggleHeatDistribuidora")
+  .addEventListener("change", function () {
+    if (this.checked) {
+      mapaClientes.addLayer(heatDistribuidora);
+    } else {
+      mapaClientes.removeLayer(heatDistribuidora);
+    }
+  });
+
+document.getElementById("toggleHeatDerivados")
+  .addEventListener("change", function () {
+    if (this.checked) {
+      mapaClientes.addLayer(heatDerivados);
+    } else {
+      mapaClientes.removeLayer(heatDerivados);
+    }
+  });
+
 /* ================= ÍCONES POR CATEGORIA ================= */
 
 const iconeDistribuidora = L.icon({
@@ -242,6 +317,13 @@ const iconeDerivados = L.icon({
   shadowSize: [41, 41]
 });
 
+function atualizarContadores(lista) {
+  const dist = lista.filter(c => c.categoria === "Distribuidora").length;
+  const der  = lista.filter(c => c.categoria === "Derivados").length;
+
+  document.getElementById("countDistribuidora").innerText = dist;
+  document.getElementById("countDerivados").innerText = der;
+}
 
 function desenharClientes(lista) {
   limparMarcadores();
@@ -264,13 +346,17 @@ function desenharClientes(lista) {
       { icon: icone }
     );
 
-    marker.bindPopup(`
-      <div class="popup-cliente">
-        <b>${c.cliente}</b>
-        ${c.cidade}<br>
-        <small><b>Categoria:</b> ${c.categoria}</small>
-      </div>
-    `);
+marker.bindPopup(`
+  <div class="popup-cliente">
+    <b>${c.cliente}</b>
+    ${c.cidade}
+    <div class="popup-cidade">
+      📍 Cidade: <b>${c.cidade}</b>
+    </div>
+    <small><b>Categoria:</b> ${c.categoria}</small>
+  </div>
+`);
+
 
     clusterClientes.addLayer(marker);
   });
@@ -281,6 +367,7 @@ function popularFiltroCidade(lista) {
   const select = document.getElementById("filtroCidade");
 
   const cidades = [...new Set(lista.map(c => c.cidade))].sort();
+
 
   cidades.forEach(cidade => {
     const opt = document.createElement("option");
