@@ -28,6 +28,7 @@
       font-size: 18px;
       font-weight: bold;
     }
+    
 
     #mapaClientes {
       height: calc(100vh - 56px);
@@ -45,6 +46,16 @@
       color: #0d47a1;
     }
   </style>
+  <div id="contadorClientes" style="
+  padding:10px 20px;
+  background:#ffffff;
+  border-bottom:1px solid #ddd;
+  font-size:14px;
+">
+  🔵 Distribuidora: <b id="countDistribuidora">0</b> &nbsp;|&nbsp;
+  🟢 Derivados: <b id="countDerivados">0</b>
+</div>
+
   <!-- MARKER CLUSTER -->
 <link
   rel="stylesheet"
@@ -72,6 +83,15 @@
   <option value="Distribuidora">Distribuidora</option>
   <option value="Derivados">Derivados</option>
 </select>
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleDistribuidora" checked>
+  Distribuidora
+</label>
+
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleDerivados" checked>
+  Derivados
+</label>
 
   <input 
     type="text" 
@@ -193,6 +213,11 @@ function aplicarFiltros() {
     .getElementById("buscaCliente")
     .value
     .toLowerCase();
+const showDistribuidora =
+  document.getElementById("toggleDistribuidora").checked;
+
+const showDerivados =
+  document.getElementById("toggleDerivados").checked;
 
   const cidade = document.getElementById("filtroCidade").value;
   const categoria = document.getElementById("filtroCategoria").value;
@@ -205,12 +230,15 @@ function aplicarFiltros() {
     const cidadeOk =
       !cidade || c.cidade === cidade;
 
-    const categoriaOk =
-      !categoria || c.categoria === categoria;
+  const categoriaOk =
+  (c.categoria === "Distribuidora" && showDistribuidora) ||
+  (c.categoria === "Derivados" && showDerivados);
+
 
     return nomeOk && cidadeOk && categoriaOk;
   });
-
+  atualizarContadores(filtrados);
+  desenharClientes(filtrados);
   desenharClientes(filtrados);
 }
 
@@ -242,6 +270,13 @@ const iconeDerivados = L.icon({
   shadowSize: [41, 41]
 });
 
+function atualizarContadores(lista) {
+  const dist = lista.filter(c => c.categoria === "Distribuidora").length;
+  const der  = lista.filter(c => c.categoria === "Derivados").length;
+
+  document.getElementById("countDistribuidora").innerText = dist;
+  document.getElementById("countDerivados").innerText = der;
+}
 
 function desenharClientes(lista) {
   limparMarcadores();
@@ -264,18 +299,25 @@ function desenharClientes(lista) {
       { icon: icone }
     );
 
-    marker.bindPopup(`
-      <div class="popup-cliente">
-        <b>${c.cliente}</b>
-        ${c.cidade}<br>
-        <small><b>Categoria:</b> ${c.categoria}</small>
-      </div>
-    `);
+marker.bindPopup(`
+  <div class="popup-cliente">
+    <b>${c.cliente}</b>
+    ${c.cidade}
+    <div class="popup-cidade">
+      📍 Cidade: <b>${c.cidade}</b>
+    </div>
+    <small><b>Categoria:</b> ${c.categoria}</small>
+  </div>
+`);
+
 
     clusterClientes.addLayer(marker);
   });
 }
 
+popularFiltroCidade(clientesData);
+atualizarContadores(clientesData);
+desenharClientes(clientesData);
 
 function popularFiltroCidade(lista) {
   const select = document.getElementById("filtroCidade");
