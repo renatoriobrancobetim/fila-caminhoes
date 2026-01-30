@@ -195,17 +195,7 @@ clientesData = clientesData.filter(c =>
   !isNaN(c.lat) &&
   !isNaN(c.lng)
 );
-
-    popularFiltroCidade(clientesData);
-    desenharClientes(clientesData);
-
-  } catch (e) {
-    console.error("Erro ao carregar clientes:", e);
-    alert("Erro ao carregar clientes");
-  }
-}
-
-// 🔥 Heatmap Distribuidora
+// 🔥 CRIA HEATMAP DISTRIBUIDORA
 const pontosDistribuidora = clientesData
   .filter(c => c.categoria === "Distribuidora")
   .map(c => [c.lat, c.lng, 1]);
@@ -216,7 +206,7 @@ heatDistribuidora = L.heatLayer(pontosDistribuidora, {
   maxZoom: 15
 });
 
-// 🔥 Heatmap Derivados
+// 🔥 CRIA HEATMAP DERIVADOS
 const pontosDerivados = clientesData
   .filter(c => c.categoria === "Derivados")
   .map(c => [c.lat, c.lng, 1]);
@@ -227,7 +217,15 @@ heatDerivados = L.heatLayer(pontosDerivados, {
   maxZoom: 15
 });
 
+    
+    popularFiltroCidade(clientesData);
+    desenharClientes(clientesData);
 
+  } catch (e) {
+    console.error("Erro ao carregar clientes:", e);
+    alert("Erro ao carregar clientes");
+  }
+}
 
 document.getElementById("buscaCliente")
   .addEventListener("input", aplicarFiltros);
