@@ -120,6 +120,9 @@ let clientesData = [];
 let clusterClientes;
 let heatDistribuidora;
 let heatDerivados;
+let zonaPrimaria;
+let zonaSecundaria;
+let zonaCritica;
 
 
     /* ================= INIT MAPA ================= */
@@ -139,7 +142,7 @@ let heatDerivados;
 });
 
 mapaClientes.addLayer(clusterClientes);
-
+desenharZonasLogisticas();
     }
 function normalizarCoordenada(valor) {
   if (!valor) return NaN;
@@ -150,6 +153,49 @@ function normalizarCoordenada(valor) {
       .replace(/\s+/g, "")   // remove espaços
       .replace(",", ".")     // vírgula → ponto
   );
+}
+function desenharZonasLogisticas() {
+  // Remove zonas anteriores (evita duplicação)
+  if (zonaPrimaria) mapaClientes.removeLayer(zonaPrimaria);
+  if (zonaSecundaria) mapaClientes.removeLayer(zonaSecundaria);
+  if (zonaCritica) mapaClientes.removeLayer(zonaCritica);
+
+  // 🟢 Zona Primária – até 50 km
+  zonaPrimaria = L.circle(
+    [BASE_COORDS.lat, BASE_COORDS.lng],
+    {
+      radius: 50000,
+      color: "#2e7d32",
+      fillColor: "#66bb6a",
+      fillOpacity: 0.15,
+      weight: 2
+    }
+  ).addTo(mapaClientes);
+
+  // 🟡 Zona Secundária – até 120 km
+  zonaSecundaria = L.circle(
+    [BASE_COORDS.lat, BASE_COORDS.lng],
+    {
+      radius: 120000,
+      color: "#f9a825",
+      fillColor: "#fff176",
+      fillOpacity: 0.12,
+      weight: 2
+    }
+  ).addTo(mapaClientes);
+
+  // 🔴 Zona Crítica – acima de 120 km (visual)
+  zonaCritica = L.circle(
+    [BASE_COORDS.lat, BASE_COORDS.lng],
+    {
+      radius: 200000, // visual de alerta
+      color: "#c62828",
+      fillColor: "#ef9a9a",
+      fillOpacity: 0.08,
+      weight: 2,
+      dashArray: "6,4"
+    }
+  ).addTo(mapaClientes);
 }
 
     /* ================= CARREGAR CLIENTES ================= */
