@@ -46,15 +46,6 @@
       color: #0d47a1;
     }
   </style>
-  <div id="contadorClientes" style="
-  padding:10px 20px;
-  background:#ffffff;
-  border-bottom:1px solid #ddd;
-  font-size:14px;
-">
-  🔵 Distribuidora: <b id="countDistribuidora">0</b> &nbsp;|&nbsp;
-  🟢 Derivados: <b id="countDerivados">0</b>
-</div>
 
   <!-- MARKER CLUSTER -->
 <link
@@ -77,12 +68,17 @@
   <div class="header">
     🗺️ Mapa de Clientes
   </div>
+  <div id="contadorClientes" style="
+  padding:10px 20px;
+  background:#ffffff;
+  border-bottom:1px solid #ddd;
+  font-size:14px;
+">
+  🔵 Distribuidora: <b id="countDistribuidora">0</b> &nbsp;|&nbsp;
+  🟢 Derivados: <b id="countDerivados">0</b>
+</div>
 <div class="filtros">
-  <select id="filtroCategoria">
-  <option value="">Todas as categorias</option>
-  <option value="Distribuidora">Distribuidora</option>
-  <option value="Derivados">Derivados</option>
-</select>
+
 <label style="margin-left:10px">
   <input type="checkbox" id="toggleDistribuidora" checked>
   Distribuidora
@@ -238,8 +234,7 @@ const showDerivados =
     return nomeOk && cidadeOk && categoriaOk;
   });
   atualizarContadores(filtrados);
-  desenharClientes(filtrados);
-  desenharClientes(filtrados);
+    desenharClientes(filtrados);
 }
 
 
@@ -315,14 +310,16 @@ marker.bindPopup(`
   });
 }
 
-popularFiltroCidade(clientesData);
-atualizarContadores(clientesData);
-desenharClientes(clientesData);
 
 function popularFiltroCidade(lista) {
   const select = document.getElementById("filtroCidade");
 
   const cidades = [...new Set(lista.map(c => c.cidade))].sort();
+document.getElementById("toggleDistribuidora")
+  .addEventListener("change", aplicarFiltros);
+
+document.getElementById("toggleDerivados")
+  .addEventListener("change", aplicarFiltros);
 
   cidades.forEach(cidade => {
     const opt = document.createElement("option");
