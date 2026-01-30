@@ -13,6 +13,8 @@
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
   </script>
+<!-- LEAFLET HEAT -->
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 
   <style>
     body {
@@ -99,6 +101,15 @@
     <option value="">Todas as cidades</option>
   </select>
 </div>
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleHeatDistribuidora">
+  🔥 Heatmap Distribuidora
+</label>
+
+<label style="margin-left:10px">
+  <input type="checkbox" id="toggleHeatDerivados">
+  🔥 Heatmap Derivados
+</label>
 
   <div id="mapaClientes"></div>
 
@@ -107,6 +118,8 @@
 let mapaClientes;
 let clientesData = [];
 let clusterClientes;
+let heatDistribuidora;
+let heatDerivados;
 
 
     /* ================= INIT MAPA ================= */
@@ -192,6 +205,27 @@ clientesData = clientesData.filter(c =>
   }
 }
 
+// 🔥 Heatmap Distribuidora
+const pontosDistribuidora = clientesData
+  .filter(c => c.categoria === "Distribuidora")
+  .map(c => [c.lat, c.lng, 1]);
+
+heatDistribuidora = L.heatLayer(pontosDistribuidora, {
+  radius: 25,
+  blur: 18,
+  maxZoom: 15
+});
+
+// 🔥 Heatmap Derivados
+const pontosDerivados = clientesData
+  .filter(c => c.categoria === "Derivados")
+  .map(c => [c.lat, c.lng, 1]);
+
+heatDerivados = L.heatLayer(pontosDerivados, {
+  radius: 25,
+  blur: 18,
+  maxZoom: 15
+});
 
 
 
@@ -247,7 +281,24 @@ function limparMarcadores() {
   }
 }
 
-    
+    document.getElementById("toggleHeatDistribuidora")
+  .addEventListener("change", function () {
+    if (this.checked) {
+      mapaClientes.addLayer(heatDistribuidora);
+    } else {
+      mapaClientes.removeLayer(heatDistribuidora);
+    }
+  });
+
+document.getElementById("toggleHeatDerivados")
+  .addEventListener("change", function () {
+    if (this.checked) {
+      mapaClientes.addLayer(heatDerivados);
+    } else {
+      mapaClientes.removeLayer(heatDerivados);
+    }
+  });
+
 /* ================= ÍCONES POR CATEGORIA ================= */
 
 const iconeDistribuidora = L.icon({
