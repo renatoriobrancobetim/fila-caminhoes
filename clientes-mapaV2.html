@@ -126,6 +126,11 @@ let zonaCritica;
 
 
     /* ================= INIT MAPA ================= */
+    const BASE_COORDS = {
+  lat: -19.9596,   // ajuste se quiser
+  lng: -44.0884
+};
+
     function initMapaClientes() {
       mapaClientes = L.map("mapaClientes").setView(
         [-19.9, -44.1], // MG central
@@ -266,6 +271,8 @@ heatDerivados = L.heatLayer(pontosDerivados, {
     
     popularFiltroCidade(clientesData);
     desenharClientes(clientesData);
+    atualizarContadores(clientesData);
+
 
   } catch (e) {
     console.error("Erro ao carregar clientes:", e);
@@ -328,7 +335,10 @@ function limparMarcadores() {
     document.getElementById("toggleHeatDistribuidora")
   .addEventListener("change", function () {
     if (this.checked) {
-      mapaClientes.addLayer(heatDistribuidora);
+      if (heatDistribuidora) {
+  mapaClientes.addLayer(heatDistribuidora);
+}
+
     } else {
       mapaClientes.removeLayer(heatDistribuidora);
     }
