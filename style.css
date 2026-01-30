@@ -519,4 +519,11 @@ th{
   width: 100%;
   max-width: 260px;
 }
+.popup-cidade {
+  margin-top:6px;
+  padding:4px 6px;
+  background:#eef3ff;
+  border-left:3px solid #0d47a1;
+  font-size:12px;
+}
 
