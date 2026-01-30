@@ -200,9 +200,12 @@ document.getElementById("buscaCliente")
 
 document.getElementById("filtroCidade")
   .addEventListener("change", aplicarFiltros);
-
-document.getElementById("filtroCategoria")
+document.getElementById("toggleDistribuidora")
   .addEventListener("change", aplicarFiltros);
+
+document.getElementById("toggleDerivados")
+  .addEventListener("change", aplicarFiltros);
+
 
 function aplicarFiltros() {
   const texto = document
@@ -216,7 +219,7 @@ const showDerivados =
   document.getElementById("toggleDerivados").checked;
 
   const cidade = document.getElementById("filtroCidade").value;
-  const categoria = document.getElementById("filtroCategoria").value;
+  
 
   const filtrados = clientesData.filter(c => {
     const nomeOk =
@@ -315,11 +318,7 @@ function popularFiltroCidade(lista) {
   const select = document.getElementById("filtroCidade");
 
   const cidades = [...new Set(lista.map(c => c.cidade))].sort();
-document.getElementById("toggleDistribuidora")
-  .addEventListener("change", aplicarFiltros);
 
-document.getElementById("toggleDerivados")
-  .addEventListener("change", aplicarFiltros);
 
   cidades.forEach(cidade => {
     const opt = document.createElement("option");
