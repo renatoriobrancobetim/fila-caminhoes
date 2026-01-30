@@ -246,6 +246,9 @@ const iconeDerivados = L.icon({
 function desenharClientes(lista) {
   limparMarcadores();
 
+  // 🧠 bounds para zoom automático
+  const bounds = L.latLngBounds([]);
+
   lista.forEach(c => {
     if (
       c.lat == null ||
@@ -262,7 +265,7 @@ function desenharClientes(lista) {
     const marker = L.marker(
       [c.lat, c.lng],
       { icon: icone }
-    );
+    ).addTo(mapaClientes);
 
     marker.bindPopup(`
       <div class="popup-cliente">
@@ -272,9 +275,21 @@ function desenharClientes(lista) {
       </div>
     `);
 
-    clusterClientes.addLayer(marker);
+    marcadores.push(marker);
+
+    // 👇 adiciona ponto aos limites
+    bounds.extend([c.lat, c.lng]);
   });
+
+  // 🎯 AJUSTA O ZOOM AUTOMATICAMENTE
+  if (bounds.isValid()) {
+    mapaClientes.fitBounds(bounds, {
+      padding: [40, 40],
+      maxZoom: 15
+    });
+  }
 }
+
 
 
 function popularFiltroCidade(lista) {
