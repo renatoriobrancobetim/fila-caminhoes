@@ -37,28 +37,41 @@ body { margin:0; font-family:Arial; background:#f4f6f8; }
 <div id="mapaClientes"></div>
 
 <script>
-let mapaClientes, clusterClientes, heatDistribuidora, heatDerivados;
+let mapaClientes, clusterClientes;
 let clientesData = [];
+let heatDistribuidora, heatDerivados;
+let zonaPrimaria, zonaSecundaria, zonaCritica;
 
 const BASE_COORDS = { lat:-19.9596, lng:-44.0884 };
 
-function normalizarCoordenada(v){
+function normalizar(v){
   return Number(String(v).replace(",", "."));
 }
 
+/* ================= MAPA ================= */
 function initMapaClientes(){
   mapaClientes = L.map("mapaClientes").setView([-19.9,-44.1],7);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapaClientes);
 
-  clusterClientes = L.markerClusterGroup();
+  clusterClientes = L.markerClusterGroup({ disableClusteringAtZoom:15 });
   mapaClientes.addLayer(clusterClientes);
+
+  desenharZonas();
 
   L.marker([BASE_COORDS.lat, BASE_COORDS.lng])
     .addTo(mapaClientes)
     .bindPopup("<b>BASE LOGÍSTICA</b>");
 }
 
+function desenharZonas(){
+  zonaPrimaria = L.circle([BASE_COORDS.lat,BASE_COORDS.lng],{radius:50000,color:"#2e7d32",fillOpacity:.15}).addTo(mapaClientes);
+  zonaSecundaria = L.circle([BASE_COORDS.lat,BASE_COORDS.lng],{radius:120000,color:"#f9a825",fillOpacity:.12}).addTo(mapaClientes);
+  zonaCritica = L.circle([BASE_COORDS.lat,BASE_COORDS.lng],{radius:200000,color:"#c62828",dashArray:"6,4",fillOpacity:.08}).addTo(mapaClientes);
+  zonaPrimaria.bringToBack(); zonaSecundaria.bringToBack(); zonaCritica.bringToBack();
+}
+
+/* ================= CLIENTES ================= */
 async function carregarClientes(){
   const [d1,d2] = await Promise.all([
     fetch("./clientes_distribuidora.json").then(r=>r.json()),
@@ -66,17 +79,64 @@ async function carregarClientes(){
   ]);
 
   clientesData = [
-    ...d1.map(c=>({...c,lat:normalizarCoordenada(c.lat),lng:normalizarCoordenada(c.lng),categoria:"Distribuidora"})),
-    ...d2.map(c=>({...c,lat:normalizarCoordenada(c.lat),lng:normalizarCoordenada(c.lng),categoria:"Derivados"}))
+    ...d1.map(c=>({...c,lat:normalizar(c.lat),lng:normalizar(c.lng),categoria:"Distribuidora"})),
+    ...d2.map(c=>({...c,lat:normalizar(c.lat),lng:normalizar(c.lng),categoria:"Derivados"}))
   ].filter(c=>!isNaN(c.lat)&&!isNaN(c.lng));
 
-  desenharClientes(clientesData);
+  popularFiltroCidade(clientesData);
+  aplicarFiltros();
+}
+
+/* ================= FILTROS ================= */
+function aplicarFiltros(){
+  const texto = buscaCliente.value.toLowerCase();
+  const cidade = filtroCidade.value;
+  const d = toggleDistribuidora.checked;
+  const r = toggleDerivados.checked;
+
+  const filtrados = clientesData.filter(c =>
+    (!texto || c.cliente.toLowerCase().includes(texto)) &&
+    (!cidade || c.cidade === cidade) &&
+    ((c.categoria==="Distribuidora"&&d)||(c.categoria==="Derivados"&&r))
+  );
+
+  desenharClientes(filtrados);
+  atualizarHeatmaps(filtrados);
 }
 
 function desenharClientes(lista){
   clusterClientes.clearLayers();
   lista.forEach(c=>{
     clusterClientes.addLayer(L.marker([c.lat,c.lng]).bindPopup(c.cliente));
+  });
+}
+
+/* ================= HEAT ================= */
+function atualizarHeatmaps(lista){
+  if(heatDistribuidora) mapaClientes.removeLayer(heatDistribuidora);
+  if(heatDerivados) mapaClientes.removeLayer(heatDerivados);
+
+  heatDistribuidora = L.heatLayer(lista.filter(c=>c.categoria==="Distribuidora").map(c=>[c.lat,c.lng,1]));
+  heatDerivados = L.heatLayer(lista.filter(c=>c.categoria==="Derivados").map(c=>[c.lat,c.lng,1]));
+
+  if(toggleHeatDistribuidora.checked) mapaClientes.addLayer(heatDistribuidora);
+  if(toggleHeatDerivados.checked) mapaClientes.addLayer(heatDerivados);
+
+  zonaPrimaria.bringToBack(); zonaSecundaria.bringToBack(); zonaCritica.bringToBack();
+}
+
+/* ================= EVENTOS ================= */
+buscaCliente.oninput =
+filtroCidade.onchange =
+toggleDistribuidora.onchange =
+toggleDerivados.onchange = aplicarFiltros;
+
+toggleHeatDistribuidora.onchange = aplicarFiltros;
+toggleHeatDerivados.onchange = aplicarFiltros;
+
+function popularFiltroCidade(lista){
+  [...new Set(lista.map(c=>c.cidade))].sort().forEach(c=>{
+    filtroCidade.add(new Option(c,c));
   });
 }
 
