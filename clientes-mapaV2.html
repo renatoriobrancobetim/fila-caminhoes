@@ -131,11 +131,8 @@ let zonaCritica;
   lng: -44.0884
 };
 
- function initMapaClientes() {
-  mapaClientes = L.map("mapaClientes").setView(
-    [-19.9, -44.1],
-    7
-  );
+function initMapaClientes() {
+  mapaClientes = L.map("mapaClientes").setView([-19.9, -44.1], 7);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap"
@@ -148,14 +145,14 @@ let zonaCritica;
   });
 
   mapaClientes.addLayer(clusterClientes);
-
   desenharZonasLogisticas();
 
-  // ✅ BASE LOGÍSTICA (AGORA NO LUGAR CERTO)
+  // ✅ ÚNICO LUGAR CORRETO
   L.marker([BASE_COORDS.lat, BASE_COORDS.lng])
     .addTo(mapaClientes)
     .bindPopup("<b>BASE LOGÍSTICA</b>");
 }
+
 
 function normalizarCoordenada(valor) {
   if (!valor) return NaN;
