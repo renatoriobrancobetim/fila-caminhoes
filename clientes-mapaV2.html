@@ -283,9 +283,6 @@ zonaVerde.onchange =
 zonaAmarela.onchange =
 zonaVermelha.onchange = aplicarFiltros;
 
-toggleHeatDistribuidora.onchange = aplicarFiltros;
-toggleHeatDerivados.onchange = aplicarFiltros;
-
 function popularFiltroCidade(lista){
   [...new Set(lista.map(c=>c.cidade))].sort().forEach(c=>{
     filtroCidade.add(new Option(c,c));
