@@ -30,8 +30,23 @@ body { margin:0; font-family:Arial; background:#f4f6f8; }
   <label><input type="checkbox" id="toggleDerivados" checked> Derivados</label>
   <input type="text" id="buscaCliente" placeholder="Buscar cliente…">
   <select id="filtroCidade"><option value="">Todas as cidades</option></select>
-  <label><input type="checkbox" id="toggleHeatDistribuidora"> 🔥 Heat Distribuidora</label>
-  <label><input type="checkbox" id="toggleHeatDerivados"> 🔥 Heat Derivados</label>
+ <hr>
+
+<label>
+  <input type="checkbox" id="zonaVerde" checked>
+  🟢 Zona Verde (até 100 km)
+</label>
+
+<label style="margin-left:10px">
+  <input type="checkbox" id="zonaAmarela" checked>
+  🟡 Zona Amarela (101–200 km)
+</label>
+
+<label style="margin-left:10px">
+  <input type="checkbox" id="zonaVermelha" checked>
+  🔴 Zona Vermelha (+200 km)
+</label>
+
 </div>
 
 <div id="mapaClientes"></div>
@@ -168,11 +183,34 @@ function aplicarFiltros(){
   const d = toggleDistribuidora.checked;
   const r = toggleDerivados.checked;
 
-  const filtrados = clientesData.filter(c =>
+const zonaV = zonaVerde.checked;
+const zonaA = zonaAmarela.checked;
+const zonaR = zonaVermelha.checked;
+
+const filtrados = clientesData.filter(c => {
+  const distanciaKm = calcularDistanciaKm(
+    BASE_COORDS.lat,
+    BASE_COORDS.lng,
+    c.lat,
+    c.lng
+  );
+
+  const zona = classificarZona(distanciaKm);
+
+  const zonaOk =
+    (zona === "Verde" && zonaV) ||
+    (zona === "Amarela" && zonaA) ||
+    (zona === "Vermelha" && zonaR);
+
+  return (
     (!texto || c.cliente.toLowerCase().includes(texto)) &&
     (!cidade || c.cidade === cidade) &&
-    ((c.categoria==="Distribuidora"&&d)||(c.categoria==="Derivados"&&r))
+    ((c.categoria === "Distribuidora" && d) ||
+     (c.categoria === "Derivados" && r)) &&
+    zonaOk
   );
+});
+
 
   desenharClientes(filtrados);
   atualizarHeatmaps(filtrados);
@@ -240,6 +278,9 @@ buscaCliente.oninput =
 filtroCidade.onchange =
 toggleDistribuidora.onchange =
 toggleDerivados.onchange = aplicarFiltros;
+zonaVerde.onchange =
+zonaAmarela.onchange =
+zonaVermelha.onchange = aplicarFiltros;
 
 toggleHeatDistribuidora.onchange = aplicarFiltros;
 toggleHeatDerivados.onchange = aplicarFiltros;
