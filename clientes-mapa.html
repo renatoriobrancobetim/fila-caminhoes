@@ -1,305 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Mapa de Clientes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Mapa de Clientes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- LEAFLET -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-  </script>
-<!-- LEAFLET HEAT -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f6f8;
-    }
-
-    .header {
-      background: #0d47a1;
-      color: #fff;
-      padding: 14px 20px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    
-
-    #mapaClientes {
-      height: calc(100vh - 56px);
-      width: 100%;
-    }
-
-    .popup-cliente {
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .popup-cliente b {
-      display: block;
-      margin-bottom: 4px;
-      color: #0d47a1;
-    }
-  </style>
-
-  <!-- MARKER CLUSTER -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
-/>
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
-/>
-
-<script
-  src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js">
-</script>
-
+<style>
+body { margin:0; font-family:Arial; background:#f4f6f8; }
+.header { background:#0d47a1; color:#fff; padding:14px 20px; font-weight:bold; }
+.filtros { background:#fff; padding:10px; border-bottom:1px solid #ddd; }
+#mapaClientes { height:calc(100vh - 170px); width:100%; }
+</style>
 </head>
 
 <body>
 
-  <div class="header">
-    🗺️ Mapa de Clientes
-  </div>
-  <div id="contadorClientes" style="
-  padding:10px 20px;
-  background:#ffffff;
-  border-bottom:1px solid #ddd;
-  font-size:14px;
-">
-  🔵 Distribuidora: <b id="countDistribuidora">0</b> &nbsp;|&nbsp;
-  🟢 Derivados: <b id="countDerivados">0</b>
-</div>
+<div class="header">🗺️ Mapa de Clientes</div>
+
 <div class="filtros">
+  <label><input type="checkbox" id="toggleDistribuidora" checked> Distribuidora</label>
+  <label><input type="checkbox" id="toggleDerivados" checked> Derivados</label>
+  <input type="text" id="buscaCliente" placeholder="Buscar cliente…">
+  <select id="filtroCidade"><option value="">Todas as cidades</option></select>
+ <hr>
 
-<label style="margin-left:10px">
-  <input type="checkbox" id="toggleDistribuidora" checked>
-  Distribuidora
+<label>
+  <input type="checkbox" id="zonaVerde" checked>
+  🟢 Zona Verde (até 100 km)
 </label>
 
 <label style="margin-left:10px">
-  <input type="checkbox" id="toggleDerivados" checked>
-  Derivados
+  <input type="checkbox" id="zonaAmarela" checked>
+  🟡 Zona Amarela (101–200 km)
 </label>
 
-  <input 
-    type="text" 
-    id="buscaCliente"
-    placeholder="Buscar cliente pelo nome…"
-  >
+<label style="margin-left:10px">
+  <input type="checkbox" id="zonaVermelha" checked>
+  🔴 Zona Vermelha (+200 km)
+</label>
 
-  <select id="filtroCidade">
-    <option value="">Todas as cidades</option>
-  </select>
 </div>
-<label style="margin-left:10px">
-  <input type="checkbox" id="toggleHeatDistribuidora">
-  🔥 Heatmap Distribuidora
-</label>
 
-<label style="margin-left:10px">
-  <input type="checkbox" id="toggleHeatDerivados">
-  🔥 Heatmap Derivados
-</label>
+<div id="mapaClientes"></div>
 
-  <div id="mapaClientes"></div>
-
-  <script>
-    /* ================= VARIÁVEIS ================= */
-let mapaClientes;
+<script>
+let mapaClientes, clusterClientes;
 let clientesData = [];
-let clusterClientes;
-let heatDistribuidora;
-let heatDerivados;
+let heatDistribuidora, heatDerivados;
+let zonaPrimaria, zonaSecundaria, zonaCritica;
+
+  // ===== ELEMENTOS DO DOM =====
+const buscaCliente = document.getElementById("buscaCliente");
+const filtroCidade = document.getElementById("filtroCidade");
+const toggleDistribuidora = document.getElementById("toggleDistribuidora");
+const toggleDerivados = document.getElementById("toggleDerivados");
+
+const zonaVerde = document.getElementById("zonaVerde");
+const zonaAmarela = document.getElementById("zonaAmarela");
+const zonaVermelha = document.getElementById("zonaVermelha");
+
+const BASE_COORDS = { lat:-19.9596, lng:-44.0884 };
+
+function normalizar(v){
+  return Number(String(v).replace(",", "."));
+}
+function calcularDistanciaKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLng / 2) ** 2;
+
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+function classificarZona(distanciaKm) {
+  if (distanciaKm <= 100) return "Verde";
+  if (distanciaKm <= 200) return "Amarela";
+  return "Vermelha";
+}
 
 
-    /* ================= INIT MAPA ================= */
-    function initMapaClientes() {
-      mapaClientes = L.map("mapaClientes").setView(
-        [-19.9, -44.1], // MG central
-        7
-      );
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap"
-      }).addTo(mapaClientes);
-      clusterClientes = L.markerClusterGroup({
-  showCoverageOnHover: false,
-  spiderfyOnMaxZoom: true,
-  disableClusteringAtZoom: 15
-});
+/* ================= MAPA ================= */
+function initMapaClientes(){
+  mapaClientes = L.map("mapaClientes").setView([-19.9,-44.1],7);
 
-mapaClientes.addLayer(clusterClientes);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mapaClientes);
 
+  clusterClientes = L.markerClusterGroup({ disableClusteringAtZoom:15 });
+  mapaClientes.addLayer(clusterClientes);
+
+  desenharZonas();
+
+  L.marker([BASE_COORDS.lat, BASE_COORDS.lng])
+    .addTo(mapaClientes)
+    .bindPopup("<b>BASE LOGÍSTICA</b>");
+}
+
+function desenharZonas(){
+  if(zonaPrimaria) mapaClientes.removeLayer(zonaPrimaria);
+  if(zonaSecundaria) mapaClientes.removeLayer(zonaSecundaria);
+  if(zonaCritica) mapaClientes.removeLayer(zonaCritica);
+
+  // 🟢 ZONA VERDE – até 100 km
+  zonaPrimaria = L.circle(
+    [BASE_COORDS.lat, BASE_COORDS.lng],
+    {
+      radius: 100000,
+      color: "#2e7d32",
+      fillColor: "#66bb6a",
+      fillOpacity: 0.18,
+      weight: 2
     }
-function normalizarCoordenada(valor) {
-  if (!valor) return NaN;
+  ).addTo(mapaClientes);
 
-  return Number(
-    String(valor)
-      .trim()
-      .replace(/\s+/g, "")   // remove espaços
-      .replace(",", ".")     // vírgula → ponto
-  );
-}
-
-    /* ================= CARREGAR CLIENTES ================= */
-
-async function carregarClientes() {
-  try {
-    const [resDistribuidora, resDerivados] = await Promise.all([
-      fetch("./clientes_distribuidora.json"),
-      fetch("./clientes_derivados.json")
-    ]);
-
-    const jsonDistribuidora = await resDistribuidora.json();
-const distribuidora = Array.isArray(jsonDistribuidora)
-  ? jsonDistribuidora
-  : jsonDistribuidora.clientes || [];
-
-    const derivados = await resDerivados.json();
-
-const clientesDistribuidora = distribuidora.map(c => ({
-  cliente: c.cliente,
-  cidade: c.cidade,
-  lat: Number(c.lat),
-  lng: Number(c.lng),
-  categoria: c.categoria || "Distribuidora"
-}));
-
-
-    const clientesDerivados = derivados.map(c => ({
-      cliente: c.cliente,
-      cidade: c.cidade,
-      lat: Number(c.lat),
-      lng: Number(c.lng),
-      categoria: "Derivados"
-    }));
-
-    clientesData = [
-      ...clientesDistribuidora,
-      ...clientesDerivados
-    ];
-clientesData = clientesData.filter(c =>
-  c.cliente &&
-  c.cidade &&
-  !isNaN(c.lat) &&
-  !isNaN(c.lng)
-);
-// 🔥 CRIA HEATMAP DISTRIBUIDORA
-const pontosDistribuidora = clientesData
-  .filter(c => c.categoria === "Distribuidora")
-  .map(c => [c.lat, c.lng, 1]);
-
-heatDistribuidora = L.heatLayer(pontosDistribuidora, {
-  radius: 25,
-  blur: 18,
-  maxZoom: 15
-});
-
-// 🔥 CRIA HEATMAP DERIVADOS
-const pontosDerivados = clientesData
-  .filter(c => c.categoria === "Derivados")
-  .map(c => [c.lat, c.lng, 1]);
-
-heatDerivados = L.heatLayer(pontosDerivados, {
-  radius: 25,
-  blur: 18,
-  maxZoom: 15
-});
-
-    
-    popularFiltroCidade(clientesData);
-    desenharClientes(clientesData);
-
-  } catch (e) {
-    console.error("Erro ao carregar clientes:", e);
-    alert("Erro ao carregar clientes");
-  }
-}
-
-document.getElementById("buscaCliente")
-  .addEventListener("input", aplicarFiltros);
-
-document.getElementById("filtroCidade")
-  .addEventListener("change", aplicarFiltros);
-document.getElementById("toggleDistribuidora")
-  .addEventListener("change", aplicarFiltros);
-
-document.getElementById("toggleDerivados")
-  .addEventListener("change", aplicarFiltros);
-
-
-function aplicarFiltros() {
-  const texto = document
-    .getElementById("buscaCliente")
-    .value
-    .toLowerCase();
-const showDistribuidora =
-  document.getElementById("toggleDistribuidora").checked;
-
-const showDerivados =
-  document.getElementById("toggleDerivados").checked;
-
-  const cidade = document.getElementById("filtroCidade").value;
-  
-
-  const filtrados = clientesData.filter(c => {
-    const nomeOk =
-      c.cliente &&
-      c.cliente.toLowerCase().includes(texto);
-
-    const cidadeOk =
-      !cidade || c.cidade === cidade;
-
-  const categoriaOk =
-  (c.categoria === "Distribuidora" && showDistribuidora) ||
-  (c.categoria === "Derivados" && showDerivados);
-
-
-    return nomeOk && cidadeOk && categoriaOk;
-  });
-  atualizarContadores(filtrados);
-    desenharClientes(filtrados);
-}
-
-
-function limparMarcadores() {
-  if (clusterClientes) {
-    clusterClientes.clearLayers();
-  }
-}
-
-    document.getElementById("toggleHeatDistribuidora")
-  .addEventListener("change", function () {
-    if (this.checked) {
-      mapaClientes.addLayer(heatDistribuidora);
-    } else {
-      mapaClientes.removeLayer(heatDistribuidora);
+  // 🟡 ZONA AMARELA – até 200 km
+  zonaSecundaria = L.circle(
+    [BASE_COORDS.lat, BASE_COORDS.lng],
+    {
+      radius: 200000,
+      color: "#f9a825",
+      fillColor: "#fff59d",
+      fillOpacity: 0.14,
+      weight: 2
     }
-  });
+  ).addTo(mapaClientes);
 
-document.getElementById("toggleHeatDerivados")
-  .addEventListener("change", function () {
-    if (this.checked) {
-      mapaClientes.addLayer(heatDerivados);
-    } else {
-      mapaClientes.removeLayer(heatDerivados);
+  // 🔴 ZONA VERMELHA – acima de 200 km (visual)
+  zonaCritica = L.circle(
+    [BASE_COORDS.lat, BASE_COORDS.lng],
+    {
+      radius: 300000,
+      color: "#c62828",
+      fillColor: "#ef9a9a",
+      fillOpacity: 0.10,
+      weight: 2,
+      dashArray: "6,4"
     }
-  });
+  ).addTo(mapaClientes);
 
+  zonaPrimaria.bringToBack();
+  zonaSecundaria.bringToBack();
+  zonaCritica.bringToBack();
+}
+
+
+/* ================= CLIENTES ================= */
+async function carregarClientes(){
+  const [d1,d2] = await Promise.all([
+    fetch("./clientes_distribuidora.json").then(r=>r.json()),
+    fetch("./clientes_derivados.json").then(r=>r.json())
+  ]);
+
+  clientesData = [
+    ...d1.map(c=>({...c,lat:normalizar(c.lat),lng:normalizar(c.lng),categoria:"Distribuidora"})),
+    ...d2.map(c=>({...c,lat:normalizar(c.lat),lng:normalizar(c.lng),categoria:"Derivados"}))
+  ].filter(c=>!isNaN(c.lat)&&!isNaN(c.lng));
+
+  popularFiltroCidade(clientesData);
+  aplicarFiltros();
+}
 /* ================= ÍCONES POR CATEGORIA ================= */
-
-const iconeDistribuidora = L.icon({
+  const iconeDistribuidora = L.icon({
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   iconSize: [25, 41],
@@ -317,24 +191,58 @@ const iconeDerivados = L.icon({
   shadowSize: [41, 41]
 });
 
-function atualizarContadores(lista) {
-  const dist = lista.filter(c => c.categoria === "Distribuidora").length;
-  const der  = lista.filter(c => c.categoria === "Derivados").length;
+/* ================= FILTROS ================= */
+function aplicarFiltros(){
+  const texto = buscaCliente.value.toLowerCase();
+  const cidade = filtroCidade.value;
+  const d = toggleDistribuidora.checked;
+  const r = toggleDerivados.checked;
 
-  document.getElementById("countDistribuidora").innerText = dist;
-  document.getElementById("countDerivados").innerText = der;
+const zonaV = zonaVerde.checked;
+const zonaA = zonaAmarela.checked;
+const zonaR = zonaVermelha.checked;
+
+const filtrados = clientesData.filter(c => {
+  const distanciaKm = calcularDistanciaKm(
+    BASE_COORDS.lat,
+    BASE_COORDS.lng,
+    c.lat,
+    c.lng
+  );
+
+  const zona = classificarZona(distanciaKm);
+
+  const zonaOk =
+    (zona === "Verde" && zonaV) ||
+    (zona === "Amarela" && zonaA) ||
+    (zona === "Vermelha" && zonaR);
+
+  return (
+    (!texto || c.cliente.toLowerCase().includes(texto)) &&
+    (!cidade || c.cidade === cidade) &&
+    ((c.categoria === "Distribuidora" && d) ||
+     (c.categoria === "Derivados" && r)) &&
+    zonaOk
+  );
+});
+
+
+  desenharClientes(filtrados);
+  atualizarHeatmaps(filtrados);
 }
 
-function desenharClientes(lista) {
-  limparMarcadores();
+function desenharClientes(lista){
+  clusterClientes.clearLayers();
 
   lista.forEach(c => {
-    if (
-      c.lat == null ||
-      c.lng == null ||
-      isNaN(c.lat) ||
-      isNaN(c.lng)
-    ) return;
+    const distanciaKm = calcularDistanciaKm(
+      BASE_COORDS.lat,
+      BASE_COORDS.lng,
+      c.lat,
+      c.lng
+    ).toFixed(1);
+
+    const zona = classificarZona(distanciaKm);
 
     const icone =
       c.categoria === "Distribuidora"
@@ -344,43 +252,46 @@ function desenharClientes(lista) {
     const marker = L.marker(
       [c.lat, c.lng],
       { icon: icone }
-    );
-
-marker.bindPopup(`
-  <div class="popup-cliente">
-    <b>${c.cliente}</b>
-    ${c.cidade}
-    <div class="popup-cidade">
-      📍 Cidade: <b>${c.cidade}</b>
-    </div>
-    <small><b>Categoria:</b> ${c.categoria}</small>
-  </div>
-`);
-
+    ).bindPopup(`
+      <div class="popup-cliente">
+        <b>${c.cliente}</b>
+        📍 ${c.cidade}<br>
+        <small><b>Categoria:</b> ${c.categoria}</small><br>
+        <small>📏 Distância da base: <b>${distanciaKm} km</b></small><br>
+        <small>🟢 Zona logística: <b>${zona}</b></small>
+      </div>
+    `);
 
     clusterClientes.addLayer(marker);
   });
 }
 
 
-function popularFiltroCidade(lista) {
-  const select = document.getElementById("filtroCidade");
 
-  const cidades = [...new Set(lista.map(c => c.cidade))].sort();
+/* ================= HEAT ================= */
+function atualizarHeatmaps(lista){
+  // heatmap desativado temporariamente
+}
 
 
-  cidades.forEach(cidade => {
-    const opt = document.createElement("option");
-    opt.value = cidade;
-    opt.textContent = cidade;
-    select.appendChild(opt);
+/* ================= EVENTOS ================= */
+buscaCliente.oninput =
+filtroCidade.onchange =
+toggleDistribuidora.onchange =
+toggleDerivados.onchange = aplicarFiltros;
+zonaVerde.onchange =
+zonaAmarela.onchange =
+zonaVermelha.onchange = aplicarFiltros;
+
+function popularFiltroCidade(lista){
+  [...new Set(lista.map(c=>c.cidade))].sort().forEach(c=>{
+    filtroCidade.add(new Option(c,c));
   });
 }
 
-    /* ================= START ================= */
-    initMapaClientes();
-    carregarClientes();
-  </script>
+initMapaClientes();
+carregarClientes();
+</script>
 
 </body>
 </html>
