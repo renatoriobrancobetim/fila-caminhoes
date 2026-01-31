@@ -32,10 +32,11 @@
     }
     
 
-    #mapaClientes {
-      height: calc(100vh - 56px);
-      width: 100%;
-    }
+ #mapaClientes {
+  height: calc(100vh - 170px);
+  width: 100%;
+}
+
 
     .popup-cliente {
       font-size: 14px;
@@ -147,10 +148,6 @@ function initMapaClientes() {
   mapaClientes.addLayer(clusterClientes);
   desenharZonasLogisticas();
 
-  // ✅ ÚNICO LUGAR CORRETO
-  L.marker([BASE_COORDS.lat, BASE_COORDS.lng])
-    .addTo(mapaClientes)
-    .bindPopup("<b>BASE LOGÍSTICA</b>");
 }
 
 
