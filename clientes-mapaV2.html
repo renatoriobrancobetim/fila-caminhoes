@@ -123,21 +123,27 @@ function aplicarFiltros(){
 }
 
 function desenharClientes(lista){
-  const icone =
-  c.categoria === "Distribuidora"
-    ? iconeDistribuidora
-    : iconeDerivados;
-
-const marker = L.marker(
-  [c.lat, c.lng],
-  { icon: icone }
-);
-
   clusterClientes.clearLayers();
-  lista.forEach(c=>{
-    clusterClientes.addLayer(L.marker([c.lat,c.lng]).bindPopup(c.cliente));
+
+  lista.forEach(c => {
+    const icone =
+      c.categoria === "Distribuidora"
+        ? iconeDistribuidora
+        : iconeDerivados;
+
+    const marker = L.marker(
+      [c.lat, c.lng],
+      { icon: icone }
+    ).bindPopup(`
+      <b>${c.cliente}</b><br>
+      📍 ${c.cidade}<br>
+      <small>${c.categoria}</small>
+    `);
+
+    clusterClientes.addLayer(marker);
   });
 }
+
 
 /* ================= HEAT ================= */
 function atualizarHeatmaps(lista){
