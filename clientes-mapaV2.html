@@ -57,6 +57,16 @@ let clientesData = [];
 let heatDistribuidora, heatDerivados;
 let zonaPrimaria, zonaSecundaria, zonaCritica;
 
+  // ===== ELEMENTOS DO DOM =====
+const buscaCliente = document.getElementById("buscaCliente");
+const filtroCidade = document.getElementById("filtroCidade");
+const toggleDistribuidora = document.getElementById("toggleDistribuidora");
+const toggleDerivados = document.getElementById("toggleDerivados");
+
+const zonaVerde = document.getElementById("zonaVerde");
+const zonaAmarela = document.getElementById("zonaAmarela");
+const zonaVermelha = document.getElementById("zonaVermelha");
+
 const BASE_COORDS = { lat:-19.9596, lng:-44.0884 };
 
 function normalizar(v){
@@ -260,17 +270,9 @@ function desenharClientes(lista){
 
 /* ================= HEAT ================= */
 function atualizarHeatmaps(lista){
-  if(heatDistribuidora) mapaClientes.removeLayer(heatDistribuidora);
-  if(heatDerivados) mapaClientes.removeLayer(heatDerivados);
-
-  heatDistribuidora = L.heatLayer(lista.filter(c=>c.categoria==="Distribuidora").map(c=>[c.lat,c.lng,1]));
-  heatDerivados = L.heatLayer(lista.filter(c=>c.categoria==="Derivados").map(c=>[c.lat,c.lng,1]));
-
-  if(toggleHeatDistribuidora.checked) mapaClientes.addLayer(heatDistribuidora);
-  if(toggleHeatDerivados.checked) mapaClientes.addLayer(heatDerivados);
-
-  zonaPrimaria.bringToBack(); zonaSecundaria.bringToBack(); zonaCritica.bringToBack();
+  // heatmap desativado temporariamente
 }
+
 
 /* ================= EVENTOS ================= */
 buscaCliente.oninput =
