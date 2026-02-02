@@ -281,12 +281,21 @@ async function otimizarRota(){
     const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
     const paradas = rows
-      .map(r => ({
-        row: r,
-        cidade: r.querySelector(".cidade").value,
-        cliente: r.querySelector("input[id^='cliente']").value
-      }))
-      .filter(p => p.cidade);
+  .map(r => {
+    const cidade = r.querySelector(".cidade")?.value.trim();
+    return {
+      row: r,
+      cidade,
+      cliente: r.querySelector("input[id^='cliente']")?.value || ""
+    };
+  })
+  .filter(p => p.cidade && cidadesCoords[p.cidade]);
+if (paradas.length === 0) {
+  alert("Informe pelo menos uma cidade válida para otimizar a rota.");
+  spinner.style.display = "none";
+  return;
+}
+
 
     let rota = [];
     let restantes = [...paradas];
