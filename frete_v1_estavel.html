@@ -795,18 +795,32 @@ html += `
   </tr>
 </table>
 `;
-html += infoDispersaoHTML || "";
-  if (existeFreteFixo) {
+if (infoDispersaoHTML || existeFreteFixo) {
   html += `
-    <div class="alerta-frete-fixo">
-      ⚠️ <b>Frete fixo por litro aplicado.</b><br>
-      O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
+    <div class="alertas-encadeados animar-alertas">
+      ${infoDispersaoHTML || ""}
+
+      ${
+        existeFreteFixo ? `
+          <div class="alerta-frete-fixo">
+            ⚠️ <b>Frete fixo por litro aplicado.</b><br>
+            O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
+          </div>
+        ` : ""
+      }
     </div>
   `;
 }
 
 
+
 document.getElementById("resumo").innerHTML = html;
+  setTimeout(() => {
+  document
+    .querySelectorAll(".alerta-frete-fixo")
+    .forEach(el => el.style.animation = "none");
+}, 4000);
+
 // 🔔 PASSO 3 — dispara animação após render do HTML
 requestAnimationFrame(() => {
   animarFretes({
