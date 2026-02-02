@@ -536,13 +536,7 @@ try {
   let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
 
 rows.forEach(r=>{
-  const itensComFixo = itens.filter(i => i.freteFixo !== null);
-const itensSemFixo = itens.filter(i => i.freteFixo === null);
-
-const todosComFreteFixo =
-  itens.length > 0 && itensSemFixo.length === 0;
-
-  const cidadeInput = r.querySelector(".cidade");
+    const cidadeInput = r.querySelector(".cidade");
   if (!cidadeInput.value) return;
 
   const c = r.querySelector("input[id^='cliente']") || { value: "" };
@@ -573,6 +567,11 @@ itens.push({
 
 
 });
+const itensComFixo = itens.filter(i => i.freteFixo !== null);
+const itensSemFixo = itens.filter(i => i.freteFixo === null);
+
+const todosComFreteFixo =
+  itens.length > 0 && itensSemFixo.length === 0;
 
 
 
