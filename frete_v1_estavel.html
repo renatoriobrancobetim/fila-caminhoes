@@ -552,7 +552,8 @@ const freteFixo = freteFixoInput && freteFixoInput.value
 
 
   litrosUsados+=litros;
-  litrosPonderadosTotal+=litros*margem;
+  litrosPonderadosTotal += litros;
+
 
 itens.push({
   idx,
@@ -603,7 +604,8 @@ if (usarFreteTabela) {
   freteTotal = 0;
 
   itens.forEach(i => {
-    freteTotal += i.litros * i.margem * valorPorLitro;
+    freteTotal += i.litros * valorPorLitro;
+
   });
 }
 
@@ -663,7 +665,7 @@ html += `
     <th>CLIENTE</th>
     <th>CIDADE</th>
     <th>HORÁRIO</th>
-    <th>AJUSTE</th>
+    <th>TIPO FRETE</th>
     <th>FRETE (R$/L)</th>
     <th>QUANTIDADE</th>
     <th>TOTAL</th>
@@ -676,7 +678,8 @@ html += `
 
 if (modalidade === "TABELA") {
   unit = tabelaFrete[normalizarCidade(i.cidade)][tipoTabela];
-  total = i.litros * i.margem * unit;
+  total = i.litros * unit;
+
 } else {
 if (i.freteFixo !== null) {
   total = i.freteFixo;
@@ -696,7 +699,7 @@ if (i.freteFixo !== null) {
         <td>${i.cliente}</td>
         <td>${i.cidade}</td>
         <td>${i.horario}</td>
-        <td>${i.margem.toFixed(2)}</td>
+        <td>${i.freteFixo !== null ? "FIXO" : "RATEIO"}</td>
         <td>${moeda3(unit)}</td>
         <td>${numero(i.litros)}</td>
         <td>${moeda(total)}</td>
