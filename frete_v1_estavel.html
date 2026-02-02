@@ -92,6 +92,7 @@ const BASE_COORDS = {
 };
 
 let cidadesCoords={}, mapa, rotaLayer;
+let cidadesCarregadas = false;
 
 let infoDispersaoHTML = "";
 
@@ -151,6 +152,7 @@ const numero=v=>v.toLocaleString("pt-BR");
 /* ================= CIDADES ================= */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
+  cidadesCarregadas = true;
   const dl=document.getElementById("cidadesMG");
   Object.keys(d).forEach(c=>{
     const o=document.createElement("option");
@@ -265,6 +267,11 @@ infoDispersaoHTML = "";
 /* ================= OTIMIZAR ROTA ================= */
 
 async function otimizarRota(){
+  if (!cidadesCarregadas) {
+  alert("Aguarde o carregamento das cidades antes de otimizar a rota.");
+  return;
+}
+
   let dispersoes = [];
   const spinner = document.getElementById("spinner");
   spinner.style.display = "flex";
