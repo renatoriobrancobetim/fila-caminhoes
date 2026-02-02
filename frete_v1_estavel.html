@@ -536,6 +536,12 @@ try {
   let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
 
 rows.forEach(r=>{
+  const itensComFixo = itens.filter(i => i.freteFixo !== null);
+const itensSemFixo = itens.filter(i => i.freteFixo === null);
+
+const todosComFreteFixo =
+  itens.length > 0 && itensSemFixo.length === 0;
+
   const cidadeInput = r.querySelector(".cidade");
   if (!cidadeInput.value) return;
 
@@ -629,13 +635,7 @@ if (todosComFreteFixo) {
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
   const freteUnitBase=freteTotal/litrosPonderadosTotal;
-const itensComFixo = itens.filter(i => i.freteFixo !== null);
-const itensSemFixo = itens.filter(i => i.freteFixo === null);
-  const todosComFreteFixo =
-  itens.length > 0 && itensSemFixo.length === 0;
-
-
-const somaFretesFixos = itensComFixo.reduce(
+  const somaFretesFixos = itensComFixo.reduce(
   (s, i) => s + (i.freteFixo * i.litros), 0
 );
 
