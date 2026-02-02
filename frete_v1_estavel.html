@@ -361,16 +361,10 @@ if (dispersoes.length > 0) {
           `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
         ).join("")}
       </ul>
-
-      ${existeFreteFixo ? `
-        <div class="alerta-frete-fixo alerta-embaixo">
-          ⚠️ <b>Frete fixo por litro aplicado.</b><br>
-          O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
-        </div>
-      ` : ""}
     </div>
   `;
 }
+
 
 
     await recalcularKM();
@@ -802,6 +796,15 @@ html += `
 </table>
 `;
 html += infoDispersaoHTML || "";
+  if (existeFreteFixo) {
+  html += `
+    <div class="alerta-frete-fixo">
+      ⚠️ <b>Frete fixo por litro aplicado.</b><br>
+      O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
+    </div>
+  `;
+}
+
 
 document.getElementById("resumo").innerHTML = html;
 // 🔔 PASSO 3 — dispara animação após render do HTML
