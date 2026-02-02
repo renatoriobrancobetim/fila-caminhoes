@@ -624,8 +624,9 @@ const itensComFixo = itens.filter(i => i.freteFixo !== null);
 const itensSemFixo = itens.filter(i => i.freteFixo === null);
 
 const somaFretesFixos = itensComFixo.reduce(
-  (s, i) => s + i.freteFixo, 0
+  (s, i) => s + (i.freteFixo * i.litros), 0
 );
+
 
 let freteRestante = freteTotal - somaFretesFixos;
 if (freteRestante < 0) freteRestante = 0;
@@ -682,12 +683,13 @@ if (modalidade === "TABELA") {
 
 } else {
 if (i.freteFixo !== null) {
-  total = i.freteFixo;
-  unit = total / i.litros;
+  unit = i.freteFixo;              // R$/L fixo digitado
+  total = i.litros * unit;         // TOTAL = R$/L × litros
 } else {
   unit = freteUnitRateio;
   total = i.litros * freteUnitRateio;
 }
+
 
 }
 
