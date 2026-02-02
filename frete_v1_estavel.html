@@ -361,9 +361,17 @@ if (dispersoes.length > 0) {
           `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
         ).join("")}
       </ul>
+
+      ${existeFreteFixo ? `
+        <div class="alerta-frete-fixo alerta-embaixo">
+          ⚠️ <b>Frete fixo por litro aplicado.</b><br>
+          O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
+        </div>
+      ` : ""}
     </div>
   `;
 }
+
 
     await recalcularKM();
     await desenharMapa(rota);
@@ -672,12 +680,6 @@ const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-d
 let html = `
 <div class="resumo-box">
   <h3>
-  ${existeFreteFixo ? `
-<div class="alerta-frete-fixo">
-  ⚠️ <b>Frete fixo por litro aplicado.</b><br>
-  O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
-</div>
-` : ""}
 
   RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
 
