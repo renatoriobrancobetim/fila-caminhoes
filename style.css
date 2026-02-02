@@ -548,3 +548,43 @@ th{
 .alerta-embaixo {
   margin-top: 12px;
 }
+/* Container geral */
+.alertas-encadeados {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Animação de entrada */
+.animar-alertas {
+  animation: alertasEntrada 0.6s ease-out both;
+}
+
+@keyframes alertasEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulse leve no frete fixo */
+.alerta-frete-fixo {
+  padding: 12px;
+  border-left: 6px solid #c62828;
+  background: #fdecea;
+  color: #7f1d1d;
+  border-radius: 6px;
+  animation: pulseFixo 1.6s ease-in-out infinite;
+}
+
+/* Para não ficar chamativo demais */
+@keyframes pulseFixo {
+  0% { box-shadow: 0 0 0 rgba(198,40,40,0.0); }
+  50% { box-shadow: 0 0 0 6px rgba(198,40,40,0.08); }
+  100% { box-shadow: 0 0 0 rgba(198,40,40,0.0); }
+}
