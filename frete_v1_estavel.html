@@ -612,16 +612,28 @@ if (usarFreteTabela) {
 
 
 
-if (modalidade !== "TABELA" && km > 0) {
+if (!todosComFreteFixo && modalidade !== "TABELA" && km > 0) {
   modalidade = "KM";
   freteTotal = (km * dados.indice) + dados.taxa;
 }
+if (todosComFreteFixo) {
+  modalidade = "FIXO";
+
+  freteTotal = itensComFixo.reduce(
+    (s, i) => s + (i.freteFixo * i.litros),
+    0
+  );
+}
+
   
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
   const freteUnitBase=freteTotal/litrosPonderadosTotal;
 const itensComFixo = itens.filter(i => i.freteFixo !== null);
 const itensSemFixo = itens.filter(i => i.freteFixo === null);
+  const todosComFreteFixo =
+  itens.length > 0 && itensSemFixo.length === 0;
+
 
 const somaFretesFixos = itensComFixo.reduce(
   (s, i) => s + (i.freteFixo * i.litros), 0
