@@ -92,6 +92,7 @@ const BASE_COORDS = {
 };
 
 let cidadesCoords={}, mapa, rotaLayer;
+let cidadesCarregadas = false;
 
 let infoDispersaoHTML = "";
 
@@ -151,6 +152,7 @@ const numero=v=>v.toLocaleString("pt-BR");
 /* ================= CIDADES ================= */
 fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
   cidadesCoords=d;
+  cidadesCarregadas = true;
   const dl=document.getElementById("cidadesMG");
   Object.keys(d).forEach(c=>{
     const o=document.createElement("option");
@@ -211,7 +213,7 @@ function gerarTabela(){
       <th>CIDADE</th>
       <th>HORÁRIO</th>
       <th>QTDE (L)</th>
-      <th>AJUSTE DE MARGEM</th>
+      <th>FRETE FIXO (R$)</th>
       <th>R$/L</th>
       <th>TOTAL</th>
       <th>VENDEDOR</th>
@@ -224,7 +226,16 @@ function gerarTabela(){
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
-      <td><input id="margem${i}" type="number" step="0.01" value="1.00" style="width:70px;text-align:center"></td>
+      <td>
+  <input
+    id="freteFixo${i}"
+    type="number"
+    step="0.01"
+    placeholder="Opcional"
+    style="width:90px;text-align:center"
+  >
+</td>
+
       <td id="unit${i}">-</td>
       <td id="frete${i}">-</td>
       <td><input id="vendedor${i}" class="uppercase"></td>
@@ -256,6 +267,11 @@ infoDispersaoHTML = "";
 /* ================= OTIMIZAR ROTA ================= */
 
 async function otimizarRota(){
+  if (!cidadesCarregadas) {
+  alert("Aguarde o carregamento das cidades antes de otimizar a rota.");
+  return;
+}
+
   let dispersoes = [];
   const spinner = document.getElementById("spinner");
   spinner.style.display = "flex";
@@ -265,12 +281,21 @@ async function otimizarRota(){
     const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
     const paradas = rows
-      .map(r => ({
-        row: r,
-        cidade: r.querySelector(".cidade").value,
-        cliente: r.querySelector("input[id^='cliente']").value
-      }))
-      .filter(p => p.cidade);
+  .map(r => {
+    const cidade = r.querySelector(".cidade")?.value.trim();
+    return {
+      row: r,
+      cidade,
+      cliente: r.querySelector("input[id^='cliente']")?.value || ""
+    };
+  })
+  .filter(p => p.cidade && cidadesCoords[p.cidade]);
+if (paradas.length === 0) {
+  alert("Informe pelo menos uma cidade válida para otimizar a rota.");
+  spinner.style.display = "none";
+  return;
+}
+
 
     let rota = [];
     let restantes = [...paradas];
@@ -327,18 +352,39 @@ infoDispersaoHTML = "";
 
 if (dispersoes.length > 0) {
   infoDispersaoHTML = `
-    <div class="info-dispersao">
-      <div class="info-dispersao-titulo">
-        ⚠️ Dispersão maior que 70KM identificada entre os trechos da rota:
-      </div>
-      <ul>
+<div class="condicoes-rota">
+  <div class="condicoes-header">
+    ⚠️ Condições especiais da rota
+  </div>
+
+  <!-- DISPERSÃO -->
+  <div class="condicao-item dispersao">
+ 
+    <div class="condicao-texto">
+           <strong>⚠️ Dispersão maior que 70 km identificada</strong></span>
+       <ul>
         ${dispersoes.map(d =>
           `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
         ).join("")}
       </ul>
+        </div>
+  </div>
+
+  <!-- FRETE FIXO -->
+  <div class="condicao-item frete-fixo">
+       <div class="condicao-texto">
+      <strong> ⚠️ Frete fixo por litro aplicado</strong>
+      <div class="condicao-subtexto">
+       <ul> O cálculo não utilizou a tabela nem o frete por KM </ul>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
   `;
 }
+
+
 
     await recalcularKM();
     await desenharMapa(rota);
@@ -527,7 +573,7 @@ try {
   let itens=[], litrosUsados=0, litrosPonderadosTotal=0;
 
 rows.forEach(r=>{
-  const cidadeInput = r.querySelector(".cidade");
+    const cidadeInput = r.querySelector(".cidade");
   if (!cidadeInput.value) return;
 
   const c = r.querySelector("input[id^='cliente']") || { value: "" };
@@ -536,10 +582,15 @@ rows.forEach(r=>{
 
   const idx=parseInt(c.id.replace("cliente",""));
   const litros=litrosArr[idx];
-  const margem=parseFloat(document.getElementById("margem"+idx).value||1);
+  const freteFixoInput = document.getElementById("freteFixo"+idx);
+const freteFixo = freteFixoInput && freteFixoInput.value
+  ? parseFloat(freteFixoInput.value)
+  : null;
+
 
   litrosUsados+=litros;
-  litrosPonderadosTotal+=litros*margem;
+  litrosPonderadosTotal += litros;
+
 
 itens.push({
   idx,
@@ -548,12 +599,17 @@ itens.push({
   horario: document.getElementById("horario"+idx).value || "-",
   vendedor: document.getElementById("vendedor"+idx).value || "-",
   litros,
-  margem
+  freteFixo
 });
 
+
 });
+const itensComFixo = itens.filter(i => i.freteFixo !== null);
+const itensSemFixo = itens.filter(i => i.freteFixo === null);
 
-
+const todosComFreteFixo =
+  itens.length > 0 && itensSemFixo.length === 0;
+  const existeFreteFixo = itensComFixo.length > 0;
 
 const todosCompartimentosUsados = itens.length === litrosArr.length;
 
@@ -589,21 +645,45 @@ if (usarFreteTabela) {
   freteTotal = 0;
 
   itens.forEach(i => {
-    freteTotal += i.litros * i.margem * valorPorLitro;
+    freteTotal += i.litros * valorPorLitro;
+
   });
 }
 
 
 
 
-if (modalidade !== "TABELA" && km > 0) {
+if (!todosComFreteFixo && modalidade !== "TABELA" && km > 0) {
   modalidade = "KM";
   freteTotal = (km * dados.indice) + dados.taxa;
 }
+if (todosComFreteFixo) {
+  modalidade = "FIXO";
+
+  freteTotal = itensComFixo.reduce(
+    (s, i) => s + (i.freteFixo * i.litros),
+    0
+  );
+}
+
   
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
   const freteUnitBase=freteTotal/litrosPonderadosTotal;
+  const somaFretesFixos = itensComFixo.reduce(
+  (s, i) => s + (i.freteFixo * i.litros), 0
+);
+
+
+let freteRestante = freteTotal - somaFretesFixos;
+if (freteRestante < 0) freteRestante = 0;
+
+const litrosRateio = itensSemFixo.reduce(
+  (s, i) => s + i.litros, 0
+);
+
+const freteUnitRateio =
+  litrosRateio > 0 ? freteRestante / litrosRateio : 0;
 
 const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
 
@@ -613,16 +693,20 @@ const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-d
 let html = `
 <div class="resumo-box">
   <h3>
-    RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
 
-    ${
-      modalidade === "TABELA"
+  RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
+
+  ${
+    existeFreteFixo
+      ? '<span class="badge-frete badge-fixo">FRETE FIXO (R$/L)</span>'
+      : modalidade === "TABELA"
         ? '<span class="badge-frete badge-tabela">FRETE TABELA</span>'
         : '<span class="badge-frete badge-km">FRETE KM</span>'
-    }
+  }
 
-    ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
-  </h3>
+  ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
+</h3>
+
 
 `;
 
@@ -633,7 +717,7 @@ html += `
     <th>CLIENTE</th>
     <th>CIDADE</th>
     <th>HORÁRIO</th>
-    <th>AJUSTE</th>
+    <th>TIPO FRETE</th>
     <th>FRETE (R$/L)</th>
     <th>QUANTIDADE</th>
     <th>TOTAL</th>
@@ -646,10 +730,18 @@ html += `
 
 if (modalidade === "TABELA") {
   unit = tabelaFrete[normalizarCidade(i.cidade)][tipoTabela];
-  total = i.litros * i.margem * unit;
+  total = i.litros * unit;
+
 } else {
-  unit = freteUnitBase;
-  total = i.litros * i.margem * freteUnitBase;
+if (i.freteFixo !== null) {
+  unit = i.freteFixo;              // R$/L fixo digitado
+  total = i.litros * unit;         // TOTAL = R$/L × litros
+} else {
+  unit = freteUnitRateio;
+  total = i.litros * freteUnitRateio;
+}
+
+
 }
 
     document.getElementById("unit"+i.idx).innerText=moeda3(unit);
@@ -660,7 +752,7 @@ if (modalidade === "TABELA") {
         <td>${i.cliente}</td>
         <td>${i.cidade}</td>
         <td>${i.horario}</td>
-        <td>${i.margem.toFixed(2)}</td>
+        <td>${i.freteFixo !== null ? "FIXO" : "RATEIO"}</td>
         <td>${moeda3(unit)}</td>
         <td>${numero(i.litros)}</td>
         <td>${moeda(total)}</td>
@@ -722,9 +814,28 @@ html += `
   </tr>
 </table>
 `;
-html += infoDispersaoHTML || "";
+if (infoDispersaoHTML || existeFreteFixo) {
+  html += `
+    <div class="alertas-encadeados animar-alertas">
+      ${infoDispersaoHTML || ""}
+
+      ${
+        existeFreteFixo ? `
+        ` : ""
+      }
+    </div>
+  `;
+}
+
+
 
 document.getElementById("resumo").innerHTML = html;
+  setTimeout(() => {
+  document
+    .querySelectorAll(".alerta-frete-fixo")
+    .forEach(el => el.style.animation = "none");
+}, 4000);
+
 // 🔔 PASSO 3 — dispara animação após render do HTML
 requestAnimationFrame(() => {
   animarFretes({
