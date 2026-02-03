@@ -362,6 +362,11 @@ if (dispersoes.length > 0) {
     <span class="condicao-icone"></span>
     <div class="condicao-texto">
       <strong>Dispersão maior que 70 km identificada</strong>
+       <ul>
+        ${dispersoes.map(d =>
+          `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
+        ).join("")}
+      </ul>
         </div>
   </div>
 
