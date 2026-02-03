@@ -373,3 +373,7 @@ button:disabled {
 .erp-header-display .nav-item.ativo {
   background: rgba(255,255,255,0.18);
 }
+/* evita “empilhamento pesado” de headers */
+.erp-header-display + header {
+  padding-top: 18px;
+}
