@@ -658,7 +658,7 @@ th{
   top: 0;
   z-index: 1000;
   height: 56px;
-  background: linear-gradient(135deg, #0d47a1, #c62828);
+  background: linear-gradient(135deg, var(--azul), var(--vermelho));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -688,7 +688,7 @@ th{
 /* ===== NAV ===== */
 .erp-nav {
   display: flex;
-  gap: 16px;
+  gap: 14px;
 }
 
 .nav-item {
@@ -699,18 +699,18 @@ th{
   border-radius: 6px;
   transition: background 0.2s ease, transform 0.15s ease;
   opacity: 0.85;
+  white-space: nowrap;
 }
 
 .nav-item:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.18);
   opacity: 1;
   transform: translateY(-1px);
 }
 
 /* ===== ATIVO ===== */
 .nav-item.ativo {
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.28);
   font-weight: 600;
   opacity: 1;
 }
-
