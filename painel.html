@@ -10,9 +10,7 @@
   --azul: #0d47a1;
   --azul-escuro: #082f6a;
   --vermelho: #c62828;
-  --vermelho-escuro: #8e0000;
-
-  --bg: #f5f7fa;
+  --bg: #f4f6f8;
   --card: #ffffff;
   --texto: #263238;
   --borda: #e0e0e0;
@@ -28,51 +26,89 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--texto);
+  display: flex;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, var(--azul), var(--azul-escuro));
+  color: #fff;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 24px 18px;
+}
+
+.sidebar h1 {
+  font-size: 18px;
+  margin: 0 0 6px 0;
+}
+
+.sidebar span {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ===== MENU ===== */
+.menu {
+  margin-top: 28px;
+}
+
+.menu-section {
+  margin-bottom: 22px;
+}
+
+.menu-section h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.menu a:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.menu svg {
+  width: 18px;
+  height: 18px;
+  fill: #fff;
+}
+
+/* ===== MAIN ===== */
+.main {
+  margin-left: 260px;
+  padding: 28px 34px;
+  width: 100%;
 }
 
 /* ===== HEADER ===== */
 .header {
-  background: linear-gradient(
-    135deg,
-    var(--azul),
-    var(--vermelho)
-  );
-  color: #fff;
-  padding: 28px 36px;
+  margin-bottom: 28px;
 }
 
-.header h1 {
+.header h2 {
   margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 22px;
 }
 
 .header span {
-  display: block;
-  margin-top: 4px;
   font-size: 14px;
-  opacity: 0.9;
-}
-
-/* ===== CONTAINER ===== */
-.container {
-  max-width: 1250px;
-  margin: 32px auto;
-  padding: 0 24px;
-}
-
-/* ===== SECTION ===== */
-.section {
-  margin-bottom: 36px;
-}
-
-.section h2 {
-  font-size: 16px;
-  margin-bottom: 16px;
-  color: #37474f;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  color: #555;
 }
 
 /* ===== GRID ===== */
@@ -93,10 +129,8 @@ body {
   justify-content: space-between;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
-  overflow: hidden;
 }
 
-/* faixa lateral */
 .card::before {
   content: "";
   position: absolute;
@@ -104,51 +138,23 @@ body {
   top: 0;
   width: 5px;
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    var(--azul),
-    var(--vermelho)
-  );
+  background: linear-gradient(to bottom, var(--azul), var(--vermelho));
+  border-radius: 14px 0 0 14px;
 }
 
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.12);
 }
 
-/* ===== ICON ===== */
-.icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: linear-gradient(
-    135deg,
-    rgba(13,71,161,0.12),
-    rgba(198,40,40,0.12)
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 14px;
-}
-
-.icon svg {
-  width: 24px;
-  height: 24px;
-  fill: var(--azul);
-}
-
-/* ===== TEXT ===== */
 .card h3 {
   margin: 0 0 6px 0;
   font-size: 17px;
-  font-weight: 600;
 }
 
 .card p {
   font-size: 14px;
   color: #555;
-  line-height: 1.4;
   flex-grow: 1;
 }
 
@@ -156,129 +162,118 @@ body {
 .card a {
   margin-top: 18px;
   padding: 11px;
-  background: linear-gradient(
-    135deg,
-    var(--azul),
-    var(--vermelho)
-  );
+  background: linear-gradient(135deg, var(--azul), var(--vermelho));
   color: #fff;
   text-decoration: none;
   text-align: center;
   border-radius: 8px;
   font-weight: 600;
-  letter-spacing: 0.2px;
-  transition: filter 0.2s ease, transform 0.15s ease;
+  transition: filter 0.2s ease;
 }
 
 .card a:hover {
   filter: brightness(1.1);
-  transform: translateY(-1px);
 }
 
-/* ===== FOOTER ===== */
-.footer {
-  text-align: center;
-  font-size: 13px;
-  color: #666;
-  margin: 48px 0 24px;
+/* ===== RESPONSIVO ===== */
+@media (max-width: 900px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+  }
+  .main {
+    margin-left: 0;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===== HEADER ===== -->
-<div class="header">
-  <h1>Painel Operacional Logístico</h1>
-  <span>Central de acesso aos sistemas da operação</span>
-</div>
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <h1>Painel Logístico</h1>
+  <span>Sistemas Operacionais</span>
 
-<!-- ===== CONTAINER ===== -->
-<div class="container">
+  <nav class="menu">
 
-  <!-- OPERAÇÃO -->
-  <div class="section">
-    <h2>🚛 Operação de Caminhões</h2>
-    <div class="grid">
-
-      <div class="card">
-        <div class="icon">
-          <svg viewBox="0 0 24 24"><path d="M3 3h13v13H3zM16 8h5l-2-3h-3zM5 18a2 2 0 104 0 2 2 0 10-4 0zm10 0a2 2 0 104 0 2 2 0 10-4 0z"/></svg>
-        </div>
-        <h3>Fila de Espera de Caminhões</h3>
-        <p>Visualização em tempo real da fila operacional.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/leitura.html" target="_blank" rel="noopener">Acessar Sistema</a>
-      </div>
-
-      <div class="card">
-        <div class="icon">
-          <svg viewBox="0 0 24 24"><path d="M4 4h16v4H4zM4 10h16v10H4z"/></svg>
-        </div>
-        <h3>Painel de Controle da Fila</h3>
-        <p>Gestão completa da fila e da operação diária.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/index.html" target="_blank" rel="noopener">Acessar Sistema</a>
-      </div>
-
-      <div class="card">
-        <div class="icon">
-          <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm-8 10c0-4 4-6 8-6s8 2 8 6"/></svg>
-        </div>
-        <h3>Fila de Disponibilidade</h3>
-        <p>Controle de motoristas e caminhões disponíveis.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/motoristas.html" target="_blank" rel="noopener">Acessar Sistema</a>
-      </div>
-
+    <div class="menu-section">
+      <h3>Operação</h3>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/leitura.html" target="_blank">
+        🚛 Fila de Espera
+      </a>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/index.html" target="_blank">
+        🧭 Controle da Fila
+      </a>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/motoristas.html" target="_blank">
+        👷 Disponibilidade
+      </a>
     </div>
+
+    <div class="menu-section">
+      <h3>Cadastros</h3>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/cadastro.html" target="_blank">
+        📋 Cadastro de Caminhões
+      </a>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/clientes-mapa.html" target="_blank">
+        🗺️ Mapa de Clientes
+      </a>
+    </div>
+
+    <div class="menu-section">
+      <h3>Frete</h3>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/frete.html" target="_blank">
+        💰 Cálculo de Frete
+      </a>
+    </div>
+
+  </nav>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <div class="header">
+    <h2>Dashboard Operacional</h2>
+    <span>Visão geral dos sistemas da logística</span>
   </div>
 
-  <!-- CADASTROS -->
-  <div class="section">
-    <h2>📋 Cadastros</h2>
-    <div class="grid">
+  <div class="grid">
 
-      <div class="card">
-        <div class="icon">
-          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM7 7h10v2H7zM7 11h10v2H7z"/></svg>
-        </div>
-        <h3>Cadastro de Caminhões</h3>
-        <p>Registro e manutenção da frota.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/cadastro.html" target="_blank" rel="noopener">Acessar Sistema</a>
-      </div>
-
-      <div class="card">
-        <div class="icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2a8 8 0 018 8c0 6-8 12-8 12S4 16 4 10a8 8 0 018-8z"/></svg>
-        </div>
-        <h3>Mapa de Clientes</h3>
-        <p>Localização geográfica e análise de clientes.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/clientes-mapa.html" target="_blank" rel="noopener">Acessar Sistema</a>
-      </div>
-
+    <div class="card">
+      <h3>Fila de Espera de Caminhões</h3>
+      <p>Acompanhamento visual da fila em tempo real.</p>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/leitura.html" target="_blank">Acessar</a>
     </div>
+
+    <div class="card">
+      <h3>Painel de Controle da Fila</h3>
+      <p>Gestão completa da operação diária.</p>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/index.html" target="_blank">Acessar</a>
+    </div>
+
+    <div class="card">
+      <h3>Cadastro de Caminhões</h3>
+      <p>Administração da frota cadastrada.</p>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/cadastro.html" target="_blank">Acessar</a>
+    </div>
+
+    <div class="card">
+      <h3>Mapa de Clientes</h3>
+      <p>Distribuição geográfica e análise de clientes.</p>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/clientes-mapa.html" target="_blank">Acessar</a>
+    </div>
+
+    <div class="card">
+      <h3>Cálculo de Frete por Rota</h3>
+      <p>Otimização de rotas e cálculo de frete.</p>
+      <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/frete.html" target="_blank">Acessar</a>
+    </div>
+
   </div>
 
-  <!-- FRETE -->
-  <div class="section">
-    <h2>💰 Frete e Roteirização</h2>
-    <div class="grid">
-
-      <div class="card">
-        <div class="icon">
-          <svg viewBox="0 0 24 24"><path d="M3 13h18v8H3zM5 5h14v6H5z"/></svg>
-        </div>
-        <h3>Cálculo de Frete por Rota</h3>
-        <p>Cálculo inteligente com otimização de rotas.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/frete.html" target="_blank" rel="noopener">Acessar Sistema</a>
-      </div>
-
-    </div>
-  </div>
-
-</div>
-
-<div class="footer">
-  © 2026 – Renato Monteiro
-</div>
+</main>
 
 </body>
 </html>
