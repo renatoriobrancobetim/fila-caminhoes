@@ -34,15 +34,21 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  height: 56px;
+
+  /* 🔥 REMOVE altura fixa */
+  min-height: 56px;
+
   background: linear-gradient(135deg, var(--azul), var(--vermelho));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+
+  padding: 0 20px;
+
   color: #fff;
   box-shadow: 0 3px 10px rgba(0,0,0,0.18);
 }
+
 
 .erp-left {
   display: flex;
@@ -343,11 +349,15 @@ button:disabled {
    ====================================================== */
 
 .erp-header.erp-header-display {
-  height: 40px;
-  min-height: 40px;
-  padding: 0 16px;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 16px !important;
+
   background: linear-gradient(90deg, #0A3D91, #062b66);
+  display: flex;
+  align-items: center;
 }
+
 
 .erp-header-display .erp-logo {
   font-size: 13px;
