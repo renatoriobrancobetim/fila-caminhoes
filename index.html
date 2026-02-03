@@ -135,21 +135,28 @@ function renderDisp(){
     .filter(([p])=>!filaPlacas[p])
     .sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1)
     .forEach(([p,s])=>{
+
+      const classeStatus = s === "DISPONÍVEL" ? "disp-ok" : "disp-off";
+      const badgeStatus  = s === "DISPONÍVEL" ? "ok" : "off";
+
       listaDisp.innerHTML+=`
-        <div class="item">
+        <div class="item ${classeStatus}">
           <div>
             <b>${p}</b><br>
-            <span class="status ${s==="DISPONÍVEL"?"ok":"off"}">${s}</span>
+            <span class="status ${badgeStatus}">${s}</span>
           </div>
+
           ${
             s==="DISPONÍVEL"
             ? `<button class="btn btn-secundario" onclick="addFila('${p}')">
-➕ Fila</button>`
+                ➕ Fila
+              </button>`
             : ""
           }
         </div>`;
     });
 }
+
 
 /* AÇÕES */
 function addFila(p){
