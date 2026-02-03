@@ -353,10 +353,11 @@ infoDispersaoHTML = "";
 if (dispersoes.length > 0) {
   infoDispersaoHTML = `
     <div class="info-dispersao">
-     <div class="info-dispersao-titulo">
-  <span class="icone-alerta">⚠️</span>
+ <div class="info-dispersao-titulo">
+  <span class="icone-alerta alerta-dispersao">⚠️</span>
   Dispersão maior que 70 km identificada entre os trechos da rota:
 </div>
+
 
       <ul>
         ${dispersoes.map(d =>
@@ -804,10 +805,12 @@ if (infoDispersaoHTML || existeFreteFixo) {
 
       ${
         existeFreteFixo ? `
-          <div class="alerta-frete-fixo">
-            <span class="icone-alerta">⚠️</span> <b>Frete fixo por litro aplicado.</b><br>
-            O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
-          </div>
+        <div class="alerta-frete-fixo">
+  <span class="icone-alerta alerta-frete-fixo">⚠️</span>
+  <b>Frete fixo por litro aplicado.</b><br>
+  O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
+</div>
+
         ` : ""
       }
     </div>
