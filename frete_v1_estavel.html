@@ -352,12 +352,17 @@ infoDispersaoHTML = "";
 
 if (dispersoes.length > 0) {
   infoDispersaoHTML = `
- <div class="info-dispersao-titulo">
-  <svg class="icone-alerta alerta-dispersao" width="20" height="18" viewBox="0 0 20 18">
-    <path d="M10 1 L19 17 H1 Z" fill="currentColor" />
+<div class="info-dispersao-titulo">
+  <svg class="alert-icon alert-dispersao" viewBox="0 0 24 24">
+    <path d="M12 3 2.7 20.5a1 1 0 0 0 .9 1.5h16.8a1 1 0 0 0 .9-1.5L12 3z"
+          fill="none" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="12" y1="9" x2="12" y2="14"
+          stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="12" cy="17" r="1.2" fill="currentColor"/>
   </svg>
   Dispersão maior que 70KM identificada entre os trechos da rota:
 </div>
+
 
 
 
@@ -808,12 +813,18 @@ if (infoDispersaoHTML || existeFreteFixo) {
       ${
         existeFreteFixo ? `
 <div class="alerta-frete-fixo">
-  <svg class="icone-alerta alerta-frete-fixo" width="20" height="18" viewBox="0 0 20 18">
-    <path d="M10 1 L19 17 H1 Z" fill="currentColor" />
+  <svg class="alert-icon alert-frete-fixo" viewBox="0 0 24 24">
+    <path d="M12 3 2.7 20.5a1 1 0 0 0 .9 1.5h16.8a1 1 0 0 0 .9-1.5L12 3z"
+          fill="none" stroke="currentColor" stroke-width="1.8"/>
+    <line x1="12" y1="9" x2="12" y2="14"
+          stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="12" cy="17" r="1.2" fill="currentColor"/>
   </svg>
+
   <b>Frete fixo por litro aplicado.</b><br>
   O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
 </div>
+
 
 
         ` : ""
