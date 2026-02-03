@@ -352,11 +352,13 @@ infoDispersaoHTML = "";
 
 if (dispersoes.length > 0) {
   infoDispersaoHTML = `
-    <div class="info-dispersao">
  <div class="info-dispersao-titulo">
-  <span class="icone-alerta alerta-dispersao">⚠️</span>
-  Dispersão maior que 70 km identificada entre os trechos da rota:
+  <svg class="icone-alerta alerta-dispersao" width="20" height="18" viewBox="0 0 20 18">
+    <path d="M10 1 L19 17 H1 Z" fill="currentColor" />
+  </svg>
+  Dispersão maior que 70KM identificada entre os trechos da rota:
 </div>
+
 
 
       <ul>
@@ -805,11 +807,14 @@ if (infoDispersaoHTML || existeFreteFixo) {
 
       ${
         existeFreteFixo ? `
-        <div class="alerta-frete-fixo">
-  <span class="icone-alerta alerta-frete-fixo">⚠️</span>
+<div class="alerta-frete-fixo">
+  <svg class="icone-alerta alerta-frete-fixo" width="20" height="18" viewBox="0 0 20 18">
+    <path d="M10 1 L19 17 H1 Z" fill="currentColor" />
+  </svg>
   <b>Frete fixo por litro aplicado.</b><br>
   O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
 </div>
+
 
         ` : ""
       }
