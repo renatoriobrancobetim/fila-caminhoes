@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Mapa de Clientes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="stylesheet" href="erp.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
@@ -14,11 +14,39 @@
 <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 
 <style>
-body { margin:0; font-family:Arial; background:#f4f6f8; }
-.header { background:#0d47a1; color:#fff; padding:14px 20px; font-weight:bold; }
-.filtros { background:#fff; padding:10px; border-bottom:1px solid #ddd; }
-#mapaClientes { height:calc(100vh - 170px); width:100%; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+}
+
+/* título da página */
+.page-title {
+  background: #fff;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--borda);
+  font-weight: 600;
+}
+
+/* filtros */
+.filtros {
+  background: #fff;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--borda);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  font-size: 13px;
+}
+
+/* mapa precisa continuar com altura calculada */
+#mapaClientes {
+  height: calc(100vh - 160px);
+  width: 100%;
+}
 </style>
+
 </head>
 
 <body>
@@ -30,38 +58,44 @@ body { margin:0; font-family:Arial; background:#f4f6f8; }
 
   <nav class="erp-nav">
     <a href="painel.html" class="nav-item">Painel</a>
-    <a href="frete.html" class="nav-item ativo">Frete</a>
+    <a href="frete.html" class="nav-item">Frete</a>
     <a href="index.html" class="nav-item">Fila</a>
     <a href="motoristas.html" class="nav-item">Disponibilidade</a>
-    <a href="clientes-mapa.html" class="nav-item">Clientes</a>
+    <a href="clientes-mapa.html" class="nav-item ativo">Clientes</a>
   </nav>
 </header>
 
-<div class="header">🗺️ Mapa de Clientes</div>
+
+<div class="page-title">
+  🗺️ Mapa de Clientes
+</div>
+
 
 <div class="filtros">
   <label><input type="checkbox" id="toggleDistribuidora" checked> Distribuidora</label>
   <label><input type="checkbox" id="toggleDerivados" checked> Derivados</label>
+
   <input type="text" id="buscaCliente" placeholder="Buscar cliente…">
-  <select id="filtroCidade"><option value="">Todas as cidades</option></select>
- <hr>
+  <select id="filtroCidade">
+    <option value="">Todas as cidades</option>
+  </select>
 
-<label>
-  <input type="checkbox" id="zonaVerde" checked>
-  🟢 Zona Verde (até 100 km)
-</label>
+  <label>
+    <input type="checkbox" id="zonaVerde" checked>
+    🟢 Zona Verde (até 100 km)
+  </label>
 
-<label style="margin-left:10px">
-  <input type="checkbox" id="zonaAmarela" checked>
-  🟡 Zona Amarela (101–200 km)
-</label>
+  <label>
+    <input type="checkbox" id="zonaAmarela" checked>
+    🟡 Zona Amarela (101–200 km)
+  </label>
 
-<label style="margin-left:10px">
-  <input type="checkbox" id="zonaVermelha" checked>
-  🔴 Zona Vermelha (+200 km)
-</label>
-
+  <label>
+    <input type="checkbox" id="zonaVermelha" checked>
+    🔴 Zona Vermelha (+200 km)
+  </label>
 </div>
+
 
 <div id="mapaClientes"></div>
 
