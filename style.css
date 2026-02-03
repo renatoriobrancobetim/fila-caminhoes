@@ -652,4 +652,65 @@ th{
 .condicao-texto li {
   font-size: 14px;
 }
+/* ===== HEADER ERP ===== */
+.erp-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 56px;
+  background: linear-gradient(135deg, #0d47a1, #c62828);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+
+/* ===== LEFT ===== */
+.erp-left {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.erp-logo {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.erp-sub {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+/* ===== NAV ===== */
+.erp-nav {
+  display: flex;
+  gap: 16px;
+}
+
+.nav-item {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.15s ease;
+  opacity: 0.85;
+}
+
+.nav-item:hover {
+  background: rgba(255,255,255,0.15);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* ===== ATIVO ===== */
+.nav-item.ativo {
+  background: rgba(255,255,255,0.25);
+  font-weight: 600;
+  opacity: 1;
+}
 
