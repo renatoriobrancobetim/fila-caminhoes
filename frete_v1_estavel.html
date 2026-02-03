@@ -376,21 +376,11 @@ if (dispersoes.length > 0) {
     <div class="condicao-texto">
       <strong>Frete fixo por litro aplicado</strong>
       <div class="condicao-subtexto">
-        O cálculo não utilizou a tabela nem o frete por KM
+       <ul> O cálculo não utilizou a tabela nem o frete por KM </ul>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-      <ul>
-        ${dispersoes.map(d =>
-          `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
-        ).join("")}
-      </ul>
     </div>
   `;
 }
