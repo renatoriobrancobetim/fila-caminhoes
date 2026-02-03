@@ -338,3 +338,38 @@ button:disabled {
   background: #c62828;
   color: #fff;
 }
+/* ======================================================
+   HEADER ERP – MODO DISPLAY / TV / LEITURA
+   ====================================================== */
+
+.erp-header.erp-header-display {
+  height: 40px;
+  min-height: 40px;
+  padding: 0 16px;
+  background: linear-gradient(90deg, #0A3D91, #062b66);
+}
+
+.erp-header-display .erp-logo {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.erp-header-display .erp-sub {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.erp-header-display .erp-nav {
+  gap: 6px;
+}
+
+.erp-header-display .nav-item {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.erp-header-display .nav-item.ativo {
+  background: rgba(255,255,255,0.18);
+}
