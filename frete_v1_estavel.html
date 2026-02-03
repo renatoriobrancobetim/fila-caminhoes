@@ -361,7 +361,7 @@ if (dispersoes.length > 0) {
   <div class="condicao-item dispersao">
  
     <div class="condicao-texto">
-           <strong> <ul>  <span class="condicao-icone"></ul>Dispersão maior que 70 km identificada</strong></span>
+           <strong>⚠️ Dispersão maior que 70 km identificada</strong></span>
        <ul>
         ${dispersoes.map(d =>
           `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
@@ -372,9 +372,8 @@ if (dispersoes.length > 0) {
 
   <!-- FRETE FIXO -->
   <div class="condicao-item frete-fixo">
-    <span class="condicao-icone"></span>
-    <div class="condicao-texto">
-      <strong>Frete fixo por litro aplicado</strong>
+       <div class="condicao-texto">
+      <strong> ⚠️ Frete fixo por litro aplicado</strong>
       <div class="condicao-subtexto">
        <ul> O cálculo não utilizou a tabela nem o frete por KM </ul>
       </div>
