@@ -573,65 +573,39 @@ th{
   }
 }
 
-/* ================= FRETE FIXO ================= */
+/* ================= ALERT ICON (MODERNO) ================= */
 
-.alerta-frete-fixo {
-  padding: 12px;
-  border-left: 6px solid #c62828;
-  background: #fdecea;
-  color: #7f1d1d;
-  border-radius: 6px;
-  animation: pulseFixo 1.6s ease-in-out infinite;
-}
-
-/* Pulso suave */
-@keyframes pulseFixo {
-  0% {
-    box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.0);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(198, 40, 40, 0.08);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.0);
-  }
-}
-/* ================= ÍCONE ALERTA (SVG) ================= */
-
-.icone-alerta {
-  display: inline-block;
+.alert-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
   vertical-align: middle;
-  margin-right: 6px;
-  animation: pulsoAlerta 1.4s ease-in-out infinite;
-  transform-origin: 50% 60%; /* base do triângulo */
+  border-radius: 50%;
+  padding: 4px;
+  animation: alertBreath 2.2s ease-in-out infinite;
 }
 
-/* 🔴 Dispersão */
-.alerta-dispersao {
+/* 🔴 Dispersão – risco operacional */
+.alert-dispersao {
   color: #c62828;
+  background: rgba(198, 40, 40, 0.08);
 }
 
-/* 🟠 Frete fixo */
-.alerta-frete-fixo {
+/* 🟠 Frete fixo – exceção comercial */
+.alert-frete-fixo {
   color: #ef6c00;
+  background: rgba(239, 108, 0, 0.10);
 }
 
-/* ================= ANIMAÇÃO ================= */
-
-@keyframes pulsoAlerta {
+/* Animação elegante (sem escala exagerada) */
+@keyframes alertBreath {
   0% {
-    transform: scale(1);
-    opacity: 0.85;
-    filter: drop-shadow(0 0 0 currentColor);
+    box-shadow: 0 0 0 rgba(0,0,0,0);
   }
   50% {
-    transform: scale(1.25);
-    opacity: 1;
-    filter: drop-shadow(0 0 8px currentColor);
+    box-shadow: 0 0 0 6px currentColor;
   }
   100% {
-    transform: scale(1);
-    opacity: 0.85;
-    filter: drop-shadow(0 0 0 currentColor);
+    box-shadow: 0 0 0 rgba(0,0,0,0);
   }
 }
