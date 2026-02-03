@@ -352,16 +352,34 @@ infoDispersaoHTML = "";
 
 if (dispersoes.length > 0) {
   infoDispersaoHTML = `
-<div class="info-dispersao-titulo">
-  <svg class="alert-icon alert-dispersao" viewBox="0 0 24 24">
-    <path d="M12 3 2.7 20.5a1 1 0 0 0 .9 1.5h16.8a1 1 0 0 0 .9-1.5L12 3z"
-          fill="none" stroke="currentColor" stroke-width="1.8"/>
-    <line x1="12" y1="9" x2="12" y2="14"
-          stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <circle cx="12" cy="17" r="1.2" fill="currentColor"/>
-  </svg>
-  Dispersão maior que 70KM identificada entre os trechos da rota:
+<div class="condicoes-rota">
+  <div class="condicoes-header">
+    ⚠️ Condições especiais da rota
+  </div>
+
+  <!-- DISPERSÃO -->
+  <div class="condicao-item dispersao">
+    <span class="condicao-icone"></span>
+    <div class="condicao-texto">
+      <strong>Dispersão maior que 70 km identificada</strong>
+      <ul>
+        <li>Betim → Biquinhas (238,1 km)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FRETE FIXO -->
+  <div class="condicao-item frete-fixo">
+    <span class="condicao-icone"></span>
+    <div class="condicao-texto">
+      <strong>Frete fixo por litro aplicado</strong>
+      <div class="condicao-subtexto">
+        O cálculo não utilizou a tabela nem o frete por KM
+      </div>
+    </div>
+  </div>
 </div>
+
 
 
 
@@ -812,21 +830,6 @@ if (infoDispersaoHTML || existeFreteFixo) {
 
       ${
         existeFreteFixo ? `
-<div class="alerta-frete-fixo">
-  <svg class="alert-icon alert-frete-fixo" viewBox="0 0 24 24">
-    <path d="M12 3 2.7 20.5a1 1 0 0 0 .9 1.5h16.8a1 1 0 0 0 .9-1.5L12 3z"
-          fill="none" stroke="currentColor" stroke-width="1.8"/>
-    <line x1="12" y1="9" x2="12" y2="14"
-          stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <circle cx="12" cy="17" r="1.2" fill="currentColor"/>
-  </svg>
-
-  <b>Frete fixo por litro aplicado.</b><br>
-  O cálculo <u>não utilizou</u> a tabela nem o frete por KM.
-</div>
-
-
-
         ` : ""
       }
     </div>
