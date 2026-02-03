@@ -224,3 +224,25 @@ button:disabled {
     padding: 0 16px;
   }
 }
+/* ================= HEADER COMPACTO (MAPAS / GIS) ================= */
+.erp-header-compact {
+  padding: 8px 18px;
+}
+
+.erp-header-compact .erp-logo {
+  font-size: 15px;
+}
+
+.erp-header-compact .erp-sub {
+  font-size: 11px;
+}
+
+.erp-header-compact .erp-nav .nav-item {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* reduz altura geral */
+.erp-header-compact {
+  min-height: 48px;
+}
