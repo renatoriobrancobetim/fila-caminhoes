@@ -2,14 +2,17 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Painel de Sistemas | Logística</title>
+<title>Painel Operacional | Logística</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root {
   --azul: #0d47a1;
-  --cinza: #f4f6f8;
+  --azul-escuro: #08306b;
+  --cinza-bg: #f4f6f8;
+  --cinza-card: #ffffff;
   --texto: #263238;
+  --borda: #e0e0e0;
 }
 
 * {
@@ -19,49 +22,58 @@
 
 body {
   margin: 0;
-  background: var(--cinza);
+  background: var(--cinza-bg);
   color: var(--texto);
 }
 
 /* ===== HEADER ===== */
 .header {
-  background: var(--azul);
+  background: linear-gradient(135deg, var(--azul), var(--azul-escuro));
   color: #fff;
-  padding: 28px 20px;
-  text-align: center;
+  padding: 24px 30px;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
 }
 
-.header p {
-  margin-top: 8px;
-  font-size: 14px;
+.header span {
+  font-size: 13px;
   opacity: 0.9;
 }
 
 /* ===== CONTAINER ===== */
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 30px auto;
   padding: 0 20px;
+}
+
+/* ===== SECTION ===== */
+.section {
+  margin-bottom: 32px;
+}
+
+.section h2 {
+  font-size: 16px;
+  margin-bottom: 14px;
+  color: #37474f;
 }
 
 /* ===== GRID ===== */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  gap: 18px;
 }
 
 /* ===== CARD ===== */
 .card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 22px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  background: var(--cinza-card);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--borda);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -70,12 +82,31 @@ body {
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.08);
 }
 
+/* ===== ICON ===== */
+.icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #e3f2fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.icon svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--azul);
+}
+
+/* ===== TEXT ===== */
 .card h3 {
-  margin: 0 0 8px 0;
-  font-size: 18px;
+  margin: 0 0 6px 0;
+  font-size: 17px;
 }
 
 .card p {
@@ -84,32 +115,21 @@ body {
   flex-grow: 1;
 }
 
-/* ===== BOTÃO ===== */
+/* ===== BUTTON ===== */
 .card a {
-  margin-top: 16px;
+  margin-top: 14px;
   padding: 10px;
   background: var(--azul);
   color: #fff;
   text-decoration: none;
-  border-radius: 6px;
   text-align: center;
+  border-radius: 6px;
   font-weight: 600;
   transition: background 0.2s ease;
 }
 
 .card a:hover {
-  background: #08306b;
-}
-
-/* ===== EM BREVE ===== */
-.card.disabled {
-  opacity: 0.55;
-}
-
-.card.disabled a {
-  background: #9e9e9e;
-  cursor: not-allowed;
-  pointer-events: none;
+  background: var(--azul-escuro);
 }
 
 /* ===== FOOTER ===== */
@@ -124,43 +144,93 @@ body {
 
 <body>
 
+<!-- ===== HEADER ===== -->
 <div class="header">
-  <h1>Painel de Sistemas Logísticos</h1>
-  <p>Acesso rápido às ferramentas operacionais</p>
+  <h1>Painel Operacional Logístico</h1>
+  <span>Acesso central aos sistemas da operação</span>
 </div>
 
+<!-- ===== CONTAINER ===== -->
 <div class="container">
-  <div class="grid">
 
-    <!-- FRETE -->
-    <div class="card">
-      <h3>Cálculo de Frete por Rota</h3>
-      <p>Sistema de cálculo automático de frete com otimização de rota, mapa e regras por tipo de caminhão.</p>
-      <a href="frete.html">Acessar sistema</a>
+  <!-- OPERAÇÃO -->
+  <div class="section">
+    <h2>🚛 Operação de Caminhões</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3h13v13H3zM16 8h5l-2-3h-3zM5 18a2 2 0 104 0 2 2 0 10-4 0zm10 0a2 2 0 104 0 2 2 0 10-4 0z"/></svg>
+        </div>
+        <h3>Fila de Espera de Caminhões</h3>
+        <p>Painel de leitura da fila operacional de caminhões.</p>
+        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/leitura.html" target="_blank">Acessar</a>
+      </div>
+
+      <div class="card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16v4H4zM4 10h16v10H4z"/></svg>
+        </div>
+        <h3>Painel de Controle da Fila</h3>
+        <p>Gerenciamento completo da fila de caminhões.</p>
+        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/index.html" target="_blank">Acessar</a>
+      </div>
+
+      <div class="card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm-8 10c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
+        <h3>Fila de Disponibilidade</h3>
+        <p>Controle de motoristas e disponibilidade de caminhões.</p>
+        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/motoristas.html" target="_blank">Acessar</a>
+      </div>
+
     </div>
-
-    <!-- FILA -->
-    <div class="card">
-      <h3>Fila de Caminhões</h3>
-      <p>Controle de chegada, chamada e ordem de atendimento de caminhões na base.</p>
-      <a href="fila-caminhoes/index.html">Acessar sistema</a>
-    </div>
-
-    <!-- MAPA -->
-    <div class="card">
-      <h3>Mapa de Clientes</h3>
-      <p>Visualização geográfica dos clientes com base em cidades e coordenadas.</p>
-      <a href="clientes-mapa.html">Acessar sistema</a>
-    </div>
-
-    <!-- EM BREVE -->
-    <div class="card disabled">
-      <h3>Relatórios Gerenciais</h3>
-      <p>Indicadores operacionais e relatórios consolidados (em desenvolvimento).</p>
-      <a href="#">Em breve</a>
-    </div>
-
   </div>
+
+  <!-- CADASTROS -->
+  <div class="section">
+    <h2>📋 Cadastros</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM7 7h10v2H7zM7 11h10v2H7z"/></svg>
+        </div>
+        <h3>Cadastro de Caminhões</h3>
+        <p>Registro e manutenção dos caminhões da operação.</p>
+        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/cadastro.html" target="_blank">Acessar</a>
+      </div>
+
+      <div class="card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a8 8 0 018 8c0 6-8 12-8 12S4 16 4 10a8 8 0 018-8z"/></svg>
+        </div>
+        <h3>Mapa de Clientes</h3>
+        <p>Visualização geográfica dos clientes atendidos.</p>
+        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/clientes-mapa.html" target="_blank">Acessar</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FRETE -->
+  <div class="section">
+    <h2>💰 Frete e Roteirização</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M3 13h18v8H3zM5 5h14v6H5z"/></svg>
+        </div>
+        <h3>Cálculo de Frete por Rota</h3>
+        <p>Cálculo automático de frete com otimização de rota.</p>
+        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/frete.html" target="_blank">Acessar</a>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <div class="footer">
