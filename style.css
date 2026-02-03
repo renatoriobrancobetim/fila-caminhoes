@@ -573,39 +573,57 @@ th{
   }
 }
 
-/* ================= ALERT ICON (MODERNO) ================= */
+/* CONTAINER PRINCIPAL resumo frete */
+.condicoes-rota {
+  margin-top: 20px;
+  border: 1px solid #e0e0e0;
+  border-left: 5px solid #0d47a1;
+  border-radius: 6px;
+  background: #fafafa;
+}
 
-.alert-icon {
-  width: 22px;
-  height: 22px;
-  margin-right: 8px;
-  vertical-align: middle;
+/* TÍTULO */
+.condicoes-header {
+  font-weight: 600;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f5f7fa;
+}
+
+/* ITEM */
+.condicao-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+/* ÍCONE */
+.condicao-icone {
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
   border-radius: 50%;
-  padding: 4px;
-  animation: alertBreath 2.2s ease-in-out infinite;
+  flex-shrink: 0;
 }
 
-/* 🔴 Dispersão – risco operacional */
-.alert-dispersao {
-  color: #c62828;
-  background: rgba(198, 40, 40, 0.08);
+/* DISPERSÃO */
+.condicao-item.dispersao .condicao-icone {
+  background: #c62828;
 }
 
-/* 🟠 Frete fixo – exceção comercial */
-.alert-frete-fixo {
-  color: #ef6c00;
-  background: rgba(239, 108, 0, 0.10);
+/* FRETE FIXO */
+.condicao-item.frete-fixo .condicao-icone {
+  background: #ef6c00;
 }
 
-/* Animação elegante (sem escala exagerada) */
-@keyframes alertBreath {
-  0% {
-    box-shadow: 0 0 0 rgba(0,0,0,0);
-  }
-  50% {
-    box-shadow: 0 0 0 6px currentColor;
-  }
-  100% {
-    box-shadow: 0 0 0 rgba(0,0,0,0);
-  }
+/* TEXTO */
+.condicao-texto strong {
+  display: block;
+  margin-bottom: 4px;
 }
+
+.condicao-subtexto {
+  font-size: 13px;
+  color: #555;
+}
+
