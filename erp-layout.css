@@ -75,3 +75,109 @@ body {
   height: 100%;
   border: none;
 }
+/* ABAS */
+.erp-tabs {
+  display: flex;
+  background: #e5e7eb;
+  border-bottom: 1px solid #cbd5e1;
+  overflow-x: auto;
+}
+
+.erp-tab {
+  padding: 10px 14px;
+  background: #e5e7eb;
+  border-right: 1px solid #cbd5e1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.erp-tab.active {
+  background: #ffffff;
+  font-weight: bold;
+}
+
+.erp-tab span.close {
+  font-weight: bold;
+  cursor: pointer;
+  color: #ef4444;
+}
+
+/* ÁREA DAS TELAS */
+.erp-views {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.erp-view {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+.erp-view.active {
+  display: block;
+}
+
+.erp-view iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+/* ABAS */
+.erp-tabs {
+  display: flex;
+  background: #e5e7eb;
+  border-bottom: 1px solid #cbd5e1;
+  overflow-x: auto;
+}
+
+.erp-tab {
+  padding: 10px 14px;
+  background: #e5e7eb;
+  border-right: 1px solid #cbd5e1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.erp-tab.active {
+  background: #ffffff;
+  font-weight: bold;
+}
+
+.erp-tab span.close {
+  font-weight: bold;
+  cursor: pointer;
+  color: #ef4444;
+}
+
+/* ÁREA DAS TELAS */
+.erp-views {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.erp-view {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+.erp-view.active {
+  display: block;
+}
+
+.erp-view iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
