@@ -1,65 +1,129 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Painel Operacional Logístico | ERP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Painel Operacional Logístico</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS EXISTENTES -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/erp.css">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f1f5f9;
+  }
 
-  <!-- CSS DO ERP -->
-  <link rel="stylesheet" href="css/erp-layout.css">
+  header {
+    background: linear-gradient(90deg, #1e3a8a, #dc2626);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+
+  main {
+    padding: 30px;
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #1f2937;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  }
+
+  .icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .desc {
+    font-size: 13px;
+    color: #475569;
+  }
+
+  footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    color: #64748b;
+  }
+</style>
 </head>
 
 <body>
 
-<div class="erp-container">
+<header>
+  <h1>🚚 Painel Operacional Logístico</h1>
+  <p>Central unificada dos sistemas da operação</p>
+</header>
 
-  <!-- SIDEBAR -->
-  <aside class="erp-sidebar">
-    <h2 class="logo">🚚 LOGÍSTICA</h2>
+<main>
+  <div class="cards">
 
-    <nav>
-      <a href="leitura.html" class="menu-link">🕒 Fila de Espera</a>
-      <a href="index.html" class="menu-link">🎛️ Painel da Fila</a>
-      <a href="motoristas.html" class="menu-link">📍 Disponibilidade</a>
-      <a href="cadastro.html" class="menu-link">🚛 Cadastro Caminhões</a>
-      <a href="clientes-mapa.html" class="menu-link">🗺️ Mapa de Clientes</a>
-      <a href="frete.html" class="menu-link">🧮 Cálculo de Frete</a>
-    </nav>
-  </aside>
+    <a class="card" href="leitura.html">
+      <div class="icon">🕒</div>
+      <div class="title">Fila de Espera</div>
+      <div class="desc">Visualização da fila de caminhões</div>
+    </a>
 
-  <!-- ÁREA PRINCIPAL -->
-  <div class="erp-main">
+    <a class="card" href="index.html">
+      <div class="icon">🎛️</div>
+      <div class="title">Painel da Fila</div>
+      <div class="desc">Controle operacional da fila</div>
+    </a>
 
-    <!-- HEADER -->
-    <header class="erp-header">
-      <span id="page-title">Sistema ERP Logístico</span>
-      <span class="user">👤 Operador Logístico</span>
-    </header>
+    <a class="card" href="motoristas.html">
+      <div class="icon">📍</div>
+      <div class="title">Disponibilidade</div>
+      <div class="desc">Fila de disponibilidade de motoristas</div>
+    </a>
 
-    <!-- CONTEÚDO -->
-    <main class="erp-content">
+    <a class="card" href="cadastro.html">
+      <div class="icon">🚛</div>
+      <div class="title">Cadastro de Caminhões</div>
+      <div class="desc">Registro e gestão de veículos</div>
+    </a>
 
-      <!-- ABAS -->
-      <div class="erp-tabs" id="erp-tabs"></div>
+    <a class="card" href="clientes-mapa.html">
+      <div class="icon">🗺️</div>
+      <div class="title">Mapa de Clientes</div>
+      <div class="desc">Visualização geográfica dos clientes</div>
+    </a>
 
-      <!-- TELAS -->
-      <div class="erp-views" id="erp-views">
-        <!-- fallback caso JS falhe -->
-        <iframe src="leitura.html" style="width:100%;height:100%;border:none;"></iframe>
-      </div>
-
-    </main>
+    <a class="card" href="frete.html">
+      <div class="icon">🧮</div>
+      <div class="title">Cálculo de Frete</div>
+      <div class="desc">Cálculo de frete por rota</div>
+    </a>
 
   </div>
+</main>
 
-</div>
-
-<!-- IMPORTANTE: defer garante carregamento correto -->
-<script src="erp.js" defer></script>
+<footer>
+  © 2026 · Sistema Operacional Logístico
+</footer>
 
 </body>
 </html>
