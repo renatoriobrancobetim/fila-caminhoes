@@ -1,87 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Operacional Logístico | ERP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS EXISTENTES -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/erp.css">
+
+  <!-- CSS NOVO -->
+  <link rel="stylesheet" href="css/erp-layout.css">
+</head>
+
 <body>
 
-<div class="container">
+<div class="erp-container">
 
-  <!-- HEADER DO PAINEL -->
-  <div class="panel-header">
-    <h1>Painel Operacional Logístico</h1>
-    <p>Central unificada dos sistemas da operação</p>
-  </div>
+  <!-- SIDEBAR -->
+  <aside class="erp-sidebar">
+    <h2 class="logo">🚚 LOGÍSTICA</h2>
 
-  <!-- OPERAÇÃO -->
-  <div class="section">
-    <h2>🚛 Operação de Caminhões</h2>
+    <nav>
+      <a href="leitura.html" class="menu-link active">🕒 Fila de Espera</a>
+      <a href="index.html" class="menu-link">🎛️ Painel da Fila</a>
+      <a href="motoristas.html" class="menu-link">📍 Disponibilidade</a>
+      <a href="cadastro.html" class="menu-link">🚛 Cadastro Caminhões</a>
+      <a href="clientes-mapa.html" class="menu-link">🗺️ Mapa de Clientes</a>
+      <a href="frete.html" class="menu-link">🧮 Cálculo de Frete</a>
+    </nav>
+  </aside>
 
-    <div class="grid">
+  <!-- ÁREA PRINCIPAL -->
+  <div class="erp-main">
 
-      <div class="card">
-        <div class="icon">🚛</div>
-        <h3>Fila de Espera de Caminhões</h3>
-        <p>Visualização da fila operacional em tempo real.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/leitura.html">Acessar</a>
-      </div>
+    <!-- HEADER -->
+    <header class="erp-header">
+      <span id="page-title">Fila de Espera</span>
+      <span class="user">👤 Operador Logístico</span>
+    </header>
 
-      <div class="card">
-        <div class="icon">🛠️</div>
-        <h3>Painel de Controle da Fila</h3>
-        <p>Gestão completa da fila e da operação diária.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/index.html">Acessar</a>
-      </div>
+    <!-- CONTEÚDO -->
+    <main class="erp-content">
+      <iframe
+        id="erp-frame"
+        src="leitura.html"
+        frameborder="0">
+      </iframe>
+    </main>
 
-      <div class="card">
-        <div class="icon">👨‍✈️</div>
-        <h3>Fila de Disponibilidade</h3>
-        <p>Controle de motoristas e caminhões disponíveis.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/motoristas.html">Acessar</a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- CADASTROS -->
-  <div class="section">
-    <h2>📋 Cadastros</h2>
-
-    <div class="grid">
-
-      <div class="card">
-        <div class="icon">🚚</div>
-        <h3>Cadastro de Caminhões</h3>
-        <p>Registro e manutenção da frota.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/cadastro.html">Acessar</a>
-      </div>
-
-      <div class="card">
-        <div class="icon">🗺️</div>
-        <h3>Mapa de Clientes</h3>
-        <p>Visualização geográfica dos clientes.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/clientes-mapa.html">Acessar</a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- FRETE -->
-  <div class="section">
-    <h2>💰 Frete e Roteirização</h2>
-
-    <div class="grid">
-
-      <div class="card ativo">
-        <span class="badge ativo">EM PRODUÇÃO</span>
-        <div class="icon">💰</div>
-        <h3>Cálculo de Frete por Rota</h3>
-        <p>Cálculo inteligente com otimização de rotas.</p>
-        <a href="https://renatoriobrancobetim.github.io/fila-caminhoes/frete.html">Acessar</a>
-      </div>
-
-    </div>
   </div>
 
 </div>
 
-<div class="footer">
-  © 2026 – Renato Monteiro
-</div>
-
+<script src="js/erp.js"></script>
 </body>
+</html>
