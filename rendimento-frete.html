@@ -2,138 +2,233 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Rendimento de Frete</title>
+<title>Cálculo de Rendimento de Frete</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+:root{
+  --azul:#0d2b45;
+  --vermelho:#c62828;
+  --cinza:#e0e0e0;
+  --cinza-esc:#bdbdbd;
+}
+
 body{
   font-family: Arial, Helvetica, sans-serif;
   background:#f4f6f8;
   margin:0;
-  padding:20px;
 }
-.container{
-  max-width:1000px;
-  margin:auto;
-  background:#fff;
-  padding:24px;
-  border-radius:8px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
-}
-h2{
-  margin-top:0;
+
+.topo{
+  background:var(--azul);
+  color:#fff;
+  padding:14px;
   text-align:center;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
-}
-label{
   font-weight:bold;
+  letter-spacing:.5px;
+}
+
+.container{
+  padding:16px;
+}
+
+.barra-info{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.box{
+  background:#eee;
+  padding:10px;
   font-size:14px;
 }
+
+.box strong{
+  display:block;
+  font-size:13px;
+}
+
 input{
   width:100%;
-  padding:8px;
+  padding:6px;
   font-size:14px;
 }
-button{
-  margin-top:20px;
-  padding:12px;
-  width:100%;
-  font-size:16px;
-  font-weight:bold;
-  background:#1976d2;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-button:hover{
-  background:#125aa0;
-}
-.resultado{
-  margin-top:30px;
-  padding:20px;
-  border-radius:6px;
-}
-.viavel{background:#e8f5e9;border-left:6px solid #2e7d32;}
-.limite{background:#fff8e1;border-left:6px solid #f9a825;}
-.inviavel{background:#fdecea;border-left:6px solid #c62828;}
-.badge{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:4px;
-  font-weight:bold;
-  margin-bottom:10px;
-}
-.badge.viavel{background:#2e7d32;color:#fff;}
-.badge.limite{background:#f9a825;color:#000;}
-.badge.inviavel{background:#c62828;color:#fff;}
+
 table{
   width:100%;
   border-collapse:collapse;
-  margin-top:15px;
+  font-size:13px;
 }
-th,td{
+
+thead th{
+  background:#bdbdbd;
   padding:8px;
-  border-bottom:1px solid #ddd;
+  border:1px solid #fff;
+}
+
+tbody td{
+  background:#f5f5f5;
+  padding:6px;
+  border:1px solid #fff;
   text-align:right;
 }
-th:first-child,td:first-child{
-  text-align:left;
-}
-.footer{
+
+tbody td:first-child,
+tbody td:nth-child(2){
   text-align:center;
-  margin-top:20px;
-  color:#777;
-  font-size:13px;
+}
+
+tfoot td{
+  background:#d0d7df;
+  font-weight:bold;
+  padding:8px;
+  border:1px solid #fff;
+}
+
+.resumo{
+  margin-top:14px;
+}
+
+.resumo table th{
+  background:#bdbdbd;
+}
+
+.saldo-neg{
+  background:#ffcdd2 !important;
+  color:#b71c1c;
+  font-weight:bold;
+}
+
+.saldo-pos{
+  background:#c8e6c9 !important;
+  color:#1b5e20;
+  font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-<h2>📊 Cálculo de Rendimento de Frete</h2>
+<div class="topo">
+  CÁLCULO DE RENDIMENTO DE FRETE
+</div>
 
-<div class="grid">
-  <div>
-    <label>Receita do Frete (R$)</label>
-    <input id="receita" type="number" step="0.01">
+<div class="container">
+
+<!-- BARRA SUPERIOR -->
+<div class="barra-info">
+  <div class="box">
+    <strong>PLACA</strong>
+    <input id="placa" value="SYN-3193">
   </div>
-  <div>
-    <label>Distância Total (km)</label>
-    <input id="km" type="number" step="0.01">
+
+  <div class="box">
+    <strong>TEMPO GASTO (DIAS)</strong>
+    <input id="dias" type="number" value="1">
   </div>
-  <div>
-    <label>Tempo Gasto (dias)</label>
-    <input id="dias" type="number" step="0.1">
+
+  <div class="box">
+    <strong>MÉDIA DE CONSUMO (KM/L)</strong>
+    <input id="consumo" type="number" value="3">
   </div>
-  <div>
-    <label>Nº de Entregas</label>
-    <input id="entregas" type="number">
+
+  <div class="box">
+    <strong>VALOR LT DIESEL</strong>
+    <input id="diesel" type="number" step="0.01" value="5.69">
   </div>
-  <div>
-    <label>Consumo Médio (km/L)</label>
-    <input id="consumo" type="number" step="0.1">
-  </div>
-  <div>
-    <label>Valor Diesel (R$/L)</label>
-    <input id="diesel" type="number" step="0.01">
-  </div>
-  <div>
-    <label>Custos Fixos Mensais (R$)</label>
-    <input id="custosFixos" type="number" step="0.01">
+
+  <div class="box">
+    <strong>ENTREGAS</strong>
+    <input id="entregas" type="number" value="4">
   </div>
 </div>
 
-<button onclick="calcular()">Calcular Rendimento</button>
+<!-- TABELA PRINCIPAL -->
+<table id="tabela">
+<thead>
+<tr>
+  <th>ENTREGA</th>
+  <th>TRAJETO</th>
+  <th>DIST KM</th>
+  <th>RECEITAS<br>FRETE</th>
+  <th>FINAME</th>
+  <th>DIESEL</th>
+  <th>SALÁRIOS</th>
+  <th>PNEUS</th>
+  <th>MANUT</th>
+  <th>FILIAL</th>
+  <th>RESULTADO<br>SALDO</th>
+</tr>
+</thead>
 
-<div id="saida"></div>
+<tbody>
+<script>
+for(let i=1;i<=7;i++){
+  document.write(`
+  <tr>
+    <td>${i}</td>
+    <td>DESTINO</td>
+    <td><input class="km" type="number"></td>
+    <td><input class="receita" type="number"></td>
+    <td class="finame">598.96</td>
+    <td class="dieselLinha">0</td>
+    <td class="salario">229.16</td>
+    <td class="pneu">0</td>
+    <td class="manut">0</td>
+    <td class="filial">0</td>
+    <td class="saldo">0</td>
+  </tr>
+  `);
+}
+</script>
+</tbody>
 
-<div class="footer">© Sistema de Rendimento de Frete</div>
+<tfoot>
+<tr>
+  <td colspan="2">TOTAIS</td>
+  <td id="kmTotal">0</td>
+  <td id="receitaTotal">R$ 0,00</td>
+  <td>R$ 598,96</td>
+  <td id="dieselTotal">R$ 0,00</td>
+  <td>R$ 229,16</td>
+  <td>R$ 0,00</td>
+  <td>R$ 0,00</td>
+  <td>R$ 0,00</td>
+  <td id="saldoFinal">R$ 0,00</td>
+</tr>
+</tfoot>
+</table>
+
+<!-- RESUMO FINAL -->
+<div class="resumo">
+<table>
+<thead>
+<tr>
+  <th>KM RODADO</th>
+  <th>ÍNDICE</th>
+  <th>TAXA</th>
+  <th>M³</th>
+  <th>UNIT MÉDIO</th>
+  <th>TOTAL FRETE</th>
+  <th>SALDO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td id="kmResumo">0</td>
+  <td>R$ 5,8420</td>
+  <td>R$ 669,32</td>
+  <td>22.500</td>
+  <td id="unitMedio">R$ 0,0000</td>
+  <td id="totalFrete">R$ 0,00</td>
+  <td id="saldoResumo" class="saldo-neg">R$ 0,00</td>
+</tr>
+</tbody>
+</table>
+</div>
+
 </div>
 
 <script>
@@ -142,66 +237,37 @@ function moeda(v){
 }
 
 function calcular(){
-  const receita = +receitaInput.value;
-  const km = +kmInput.value;
-  const dias = +diasInput.value;
-  const entregas = +entregasInput.value;
-  const consumo = +consumoInput.value;
-  const dieselValor = +dieselInput.value;
-  const custosFixos = +custosFixosInput.value;
+  const kms = [...document.querySelectorAll(".km")];
+  const receitas = [...document.querySelectorAll(".receita")];
+  const consumo = +document.getElementById("consumo").value;
+  const dieselValor = +document.getElementById("diesel").value;
 
-  if(!receita || !km || !dias || !entregas || !consumo || !dieselValor){
-    alert("Preencha todos os campos corretamente.");
-    return;
-  }
+  let kmTotal = 0;
+  let receitaTotal = 0;
 
-  const diesel = (km / consumo) * dieselValor;
-  const custoFixoViagem = custosFixos / entregas;
-  const custoTotal = diesel + custoFixoViagem;
+  kms.forEach(k=>kmTotal += +k.value || 0);
+  receitas.forEach(r=>receitaTotal += +r.value || 0);
 
-  const lucro = receita - custoTotal;
-  const margem = (lucro / receita) * 100;
-  const lucroKm = lucro / km;
-  const lucroDia = lucro / dias;
+  const diesel = (kmTotal / consumo) * dieselValor;
+  const custoFixo = 598.96 + 229.16;
 
-  let status, classe;
-  if(margem >= 15){
-    status = "VIÁVEL";
-    classe = "viavel";
-  }else if(margem >= 8){
-    status = "NO LIMITE";
-    classe = "limite";
-  }else{
-    status = "INVIÁVEL";
-    classe = "inviavel";
-  }
+  const saldo = receitaTotal - (diesel + custoFixo);
 
-  saida.innerHTML = `
-    <div class="resultado ${classe}">
-      <span class="badge ${classe}">${status}</span>
+  kmResumo.innerText = kmTotal.toFixed(1);
+  kmTotalEl.innerText = kmTotal.toFixed(1);
+  receitaTotalEl.innerText = moeda(receitaTotal);
+  dieselTotal.innerText = moeda(diesel);
+  totalFrete.innerText = moeda(receitaTotal);
+  saldoResumo.innerText = moeda(saldo);
+  saldoFinal.innerText = moeda(saldo);
 
-      <table>
-        <tr><th>Receita</th><td>${moeda(receita)}</td></tr>
-        <tr><th>Diesel</th><td>${moeda(diesel)}</td></tr>
-        <tr><th>Custos Fixos Rateados</th><td>${moeda(custoFixoViagem)}</td></tr>
-        <tr><th>Custo Total</th><td>${moeda(custoTotal)}</td></tr>
-        <tr><th>Lucro</th><td>${moeda(lucro)}</td></tr>
-        <tr><th>Margem</th><td>${margem.toFixed(2)}%</td></tr>
-        <tr><th>Lucro por km</th><td>${moeda(lucroKm)}</td></tr>
-        <tr><th>Lucro por dia</th><td>${moeda(lucroDia)}</td></tr>
-      </table>
-    </div>
-  `;
+  saldoResumo.className = saldo >= 0 ? "saldo-pos" : "saldo-neg";
 }
 
-const receitaInput = document.getElementById("receita");
-const kmInput = document.getElementById("km");
-const diasInput = document.getElementById("dias");
-const entregasInput = document.getElementById("entregas");
-const consumoInput = document.getElementById("consumo");
-const dieselInput = document.getElementById("diesel");
-const custosFixosInput = document.getElementById("custosFixos");
-const saida = document.getElementById("saida");
+document.addEventListener("input", calcular);
+
+const kmTotalEl = document.getElementById("kmTotal");
+const receitaTotalEl = document.getElementById("receitaTotal");
 </script>
 
 </body>
