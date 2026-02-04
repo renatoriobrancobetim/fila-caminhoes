@@ -1,3 +1,14 @@
+/* RESET TOTAL DO ERP (BLOQUEIA style.css) */
+.erp-container {
+  all: initial;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.erp-container * {
+  all: unset;
+  box-sizing: border-box;
+}
+
 /* ======================================================
    ISOLAMENTO TOTAL DO ERP
 ====================================================== */
