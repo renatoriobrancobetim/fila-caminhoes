@@ -1,89 +1,98 @@
-* {
+/* ======================================================
+   ISOLAMENTO TOTAL DO ERP
+====================================================== */
+.erp-container,
+.erp-container * {
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
-  margin: 0;
-  background: #eef2f7;
-}
-
-/* CONTAINER */
+/* ======================================================
+   BASE
+====================================================== */
 .erp-container {
   display: flex;
   height: 100vh;
+  background: #eef2f7;
 }
 
-/* SIDEBAR */
-.erp-sidebar {
+/* ======================================================
+   SIDEBAR
+====================================================== */
+.erp-container .erp-sidebar {
   width: 250px;
   background: #0f172a;
-  color: #fff;
+  color: #ffffff;
   padding: 20px;
 }
 
-.erp-sidebar .logo {
+.erp-container .erp-sidebar .logo {
   text-align: center;
   margin-bottom: 25px;
   font-size: 20px;
 }
 
-.erp-sidebar nav a {
+.erp-container .erp-sidebar nav a {
   display: block;
   padding: 12px 14px;
   color: #cbd5e1;
   text-decoration: none;
   border-radius: 6px;
   margin-bottom: 6px;
-  transition: 0.2s;
   font-size: 14px;
+  transition: background 0.2s;
 }
 
-.erp-sidebar nav a:hover,
-.erp-sidebar nav a.active {
+.erp-container .erp-sidebar nav a:hover,
+.erp-container .erp-sidebar nav a.active {
   background: #2563eb;
-  color: #fff;
+  color: #ffffff;
 }
 
-/* MAIN */
-.erp-main {
+/* ======================================================
+   MAIN
+====================================================== */
+.erp-container .erp-main {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* HEADER */
-.erp-header {
+/* ======================================================
+   HEADER
+====================================================== */
+.erp-container .erp-header {
   height: 60px;
   background: #ffffff;
   border-bottom: 1px solid #d1d5db;
   padding: 0 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   font-weight: bold;
 }
 
-/* CONTENT */
-.erp-content {
+/* ======================================================
+   CONTEÚDO
+====================================================== */
+.erp-container .erp-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   background: #f8fafc;
 }
 
-.erp-content iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-/* ABAS */
-.erp-tabs {
+/* ======================================================
+   ABAS
+====================================================== */
+.erp-container .erp-tabs {
   display: flex;
   background: #e5e7eb;
   border-bottom: 1px solid #cbd5e1;
   overflow-x: auto;
 }
 
-.erp-tab {
+.erp-container .erp-tab {
   padding: 10px 14px;
   background: #e5e7eb;
   border-right: 1px solid #cbd5e1;
@@ -95,88 +104,36 @@ body {
   white-space: nowrap;
 }
 
-.erp-tab.active {
+.erp-container .erp-tab.active {
   background: #ffffff;
   font-weight: bold;
 }
 
-.erp-tab span.close {
+.erp-container .erp-tab .close {
   font-weight: bold;
-  cursor: pointer;
   color: #ef4444;
+  cursor: pointer;
 }
 
-/* ÁREA DAS TELAS */
-.erp-views {
+/* ======================================================
+   VIEWS / IFRAMES
+====================================================== */
+.erp-container .erp-views {
   flex: 1;
   position: relative;
-  height: 100%;
 }
 
-.erp-view {
+.erp-container .erp-view {
   position: absolute;
   inset: 0;
   display: none;
 }
 
-.erp-view.active {
+.erp-container .erp-view.active {
   display: block;
 }
 
-.erp-view iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-/* ABAS */
-.erp-tabs {
-  display: flex;
-  background: #e5e7eb;
-  border-bottom: 1px solid #cbd5e1;
-  overflow-x: auto;
-}
-
-.erp-tab {
-  padding: 10px 14px;
-  background: #e5e7eb;
-  border-right: 1px solid #cbd5e1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  white-space: nowrap;
-}
-
-.erp-tab.active {
-  background: #ffffff;
-  font-weight: bold;
-}
-
-.erp-tab span.close {
-  font-weight: bold;
-  cursor: pointer;
-  color: #ef4444;
-}
-
-/* ÁREA DAS TELAS */
-.erp-views {
-  flex: 1;
-  position: relative;
-  height: 100%;
-}
-
-.erp-view {
-  position: absolute;
-  inset: 0;
-  display: none;
-}
-
-.erp-view.active {
-  display: block;
-}
-
-.erp-view iframe {
+.erp-container .erp-view iframe {
   width: 100%;
   height: 100%;
   border: none;
