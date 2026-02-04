@@ -5,11 +5,11 @@
   <title>Painel Operacional Logístico | ERP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS EXISTENTES (NÃO MEXER) -->
+  <!-- CSS EXISTENTES -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/erp.css">
 
-  <!-- CSS ISOLADO DO ERP -->
+  <!-- CSS DO ERP -->
   <link rel="stylesheet" href="css/erp-layout.css">
 </head>
 
@@ -22,7 +22,7 @@
     <h2 class="logo">🚚 LOGÍSTICA</h2>
 
     <nav>
-      <a href="leitura.html" class="menu-link active">🕒 Fila de Espera</a>
+      <a href="leitura.html" class="menu-link">🕒 Fila de Espera</a>
       <a href="index.html" class="menu-link">🎛️ Painel da Fila</a>
       <a href="motoristas.html" class="menu-link">📍 Disponibilidade</a>
       <a href="cadastro.html" class="menu-link">🚛 Cadastro Caminhões</a>
@@ -36,7 +36,7 @@
 
     <!-- HEADER -->
     <header class="erp-header">
-      <span id="page-title">Fila de Espera</span>
+      <span id="page-title">Sistema ERP Logístico</span>
       <span class="user">👤 Operador Logístico</span>
     </header>
 
@@ -47,7 +47,10 @@
       <div class="erp-tabs" id="erp-tabs"></div>
 
       <!-- TELAS -->
-      <div class="erp-views" id="erp-views"></div>
+      <div class="erp-views" id="erp-views">
+        <!-- fallback caso JS falhe -->
+        <iframe src="leitura.html" style="width:100%;height:100%;border:none;"></iframe>
+      </div>
 
     </main>
 
@@ -55,6 +58,8 @@
 
 </div>
 
-<script src="js/erp.js"></script>
+<!-- IMPORTANTE: defer garante carregamento correto -->
+<script src="js/erp.js" defer></script>
+
 </body>
 </html>
