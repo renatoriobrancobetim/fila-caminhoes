@@ -1,36 +1,25 @@
-/* RESET TOTAL DO ERP (BLOQUEIA style.css) */
-.erp-container {
-  all: initial;
+/* ======================================================
+   ISOLAMENTO SEGURO DO ERP
+   (neutraliza style.css sem quebrar layout)
+====================================================== */
+
+.erp-container,
+.erp-container * {
+  box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.erp-container * {
-  all: unset;
-  box-sizing: border-box;
-}
-.erp-container {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  background: #eef2f7;
-}
-
+/* Neutraliza estilos comuns herdados */
 .erp-container a {
   text-decoration: none;
   color: inherit;
 }
 
-.erp-container nav {
-  display: block;
-}
-
-/* ======================================================
-   ISOLAMENTO TOTAL DO ERP
-====================================================== */
-.erp-container,
-.erp-container * {
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+.erp-container ul,
+.erp-container li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* ======================================================
@@ -39,38 +28,40 @@
 .erp-container {
   display: flex;
   height: 100vh;
+  width: 100vw;
   background: #eef2f7;
+  overflow: hidden;
 }
 
 /* ======================================================
    SIDEBAR
 ====================================================== */
-.erp-container .erp-sidebar {
+.erp-sidebar {
   width: 250px;
   background: #0f172a;
   color: #ffffff;
   padding: 20px;
+  flex-shrink: 0;
 }
 
-.erp-container .erp-sidebar .logo {
+.erp-sidebar .logo {
   text-align: center;
   margin-bottom: 25px;
   font-size: 20px;
 }
 
-.erp-container .erp-sidebar nav a {
+.erp-sidebar nav a {
   display: block;
   padding: 12px 14px;
   color: #cbd5e1;
-  text-decoration: none;
   border-radius: 6px;
   margin-bottom: 6px;
   font-size: 14px;
   transition: background 0.2s;
 }
 
-.erp-container .erp-sidebar nav a:hover,
-.erp-container .erp-sidebar nav a.active {
+.erp-sidebar nav a:hover,
+.erp-sidebar nav a.active {
   background: #2563eb;
   color: #ffffff;
 }
@@ -78,16 +69,17 @@
 /* ======================================================
    MAIN
 ====================================================== */
-.erp-container .erp-main {
+.erp-main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 /* ======================================================
    HEADER
 ====================================================== */
-.erp-container .erp-header {
+.erp-header {
   height: 60px;
   background: #ffffff;
   border-bottom: 1px solid #d1d5db;
@@ -96,29 +88,32 @@
   align-items: center;
   justify-content: space-between;
   font-weight: bold;
+  flex-shrink: 0;
 }
 
 /* ======================================================
    CONTEÚDO
 ====================================================== */
-.erp-container .erp-content {
+.erp-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   background: #f8fafc;
+  min-height: 0;
 }
 
 /* ======================================================
    ABAS
 ====================================================== */
-.erp-container .erp-tabs {
+.erp-tabs {
   display: flex;
   background: #e5e7eb;
   border-bottom: 1px solid #cbd5e1;
   overflow-x: auto;
+  flex-shrink: 0;
 }
 
-.erp-container .erp-tab {
+.erp-tab {
   padding: 10px 14px;
   background: #e5e7eb;
   border-right: 1px solid #cbd5e1;
@@ -130,46 +125,39 @@
   white-space: nowrap;
 }
 
-.erp-container .erp-tab.active {
+.erp-tab.active {
   background: #ffffff;
   font-weight: bold;
 }
 
-.erp-container .erp-tab .close {
+.erp-tab .close {
   font-weight: bold;
   color: #ef4444;
   cursor: pointer;
-}
-.erp-container iframe {
-  width: 100%;
-  height: 100%;
-  display: block;
-  border: none;
 }
 
 /* ======================================================
    VIEWS / IFRAMES
 ====================================================== */
-.erp-container .erp-views {
+.erp-views {
   flex: 1;
   position: relative;
-  height: calc(100vh - 60px - 42px); /* header + abas */
   overflow: hidden;
 }
 
-
-.erp-container .erp-view {
+.erp-view {
   position: absolute;
   inset: 0;
   display: none;
 }
 
-.erp-container .erp-view.active {
+.erp-view.active {
   display: block;
 }
 
-.erp-container .erp-view iframe {
+.erp-view iframe {
   width: 100%;
   height: 100%;
   border: none;
+  display: block;
 }
