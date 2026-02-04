@@ -69,6 +69,16 @@ body {
   max-width: 100%;
   appearance: auto;
 }
+.filtros select {
+  height: 30px;
+  font-size: 12px;
+
+  /* 🔧 correção do problema */
+  line-height: 30px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  background-clip: padding-box;
+}
 
 /* evita quebra de linha feia */
 .filtros * {
@@ -81,6 +91,7 @@ body {
   height: calc(100vh - 84px);
   
 }
+  
 </style>
 
 </head>
