@@ -370,15 +370,6 @@ if (dispersoes.length > 0) {
         </div>
   </div>
 
-  <!-- FRETE FIXO -->
-  <div class="condicao-item frete-fixo">
-       <div class="condicao-texto">
-      <strong> ⚠️ Frete fixo por litro aplicado</strong>
-      <div class="condicao-subtexto">
-       <ul> O cálculo não utilizou a tabela nem o frete por KM </ul>
-      </div>
-    </div>
-  </div>
 </div>
     </div>
   `;
@@ -821,11 +812,22 @@ if (infoDispersaoHTML || existeFreteFixo) {
 
       ${
         existeFreteFixo ? `
+        <div class="condicoes-rota">
+          <div class="condicao-item frete-fixo">
+            <div class="condicao-texto">
+              <strong>⚠️ Frete fixo por litro aplicado</strong>
+              <div class="condicao-subtexto">
+                O cálculo utilizou valores fixos informados manualmente
+              </div>
+            </div>
+          </div>
+        </div>
         ` : ""
       }
     </div>
   `;
 }
+
 
 
 
