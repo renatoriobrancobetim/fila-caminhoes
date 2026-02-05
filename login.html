@@ -242,6 +242,7 @@ button:disabled {
   </div>
 
 </div>
+<script src="users.js"></script>
 
 <script>
 function toggleSenha(){
@@ -260,23 +261,26 @@ function login(){
   const lembrar = document.getElementById("remember").checked;
 
   error.style.display = "none";
-
   btn.disabled = true;
   loader.style.display = "block";
   btnText.textContent = "Entrando...";
 
   setTimeout(() => {
 
-    if (usuario === "renato" && senha === "renato") {
-      localStorage.setItem("logado", "true");
+    const u = USERS[usuario];
 
-      if (lembrar) {
-        localStorage.setItem("lembrar", "1");
-      } else {
-        localStorage.removeItem("lembrar");
-      }
+    if (u && u.senha === senha) {
+
+      localStorage.setItem("logado", "true");
+      localStorage.setItem("usuario", usuario);
+      localStorage.setItem("perfil", u.perfil);
+      localStorage.setItem("nome", u.nome);
+
+      if (lembrar) localStorage.setItem("lembrar", "1");
+      else localStorage.removeItem("lembrar");
 
       window.location.href = "painel.html";
+
     } else {
       loader.style.display = "none";
       btnText.textContent = "Entrar";
@@ -287,8 +291,9 @@ function login(){
       setTimeout(() => box.classList.remove("shake"), 400);
     }
 
-  }, 900);
+  }, 800);
 }
+
 </script>
 
 </body>
