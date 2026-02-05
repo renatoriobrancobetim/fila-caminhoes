@@ -12,12 +12,13 @@
 
   // 🔐 REGRAS POR PÁGINA
   const regras = {
-    "index.html":   ["admin", "operador"],
-    "frete.html":   ["admin"],
+    "index.html":   ["admin"],
+    "motoristas.html":   ["admin"],
+    "frete.html":   ["admin", "comercial", "leitura"],
     "cadastro.html":["admin"],
-    "painel.html":  ["admin", "operador", "leitura"],
-    "leitura.html": ["admin", "operador", "leitura"],
-    "clientes-mapa.html": ["admin", "operador"]
+    "painel.html":  ["admin", "comercial", "leitura"],
+    "leitura.html": ["admin", "comercial", "leitura"],
+    "clientes-mapa.html": ["admin", "comercial", "leitura"],
   };
 
   const pagina = location.pathname.split("/").pop();
