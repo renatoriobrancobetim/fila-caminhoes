@@ -11,10 +11,17 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* ===== BACKGROUND CORPORATIVO ===== */
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(90deg, #c8b35a 0%, #6b8fd6 50%, #2f6bff 100%);
+  background: linear-gradient(
+    135deg,
+    #0f2a5c 0%,
+    #1e3a8a 45%,
+    #7f1d1d 75%,
+    #b91c1c 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,7 +139,7 @@ button {
   padding: 14px;
   border-radius: 12px;
   border: none;
-  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  background: linear-gradient(135deg, #1e3a8a, #dc2626);
   color: #fff;
   font-size: 15px;
   font-weight: bold;
@@ -237,13 +244,11 @@ button:disabled {
 </div>
 
 <script>
-/* MOSTRAR / OCULTAR SENHA */
 function toggleSenha(){
   const input = document.getElementById("pass");
   input.type = input.type === "password" ? "text" : "password";
 }
 
-/* LOGIN */
 function login(){
   const usuario = user.value.trim();
   const senha   = pass.value.trim();
@@ -279,7 +284,6 @@ function login(){
 
       error.style.display = "block";
       box.classList.add("shake");
-
       setTimeout(() => box.classList.remove("shake"), 400);
     }
 
