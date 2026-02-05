@@ -950,6 +950,16 @@ const progresso = isParcial
 }
 
 </script>
+<script>
+const perfil = localStorage.getItem("perfil");
+
+document.querySelectorAll("[data-perfil]").forEach(el => {
+  const permitido = el.dataset.perfil.split(",");
+  if (!permitido.includes(perfil)) {
+    el.style.display = "none";
+  }
+});
+</script>
 
 </body>
 </html>
