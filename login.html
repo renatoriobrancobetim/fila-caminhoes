@@ -6,13 +6,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ===== RESET ===== */
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ===== BACKGROUND ===== */
 body {
   margin: 0;
   min-height: 100vh;
@@ -22,29 +20,35 @@ body {
   justify-content: center;
 }
 
-/* ===== LOGIN CARD ===== */
+/* CARD */
 .login-box {
   width: 100%;
-  max-width: 380px;
+  max-width: 390px;
   background: linear-gradient(180deg, #0b1633, #050b1e);
   border-radius: 16px;
   padding: 28px 26px;
   box-shadow: 0 25px 60px rgba(0,0,0,.45);
   color: #fff;
+  animation: fadeIn .6s ease;
 }
 
-/* ===== HEADER ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* HEADER */
 .login-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #dc2626, #1e3a8a);
   display: flex;
   align-items: center;
@@ -57,19 +61,19 @@ body {
   font-size: 14px;
 }
 
-/* ===== TITLES ===== */
-.login-box h2 {
-  margin: 10px 0 4px;
+/* TITLES */
+h2 {
+  margin: 8px 0 4px;
   font-size: 22px;
 }
 
-.login-box p {
+p {
   margin: 0 0 20px;
   font-size: 14px;
   color: #c7d2fe;
 }
 
-/* ===== INPUTS ===== */
+/* INPUTS */
 label {
   font-size: 13px;
   color: #cbd5f5;
@@ -77,9 +81,13 @@ label {
   margin-bottom: 6px;
 }
 
+.input-group {
+  position: relative;
+}
+
 input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px 42px 12px 14px;
   border-radius: 10px;
   border: 1px solid #1e293b;
   background: #020617;
@@ -92,7 +100,33 @@ input::placeholder {
   color: #64748b;
 }
 
-/* ===== BUTTON ===== */
+/* TOGGLE SENHA */
+.toggle-pass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* CHECKBOX */
+.options {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #cbd5f5;
+  margin-bottom: 14px;
+}
+
+.options input {
+  width: auto;
+  margin: 0;
+}
+
+/* BUTTON */
 button {
   width: 100%;
   padding: 14px;
@@ -103,14 +137,33 @@ button {
   font-size: 15px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-button:hover {
-  opacity: .9;
+button:disabled {
+  opacity: .7;
+  cursor: not-allowed;
 }
 
-/* ===== ERROR ===== */
+/* LOADER */
+.loader {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ERROR */
 .error {
   margin-top: 12px;
   font-size: 13px;
@@ -119,7 +172,20 @@ button:hover {
   text-align: center;
 }
 
-/* ===== FOOTER ===== */
+/* SHAKE */
+.shake {
+  animation: shake .4s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}
+
+/* FOOTER */
 .login-footer {
   display: flex;
   justify-content: space-between;
@@ -132,23 +198,34 @@ button:hover {
 
 <body>
 
-<div class="login-box">
+<div class="login-box" id="box">
 
   <div class="login-header">
     <div class="logo">RB</div>
-    <span>RB Logística · Área de Acesso</span>
+    <span>Painel Operacional - Logística</span>
   </div>
 
   <h2>Acesse sua conta</h2>
   <p>Use suas credenciais para continuar.</p>
 
-  <label for="user">Usuário</label>
+  <label>Usuário</label>
   <input type="text" id="user" placeholder="Informe seu usuário">
 
-  <label for="pass">Senha</label>
-  <input type="password" id="pass" placeholder="Informe sua senha">
+  <label>Senha</label>
+  <div class="input-group">
+    <input type="password" id="pass" placeholder="Informe sua senha">
+    <span class="toggle-pass" onclick="toggleSenha()">👁</span>
+  </div>
 
-  <button onclick="login()">➡ Entrar</button>
+  <div class="options">
+    <input type="checkbox" id="remember">
+    <label for="remember">Lembrar acesso</label>
+  </div>
+
+  <button id="btn" onclick="login()">
+    <span id="btnText">Entrar</span>
+    <div class="loader" id="loader"></div>
+  </button>
 
   <div class="error" id="error">Usuário ou senha inválidos</div>
 
@@ -160,20 +237,53 @@ button:hover {
 </div>
 
 <script>
-function login() {
-  const usuario = document.getElementById('user').value.trim();
-  const senha   = document.getElementById('pass').value.trim();
-  const error   = document.getElementById('error');
+/* MOSTRAR / OCULTAR SENHA */
+function toggleSenha(){
+  const input = document.getElementById("pass");
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+/* LOGIN */
+function login(){
+  const usuario = user.value.trim();
+  const senha   = pass.value.trim();
+  const box     = document.getElementById("box");
+  const error   = document.getElementById("error");
+  const loader  = document.getElementById("loader");
+  const btnText = document.getElementById("btnText");
+  const btn     = document.getElementById("btn");
+  const lembrar = document.getElementById("remember").checked;
 
   error.style.display = "none";
 
-  // 🔒 LOGIN
-  if (usuario === "renato" && senha === "renato") {
-    localStorage.setItem("logado", "true");
-    window.location.href = "painel.html";
-  } else {
-    error.style.display = "block";
-  }
+  btn.disabled = true;
+  loader.style.display = "block";
+  btnText.textContent = "Entrando...";
+
+  setTimeout(() => {
+
+    if (usuario === "renato" && senha === "renato") {
+      localStorage.setItem("logado", "true");
+
+      if (lembrar) {
+        localStorage.setItem("lembrar", "1");
+      } else {
+        localStorage.removeItem("lembrar");
+      }
+
+      window.location.href = "painel.html";
+    } else {
+      loader.style.display = "none";
+      btnText.textContent = "Entrar";
+      btn.disabled = false;
+
+      error.style.display = "block";
+      box.classList.add("shake");
+
+      setTimeout(() => box.classList.remove("shake"), 400);
+    }
+
+  }, 900);
 }
 </script>
 
