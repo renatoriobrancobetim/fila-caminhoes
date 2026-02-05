@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <script>
+if (localStorage.getItem("adminLogado") !== "1") {
+  window.location.href = "login.html";
+}
+</script>
+
 <meta charset="UTF-8">
 <title>Painel Operacional Logístico</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
