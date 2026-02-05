@@ -6,9 +6,9 @@ const USERS = {
     nome: "Renato",
     perfil: "admin"
   },
-  operador1: {
-    senha: "1234",
-    nome: "Operador Pátio",
+  comercial: {
+    senha: "Rio2026@",
+    nome: "Comercial",
     perfil: "operador"
   },
   consulta: {
