@@ -2,87 +2,92 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Login Administrativo</title>
+<title>Login | Painel Operacional</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#0A3D91;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #1e3a8a, #dc2626);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
-.box{
-  background:#fff;
-  padding:30px;
-  border-radius:14px;
-  width:100%;
-  max-width:320px;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-  text-align:center;
+
+.login-box {
+  background: #fff;
+  padding: 30px;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  text-align: center;
 }
-h2{margin-top:0;color:#0A3D91;}
-input,button{
-  width:100%;
-  padding:14px;
-  font-size:16px;
-  margin-top:14px;
+
+.login-box h2 {
+  margin-bottom: 20px;
+  color: #1f2937;
 }
-button{
-  background:#D71920;
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
+
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
 }
-.msg{
-  margin-top:12px;
-  font-weight:bold;
-  color:#dc3545;
+
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background: #1e3a8a;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.login-box button:hover {
+  background: #172554;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 13px;
+  display: none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h2>🔐 Login Admin</h2>
+<div class="login-box">
+  <h2>🔐 Acesso Restrito</h2>
 
-  <input id="senha" type="password" placeholder="Senha administrativa">
+  <input type="text" id="user" placeholder="Usuário">
+  <input type="password" id="pass" placeholder="Senha">
+
+  <div class="error" id="error">Usuário ou senha inválidos</div>
+
   <button onclick="login()">Entrar</button>
-
-  <div class="msg" id="msg"></div>
 </div>
 
 <script>
-const SENHA_ADMIN = "Rio2026@"; // 🔐 mesma do App Script
+function login() {
+  const usuario = document.getElementById('user').value;
+  const senha   = document.getElementById('pass').value;
 
-function login(){
-  const senha = document.getElementById("senha").value.trim();
-  const msg = document.getElementById("msg");
-
-  if(!senha){
-    msg.textContent = "Informe a senha";
-    return;
+  // 🔒 DEFINA AQUI O LOGIN
+  if (usuario === "renato" && senha === "renato") {
+    localStorage.setItem("logado", "true");
+    window.location.href = "painel.html";
+  } else {
+    document.getElementById("error").style.display = "block";
   }
-
-  if(senha !== SENHA_ADMIN){
-    msg.textContent = "Senha inválida";
-    return;
-  }
-
-  // ✅ SALVA SESSÃO
-localStorage.setItem("adminLogado","1");
-
-const destino = localStorage.getItem("redirectAfterLogin") || "index.html";
-localStorage.removeItem("redirectAfterLogin");
-
-window.location.href = destino;
-
 }
 </script>
 
