@@ -11,15 +11,22 @@
   }
 
   // 🔐 REGRAS POR PÁGINA
-  const regras = {
-    "index.html":   ["admin"],
-    "motoristas.html":   ["admin"],
-    "frete.html":   ["admin", "comercial", "leitura"],
-    "cadastro.html":["admin"],
-    "painel.html":  ["admin", "comercial", "leitura"],
-    "leitura.html": ["admin", "comercial", "leitura"],
-    "clientes-mapa.html": ["admin", "comercial", "leitura"],
-  };
+const regras = {
+  "painel.html": ["admin", "operador", "leitura", "comercial"],
+
+  "frete.html": ["admin", "comercial"],
+
+  "clientes-mapa.html": ["admin", "comercial"],
+
+  "leitura.html": ["admin", "comercial", "leitura"],
+
+  "index.html": ["admin", "operador"],
+
+  "motoristas.html": ["admin", "operador"],
+
+  "cadastro.html": ["admin"]
+};
+
 
   const pagina = location.pathname.split("/").pop();
 
