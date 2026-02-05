@@ -76,10 +76,13 @@ function login(){
   }
 
   // ✅ SALVA SESSÃO
-  localStorage.setItem("adminLogado","1");
+localStorage.setItem("adminLogado","1");
 
-  // ➡ REDIRECIONA
-  window.location.href = "index.html";
+const destino = localStorage.getItem("redirectAfterLogin") || "index.html";
+localStorage.removeItem("redirectAfterLogin");
+
+window.location.href = destino;
+
 }
 </script>
 
