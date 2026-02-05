@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <script>
-if (localStorage.getItem("adminLogado") !== "1") {
+<script>
+if (localStorage.getItem("logado") !== "true") {
   window.location.href = "login.html";
 }
 </script>
+
 
 <meta charset="UTF-8">
 <title>Painel Operacional Logístico</title>
@@ -81,6 +82,27 @@ if (localStorage.getItem("adminLogado") !== "1") {
 <body>
 
 <header>
+  <button onclick="logout()" style="
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #dc2626;
+  color: #fff;
+  cursor: pointer;
+">
+  Sair
+</button>
+
+<script>
+function logout() {
+  localStorage.removeItem("logado");
+  window.location.href = "login.html";
+}
+</script>
+
   <h1>🚚 Painel Operacional Logístico</h1>
   <p>Central unificada dos sistemas da operação</p>
 </header>
