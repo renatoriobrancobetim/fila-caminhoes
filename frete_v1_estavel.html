@@ -434,6 +434,8 @@ async function recalcularKM(){
   const cidades = [...document.querySelectorAll(".cidade")]
     .map(i => i.value)
     .filter(v => v);
+  const clientes = cidades.length;
+
 
   if (cidades.length === 0) {
     document.getElementById("kmTotal").value = "0.00";
@@ -1018,83 +1020,53 @@ function calcularTempoRota() {
     .map(i => i.value.trim())
     .filter(v => v);
 
-// 🔹 CLIENTES (verifica se são todos iguais)
-const clientesUnicos = [...new Set(cidades.map(c => c.toUpperCase()))];
+  // ✅ CORREÇÃO CIRÚRGICA
+  const clientes = cidades.length;
 
-// 🔹 DESCARGA
-const TEMPO_DESCARGA_MIN = 50;
+  // 🔹 CLIENTES ÚNICOS
+  const clientesUnicos = [...new Set(cidades.map(c => c.toUpperCase()))];
 
-// Se todos os clientes forem o mesmo → apenas 1 descarga
-const qtDescargas = clientesUnicos.length === 1 ? 1 : clientesUnicos.length;
+  const TEMPO_DESCARGA_MIN = 50;
+  const qtDescargas = clientesUnicos.length === 1 ? 1 : clientesUnicos.length;
+  const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
 
-const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
+  const VELOCIDADE_MEDIA = 60;
+  const TEMPO_DISPERSAO_MIN = 30;
 
-
-  const VELOCIDADE_MEDIA = 60; // km/h
-  
-  const TEMPO_DISPERSAO_MIN = 30; // por trecho >70km
-
-  // 🔹 DESLOCAMENTO
   const tempoDeslocamentoH = km / VELOCIDADE_MEDIA;
 
-  
+  const qtDispersoes = (infoDispersaoHTML.match(/→/g) || []).length;
+  const tempoDispersaoH = (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
 
-  // 🔹 DISPERSÕES (usa infoDispersaoHTML já calculado)
-  const qtDispersoes =
-    (infoDispersaoHTML.match(/→/g) || []).length;
-
-  const tempoDispersaoH =
-    (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
-
-  // 🔹 TEMPO BASE
   let tempoTotalH =
     tempoDeslocamentoH +
     tempoDescargaH +
     tempoDispersaoH;
 
-  // 🔹 ALMOÇO AUTOMÁTICO
   const incluiAlmoco = tempoTotalH > 6;
   if (incluiAlmoco) tempoTotalH += 1;
 
-  // 🔹 DESCANSO LEGAL (Lei do Motorista)
   let pausasDescanso = 0;
-  if (tempoDeslocamentoH > 5.5) pausasDescanso = 0.5; // 30 min
+  if (tempoDeslocamentoH > 5.5) pausasDescanso = 0.5;
 
   tempoTotalH += pausasDescanso;
 
-  // 🔹 ALERTAS
-  const alertas = [];
-
-  if (qtDispersoes > 0) {
-    alertas.push("⚠️ Dispersão elevada na rota");
-  }
-
-  if (tempoTotalH > 10) {
-    alertas.push("🚨 Rota longa – risco operacional");
-  }
-
-  if (pausasDescanso > 0) {
-    alertas.push("🛑 Exige pausa legal do motorista (Lei 13.103)");
-  }
-
-  // 🔹 FORMATAÇÃO
   const horas = Math.floor(tempoTotalH);
   const minutos = Math.round((tempoTotalH - horas) * 60);
 
   return {
-  clientes,
-  qtDescargas,
-  tempoTotalH,
-  tempoDeslocamentoH,
-  tempoDescargaH,
-  tempoDispersaoH,
-  incluiAlmoco,
-  pausasDescanso,
-  alertas,
-  texto: `${horas}h ${minutos}min`
-};
-
+    clientes,
+    qtDescargas,
+    tempoTotalH,
+    tempoDeslocamentoH,
+    tempoDescargaH,
+    tempoDispersaoH,
+    incluiAlmoco,
+    pausasDescanso,
+    texto: `${horas}h ${minutos}min`
+  };
 }
+
 
 </script>
 <script>
