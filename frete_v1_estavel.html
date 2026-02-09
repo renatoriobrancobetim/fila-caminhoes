@@ -801,40 +801,56 @@ if (i.freteFixo !== null) {
     </table>
   `;
   html += `
-<table style="margin-top:18px">
-  <tr class="total-row">
-    <td>KM TOTAL</td>
-    <td>ÍNDICE</td>
-    <td>TAXA</td>
-    <td>M³ TOTAL</td>
-    <td>FRETE UNIT. MÉDIO</td>
-    <td>FRETE TOTAL</td>
-  </tr>
-  <tr>
-    <td><b>${kmLabel}</b></td>
-    <td>${indiceLabel}</td>
-    <td>${taxaLabel}</td>
-    <td>${m3Total}</td>
-    <td>${moeda3(freteUnitMedio)}</td>
-    <td><b>${moeda(freteTotal)}</b></td>
-  </tr>
-</table>
+html += `
+<div class="resumo-cards">
+
+  <!-- MÉTRICAS DO FRETE -->
+  <div class="card-linha azul">
+    <div class="card-item">
+      <span>KM TOTAL</span>
+      <strong>${kmLabel}</strong>
+    </div>
+    <div class="card-item">
+      <span>ÍNDICE</span>
+      <strong>${indiceLabel}</strong>
+    </div>
+    <div class="card-item">
+      <span>TAXA</span>
+      <strong>${taxaLabel}</strong>
+    </div>
+    <div class="card-item">
+      <span>M³ TOTAL</span>
+      <strong>${m3Total}</strong>
+    </div>
+    <div class="card-item">
+      <span>FRETE UNIT. MÉDIO</span>
+      <strong>${moeda3(freteUnitMedio)}</strong>
+    </div>
+    <div class="card-item destaque">
+      <span>FRETE TOTAL</span>
+      <strong>${moeda(freteTotal)}</strong>
+    </div>
+  </div>
+
+  <!-- TEMPO E PAUSAS -->
+  <div class="card-linha">
+    <div class="card-item">
+      <span>⏱ TEMPO DE ROTA</span>
+      <strong>${tempoRota.texto}</strong>
+    </div>
+
+    <div class="card-item">
+      <span>🛑 PAUSAS OPERACIONAIS</span>
+      <strong>
+        ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)<br>" : ""}
+        ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
+      </strong>
+    </div>
+  </div>
+
+</div>
 `;
-  html += `
-<table style="margin-top:12px">
-  <tr class="total-row">
-    <td>TEMPO DE ROTA</td>
-    <td>PAUSAS OPERACIONAIS</td>
-  </tr>
-  <tr>
-    <td><b>${tempoRota.texto}</b></td>
-    <td>
-      ${tempoRota.incluiAlmoco ? "🍽️ Almoço (1h)<br>" : ""}
-      ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
-    </td>
-  </tr>
-</table>
-`;
+
 html += `</div>`;
 
 
