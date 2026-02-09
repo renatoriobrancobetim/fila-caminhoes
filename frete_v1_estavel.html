@@ -722,7 +722,8 @@ let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
 
 
 let html = `
-<div class="resumo-box">
+<div class="resumo-box resumo-integrado">
+
   <h3>
 
   RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
@@ -741,6 +742,8 @@ let html = `
 
 `;
 
+<div class="resumo-tabela">
+  <!-- TABELA DE CLIENTES -->
 
 html += `
 <table>
@@ -800,6 +803,11 @@ if (i.freteFixo !== null) {
     </tr>
     </table>
   `;
+</div>
+
+<div class="resumo-metricas">
+  <!-- cards de KM, índice, frete etc -->
+</div>
 
   html += `
   <div class="resumo-cards">
