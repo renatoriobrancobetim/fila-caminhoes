@@ -851,10 +851,12 @@ if (i.freteFixo !== null) {
 
       <div class="card-item">
         <span>🛑 PAUSAS OPERACIONAIS</span>
-        <strong>
-          ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)<br>" : ""}
-          ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
-        </strong>
+<strong>
+  📦 Descarga: ${tempoRota.qtDescargas} × 50 min<br>
+  ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)<br>" : ""}
+  ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : ""}
+</strong>
+
       </div>
     </div>
 
@@ -1016,17 +1018,26 @@ function calcularTempoRota() {
     .map(i => i.value.trim())
     .filter(v => v);
 
-  const clientes = cidades.length;
+// 🔹 CLIENTES (verifica se são todos iguais)
+const clientesUnicos = [...new Set(cidades.map(c => c.toUpperCase()))];
+
+// 🔹 DESCARGA
+const TEMPO_DESCARGA_MIN = 50;
+
+// Se todos os clientes forem o mesmo → apenas 1 descarga
+const qtDescargas = clientesUnicos.length === 1 ? 1 : clientesUnicos.length;
+
+const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
+
 
   const VELOCIDADE_MEDIA = 60; // km/h
-  const TEMPO_DESCARGA_MIN = 50;
+  
   const TEMPO_DISPERSAO_MIN = 30; // por trecho >70km
 
   // 🔹 DESLOCAMENTO
   const tempoDeslocamentoH = km / VELOCIDADE_MEDIA;
 
-  // 🔹 DESCARGA
-  const tempoDescargaH = (clientes * TEMPO_DESCARGA_MIN) / 60;
+  
 
   // 🔹 DISPERSÕES (usa infoDispersaoHTML já calculado)
   const qtDispersoes =
@@ -1071,16 +1082,18 @@ function calcularTempoRota() {
   const minutos = Math.round((tempoTotalH - horas) * 60);
 
   return {
-    clientes,
-    tempoTotalH,
-    tempoDeslocamentoH,
-    tempoDescargaH,
-    tempoDispersaoH,
-    incluiAlmoco,
-    pausasDescanso,
-    alertas,
-    texto: `${horas}h ${minutos}min`
-  };
+  clientes,
+  qtDescargas,
+  tempoTotalH,
+  tempoDeslocamentoH,
+  tempoDescargaH,
+  tempoDispersaoH,
+  incluiAlmoco,
+  pausasDescanso,
+  alertas,
+  texto: `${horas}h ${minutos}min`
+};
+
 }
 
 </script>
