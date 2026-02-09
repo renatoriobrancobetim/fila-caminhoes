@@ -756,3 +756,21 @@ th{
   color: #c62828;
   font-size: 16px;
 }
+.card-linha.alerta {
+  border-left: 5px solid #c62828;
+  background: #fff5f5;
+}
+
+.card-item.full {
+  grid-column: 1 / -1;
+}
+
+.card-linha.alerta span {
+  color: #c62828;
+  font-weight: 600;
+}
+
+.card-linha.alerta strong {
+  line-height: 1.6;
+  display: block;
+}
