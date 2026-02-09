@@ -707,7 +707,16 @@ const freteUnitRateio =
 
 const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
   const tempoRota = calcularTempoRota();
+// ===== MÉTRICAS PARA RESUMO FINAL =====
+const m3Total = (litrosUsados / 1000).toFixed(1);
+const freteUnitMedio = freteTotal / litrosUsados;
+ 
+let kmLabel = modalidade === "TABELA"
+  ? "FRETE TABELA"
+  : `${numero(km)} km`;
 
+let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
+let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
 
 // ================= BLOCO FRETE REAL (HTML) =================
 
@@ -828,18 +837,6 @@ if (i.freteFixo !== null) {
 `;
 html += `</div>`;
 
-
-
-// ===== MÉTRICAS PARA RESUMO FINAL =====
-const m3Total = (litrosUsados / 1000).toFixed(1);
-const freteUnitMedio = freteTotal / litrosUsados;
- 
-let kmLabel = modalidade === "TABELA"
-  ? "FRETE TABELA"
-  : `${numero(km)} km`;
-
-let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
-let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
 
 const observacaoFrete = `
 <div class="frete-observacao">
