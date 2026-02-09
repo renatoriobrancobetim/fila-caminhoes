@@ -849,3 +849,33 @@ th{
 .resumo-metricas .destaque strong {
   color: #c62828;
 }
+.card-tabela {
+  padding: 0;
+}
+
+.card-tabela .card-item.full {
+  width: 100%;
+}
+
+.card-tabela table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.card-tabela th {
+  background: #e9f3ff;
+  color: #0d47a1;
+  font-weight: 600;
+}
+
+.card-tabela td,
+.card-tabela th {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.card-tabela .total-row td {
+  font-weight: bold;
+  color: #0d47a1;
+}
