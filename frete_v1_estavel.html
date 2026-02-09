@@ -707,7 +707,7 @@ const freteUnitRateio =
   litrosRateio > 0 ? freteRestante / litrosRateio : 0;
 
 const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
-  const tempoRota = calcularTempoRota();
+  const tempoRota = await calcularTempoRota();
 // ===== MÉTRICAS PARA RESUMO FINAL =====
 const m3Total = (litrosUsados / 1000).toFixed(1);
 const freteUnitMedio = freteTotal / litrosUsados;
@@ -1026,60 +1026,32 @@ const progresso = isParcial
 
   requestAnimationFrame(step);
 }
-function calcularTempoRota() {
-  const kmTotal = parseFloat(document.getElementById("kmTotal").value || 0);
-
+async function calcularTempoRota() {
   const cidades = [...document.querySelectorAll(".cidade")]
     .map(i => i.value.trim())
     .filter(v => v);
 
-  const VELOCIDADE_MEDIA = 60; // km/h
-  const TEMPO_DESCARGA_MIN = 50;
   const TEMPO_DISPERSAO_MIN = 30;
 
-  let etapas = [];
-  let tempoDeslocamentoH = 0;
-  let tempoDescargaH = 0;
+  // 🔹 CALCULA ETAPAS REAIS (OSRM)
+  const etapas = await calcularEtapasTempo(cidades);
 
-  // 🔹 CLIENTES ÚNICOS (regra da descarga)
-  const clientesUnicos = [...new Set(cidades.map(c => c.toUpperCase()))];
-  const qtDescargas = clientesUnicos.length === 1 ? 1 : clientesUnicos.length;
+  // 🔹 SOMAS
+  const tempoDeslocamentoH = etapas.reduce(
+    (s, e) => s + e.tempoViagemH,
+    0
+  );
 
-  // 🔹 BASE → PRIMEIRO CLIENTE
-  if (cidades.length > 0) {
-    const kmBase = kmTotal / (cidades.length + 1); // distribuição proporcional
-    const tempoH = kmBase / VELOCIDADE_MEDIA;
-
-    etapas.push({
-      trecho: `Base → ${cidades[0]}`,
-      tempoViagemH: tempoH,
-      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
-    });
-
-    tempoDeslocamentoH += tempoH;
-    tempoDescargaH += TEMPO_DESCARGA_MIN / 60;
-  }
-
-  // 🔹 CLIENTE → CLIENTE
-  for (let i = 1; i < cidades.length; i++) {
-    const kmTrecho = kmTotal / (cidades.length + 1);
-    const tempoH = kmTrecho / VELOCIDADE_MEDIA;
-
-    etapas.push({
-      trecho: `${cidades[i - 1]} → ${cidades[i]}`,
-      tempoViagemH: tempoH,
-      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
-    });
-
-    tempoDeslocamentoH += tempoH;
-    tempoDescargaH += TEMPO_DESCARGA_MIN / 60;
-  }
+  const tempoDescargaH = etapas.reduce(
+    (s, e) => s + e.tempoDescargaH,
+    0
+  );
 
   // 🔹 DISPERSÕES
   const qtDispersoes = (infoDispersaoHTML.match(/→/g) || []).length;
   const tempoDispersaoH = (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
 
-  // 🔹 TEMPO TOTAL BASE
+  // 🔹 TEMPO BASE
   let tempoTotalH =
     tempoDeslocamentoH +
     tempoDescargaH +
@@ -1096,12 +1068,12 @@ function calcularTempoRota() {
     tempoTotalH += pausasDescanso;
   }
 
+  // 🔹 FORMATAÇÃO
   const horas = Math.floor(tempoTotalH);
   const minutos = Math.round((tempoTotalH - horas) * 60);
 
   return {
     etapas,
-    qtDescargas,
     tempoDeslocamentoH,
     tempoDescargaH,
     tempoDispersaoH,
@@ -1110,6 +1082,37 @@ function calcularTempoRota() {
     tempoTotalH,
     textoTotal: `${horas}h ${minutos}min`
   };
+}
+
+async function calcularEtapasTempo(cidades) {
+  const VELOCIDADE_MEDIA = 60; // km/h
+  const TEMPO_DESCARGA_MIN = 50;
+
+  const etapas = [];
+
+  // BASE → PRIMEIRA CIDADE
+  if (cidades.length > 0) {
+    const kmBase = await distanciaBaseCidade(cidades[0]);
+    etapas.push({
+      trecho: `Base → ${cidades[0]}`,
+      km: kmBase,
+      tempoViagemH: kmBase / VELOCIDADE_MEDIA,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+  }
+
+  // ENTRE CIDADES
+  for (let i = 0; i < cidades.length - 1; i++) {
+    const kmTrecho = await distanciaCidades(cidades[i], cidades[i + 1]);
+    etapas.push({
+      trecho: `${cidades[i]} → ${cidades[i + 1]}`,
+      km: kmTrecho,
+      tempoViagemH: kmTrecho / VELOCIDADE_MEDIA,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+  }
+
+  return etapas;
 }
 
 
