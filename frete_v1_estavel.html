@@ -814,76 +814,34 @@ const observacaoFrete = `
   ${cargaParcial ? " • <span class='parcial'>Carga parcial</span>" : ""}
 </div>
 `;
+const alertasOperacionais = [];
+
+// dispersão
+if ((infoDispersaoHTML.match(/→/g) || []).length > 0) {
+  alertasOperacionais.push("⚠️ Dispersão maior que 70 km identificada");
+}
+
+// rota longa
+if (tempoRota.tempoTotalH > 10) {
+  alertasOperacionais.push("🚨 Rota longa – risco operacional");
+}
+
+// pausa legal
+if (tempoRota.pausasDescanso > 0) {
+  alertasOperacionais.push("🛑 Exige pausa legal do motorista");
+}
 
 
-html += `
-<table style="margin-top:18px">
-  <tr class="total-row">
-    <td>KM TOTAL</td>
-    <td>ÍNDICE</td>
-    <td>TAXA</td>
-    <td>M³ TOTAL</td>
-    <td>FRETE UNIT. MÉDIO</td>
-    <td>FRETE TOTAL</td>
-  </tr>
-  <tr>
-    <td><b>${kmLabel}</b></td>
-    <td>${indiceLabel}</td>
-    <td>${taxaLabel}</td>
-    <td>${m3Total}</td>
-    <td>${moeda3(freteUnitMedio)}</td>
-    <td><b>${moeda(freteTotal)}</b></td>
-  </tr>
-</table>
-`;
- html += `
-<table style="margin-top:12px">
-  <tr class="total-row">
-    <td>TEMPO DE ROTA</td>
-    <td>PAUSAS OPERACIONAIS</td>
-  </tr>
-  <tr>
-    <td><b>${tempoRota.texto}</b></td>
-    <td>
-      ${tempoRota.incluiAlmoco ? "🍽️ Almoço (1h)<br>" : ""}
-      ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
-    </td>
-  </tr>
-</table>
-`;
-
-
-
-if (infoDispersaoHTML || tempoRota.alertas.length > 0 || existeFreteFixo) {
+if (alertasOperacionais.length > 0) {
   html += `
     <div class="condicoes-rota" style="margin-top:18px">
       <div class="condicoes-header">
-        ⚠️ Informações Operacionais da Rota
+        ⚠️ Informações Operacionais e Logística
       </div>
 
-      ${infoDispersaoHTML || ""}
-
-      ${
-        tempoRota.alertas.length > 0 ? `
-        <div class="condicao-item alerta-operacional">
-          <strong>🚨 Alertas Operacionais</strong>
-          <ul>
-            ${tempoRota.alertas.map(a => `<li>${a}</li>`).join("")}
-          </ul>
-        </div>
-        ` : ""
-      }
-
-      ${
-        existeFreteFixo ? `
-        <div class="condicao-item frete-fixo">
-          <strong>⚠️ Frete fixo por litro aplicado</strong>
-          <div class="condicao-subtexto">
-            O cálculo utilizou valores fixos informados manualmente
-          </div>
-        </div>
-        ` : ""
-      }
+      <ul style="margin:10px 0 0 18px">
+        ${alertasOperacionais.map(a => `<li>${a}</li>`).join("")}
+      </ul>
     </div>
   `;
 }
