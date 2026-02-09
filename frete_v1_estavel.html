@@ -791,7 +791,7 @@ if (i.freteFixo !== null) {
       </tr>`;
   });
 
-  html+=`
+   html += `
     <tr class="total-row">
       <td colspan="5">TOTAIS</td>
       <td>${numero(litrosUsados)}</td>
@@ -800,56 +800,56 @@ if (i.freteFixo !== null) {
     </tr>
     </table>
   `;
+
   html += `
-html += `
-<div class="resumo-cards">
+  <div class="resumo-cards">
 
-  <!-- MÉTRICAS DO FRETE -->
-  <div class="card-linha azul">
-    <div class="card-item">
-      <span>KM TOTAL</span>
-      <strong>${kmLabel}</strong>
+    <!-- MÉTRICAS DO FRETE -->
+    <div class="card-linha azul">
+      <div class="card-item">
+        <span>KM TOTAL</span>
+        <strong>${kmLabel}</strong>
+      </div>
+      <div class="card-item">
+        <span>ÍNDICE</span>
+        <strong>${indiceLabel}</strong>
+      </div>
+      <div class="card-item">
+        <span>TAXA</span>
+        <strong>${taxaLabel}</strong>
+      </div>
+      <div class="card-item">
+        <span>M³ TOTAL</span>
+        <strong>${m3Total}</strong>
+      </div>
+      <div class="card-item">
+        <span>FRETE UNIT. MÉDIO</span>
+        <strong>${moeda3(freteUnitMedio)}</strong>
+      </div>
+      <div class="card-item destaque">
+        <span>FRETE TOTAL</span>
+        <strong>${moeda(freteTotal)}</strong>
+      </div>
     </div>
-    <div class="card-item">
-      <span>ÍNDICE</span>
-      <strong>${indiceLabel}</strong>
+
+    <!-- TEMPO E PAUSAS -->
+    <div class="card-linha">
+      <div class="card-item">
+        <span>⏱ TEMPO DE ROTA</span>
+        <strong>${tempoRota.texto}</strong>
+      </div>
+
+      <div class="card-item">
+        <span>🛑 PAUSAS OPERACIONAIS</span>
+        <strong>
+          ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)<br>" : ""}
+          ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
+        </strong>
+      </div>
     </div>
-    <div class="card-item">
-      <span>TAXA</span>
-      <strong>${taxaLabel}</strong>
-    </div>
-    <div class="card-item">
-      <span>M³ TOTAL</span>
-      <strong>${m3Total}</strong>
-    </div>
-    <div class="card-item">
-      <span>FRETE UNIT. MÉDIO</span>
-      <strong>${moeda3(freteUnitMedio)}</strong>
-    </div>
-    <div class="card-item destaque">
-      <span>FRETE TOTAL</span>
-      <strong>${moeda(freteTotal)}</strong>
-    </div>
+
   </div>
-
-  <!-- TEMPO E PAUSAS -->
-  <div class="card-linha">
-    <div class="card-item">
-      <span>⏱ TEMPO DE ROTA</span>
-      <strong>${tempoRota.texto}</strong>
-    </div>
-
-    <div class="card-item">
-      <span>🛑 PAUSAS OPERACIONAIS</span>
-      <strong>
-        ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)<br>" : ""}
-        ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
-      </strong>
-    </div>
-  </div>
-
-</div>
-`;
+  `;
 
 html += `</div>`;
 
