@@ -434,6 +434,8 @@ async function recalcularKM(){
   const cidades = [...document.querySelectorAll(".cidade")]
     .map(i => i.value)
     .filter(v => v);
+  const clientes = cidades.length;
+
 
   if (cidades.length === 0) {
     document.getElementById("kmTotal").value = "0.00";
@@ -689,7 +691,6 @@ if (todosComFreteFixo) {
   
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
-  const freteUnitBase=freteTotal/litrosPonderadosTotal;
   const somaFretesFixos = itensComFixo.reduce(
   (s, i) => s + (i.freteFixo * i.litros), 0
 );
@@ -706,12 +707,24 @@ const freteUnitRateio =
   litrosRateio > 0 ? freteRestante / litrosRateio : 0;
 
 const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
+  const tempoRota = await calcularTempoRota();
+// ===== MÉTRICAS PARA RESUMO FINAL =====
+const m3Total = (litrosUsados / 1000).toFixed(1);
+const freteUnitMedio = freteTotal / litrosUsados;
+ 
+let kmLabel = modalidade === "TABELA"
+  ? "FRETE TABELA"
+  : `${numero(km)} km`;
+
+let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
+let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
 
 // ================= BLOCO FRETE REAL (HTML) =================
 
 
 let html = `
-<div class="resumo-box">
+<div class="resumo-box resumo-integrado">
+
   <h3>
 
   RESUMO DE FRETE POR ROTA – ${tipo.replace("_"," ")}
@@ -726,24 +739,30 @@ let html = `
 
   ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
 </h3>
-
-
 `;
-
 
 html += `
-<table>
-  <tr>
-    <th>CLIENTE</th>
-    <th>CIDADE</th>
-    <th>HORÁRIO</th>
-    <th>TIPO FRETE</th>
-    <th>FRETE (R$/L)</th>
-    <th>QUANTIDADE</th>
-    <th>TOTAL</th>
-    <th>VENDEDOR</th>
-  </tr>
+<div class="card-linha azul card-tabela">
+
+  <div class="card-item full">
+    <span>📋 CLIENTES E DISTRIBUIÇÃO DA ROTA</span>
+  </div>
+
+  <div class="card-item full">
+    <div class="resumo-tabela">
+      <table>
+        <tr>
+          <th>CLIENTE</th>
+          <th>CIDADE</th>
+          <th>HORÁRIO</th>
+          <th>TIPO FRETE</th>
+          <th>FRETE (R$/L)</th>
+          <th>QUANTIDADE</th>
+          <th>TOTAL</th>
+          <th>VENDEDOR</th>
+        </tr>
 `;
+
 
   itens.forEach(i=>{
  let unit, total;
@@ -780,27 +799,85 @@ if (i.freteFixo !== null) {
       </tr>`;
   });
 
-  html+=`
-    <tr class="total-row">
-      <td colspan="5">TOTAIS</td>
-      <td>${numero(litrosUsados)}</td>
-      <td>${moeda(freteTotal)}</td>
-      <td>-</td>
-    </tr>
-    </table>
+ html += `
+        <tr class="total-row">
+          <td colspan="5">TOTAIS</td>
+          <td>${numero(litrosUsados)}</td>
+          <td>${moeda(freteTotal)}</td>
+          <td>-</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+`;
+
+
+  html += `
+  <div class="resumo-cards">
+
+    <!-- MÉTRICAS DO FRETE -->
+    <div class="card-linha azul">
+      <div class="card-item">
+        <span>KM TOTAL</span>
+        <strong>${kmLabel}</strong>
+      </div>
+      <div class="card-item">
+        <span>ÍNDICE</span>
+        <strong>${indiceLabel}</strong>
+      </div>
+      <div class="card-item">
+        <span>TAXA</span>
+        <strong>${taxaLabel}</strong>
+      </div>
+      <div class="card-item">
+        <span>M³ TOTAL</span>
+        <strong>${m3Total}</strong>
+      </div>
+      <div class="card-item">
+        <span>FRETE UNIT. MÉDIO</span>
+        <strong>${moeda3(freteUnitMedio)}</strong>
+      </div>
+      <div class="card-item destaque">
+        <span>FRETE TOTAL</span>
+        <strong>${moeda(freteTotal)}</strong>
+      </div>
+    </div>
+
+<div class="card-linha tempo-detalhado">
+
+  <!-- TRECHOS -->
+  <div class="tempo-trechos">
+    ${tempoRota.etapas.map(e => `
+      <div class="tempo-card">
+        <div class="trecho-titulo">${e.trecho}</div>
+        <div class="trecho-dados">
+          🚚 ${Math.round(e.tempoViagemH * 60)} min
+          <span>|</span>
+          📦 ${Math.round(e.tempoDescargaH * 60)} min
+        </div>
+      </div>
+    `).join("")}
+  </div>
+
+  <!-- TOTAL -->
+  <div class="tempo-total-card">
+    <div class="tempo-total-titulo">⏱ TEMPO TOTAL DA OPERAÇÃO</div>
+    <div class="tempo-total-valor">${tempoRota.textoTotal}</div>
+  </div>
+
+  <!-- PAUSAS -->
+  <div class="tempo-pausas">
+    ${tempoRota.incluiAlmoco ? "<div>🍽 Almoço (1h)</div>" : ""}
+    ${tempoRota.pausasDescanso ? "<div>🛑 Descanso legal (30min)</div>" : ""}
+  </div>
+
+</div>
+
+
+
   `;
-  
 
-// ===== MÉTRICAS PARA RESUMO FINAL =====
-const m3Total = (litrosUsados / 1000).toFixed(1);
-const freteUnitMedio = freteTotal / litrosUsados;
- 
-let kmLabel = modalidade === "TABELA"
-  ? "FRETE TABELA"
-  : `${numero(km)} km`;
-
-let indiceLabel = modalidade === "TABELA" ? "-" : dados.indice.toFixed(4);
-let taxaLabel   = modalidade === "TABELA" ? "-" : moeda(dados.taxa);
 
 const observacaoFrete = `
 <div class="frete-observacao">
@@ -812,50 +889,39 @@ const observacaoFrete = `
   ${cargaParcial ? " • <span class='parcial'>Carga parcial</span>" : ""}
 </div>
 `;
+const alertasOperacionais = [];
+
+// dispersão
+if ((infoDispersaoHTML.match(/→/g) || []).length > 0) {
+  alertasOperacionais.push("⚠️ Dispersão maior que 70 km identificada");
+}
+
+// rota longa
+if (tempoRota.tempoTotalH > 10) {
+  alertasOperacionais.push("🚨 Rota longa – risco operacional");
+}
+
+// pausa legal
+if (tempoRota.pausasDescanso > 0) {
+  alertasOperacionais.push("🛑 Exige pausa legal do motorista");
+}
 
 
-html += `
-<table style="margin-top:18px">
-  <tr class="total-row">
-    <td>KM TOTAL</td>
-    <td>ÍNDICE</td>
-    <td>TAXA</td>
-    <td>M³ TOTAL</td>
-    <td>FRETE UNIT. MÉDIO</td>
-    <td>FRETE TOTAL</td>
-  </tr>
-  <tr>
-    <td><b>${kmLabel}</b></td>
-    <td>${indiceLabel}</td>
-    <td>${taxaLabel}</td>
-    <td>${m3Total}</td>
-    <td>${moeda3(freteUnitMedio)}</td>
-    <td><b>${moeda(freteTotal)}</b></td>
-  </tr>
-</table>
-`;
-if (infoDispersaoHTML || existeFreteFixo) {
+if (alertasOperacionais.length > 0) {
   html += `
-    <div class="alertas-encadeados animar-alertas">
-      ${infoDispersaoHTML || ""}
+    <div class="card-linha alerta">
 
-      ${
-        existeFreteFixo ? `
-        <div class="condicoes-rota">
-          <div class="condicao-item frete-fixo">
-            <div class="condicao-texto">
-              <strong>⚠️ Frete fixo por litro aplicado</strong>
-              <div class="condicao-subtexto">
-                O cálculo utilizou valores fixos informados manualmente
-              </div>
-            </div>
-          </div>
-        </div>
-        ` : ""
-      }
+      <div class="card-item full">
+        <span>⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA</span>
+        <strong>
+          ${alertasOperacionais.join("<br>")}
+        </strong>
+      </div>
+
     </div>
   `;
 }
+
 
 
 
@@ -960,6 +1026,116 @@ const progresso = isParcial
 
   requestAnimationFrame(step);
 }
+async function calcularTempoRota() {
+  const cidades = [...document.querySelectorAll(".cidade")]
+    .map(i => i.value.trim())
+    .filter(v => v);
+
+  const TEMPO_DISPERSAO_MIN = 30;
+
+  // 🔹 CALCULA ETAPAS REAIS (OSRM)
+  const etapas = await calcularEtapasTempo(cidades);
+
+  // 🔹 SOMAS
+  const tempoDeslocamentoH = etapas.reduce(
+    (s, e) => s + e.tempoViagemH,
+    0
+  );
+
+// 🔹 REGRA REAL DE DESCARGA
+const cidadesNormalizadas = cidades.map(c => c.toUpperCase());
+const clientesUnicos = [...new Set(cidadesNormalizadas)];
+
+const TEMPO_DESCARGA_MIN = 50;
+
+// Se todos os clientes forem iguais → 1 descarga
+const qtDescargas = clientesUnicos.length === 1
+  ? 1
+  : clientesUnicos.length;
+
+const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
+
+
+  // 🔹 DISPERSÕES
+  const qtDispersoes = (infoDispersaoHTML.match(/→/g) || []).length;
+  const tempoDispersaoH = (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
+
+  // 🔹 TEMPO BASE
+  let tempoTotalH =
+    tempoDeslocamentoH +
+    tempoDescargaH +
+    tempoDispersaoH;
+
+  // 🔹 ALMOÇO
+  const incluiAlmoco = tempoTotalH > 6;
+  if (incluiAlmoco) tempoTotalH += 1;
+
+  // 🔹 DESCANSO LEGAL
+  let pausasDescanso = 0;
+  if (tempoDeslocamentoH > 5.5) {
+    pausasDescanso = 0.5;
+    tempoTotalH += pausasDescanso;
+  }
+
+  // 🔹 FORMATAÇÃO
+  const horas = Math.floor(tempoTotalH);
+  const minutos = Math.round((tempoTotalH - horas) * 60);
+
+  return {
+    etapas,
+    tempoDeslocamentoH,
+    tempoDescargaH,
+    tempoDispersaoH,
+    incluiAlmoco,
+    pausasDescanso,
+    tempoTotalH,
+    textoTotal: `${horas}h ${minutos}min`
+  };
+}
+// ================= VELOCIDADE MÉDIA POR TRECHO (INDUSTRIAL) =================
+function velocidadeMediaPorTrecho(km) {
+  if (km <= 30) return 45;   // urbano / acesso
+  if (km <= 80) return 55;   // intermunicipal
+  return 65;                // rodovia longa (tanque)
+}
+
+async function calcularEtapasTempo(cidades) {
+  const TEMPO_DESCARGA_MIN = 50;
+  const etapas = [];
+
+  // BASE → PRIMEIRA CIDADE
+  if (cidades.length > 0) {
+    const kmBase = await distanciaBaseCidade(cidades[0]);
+    const velBase = velocidadeMediaPorTrecho(kmBase);
+
+    etapas.push({
+      trecho: `Base → ${cidades[0]}`,
+      km: kmBase,
+      velocidade: velBase,
+      tempoViagemH: kmBase / velBase,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+  }
+
+  // ENTRE CIDADES
+  for (let i = 0; i < cidades.length - 1; i++) {
+    const kmTrecho = await distanciaCidades(cidades[i], cidades[i + 1]);
+    const velTrecho = velocidadeMediaPorTrecho(kmTrecho);
+
+    etapas.push({
+      trecho: `${cidades[i]} → ${cidades[i + 1]}`,
+      km: kmTrecho,
+      velocidade: velTrecho,
+      tempoViagemH: kmTrecho / velTrecho,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+  }
+
+  return etapas;
+}
+
+
+
 
 </script>
 <script>
