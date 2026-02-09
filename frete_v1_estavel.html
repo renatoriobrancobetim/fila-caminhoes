@@ -740,10 +740,10 @@ let html = `
 </h3>
 
 
+html += `
+<div class="resumo-tabela">
 `;
 
-<div class="resumo-tabela">
-  <!-- TABELA DE CLIENTES -->
 
 html += `
 <table>
@@ -803,11 +803,12 @@ if (i.freteFixo !== null) {
     </tr>
     </table>
   `;
+html += `
 </div>
 
 <div class="resumo-metricas">
-  <!-- cards de KM, índice, frete etc -->
-</div>
+`;
+
 
   html += `
   <div class="resumo-cards">
