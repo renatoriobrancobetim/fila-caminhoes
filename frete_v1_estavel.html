@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <script src="auth.js"></script>
+
 <meta charset="UTF-8">
 <title>Cálculo de Frete por Rota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +18,34 @@
 </head>
 
 <body>
+<header class="erp-header">
+  <div class="erp-left">
+    <span class="erp-logo">LOGÍSTICA</span>
+    <span class="erp-sub">Sistema Operacional</span>
+  </div>
+
+<nav class="erp-nav">
+  <a href="painel.html" class="nav-item" data-perfil="admin,comercial,leitura">Painel</a>
+
+  <a href="frete.html" class="nav-item" data-perfil="admin,comercial">Frete</a>
+
+  <a href="index.html" class="nav-item" data-perfil="admin">
+    Controle Fila
+  </a>
+
+  <a href="leitura.html" class="nav-item" data-perfil="admin,operador,leitura">
+    CT's Disponíveis
+  </a>
+
+  <a href="motoristas.html" class="nav-item" data-perfil="admin">
+    Disponibilidade
+  </a>
+
+  <a href="clientes-mapa.html" class="nav-item" data-perfil="admin,comercial">
+    Clientes
+  </a>
+</nav>
+</header>
 
 <div class="spinner-overlay" id="spinner">
   <div class="spinner"></div>
@@ -369,8 +399,7 @@ if (dispersoes.length > 0) {
       </ul>
         </div>
   </div>
-
-</div>
+ </div>
     </div>
   `;
 }
@@ -677,6 +706,8 @@ const freteUnitRateio =
   litrosRateio > 0 ? freteRestante / litrosRateio : 0;
 
 const classeFrete = modalidade === "TABELA" ? "frete-destaque tabela" : "frete-destaque km";
+  const tempoRota = calcularTempoRota();
+
 
 // ================= BLOCO FRETE REAL (HTML) =================
 
@@ -805,6 +836,30 @@ html += `
   </tr>
 </table>
 `;
+  html += `
+<table style="margin-top:18px">
+  <tr class="total-row">
+    <td>KM TOTAL</td>
+    <td>TEMPO DE ROTA</td>
+    <td>CLIENTES</td>
+    <td>PAUSAS</td>
+    <td>M³ TOTAL</td>
+    <td>FRETE TOTAL</td>
+  </tr>
+  <tr>
+    <td><b>${kmLabel}</b></td>
+    <td><b>${tempoRota.texto}</b></td>
+    <td>${tempoRota.clientes}</td>
+    <td>
+      ${tempoRota.incluiAlmoco ? "🍽️ Almoço (1h)<br>" : ""}
+      ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "-"}
+    </td>
+    <td>${m3Total}</td>
+    <td><b>${moeda(freteTotal)}</b></td>
+  </tr>
+</table>
+`;
+
 if (infoDispersaoHTML || existeFreteFixo) {
   html += `
     <div class="alertas-encadeados animar-alertas">
@@ -824,6 +879,18 @@ if (infoDispersaoHTML || existeFreteFixo) {
         </div>
         ` : ""
       }
+    </div>
+  `;
+}
+if (tempoRota.alertas.length > 0) {
+  html += `
+    <div class="condicoes-rota">
+      <div class="condicao-header">
+        ⚠️ Alertas Operacionais
+      </div>
+      <ul>
+        ${tempoRota.alertas.map(a => `<li>${a}</li>`).join("")}
+      </ul>
     </div>
   `;
 }
@@ -931,7 +998,90 @@ const progresso = isParcial
 
   requestAnimationFrame(step);
 }
+function calcularTempoRota() {
+  const km = parseFloat(document.getElementById("kmTotal").value || 0);
 
+  const cidades = [...document.querySelectorAll(".cidade")]
+    .map(i => i.value.trim())
+    .filter(v => v);
+
+  const clientes = cidades.length;
+
+  const VELOCIDADE_MEDIA = 60; // km/h
+  const TEMPO_DESCARGA_MIN = 50;
+  const TEMPO_DISPERSAO_MIN = 30; // por trecho >70km
+
+  // 🔹 DESLOCAMENTO
+  const tempoDeslocamentoH = km / VELOCIDADE_MEDIA;
+
+  // 🔹 DESCARGA
+  const tempoDescargaH = (clientes * TEMPO_DESCARGA_MIN) / 60;
+
+  // 🔹 DISPERSÕES (usa infoDispersaoHTML já calculado)
+  const qtDispersoes =
+    (infoDispersaoHTML.match(/→/g) || []).length;
+
+  const tempoDispersaoH =
+    (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
+
+  // 🔹 TEMPO BASE
+  let tempoTotalH =
+    tempoDeslocamentoH +
+    tempoDescargaH +
+    tempoDispersaoH;
+
+  // 🔹 ALMOÇO AUTOMÁTICO
+  const incluiAlmoco = tempoTotalH > 6;
+  if (incluiAlmoco) tempoTotalH += 1;
+
+  // 🔹 DESCANSO LEGAL (Lei do Motorista)
+  let pausasDescanso = 0;
+  if (tempoDeslocamentoH > 5.5) pausasDescanso = 0.5; // 30 min
+
+  tempoTotalH += pausasDescanso;
+
+  // 🔹 ALERTAS
+  const alertas = [];
+
+  if (qtDispersoes > 0) {
+    alertas.push("⚠️ Dispersão elevada na rota");
+  }
+
+  if (tempoTotalH > 10) {
+    alertas.push("🚨 Rota longa – risco operacional");
+  }
+
+  if (pausasDescanso > 0) {
+    alertas.push("🛑 Exige pausa legal do motorista (Lei 13.103)");
+  }
+
+  // 🔹 FORMATAÇÃO
+  const horas = Math.floor(tempoTotalH);
+  const minutos = Math.round((tempoTotalH - horas) * 60);
+
+  return {
+    clientes,
+    tempoTotalH,
+    tempoDeslocamentoH,
+    tempoDescargaH,
+    tempoDispersaoH,
+    incluiAlmoco,
+    pausasDescanso,
+    alertas,
+    texto: `${horas}h ${minutos}min`
+  };
+}
+
+</script>
+<script>
+const perfil = localStorage.getItem("perfil");
+
+document.querySelectorAll("[data-perfil]").forEach(el => {
+  const permitido = el.dataset.perfil.split(",");
+  if (!permitido.includes(perfil)) {
+    el.style.display = "none";
+  }
+});
 </script>
 
 </body>
