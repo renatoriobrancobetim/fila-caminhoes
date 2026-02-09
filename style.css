@@ -937,3 +937,61 @@ th{
   text-align: center;
   margin-top: 8px;
 }
+/* ===== TEMPO OPERACIONAL ===== */
+
+.card-linha.tempo-detalhado {
+  margin-top: 18px;
+  padding: 14px;
+}
+
+.tempo-trechos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.tempo-card {
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 10px 12px;
+  min-width: 260px;
+  background: #f8fbff;
+}
+
+.trecho-titulo {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 6px;
+}
+
+.trecho-dados {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.trecho-dados .separador {
+  margin: 0 6px;
+  color: #64748b;
+}
+
+.tempo-total {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #c7d2fe;
+  text-align: center;
+}
+
+.tempo-total span {
+  display: block;
+  font-size: 13px;
+  color: #1e40af;
+}
+
+.tempo-total strong {
+  font-size: 18px;
+  display: block;
+  margin: 4px 0;
+}
