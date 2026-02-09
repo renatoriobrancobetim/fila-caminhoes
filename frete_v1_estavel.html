@@ -844,22 +844,24 @@ if (i.freteFixo !== null) {
       </div>
     </div>
 
-    <!-- TEMPO E PAUSAS -->
-    <div class="card-item full">
+<div class="card-linha operacional tempo-detalhado">
+
+  <div class="card-item full titulo">
     <span>⏱ TEMPO OPERACIONAL POR TRECHO</span>
   </div>
 
   ${tempoRota.etapas.map(e => `
-    <div class="card-item">
+    <div class="card-item trecho">
       <span>${e.trecho}</span>
       <strong>
-        🚚 ${(e.tempoViagemH * 60).toFixed(0)} min +
+        🚚 ${(e.tempoViagemH * 60).toFixed(0)} min
+        &nbsp;|&nbsp;
         📦 ${(e.tempoDescargaH * 60).toFixed(0)} min
       </strong>
     </div>
   `).join("")}
 
-  <div class="card-item destaque full">
+  <div class="card-item destaque full total-operacao">
     <span>⏱ TEMPO TOTAL DA OPERAÇÃO</span>
     <strong>
       ${tempoRota.textoTotal}<br>
@@ -867,10 +869,9 @@ if (i.freteFixo !== null) {
       ${tempoRota.pausasDescanso ? "🛑 Descanso legal (30min)" : ""}
     </strong>
   </div>
+
 </div>
 
-     
-  </div>
   `;
 
 
