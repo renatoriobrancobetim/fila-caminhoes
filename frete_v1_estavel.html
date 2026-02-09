@@ -884,17 +884,19 @@ if (tempoRota.pausasDescanso > 0) {
 
 if (alertasOperacionais.length > 0) {
   html += `
-    <div class="condicoes-rota" style="margin-top:18px">
-      <div class="condicoes-header">
-        ⚠️ Informações Operacionais e Logística
+    <div class="card-linha alerta">
+
+      <div class="card-item full">
+        <span>⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA</span>
+        <strong>
+          ${alertasOperacionais.join("<br>")}
+        </strong>
       </div>
 
-      <ul style="margin:10px 0 0 18px">
-        ${alertasOperacionais.map(a => `<li>${a}</li>`).join("")}
-      </ul>
     </div>
   `;
 }
+
 
 
 
