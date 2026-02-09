@@ -844,33 +844,34 @@ if (i.freteFixo !== null) {
       </div>
     </div>
 
-<div class="card-linha operacional tempo-detalhado">
+<div class="card-linha tempo-detalhado">
 
   <div class="card-item full titulo">
     <span>⏱ TEMPO OPERACIONAL POR TRECHO</span>
   </div>
 
-  ${tempoRota.etapas.map(e => `
-    <div class="card-item trecho">
-      <span>${e.trecho}</span>
-      <strong>
-        🚚 ${(e.tempoViagemH * 60).toFixed(0)} min
-        &nbsp;|&nbsp;
-        📦 ${(e.tempoDescargaH * 60).toFixed(0)} min
-      </strong>
-    </div>
-  `).join("")}
+  <div class="tempo-trechos">
+    ${tempoRota.etapas.map(e => `
+      <div class="tempo-card">
+        <div class="trecho-titulo">${e.trecho}</div>
+        <div class="trecho-dados">
+          🚚 ${Math.round(e.tempoViagemH * 60)} min
+          <span class="separador">|</span>
+          📦 ${Math.round(e.tempoDescargaH * 60)} min
+        </div>
+      </div>
+    `).join("")}
+  </div>
 
-  <div class="card-item destaque full total-operacao">
+  <div class="tempo-total">
     <span>⏱ TEMPO TOTAL DA OPERAÇÃO</span>
-    <strong>
-      ${tempoRota.textoTotal}<br>
-      ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)<br>" : ""}
-      ${tempoRota.pausasDescanso ? "🛑 Descanso legal (30min)" : ""}
-    </strong>
+    <strong>${tempoRota.textoTotal}</strong>
+    ${tempoRota.incluiAlmoco ? "<div>🍽 Almoço (1h)</div>" : ""}
+    ${tempoRota.pausasDescanso ? "<div>🛑 Descanso legal (30min)</div>" : ""}
   </div>
 
 </div>
+
 
   `;
 
