@@ -740,23 +740,27 @@ let html = `
 `;
 
 html += `
-<div class="resumo-tabela">
+<div class="card-linha azul card-tabela">
+
+  <div class="card-item full">
+    <span>📋 CLIENTES E DISTRIBUIÇÃO DA ROTA</span>
+  </div>
+
+  <div class="card-item full">
+    <div class="resumo-tabela">
+      <table>
+        <tr>
+          <th>CLIENTE</th>
+          <th>CIDADE</th>
+          <th>HORÁRIO</th>
+          <th>TIPO FRETE</th>
+          <th>FRETE (R$/L)</th>
+          <th>QUANTIDADE</th>
+          <th>TOTAL</th>
+          <th>VENDEDOR</th>
+        </tr>
 `;
 
-
-html += `
-<table>
-  <tr>
-    <th>CLIENTE</th>
-    <th>CIDADE</th>
-    <th>HORÁRIO</th>
-    <th>TIPO FRETE</th>
-    <th>FRETE (R$/L)</th>
-    <th>QUANTIDADE</th>
-    <th>TOTAL</th>
-    <th>VENDEDOR</th>
-  </tr>
-`;
 
   itens.forEach(i=>{
  let unit, total;
@@ -793,18 +797,17 @@ if (i.freteFixo !== null) {
       </tr>`;
   });
 
-   html += `
-    <tr class="total-row">
-      <td colspan="5">TOTAIS</td>
-      <td>${numero(litrosUsados)}</td>
-      <td>${moeda(freteTotal)}</td>
-      <td>-</td>
-    </tr>
-    </table>
-  `;
-html += `
+ html += `
+        <tr class="total-row">
+          <td colspan="5">TOTAIS</td>
+          <td>${numero(litrosUsados)}</td>
+          <td>${moeda(freteTotal)}</td>
+          <td>-</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>
-
 `;
 
 
