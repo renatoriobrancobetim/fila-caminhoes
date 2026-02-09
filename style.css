@@ -714,3 +714,45 @@ th{
   font-weight: 600;
   opacity: 1;
 }
+.resumo-cards {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-linha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  background: #fff;
+  border: 2px solid #1e5bd8;
+  border-radius: 10px;
+  padding: 12px;
+  gap: 10px;
+}
+
+.card-linha.azul {
+  background: #f4f8ff;
+}
+
+.card-item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.card-item span {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.card-item strong {
+  font-size: 15px;
+  color: #0d47a1;
+}
+
+.card-item.destaque strong {
+  color: #c62828;
+  font-size: 16px;
+}
