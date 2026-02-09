@@ -791,7 +791,44 @@ if (i.freteFixo !== null) {
     </tr>
     </table>
   `;
-  
+  html += `
+<table style="margin-top:18px">
+  <tr class="total-row">
+    <td>KM TOTAL</td>
+    <td>ÍNDICE</td>
+    <td>TAXA</td>
+    <td>M³ TOTAL</td>
+    <td>FRETE UNIT. MÉDIO</td>
+    <td>FRETE TOTAL</td>
+  </tr>
+  <tr>
+    <td><b>${kmLabel}</b></td>
+    <td>${indiceLabel}</td>
+    <td>${taxaLabel}</td>
+    <td>${m3Total}</td>
+    <td>${moeda3(freteUnitMedio)}</td>
+    <td><b>${moeda(freteTotal)}</b></td>
+  </tr>
+</table>
+`;
+  html += `
+<table style="margin-top:12px">
+  <tr class="total-row">
+    <td>TEMPO DE ROTA</td>
+    <td>PAUSAS OPERACIONAIS</td>
+  </tr>
+  <tr>
+    <td><b>${tempoRota.texto}</b></td>
+    <td>
+      ${tempoRota.incluiAlmoco ? "🍽️ Almoço (1h)<br>" : ""}
+      ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
+    </td>
+  </tr>
+</table>
+`;
+html += `</div>`;
+
+
 
 // ===== MÉTRICAS PARA RESUMO FINAL =====
 const m3Total = (litrosUsados / 1000).toFixed(1);
