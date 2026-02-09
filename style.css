@@ -886,3 +886,25 @@ th{
 .card-linha + .card-linha.alerta {
   margin-top: 14px;
 }
+/* ===== CARD OPERACIONAL (TEMPO / PAUSAS) ===== */
+.card-linha.operacional {
+  margin-top: 12px;              /* espaço em relação aos cards financeiros */
+  background: #f8fafc;
+  border: 1px solid #dbe7ff;
+}
+
+.card-linha.operacional .card-item {
+  background: transparent;
+}
+
+.card-linha.operacional .card-item span {
+  font-size: 12px;
+  color: #5a6f91;
+  font-weight: 600;
+}
+
+.card-linha.operacional .card-item strong {
+  font-size: 15px;
+  color: #0d47a1;
+  font-weight: 700;
+}
