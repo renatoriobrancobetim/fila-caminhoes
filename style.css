@@ -815,3 +815,37 @@ th{
 .resumo-box tbody tr:hover {
   background: #f1f8ff;
 }
+/* ===== RESUMO INTEGRADO ===== */
+.resumo-integrado {
+  border: 2px solid #0d47a1;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+/* REMOVE bordas duplicadas */
+.resumo-integrado table {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* DIVISOR ENTRE TABELA E MÉTRICAS */
+.resumo-metricas {
+  border-top: 2px solid #bbdefb;
+  background: #f8fbff;
+  padding: 14px 16px;
+}
+
+/* AJUSTE DOS CARDS INTERNOS */
+.resumo-metricas .card-linha {
+  margin: 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* DESTACA FRETE TOTAL */
+.resumo-metricas .destaque strong {
+  color: #c62828;
+}
