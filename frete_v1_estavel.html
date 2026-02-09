@@ -1083,20 +1083,27 @@ async function calcularTempoRota() {
     textoTotal: `${horas}h ${minutos}min`
   };
 }
+// ================= VELOCIDADE MÉDIA POR TRECHO (INDUSTRIAL) =================
+function velocidadeMediaPorTrecho(km) {
+  if (km <= 30) return 45;   // urbano / acesso
+  if (km <= 80) return 55;   // intermunicipal
+  return 65;                // rodovia longa (tanque)
+}
 
 async function calcularEtapasTempo(cidades) {
-  const VELOCIDADE_MEDIA = 60; // km/h
   const TEMPO_DESCARGA_MIN = 50;
-
   const etapas = [];
 
   // BASE → PRIMEIRA CIDADE
   if (cidades.length > 0) {
     const kmBase = await distanciaBaseCidade(cidades[0]);
+    const velBase = velocidadeMediaPorTrecho(kmBase);
+
     etapas.push({
       trecho: `Base → ${cidades[0]}`,
       km: kmBase,
-      tempoViagemH: kmBase / VELOCIDADE_MEDIA,
+      velocidade: velBase,
+      tempoViagemH: kmBase / velBase,
       tempoDescargaH: TEMPO_DESCARGA_MIN / 60
     });
   }
@@ -1104,16 +1111,20 @@ async function calcularEtapasTempo(cidades) {
   // ENTRE CIDADES
   for (let i = 0; i < cidades.length - 1; i++) {
     const kmTrecho = await distanciaCidades(cidades[i], cidades[i + 1]);
+    const velTrecho = velocidadeMediaPorTrecho(kmTrecho);
+
     etapas.push({
       trecho: `${cidades[i]} → ${cidades[i + 1]}`,
       km: kmTrecho,
-      tempoViagemH: kmTrecho / VELOCIDADE_MEDIA,
+      velocidade: velTrecho,
+      tempoViagemH: kmTrecho / velTrecho,
       tempoDescargaH: TEMPO_DESCARGA_MIN / 60
     });
   }
 
   return etapas;
 }
+
 
 
 
