@@ -908,3 +908,32 @@ th{
   color: #0d47a1;
   font-weight: 700;
 }
+.card-linha.tempo-detalhado {
+  margin-top: 16px;
+}
+
+.card-linha.tempo-detalhado .titulo {
+  text-align: center;
+  font-weight: bold;
+}
+
+.card-item.trecho {
+  min-width: 260px;
+  text-align: center;
+}
+
+.card-item.trecho span {
+  font-size: 13px;
+  color: #1e3a8a;
+}
+
+.card-item.trecho strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.card-item.total-operacao {
+  text-align: center;
+  margin-top: 8px;
+}
