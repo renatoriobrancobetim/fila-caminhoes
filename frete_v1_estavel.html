@@ -1042,10 +1042,19 @@ async function calcularTempoRota() {
     0
   );
 
-  const tempoDescargaH = etapas.reduce(
-    (s, e) => s + e.tempoDescargaH,
-    0
-  );
+// 🔹 REGRA REAL DE DESCARGA
+const cidadesNormalizadas = cidades.map(c => c.toUpperCase());
+const clientesUnicos = [...new Set(cidadesNormalizadas)];
+
+const TEMPO_DESCARGA_MIN = 50;
+
+// Se todos os clientes forem iguais → 1 descarga
+const qtDescargas = clientesUnicos.length === 1
+  ? 1
+  : clientesUnicos.length;
+
+const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
+
 
   // 🔹 DISPERSÕES
   const qtDispersoes = (infoDispersaoHTML.match(/→/g) || []).length;
