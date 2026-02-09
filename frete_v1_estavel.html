@@ -846,31 +846,34 @@ if (i.freteFixo !== null) {
 
 <div class="card-linha tempo-detalhado">
 
-  <div class="card-item full titulo">
-    <span>⏱ TEMPO OPERACIONAL POR TRECHO</span>
-  </div>
-
+  <!-- TRECHOS -->
   <div class="tempo-trechos">
     ${tempoRota.etapas.map(e => `
       <div class="tempo-card">
         <div class="trecho-titulo">${e.trecho}</div>
         <div class="trecho-dados">
           🚚 ${Math.round(e.tempoViagemH * 60)} min
-          <span class="separador">|</span>
+          <span>|</span>
           📦 ${Math.round(e.tempoDescargaH * 60)} min
         </div>
       </div>
     `).join("")}
   </div>
 
-  <div class="tempo-total">
-    <span>⏱ TEMPO TOTAL DA OPERAÇÃO</span>
-    <strong>${tempoRota.textoTotal}</strong>
+  <!-- TOTAL -->
+  <div class="tempo-total-card">
+    <div class="tempo-total-titulo">⏱ TEMPO TOTAL DA OPERAÇÃO</div>
+    <div class="tempo-total-valor">${tempoRota.textoTotal}</div>
+  </div>
+
+  <!-- PAUSAS -->
+  <div class="tempo-pausas">
     ${tempoRota.incluiAlmoco ? "<div>🍽 Almoço (1h)</div>" : ""}
     ${tempoRota.pausasDescanso ? "<div>🛑 Descanso legal (30min)</div>" : ""}
   </div>
 
 </div>
+
 
 
   `;
