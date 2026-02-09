@@ -836,61 +836,54 @@ html += `
   </tr>
 </table>
 `;
-  html += `
-<table style="margin-top:18px">
+ hhtml += `
+<table style="margin-top:12px">
   <tr class="total-row">
-    <td>KM TOTAL</td>
     <td>TEMPO DE ROTA</td>
-    <td>CLIENTES</td>
-    <td>PAUSAS</td>
-    <td>M³ TOTAL</td>
-    <td>FRETE TOTAL</td>
+    <td>PAUSAS OPERACIONAIS</td>
   </tr>
   <tr>
-    <td><b>${kmLabel}</b></td>
     <td><b>${tempoRota.texto}</b></td>
-    <td>${tempoRota.clientes}</td>
     <td>
       ${tempoRota.incluiAlmoco ? "🍽️ Almoço (1h)<br>" : ""}
-      ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "-"}
+      ${tempoRota.pausasDescanso ? "🛑 Descanso legal" : "—"}
     </td>
-    <td>${m3Total}</td>
-    <td><b>${moeda(freteTotal)}</b></td>
   </tr>
 </table>
 `;
 
-if (infoDispersaoHTML || existeFreteFixo) {
+
+
+if (infoDispersaoHTML || tempoRota.alertas.length > 0 || existeFreteFixo) {
   html += `
-    <div class="alertas-encadeados animar-alertas">
+    <div class="condicoes-rota" style="margin-top:18px">
+      <div class="condicoes-header">
+        ⚠️ Informações Operacionais da Rota
+      </div>
+
       ${infoDispersaoHTML || ""}
 
       ${
+        tempoRota.alertas.length > 0 ? `
+        <div class="condicao-item alerta-operacional">
+          <strong>🚨 Alertas Operacionais</strong>
+          <ul>
+            ${tempoRota.alertas.map(a => `<li>${a}</li>`).join("")}
+          </ul>
+        </div>
+        ` : ""
+      }
+
+      ${
         existeFreteFixo ? `
-        <div class="condicoes-rota">
-          <div class="condicao-item frete-fixo">
-            <div class="condicao-texto">
-              <strong>⚠️ Frete fixo por litro aplicado</strong>
-              <div class="condicao-subtexto">
-                O cálculo utilizou valores fixos informados manualmente
-              </div>
-            </div>
+        <div class="condicao-item frete-fixo">
+          <strong>⚠️ Frete fixo por litro aplicado</strong>
+          <div class="condicao-subtexto">
+            O cálculo utilizou valores fixos informados manualmente
           </div>
         </div>
         ` : ""
       }
-    </div>
-  `;
-}
-if (tempoRota.alertas.length > 0) {
-  html += `
-    <div class="condicoes-rota">
-      <div class="condicao-header">
-        ⚠️ Alertas Operacionais
-      </div>
-      <ul>
-        ${tempoRota.alertas.map(a => `<li>${a}</li>`).join("")}
-      </ul>
     </div>
   `;
 }
