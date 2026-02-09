@@ -774,3 +774,44 @@ th{
   line-height: 1.6;
   display: block;
 }
+/* ===== TABELA RESUMO FRETE (PADRÃO CARD AZUL) ===== */
+.resumo-box table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+  border-top: 5px solid #0d47a1; /* 🔵 LINHA AZUL */
+}
+
+/* HEADER */
+.resumo-box th {
+  background: #e3f2fd;
+  color: #0d47a1;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #bbdefb;
+}
+
+/* CELULAS */
+.resumo-box td {
+  padding: 10px;
+  font-size: 13px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+/* LINHA TOTAL */
+.resumo-box .total-row td {
+  background: #f5f7fa;
+  font-weight: 700;
+  color: #0d47a1;
+}
+
+/* HOVER SUAVE */
+.resumo-box tbody tr:hover {
+  background: #f1f8ff;
+}
