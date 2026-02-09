@@ -846,6 +846,30 @@ if (i.freteFixo !== null) {
 
     <!-- TEMPO E PAUSAS -->
    <div class="card-linha operacional">
+  <div class="card-item full">
+    <span>⏱ TEMPO OPERACIONAL POR TRECHO</span>
+  </div>
+
+  ${tempoRota.etapas.map(e => `
+    <div class="card-item">
+      <span>${e.trecho}</span>
+      <strong>
+        🚚 ${(e.tempoViagemH * 60).toFixed(0)} min +
+        📦 ${(e.tempoDescargaH * 60).toFixed(0)} min
+      </strong>
+    </div>
+  `).join("")}
+
+  <div class="card-item destaque full">
+    <span>⏱ TEMPO TOTAL DA OPERAÇÃO</span>
+    <strong>
+      ${tempoRota.textoTotal}<br>
+      ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)<br>" : ""}
+      ${tempoRota.pausasDescanso ? "🛑 Descanso legal (30min)" : ""}
+    </strong>
+  </div>
+</div>
+
       <div class="card-item">
         <span>⏱ TEMPO DE ROTA</span>
         <strong>${tempoRota.texto}</strong>
@@ -1014,58 +1038,91 @@ const progresso = isParcial
   requestAnimationFrame(step);
 }
 function calcularTempoRota() {
-  const km = parseFloat(document.getElementById("kmTotal").value || 0);
+  const kmTotal = parseFloat(document.getElementById("kmTotal").value || 0);
 
   const cidades = [...document.querySelectorAll(".cidade")]
     .map(i => i.value.trim())
     .filter(v => v);
 
-  // ✅ CORREÇÃO CIRÚRGICA
-  const clientes = cidades.length;
-
-  // 🔹 CLIENTES ÚNICOS
-  const clientesUnicos = [...new Set(cidades.map(c => c.toUpperCase()))];
-
+  const VELOCIDADE_MEDIA = 60; // km/h
   const TEMPO_DESCARGA_MIN = 50;
-  const qtDescargas = clientesUnicos.length === 1 ? 1 : clientesUnicos.length;
-  const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
-
-  const VELOCIDADE_MEDIA = 60;
   const TEMPO_DISPERSAO_MIN = 30;
 
-  const tempoDeslocamentoH = km / VELOCIDADE_MEDIA;
+  let etapas = [];
+  let tempoDeslocamentoH = 0;
+  let tempoDescargaH = 0;
 
+  // 🔹 CLIENTES ÚNICOS (regra da descarga)
+  const clientesUnicos = [...new Set(cidades.map(c => c.toUpperCase()))];
+  const qtDescargas = clientesUnicos.length === 1 ? 1 : clientesUnicos.length;
+
+  // 🔹 BASE → PRIMEIRO CLIENTE
+  if (cidades.length > 0) {
+    const kmBase = kmTotal / (cidades.length + 1); // distribuição proporcional
+    const tempoH = kmBase / VELOCIDADE_MEDIA;
+
+    etapas.push({
+      trecho: `Base → ${cidades[0]}`,
+      tempoViagemH: tempoH,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+
+    tempoDeslocamentoH += tempoH;
+    tempoDescargaH += TEMPO_DESCARGA_MIN / 60;
+  }
+
+  // 🔹 CLIENTE → CLIENTE
+  for (let i = 1; i < cidades.length; i++) {
+    const kmTrecho = kmTotal / (cidades.length + 1);
+    const tempoH = kmTrecho / VELOCIDADE_MEDIA;
+
+    etapas.push({
+      trecho: `${cidades[i - 1]} → ${cidades[i]}`,
+      tempoViagemH: tempoH,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+
+    tempoDeslocamentoH += tempoH;
+    tempoDescargaH += TEMPO_DESCARGA_MIN / 60;
+  }
+
+  // 🔹 DISPERSÕES
   const qtDispersoes = (infoDispersaoHTML.match(/→/g) || []).length;
   const tempoDispersaoH = (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
 
+  // 🔹 TEMPO TOTAL BASE
   let tempoTotalH =
     tempoDeslocamentoH +
     tempoDescargaH +
     tempoDispersaoH;
 
+  // 🔹 ALMOÇO
   const incluiAlmoco = tempoTotalH > 6;
   if (incluiAlmoco) tempoTotalH += 1;
 
+  // 🔹 DESCANSO LEGAL
   let pausasDescanso = 0;
-  if (tempoDeslocamentoH > 5.5) pausasDescanso = 0.5;
-
-  tempoTotalH += pausasDescanso;
+  if (tempoDeslocamentoH > 5.5) {
+    pausasDescanso = 0.5;
+    tempoTotalH += pausasDescanso;
+  }
 
   const horas = Math.floor(tempoTotalH);
   const minutos = Math.round((tempoTotalH - horas) * 60);
 
   return {
-    clientes,
+    etapas,
     qtDescargas,
-    tempoTotalH,
     tempoDeslocamentoH,
     tempoDescargaH,
     tempoDispersaoH,
     incluiAlmoco,
     pausasDescanso,
-    texto: `${horas}h ${minutos}min`
+    tempoTotalH,
+    textoTotal: `${horas}h ${minutos}min`
   };
 }
+
 
 
 </script>
