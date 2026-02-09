@@ -689,7 +689,6 @@ if (todosComFreteFixo) {
   
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
-  const freteUnitBase=freteTotal/litrosPonderadosTotal;
   const somaFretesFixos = itensComFixo.reduce(
   (s, i) => s + (i.freteFixo * i.litros), 0
 );
@@ -738,7 +737,7 @@ let html = `
 
   ${cargaParcial ? '<span class="badge-parcial">CARGA PARCIAL</span>' : ''}
 </h3>
-
+`;
 
 html += `
 <div class="resumo-tabela">
