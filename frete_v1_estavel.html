@@ -126,6 +126,36 @@
   const j = await r.json();
   return j.routes[0].distance / 1000;
 }
+async function distanciaEntreClientes(clienteA, clienteB) {
+  const latA = parseFloat(clienteA?.dataset?.lat);
+  const lngA = parseFloat(clienteA?.dataset?.lng);
+  const latB = parseFloat(clienteB?.dataset?.lat);
+  const lngB = parseFloat(clienteB?.dataset?.lng);
+
+  // 🔁 fallback se algum cliente não tiver coordenada válida
+  if ([latA, lngA, latB, lngB].some(isNaN)) {
+    const cidadeA = document.getElementById(
+      clienteA.id.replace("cliente", "cidade")
+    ).value;
+
+    const cidadeB = document.getElementById(
+      clienteB.id.replace("cliente", "cidade")
+    ).value;
+
+    return distanciaCidades(
+      normalizarCidade(cidadeA),
+      normalizarCidade(cidadeB)
+    );
+  }
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
 
   function validarCoordenadaCliente(input) {
   const lat = parseFloat(input.dataset.lat);
@@ -616,16 +646,28 @@ async function recalcularKM(){
   let km = 0;
 
   // Empresa → primeira cidade
-  km += await distanciaBaseCidade(cidades[0]);
+  const cliente0 = document.getElementById("cliente0");
+km += await distanciaBaseCliente(cliente0);
+
 
   // Entre cidades
 for (let i = 0; i < cidades.length - 1; i++) {
-  km += await distanciaCidades(cidades[i], cidades[i + 1]);
+  for (let i = 0; i < cidades.length - 1; i++) {
+  const clienteA = document.getElementById("cliente" + i);
+  const clienteB = document.getElementById("cliente" + (i + 1));
+
+  km += await distanciaEntreClientes(clienteA, clienteB);
+}
+
 }
 
 
   // Última cidade → Empresa
-  km += await distanciaBaseCidade(cidades[cidades.length - 1]);
+  const ultimoCliente = document.getElementById(
+  "cliente" + (cidades.length - 1)
+);
+km += await distanciaBaseCliente(ultimoCliente);
+
 
   document.getElementById("kmTotal").value = km.toFixed(2);
 }
