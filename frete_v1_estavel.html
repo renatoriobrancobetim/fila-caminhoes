@@ -662,14 +662,14 @@ async function recalcularKM(){
     return;
   }
 
-  let km = 0;
+let km = 0;
 
-  // Empresa → primeira cidade
-  const cliente0 = document.getElementById("cliente0");
-km += await distanciaBaseCliente(cliente0);
+// BASE → PRIMEIRO CLIENTE
+km += await distanciaBaseCliente(
+  document.getElementById("cliente0")
+);
 
-
-  // Entre cidades
+// ENTRE CLIENTES (COORD REAL)
 for (let i = 0; i < cidades.length - 1; i++) {
   const clienteA = document.getElementById("cliente" + i);
   const clienteB = document.getElementById("cliente" + (i + 1));
@@ -677,16 +677,14 @@ for (let i = 0; i < cidades.length - 1; i++) {
   km += await distanciaEntreClientes(clienteA, clienteB);
 }
 
-
-
-  // Última cidade → Empresa
-  const ultimoCliente = document.getElementById(
+// ÚLTIMO CLIENTE → BASE
+const ultimo = document.getElementById(
   "cliente" + (cidades.length - 1)
 );
-km += await distanciaBaseCliente(ultimoCliente);
+km += await distanciaBaseCliente(ultimo);
 
+document.getElementById("kmTotal").value = km.toFixed(2);
 
-  document.getElementById("kmTotal").value = km.toFixed(2);
 }
 
 
@@ -762,8 +760,38 @@ for (let i = 0; i < rota.length - 1; i++) {
   const atual = rota[i];
   const proxima = rota[i + 1];
 
-  const [latA, lngA] = cidadesCoords[atual.cidade];
-  const [latB, lngB] = cidadesCoords[proxima.cidade];
+ function obterCoordsCliente(idx) {
+  const input = document.getElementById("cliente" + idx);
+
+  const lat = parseFloat(input?.dataset?.lat);
+  const lng = parseFloat(input?.dataset?.lng);
+   for (let i = 0; i < rota.length - 1; i++) {
+  const [latA, lngA] = obterCoordsCliente(rota[i].idx);
+  const [latB, lngB] = obterCoordsCliente(rota[i + 1].idx);
+
+  const distancia = await distanciaEntreClientes(
+    document.getElementById("cliente" + rota[i].idx),
+    document.getElementById("cliente" + rota[i + 1].idx)
+  );
+
+  const cor = distancia >= 70 ? "#c62828" : "#2e7d32";
+
+  await desenharTrecho(latA, lngA, latB, lngB, cor);
+}
+
+
+  if (!isNaN(lat) && !isNaN(lng)) {
+    return [lat, lng];
+  }
+
+  // fallback extremo (apenas se cliente não tiver coord)
+  const cidade = document.getElementById(
+    "cidade" + idx
+  )?.value;
+
+  return cidadesCoords[normalizarCidade(cidade)];
+}
+
 
   const distancia = await distanciaCidades(
     atual.cidade,
