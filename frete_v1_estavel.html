@@ -349,6 +349,35 @@ async function distanciaCidades(cidadeA, cidadeB){
   const j = await r.json();
   return j.routes[0].distance / 1000;
 }
+// Cliente → Cliente (usa coordenada se existir, senão cai para cidade)
+async function distanciaEntreClientes(clienteA, clienteB) {
+  const latA = parseFloat(clienteA?.dataset?.lat);
+  const lngA = parseFloat(clienteA?.dataset?.lng);
+  const latB = parseFloat(clienteB?.dataset?.lat);
+  const lngB = parseFloat(clienteB?.dataset?.lng);
+
+  // 🔁 Fallback: usa cidades se coordenadas forem inválidas
+  if ([latA, lngA, latB, lngB].some(isNaN)) {
+    const cidadeA = document
+      .getElementById(clienteA.id.replace("cliente", "cidade"))
+      .value;
+
+    const cidadeB = document
+      .getElementById(clienteB.id.replace("cliente", "cidade"))
+      .value;
+
+    return distanciaCidades(cidadeA, cidadeB);
+  }
+
+  // 🧭 OSRM por coordenadas reais
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
 
 
 
