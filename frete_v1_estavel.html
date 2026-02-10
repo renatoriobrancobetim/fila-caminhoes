@@ -1232,37 +1232,10 @@ async function calcularEtapasTempo(cidades) {
   const TEMPO_DESCARGA_MIN = 50;
   const etapas = [];
 
-  // BASE → PRIMEIRA CIDADE
+  // BASE → PRIMEIRO CLIENTE
   if (cidades.length > 0) {
-    const clienteInput = document.getElementById("cliente0");
-const kmBase = await distanciaBaseCliente(clienteInput);
-    const clienteA = document.getElementById("cliente" + i);
-const clienteB = document.getElementById("cliente" + (i + 1));
-
-const kmTrecho = await distanciaEntreClientes(clienteA, clienteB);
-async function distanciaEntreClientes(a, b) {
-  const latA = parseFloat(a.dataset.lat);
-  const lngA = parseFloat(a.dataset.lng);
-  const latB = parseFloat(b.dataset.lat);
-  const lngB = parseFloat(b.dataset.lng);
-
-  if ([latA, lngA, latB, lngB].some(isNaN)) {
-    return distanciaCidades(
-      document.getElementById(a.id.replace("cliente", "cidade")).value,
-      document.getElementById(b.id.replace("cliente", "cidade")).value
-    );
-  }
-
-  const r = await fetch(
-    `https://router.project-osrm.org/route/v1/driving/` +
-    `${lngA},${latA};${lngB},${latB}?overview=false`
-  );
-
-  const j = await r.json();
-  return j.routes[0].distance / 1000;
-}
-
-
+    const cliente0 = document.getElementById("cliente0");
+    const kmBase = await distanciaBaseCliente(cliente0);
     const velBase = velocidadeMediaPorTrecho(kmBase);
 
     etapas.push({
@@ -1274,9 +1247,12 @@ async function distanciaEntreClientes(a, b) {
     });
   }
 
-  // ENTRE CIDADES
+  // ENTRE CLIENTES
   for (let i = 0; i < cidades.length - 1; i++) {
-    const kmTrecho = await distanciaCidades(cidades[i], cidades[i + 1]);
+    const clienteA = document.getElementById("cliente" + i);
+    const clienteB = document.getElementById("cliente" + (i + 1));
+
+    const kmTrecho = await distanciaEntreClientes(clienteA, clienteB);
     const velTrecho = velocidadeMediaPorTrecho(kmTrecho);
 
     etapas.push({
@@ -1290,6 +1266,7 @@ async function distanciaEntreClientes(a, b) {
 
   return etapas;
 }
+
 
 
 
