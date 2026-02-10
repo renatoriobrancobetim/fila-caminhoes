@@ -759,15 +759,15 @@ function obterCoordsCliente(idx) {
 }
 
 // Desenha BASE → 1ª cidade (sempre verde, sem regra)
-const primeira = rota[0];
-const [lat1, lng1] = cidadesCoords[primeira.cidade];
+// Desenha BASE → PRIMEIRO CLIENTE REAL
+const [lat1, lng1] = obterCoordsCliente(rota[0].idx);
 
 await desenharTrecho(
   BASE_COORDS.lat,
   BASE_COORDS.lng,
   lat1,
   lng1,
-  "#2e7d32" // verde
+  "#2e7d32"
 );
 
 // Desenha cidade → cidade com regra de dispersão
@@ -787,8 +787,10 @@ for (let i = 0; i < rota.length - 1; i++) {
 
 
 // Desenha última cidade → BASE (opcional, verde)
-const ultima = rota[rota.length - 1];
-const [latU, lngU] = cidadesCoords[ultima.cidade];
+const [latU, lngU] = obterCoordsCliente(
+  rota[rota.length - 1].idx
+);
+
 
 await desenharTrecho(
   latU,
@@ -890,13 +892,21 @@ const cidadeTabela = cidadesNormalizadas[0];
 const todasCidadesIguais = cidadesNormalizadas.every(c => c === cidadeTabela);
 
 const tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
+  const existeClienteComCoordenada = itens.some(i => {
+  const input = document.getElementById("cliente" + i.idx);
+  return !isNaN(parseFloat(input?.dataset?.lat)) &&
+         !isNaN(parseFloat(input?.dataset?.lng));
+});
+
 
 const usarFreteTabela =
   tabelaFreteCarregada &&
+  !existeClienteComCoordenada &&   // 🔥 LINHA CRÍTICA
   todosCompartimentosUsados &&
   todasCidadesIguais &&
   tabelaFrete[cidadeTabela] &&
   tabelaFrete[cidadeTabela][tipoTabela] !== undefined;
+
 
 console.log("DEBUG FRETE TABELA FINAL", {
   tabelaFreteCarregada,
