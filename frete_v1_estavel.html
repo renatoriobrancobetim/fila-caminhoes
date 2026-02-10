@@ -742,6 +742,21 @@ if (rotaLayer) {
     }
   });
 }
+function obterCoordsCliente(idx) {
+  const input = document.getElementById("cliente" + idx);
+  if (!input) return null;
+
+  const lat = parseFloat(input.dataset.lat);
+  const lng = parseFloat(input.dataset.lng);
+
+  if (!isNaN(lat) && !isNaN(lng)) {
+    return [lat, lng];
+  }
+
+  // fallback extremo (somente se cliente não tiver coord)
+  const cidade = document.getElementById("cidade" + idx)?.value;
+  return cidadesCoords[normalizarCidade(cidade)];
+}
 
 // Desenha BASE → 1ª cidade (sempre verde, sem regra)
 const primeira = rota[0];
@@ -757,15 +772,6 @@ await desenharTrecho(
 
 // Desenha cidade → cidade com regra de dispersão
 for (let i = 0; i < rota.length - 1; i++) {
-  const atual = rota[i];
-  const proxima = rota[i + 1];
-
- function obterCoordsCliente(idx) {
-  const input = document.getElementById("cliente" + idx);
-
-  const lat = parseFloat(input?.dataset?.lat);
-  const lng = parseFloat(input?.dataset?.lng);
-   for (let i = 0; i < rota.length - 1; i++) {
   const [latA, lngA] = obterCoordsCliente(rota[i].idx);
   const [latB, lngB] = obterCoordsCliente(rota[i + 1].idx);
 
@@ -779,31 +785,6 @@ for (let i = 0; i < rota.length - 1; i++) {
   await desenharTrecho(latA, lngA, latB, lngB, cor);
 }
 
-
-  if (!isNaN(lat) && !isNaN(lng)) {
-    return [lat, lng];
-  }
-
-  // fallback extremo (apenas se cliente não tiver coord)
-  const cidade = document.getElementById(
-    "cidade" + idx
-  )?.value;
-
-  return cidadesCoords[normalizarCidade(cidade)];
-}
-
-
-  const distancia = await distanciaCidades(
-    atual.cidade,
-    proxima.cidade
-  );
-
-  const cor = distancia >= 70
-    ? "#c62828" // 🔴 dispersão
-    : "#2e7d32"; // 🟢 normal
-
-  await desenharTrecho(latA, lngA, latB, lngB, cor);
-}
 
 // Desenha última cidade → BASE (opcional, verde)
 const ultima = rota[rota.length - 1];
