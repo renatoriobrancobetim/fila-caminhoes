@@ -506,18 +506,27 @@ async function otimizarRota(){
   try {
     const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-    const paradas = rows
-  .map(r => {
-    const cidadeRaw = r.querySelector(".cidade")?.value.trim();
-    const cidadeNorm = normalizarCidade(cidadeRaw);
+const paradas = rows
+  .map((r, i) => {
+    const clienteInput = r.querySelector("input[id^='cliente']");
+    const cidadeInput = r.querySelector(".cidade");
+
+    const lat = parseFloat(clienteInput?.dataset?.lat);
+    const lng = parseFloat(clienteInput?.dataset?.lng);
 
     return {
       row: r,
-      cidade: cidadeNorm,
-      cidadeRaw,
-      cliente: r.querySelector("input[id^='cliente']")?.value || ""
+      idx: i,
+      clienteInput,
+      cidade: normalizarCidade(cidadeInput?.value || ""),
+      lat,
+      lng
     };
   })
+  .filter(p =>
+    (!isNaN(p.lat) && !isNaN(p.lng)) || cidadesCoords[p.cidade]
+  );
+
   .filter(p => p.cidade && cidadesCoords[p.cidade]);
 
     
@@ -531,21 +540,27 @@ if (paradas.length === 0) {
     let rota = [];
     let restantes = [...paradas];
     let atualCidade = null;
-
+    let atual = null;
     while (restantes.length) {
       let menor = Infinity;
       let escolhido = null;
 
       for (const p of restantes) {
-const d = !atualCidade
-  ? await distanciaBaseCidade(p.cidade)
-  : await distanciaCidades(atualCidade, p.cidade);
+const d = !atual
+  ? await distanciaBaseCliente(p.clienteInput)
+  : await distanciaEntreClientes(
+      document.getElementById("cliente" + atual.idx),
+      document.getElementById("cliente" + p.idx)
+    );
+
 
 
 
         if (d < menor) {
           menor = d;
           escolhido = p;
+          atual = escolhido;
+
         }
       }
 
@@ -565,7 +580,11 @@ for (let i = 0; i < rota.length - 1; i++) {
   const cidadeA = rota[i].cidade;
   const cidadeB = rota[i + 1].cidade;
 
-  const d = await distanciaCidades(cidadeA, cidadeB);
+  const clienteA = document.getElementById("cliente" + rota[i].idx);
+const clienteB = document.getElementById("cliente" + rota[i + 1].idx);
+
+const d = await distanciaEntreClientes(clienteA, clienteB);
+
 
   if (d >= 70) {
     dispersoes.push({
@@ -701,7 +720,18 @@ async function desenharMapa(rota){
   const pontos = [
   [BASE_COORDS.lat, BASE_COORDS.lng],
   ...rota.map(r => {
-    const [lat, lng] = cidadesCoords[r.cidade];
+    const input = document.getElementById("cliente" + r.idx);
+
+const lat = parseFloat(input.dataset.lat);
+const lng = parseFloat(input.dataset.lng);
+
+if (isNaN(lat) || isNaN(lng)) {
+  const [cLat, cLng] = cidadesCoords[r.cidade];
+  return [cLat, cLng];
+}
+
+return [lat, lng];
+
     return [lat, lng];
   }),
   [BASE_COORDS.lat, BASE_COORDS.lng]
