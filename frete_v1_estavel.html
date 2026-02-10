@@ -111,11 +111,14 @@
 
   if (isNaN(lat) || isNaN(lng)) {
     // fallback para cidade
-    return distanciaBaseCidade(
-      document.getElementById(
-        inputCliente.id.replace("cliente", "cidade")
-      ).value
-    );
+return distanciaBaseCidade(
+  normalizarCidade(
+    document.getElementById(
+      inputCliente.id.replace("cliente", "cidade")
+    ).value
+  )
+);
+
   }
 
   const r = await fetch(
