@@ -742,6 +742,27 @@ if (rotaLayer) {
     }
   });
 }
+  const iconBase = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32]
+});
+
+const iconCliente = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/854/854878.png",
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [0, -28]
+});
+
+const iconUltimo = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684911.png",
+  iconSize: [34, 34],
+  iconAnchor: [17, 34],
+  popupAnchor: [0, -34]
+});
+
 function obterCoordsCliente(idx) {
   const input = document.getElementById("cliente" + idx);
   if (!input) return null;
@@ -800,21 +821,53 @@ await desenharTrecho(
   "#2e7d32"
 );
 
- pontos.forEach((p, i) => {
-  let label = "BASE - BETIM";
+pontos.forEach((p, i) => {
+  let icon = iconCliente;
+  let popupHTML = "";
 
-  if (i > 0 && i < pontos.length - 1) {
-    const parada = rota[i - 1];
-    const inputCliente = document.getElementById("cliente" + parada.idx);
-
-    label =
-      inputCliente?.value?.trim() ||
-      parada.cidade ||
-      "Cliente";
+  // 🟢 BASE
+  if (i === 0) {
+    icon = iconBase;
+    popupHTML = `
+      <strong>BASE OPERACIONAL</strong><br>
+      BETIM / MG
+    `;
   }
 
-  L.marker(p).addTo(mapa).bindPopup(label);
+  // 🔴 ÚLTIMO PONTO (RETORNO)
+  else if (i === pontos.length - 1) {
+    icon = iconUltimo;
+    popupHTML = `
+      <strong>RETORNO À BASE</strong><br>
+      BETIM / MG
+    `;
+  }
+
+  // 🔵 CLIENTES
+  else {
+    const parada = rota[i - 1];
+    const idx = parada.idx;
+
+    const clienteInput = document.getElementById("cliente" + idx);
+    const cidadeInput  = document.getElementById("cidade" + idx);
+
+    const clienteNome = clienteInput?.value || "Cliente";
+    const cidadeNome  = cidadeInput?.value || parada.cidade || "-";
+    const litros      = compartimentos[
+      document.getElementById("tipo").value
+    ]?.[idx] || 0;
+
+    popupHTML = `
+      <strong>Parada ${i}</strong><br>
+      <strong>Cliente:</strong> ${clienteNome}<br>
+      <strong>Cidade:</strong> ${cidadeNome}<br>
+      <strong>Volume:</strong> ${litros.toLocaleString("pt-BR")} L
+    `;
+  }
+
+  L.marker(p, { icon }).addTo(mapa).bindPopup(popupHTML);
 });
+
 
 
   const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
