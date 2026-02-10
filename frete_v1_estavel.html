@@ -800,10 +800,22 @@ await desenharTrecho(
   "#2e7d32"
 );
 
-  pontos.forEach((p,i)=>{
-    let label=i===0||i===pontos.length-1?"BASE - BETIM":rota[i-1].cliente||rota[i-1].cidade;
-    L.marker(p).addTo(mapa).bindPopup(label);
-  });
+ pontos.forEach((p, i) => {
+  let label = "BASE - BETIM";
+
+  if (i > 0 && i < pontos.length - 1) {
+    const parada = rota[i - 1];
+    const inputCliente = document.getElementById("cliente" + parada.idx);
+
+    label =
+      inputCliente?.value?.trim() ||
+      parada.cidade ||
+      "Cliente";
+  }
+
+  L.marker(p).addTo(mapa).bindPopup(label);
+});
+
 
   const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
