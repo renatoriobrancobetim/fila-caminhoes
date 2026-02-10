@@ -524,10 +524,10 @@ const paradas = rows
     };
   })
   .filter(p =>
-    (!isNaN(p.lat) && !isNaN(p.lng)) || cidadesCoords[p.cidade]
+    (!isNaN(p.lat) && !isNaN(p.lng)) ||
+    (p.cidade && cidadesCoords[p.cidade])
   );
 
-  .filter(p => p.cidade && cidadesCoords[p.cidade]);
 
     
 if (paradas.length === 0) {
@@ -671,14 +671,12 @@ km += await distanciaBaseCliente(cliente0);
 
   // Entre cidades
 for (let i = 0; i < cidades.length - 1; i++) {
-  for (let i = 0; i < cidades.length - 1; i++) {
   const clienteA = document.getElementById("cliente" + i);
   const clienteB = document.getElementById("cliente" + (i + 1));
 
   km += await distanciaEntreClientes(clienteA, clienteB);
 }
 
-}
 
 
   // Última cidade → Empresa
@@ -732,7 +730,6 @@ if (isNaN(lat) || isNaN(lng)) {
 
 return [lat, lng];
 
-    return [lat, lng];
   }),
   [BASE_COORDS.lat, BASE_COORDS.lng]
 ];
