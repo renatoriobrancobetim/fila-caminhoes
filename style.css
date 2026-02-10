@@ -1057,3 +1057,7 @@ th{
   flex-direction: column;
   gap: 4px;
 }
+.cliente-erro {
+  border: 2px solid #c62828 !important;
+  background: #fff4f4;
+}
