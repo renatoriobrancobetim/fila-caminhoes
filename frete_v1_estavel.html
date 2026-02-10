@@ -270,16 +270,24 @@ const moeda3=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimu
 const numero=v=>v.toLocaleString("pt-BR");
 
 /* ================= CIDADES ================= */
-fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
-  cidadesCoords=d;
+fetch("cidades-mg.json").then(r => r.json()).then(d => {
+  cidadesCoords = {};
+
+  Object.entries(d).forEach(([cidade, coords]) => {
+    const key = normalizarCidade(cidade);
+    cidadesCoords[key] = coords;
+  });
+
   cidadesCarregadas = true;
-  const dl=document.getElementById("cidadesMG");
-  Object.keys(d).forEach(c=>{
-    const o=document.createElement("option");
-    o.value=c;
+
+  const dl = document.getElementById("cidadesMG");
+  Object.keys(cidadesCoords).forEach(c => {
+    const o = document.createElement("option");
+    o.value = c;
     dl.appendChild(o);
   });
 });
+
 Promise.all([
   fetch("clientes_derivados.json").then(r => r.json()),
   fetch("clientes_distribuidora.json").then(r => r.json())
@@ -470,14 +478,19 @@ async function otimizarRota(){
 
     const paradas = rows
   .map(r => {
-    const cidade = r.querySelector(".cidade")?.value.trim();
+    const cidadeRaw = r.querySelector(".cidade")?.value.trim();
+    const cidadeNorm = normalizarCidade(cidadeRaw);
+
     return {
       row: r,
-      cidade,
+      cidade: cidadeNorm,
+      cidadeRaw,
       cliente: r.querySelector("input[id^='cliente']")?.value || ""
     };
   })
   .filter(p => p.cidade && cidadesCoords[p.cidade]);
+
+    
 if (paradas.length === 0) {
   alert("Informe pelo menos uma cidade válida para otimizar a rota.");
   spinner.style.display = "none";
