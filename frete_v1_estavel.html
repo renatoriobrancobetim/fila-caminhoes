@@ -101,8 +101,95 @@
 </div>
 
 <datalist id="cidadesMG"></datalist>
+  <datalist id="clientesLista"></datalist>
+
 
 <script>
+  async function distanciaBaseCliente(inputCliente) {
+  const lat = parseFloat(inputCliente.dataset.lat);
+  const lng = parseFloat(inputCliente.dataset.lng);
+
+  if (isNaN(lat) || isNaN(lng)) {
+    // fallback para cidade
+    return distanciaBaseCidade(
+      document.getElementById(
+        inputCliente.id.replace("cliente", "cidade")
+      ).value
+    );
+  }
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${BASE_COORDS.lng},${BASE_COORDS.lat};${lng},${lat}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
+
+  function validarCoordenadaCliente(input) {
+  const lat = parseFloat(input.dataset.lat);
+  const lng = parseFloat(input.dataset.lng);
+
+  // Limites aproximados de MG
+  const MG_LAT_MIN = -23.5;
+  const MG_LAT_MAX = -14.0;
+  const MG_LNG_MIN = -51.0;
+  const MG_LNG_MAX = -39.0;
+
+  const invalida =
+    isNaN(lat) ||
+    isNaN(lng) ||
+    lat < MG_LAT_MIN ||
+    lat > MG_LAT_MAX ||
+    lng < MG_LNG_MIN ||
+    lng > MG_LNG_MAX;
+
+  if (invalida) {
+    input.classList.add("cliente-erro");
+    input.title = "⚠ Coordenada do cliente fora de MG. Verifique o cadastro.";
+  } else {
+    input.classList.remove("cliente-erro");
+    input.title = "";
+  }
+}
+
+  function aplicarCliente(idx) {
+  const input = document.getElementById("cliente" + idx);
+  if (!input.value) return;
+
+  const key = input.value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .trim();
+
+  const cliente = clientesCoords[key];
+  if (!cliente) return;
+
+  // Preenche cidade
+  const cidadeInput = document.getElementById("cidade" + idx);
+  cidadeInput.value = cliente.cidade;
+
+  // Salva coordenadas no próprio input (padrão industrial)
+  input.dataset.lat = cliente.lat;
+  input.dataset.lng = cliente.lng;
+
+  // 🔴 VALIDAÇÃO DE COORDENADA
+  validarCoordenadaCliente(input);
+}
+
+  function montarListaClientes() {
+  const dl = document.getElementById("clientesLista");
+  dl.innerHTML = "";
+
+  Object.values(clientesCoords).forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.cliente;
+    dl.appendChild(opt);
+  });
+}
+
 /* ================= UTIL ================= */
 function normalizarCidade(nome){
   return nome
@@ -122,6 +209,9 @@ const BASE_COORDS = {
 };
 
 let cidadesCoords={}, mapa, rotaLayer;
+let clientesCoords = {};
+let clientesCarregados = false;
+  
 let cidadesCarregadas = false;
 
 let infoDispersaoHTML = "";
@@ -190,6 +280,37 @@ fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
     dl.appendChild(o);
   });
 });
+Promise.all([
+  fetch("clientes_derivados.json").then(r => r.json()),
+  fetch("clientes_distribuidora.json").then(r => r.json())
+])
+.then(([derivados, distribuidora]) => {
+
+  [...derivados, ...distribuidora].forEach(c => {
+    if (!c.cliente || !c.lat || !c.lng) return;
+
+    const key = c.cliente
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .trim();
+
+    clientesCoords[key] = {
+      cliente: c.cliente,
+      cidade: c.cidade,
+      lat: c.lat,
+      lng: c.lng
+    };
+  });
+
+  montarListaClientes();
+  clientesCarregados = true;
+
+  console.log("Clientes carregados:", Object.keys(clientesCoords).length);
+})
+.catch(err => {
+  console.error("Erro ao carregar clientes", err);
+});
 
 /* ================= DISTÂNCIA ================= */
 
@@ -252,7 +373,15 @@ function gerarTabela(){
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
     <tr data-row>
-      <td><input id="cliente${i}" class="uppercase"></td>
+      <td>
+  <input
+    id="cliente${i}"
+    class="uppercase cliente-input"
+    list="clientesLista"
+    onblur="aplicarCliente(${i})"
+  >
+</td>
+
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
@@ -1105,7 +1234,35 @@ async function calcularEtapasTempo(cidades) {
 
   // BASE → PRIMEIRA CIDADE
   if (cidades.length > 0) {
-    const kmBase = await distanciaBaseCidade(cidades[0]);
+    const clienteInput = document.getElementById("cliente0");
+const kmBase = await distanciaBaseCliente(clienteInput);
+    const clienteA = document.getElementById("cliente" + i);
+const clienteB = document.getElementById("cliente" + (i + 1));
+
+const kmTrecho = await distanciaEntreClientes(clienteA, clienteB);
+async function distanciaEntreClientes(a, b) {
+  const latA = parseFloat(a.dataset.lat);
+  const lngA = parseFloat(a.dataset.lng);
+  const latB = parseFloat(b.dataset.lat);
+  const lngB = parseFloat(b.dataset.lng);
+
+  if ([latA, lngA, latB, lngB].some(isNaN)) {
+    return distanciaCidades(
+      document.getElementById(a.id.replace("cliente", "cidade")).value,
+      document.getElementById(b.id.replace("cliente", "cidade")).value
+    );
+  }
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${lngA},${latA};${lngB},${latB}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
+
+
     const velBase = velocidadeMediaPorTrecho(kmBase);
 
     etapas.push({
