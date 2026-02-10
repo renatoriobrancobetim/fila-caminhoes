@@ -545,28 +545,26 @@ if (paradas.length === 0) {
       let menor = Infinity;
       let escolhido = null;
 
-      for (const p of restantes) {
-const d = !atual
-  ? await distanciaBaseCliente(p.clienteInput)
-  : await distanciaEntreClientes(
-      document.getElementById("cliente" + atual.idx),
-      document.getElementById("cliente" + p.idx)
-    );
+for (const p of restantes) {
+  const d = !atual
+    ? await distanciaBaseCliente(p.clienteInput)
+    : await distanciaEntreClientes(
+        document.getElementById("cliente" + atual.idx),
+        document.getElementById("cliente" + p.idx)
+      );
 
+  if (d < menor) {
+    menor = d;
+    escolhido = p;
+  }
+}
 
-
-
-        if (d < menor) {
-          menor = d;
-          escolhido = p;
-          atual = escolhido;
-
-        }
-      }
 
 
       rota.push(escolhido);
-      restantes = restantes.filter(p => p !== escolhido);
+restantes = restantes.filter(p => p !== escolhido);
+atual = escolhido; // ✅ AGORA SIM
+
       atualCidade = escolhido.cidade;
     }
 
