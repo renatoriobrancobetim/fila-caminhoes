@@ -135,30 +135,36 @@ async function distanciaEntreClientes(clienteA, clienteB) {
   const latB = parseFloat(clienteB?.dataset?.lat);
   const lngB = parseFloat(clienteB?.dataset?.lng);
 
-  // 🔁 fallback se algum cliente não tiver coordenada válida
-  if ([latA, lngA, latB, lngB].some(isNaN)) {
-    const cidadeA = document.getElementById(
-      clienteA.id.replace("cliente", "cidade")
-    ).value;
-
-    const cidadeB = document.getElementById(
-      clienteB.id.replace("cliente", "cidade")
-    ).value;
-
-    return distanciaCidades(
-      normalizarCidade(cidadeA),
-      normalizarCidade(cidadeB)
+  // ✅ CASO 1 — COORDENADAS VÁLIDAS (PRIORIDADE TOTAL)
+  if (![latA, lngA, latB, lngB].some(isNaN)) {
+    const r = await fetch(
+      `https://router.project-osrm.org/route/v1/driving/` +
+      `${lngA},${latA};${lngB},${latB}?overview=false`
     );
+    const j = await r.json();
+    return j.routes[0].distance / 1000;
   }
 
-  const r = await fetch(
-    `https://router.project-osrm.org/route/v1/driving/` +
-    `${lngA},${latA};${lngB},${latB}?overview=false`
+  // ✅ CASO 2 — FALLBACK POR CIDADE (100% NORMALIZADO)
+  const cidadeA = normalizarCidade(
+    document.getElementById(
+      clienteA.id.replace("cliente", "cidade")
+    ).value
   );
 
-  const j = await r.json();
-  return j.routes[0].distance / 1000;
+  const cidadeB = normalizarCidade(
+    document.getElementById(
+      clienteB.id.replace("cliente", "cidade")
+    ).value
+  );
+
+  if (!cidadesCoords[cidadeA] || !cidadesCoords[cidadeB]) {
+    throw new Error(`Cidade inválida: ${cidadeA} > ${cidadeB}`);
+  }
+
+  return distanciaCidades(cidadeA, cidadeB);
 }
+
 
   function validarCoordenadaCliente(input) {
   const lat = parseFloat(input.dataset.lat);
