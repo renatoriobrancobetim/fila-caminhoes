@@ -667,41 +667,35 @@ document.getElementById("btnCalcular").classList.add("btn-destaque");
 
 /* ================= KM ================= */
 async function recalcularKM(){
-  const cidades = [...document.querySelectorAll(".cidade")]
-    .map(i => i.value)
-    .filter(v => v);
-  const clientes = cidades.length;
+  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-
-  if (cidades.length === 0) {
+  if (rows.length === 0) {
     document.getElementById("kmTotal").value = "0.00";
     return;
   }
 
-let km = 0;
+  let km = 0;
 
-// BASE → PRIMEIRO CLIENTE
-km += await distanciaBaseCliente(
-  document.getElementById("cliente0")
-);
+  const primeiraRow = rows[0];
+  const primeiroCliente = primeiraRow.querySelector("input[id^='cliente']");
 
-// ENTRE CLIENTES (COORD REAL)
-for (let i = 0; i < cidades.length - 1; i++) {
-  const clienteA = document.getElementById("cliente" + i);
-  const clienteB = document.getElementById("cliente" + (i + 1));
+  km += await distanciaBaseCliente(primeiroCliente);
 
-  km += await distanciaEntreClientes(clienteA, clienteB);
+  for (let i = 0; i < rows.length - 1; i++) {
+    const clienteA = rows[i].querySelector("input[id^='cliente']");
+    const clienteB = rows[i + 1].querySelector("input[id^='cliente']");
+
+    km += await distanciaEntreClientes(clienteA, clienteB);
+  }
+
+  const ultimaRow = rows[rows.length - 1];
+  const ultimoCliente = ultimaRow.querySelector("input[id^='cliente']");
+
+  km += await distanciaBaseCliente(ultimoCliente);
+
+  document.getElementById("kmTotal").value = km.toFixed(2);
 }
 
-// ÚLTIMO CLIENTE → BASE
-const ultimo = document.getElementById(
-  "cliente" + (cidades.length - 1)
-);
-km += await distanciaBaseCliente(ultimo);
-
-document.getElementById("kmTotal").value = km.toFixed(2);
-
-}
 
 
 /* ================= MAPA ================= */
@@ -1414,7 +1408,11 @@ const qtDescargas = clientesUnicos.length === 1
   ? 1
   : clientesUnicos.length;
 
-const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
+const tempoDescargaH = etapas.reduce(
+  (s, e) => s + e.tempoDescargaH,
+  0
+);
+
 
 
   // 🔹 DISPERSÕES
