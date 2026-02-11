@@ -245,33 +245,36 @@ function verNoMapa(lat, lng, nome) {
   const mapDiv = document.getElementById("mapContainer");
   mapDiv.style.display = "block";
 
-  // Se mapa ainda não foi criado
-  if (!map) {
-    map = L.map('map').setView([lat, lng], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-  } else {
-    map.setView([lat, lng], 13);
-  }
-
-  // Remove marcador anterior
-  if (markerAtual) {
-    map.removeLayer(markerAtual);
-  }
-
-  // Adiciona novo marcador
-  markerAtual = L.marker([lat, lng])
-    .addTo(map)
-    .bindPopup(`<strong>${nome}</strong>`)
-    .openPopup();
-
-  // Pequeno delay para corrigir renderização
+  // Aguarda o container ficar visível antes de criar o mapa
   setTimeout(() => {
+
+    if (!map) {
+
+      map = L.map('map');
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+    }
+
+    map.setView([lat, lng], 13);
+
+    // Remove marcador anterior
+    if (markerAtual) {
+      map.removeLayer(markerAtual);
+    }
+
+    markerAtual = L.marker([lat, lng])
+      .addTo(map)
+      .bindPopup(`<strong>${nome}</strong>`)
+      .openPopup();
+
     map.invalidateSize();
-  }, 200);
+
+  }, 300); // tempo maior para garantir renderização
+
 }
+
 
  // ================= EXPORTAR =================
 function exportarJSON() {
