@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script src="auth.js"></script>
 <meta charset="UTF-8">
 <title>Administração de Clientes</title>
@@ -38,6 +41,11 @@
     </div>
 
     <div id="tabelaClientes"></div>
+    <div id="mapContainer" style="margin-top:20px; display:none;">
+  <h3 style="margin-bottom:10px;">Localização do Cliente</h3>
+  <div id="map" style="height:400px; border-radius:8px;"></div>
+</div>
+
 
   </div>
 </div>
@@ -79,6 +87,8 @@ let clientesDistribuidora = [];
 let clientesDerivados = [];
 let abaAtual = "distribuidora";
 let editIndex = null;
+let map;
+let markerAtual;
 
 // ================= CARREGAMENTO =================
 Promise.all([
@@ -229,31 +239,41 @@ function excluir(index) {
   lista.splice(index, 1);
   renderTabela();
 }
-// ================= VER NO MAPA =================
+// ================= VER NO MAPA INTERNO =================
 function verNoMapa(lat, lng, nome) {
 
-  const url = `clientes-mapa.html?lat=${lat}&lng=${lng}&cliente=${encodeURIComponent(nome)}`;
-  window.open(url, "_blank");
+  const mapDiv = document.getElementById("mapContainer");
+  mapDiv.style.display = "block";
 
-}
-  // ================= RECEBER PARAMETROS DA URL =================
-const params = new URLSearchParams(window.location.search);
-const lat = parseFloat(params.get("lat"));
-const lng = parseFloat(params.get("lng"));
-const cliente = params.get("cliente");
+  // Se mapa ainda não foi criado
+  if (!map) {
+    map = L.map('map').setView([lat, lng], 13);
 
-if (!isNaN(lat) && !isNaN(lng)) {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+  } else {
+    map.setView([lat, lng], 13);
+  }
 
-  map.setView([lat, lng], 13);
+  // Remove marcador anterior
+  if (markerAtual) {
+    map.removeLayer(markerAtual);
+  }
 
-  L.marker([lat, lng])
+  // Adiciona novo marcador
+  markerAtual = L.marker([lat, lng])
     .addTo(map)
-    .bindPopup(`<strong>${cliente}</strong>`)
+    .bindPopup(`<strong>${nome}</strong>`)
     .openPopup();
+
+  // Pequeno delay para corrigir renderização
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 200);
 }
 
-
-// ================= EXPORTAR =================
+ // ================= EXPORTAR =================
 function exportarJSON() {
 
   const lista = abaAtual === "distribuidora"
