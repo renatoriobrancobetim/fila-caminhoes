@@ -381,6 +381,10 @@ async function distanciaBaseCidade(cidade){
 
 // Cidade → Cidade
 async function distanciaCidades(cidadeA, cidadeB){
+
+  cidadeA = normalizarCidade(cidadeA);
+  cidadeB = normalizarCidade(cidadeB);
+
   if (!cidadesCoords[cidadeA] || !cidadesCoords[cidadeB]) {
     throw new Error("Cidade inválida: " + cidadeA + " → " + cidadeB);
   }
@@ -405,15 +409,20 @@ async function distanciaEntreClientes(clienteA, clienteB) {
 
   // 🔁 Fallback: usa cidades se coordenadas forem inválidas
   if ([latA, lngA, latB, lngB].some(isNaN)) {
-    const cidadeA = document
-      .getElementById(clienteA.id.replace("cliente", "cidade"))
-      .value;
+    const cidadeA = normalizarCidade(
+  document
+    .getElementById(clienteA.id.replace("cliente", "cidade"))
+    .value
+);
 
-    const cidadeB = document
-      .getElementById(clienteB.id.replace("cliente", "cidade"))
-      .value;
+const cidadeB = normalizarCidade(
+  document
+    .getElementById(clienteB.id.replace("cliente", "cidade"))
+    .value
+);
 
-    return distanciaCidades(cidadeA, cidadeB);
+return distanciaCidades(cidadeA, cidadeB);
+
   }
 
   // 🧭 OSRM por coordenadas reais
