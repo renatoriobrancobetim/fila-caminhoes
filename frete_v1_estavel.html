@@ -595,14 +595,14 @@ atual = escolhido; // ✅ AGORA SIM
 dispersoes = [];
 
 for (let i = 0; i < rota.length - 1; i++) {
+
   const cidadeA = rota[i].cidade;
   const cidadeB = rota[i + 1].cidade;
 
   const clienteA = document.getElementById("cliente" + rota[i].idx);
-const clienteB = document.getElementById("cliente" + rota[i + 1].idx);
+  const clienteB = document.getElementById("cliente" + rota[i + 1].idx);
 
-const d = await distanciaEntreClientes(clienteA, clienteB);
-dispersoesCount = dispersoes.length;
+  const d = await distanciaEntreClientes(clienteA, clienteB);
 
   if (d >= 70) {
     dispersoes.push({
@@ -612,6 +612,10 @@ dispersoesCount = dispersoes.length;
     });
   }
 }
+
+// ✅ AGORA SIM — DEPOIS do loop
+dispersoesCount = dispersoes.length;
+
 
 
 // ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
