@@ -150,7 +150,14 @@ function renderTabela() {
           <td>${c.lat}</td>
           <td>${c.lng}</td>
           <td>
-  <button onclick="verNoMapa(${c.lat}, ${c.lng}, '${c.cliente}')">
+  <button 
+  data-lat="${c.lat}" 
+  data-lng="${c.lng}" 
+  data-nome="${c.cliente}"
+  onclick="verNoMapa(this)">
+  Ver no Mapa
+</button>
+
     Ver no Mapa
   </button>
   <button onclick="abrirModal(${i})">Editar</button>
@@ -240,40 +247,41 @@ function excluir(index) {
   renderTabela();
 }
 // ================= VER NO MAPA INTERNO =================
-function verNoMapa(lat, lng, nome) {
+function verNoMapa(botao) {
+
+  const lat = parseFloat(botao.dataset.lat);
+  const lng = parseFloat(botao.dataset.lng);
+  const nome = botao.dataset.nome;
 
   const mapDiv = document.getElementById("mapContainer");
   mapDiv.style.display = "block";
 
-  // Aguarda o container ficar visível antes de criar o mapa
-  setTimeout(() => {
+  if (!map) {
 
-    if (!map) {
+    map = L.map('map').setView([lat, lng], 13);
 
-      map = L.map('map');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap'
-      }).addTo(map);
-    }
-
+  } else {
     map.setView([lat, lng], 13);
+  }
 
-    // Remove marcador anterior
-    if (markerAtual) {
-      map.removeLayer(markerAtual);
-    }
+  if (markerAtual) {
+    map.removeLayer(markerAtual);
+  }
 
-    markerAtual = L.marker([lat, lng])
-      .addTo(map)
-      .bindPopup(`<strong>${nome}</strong>`)
-      .openPopup();
+  markerAtual = L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(`<strong>${nome}</strong>`)
+    .openPopup();
 
+  setTimeout(() => {
     map.invalidateSize();
-
-  }, 300); // tempo maior para garantir renderização
-
+  }, 200);
 }
+
 
 
  // ================= EXPORTAR =================
