@@ -1213,22 +1213,25 @@ if (i.freteFixo !== null) {
 
 
   <!-- TOTAL -->
-  <div class="tempo-total-wrapper">
+ <div class="tempo-total-container">
 
-  <div class="tempo-total-header">
-    ⏱ TEMPO TOTAL DA OPERAÇÃO
-  </div>
+  <div class="tempo-total-card-suave">
+    <div class="tempo-total-header">
+      ⏱ TEMPO TOTAL DA OPERAÇÃO
+    </div>
 
-  <div class="tempo-total-valor">
-    ${tempoRota.textoTotal}
-  </div>
+    <div class="tempo-total-valor">
+      ${tempoRota.textoTotal}
+    </div>
 
-  <div class="tempo-total-extra">
-    ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)" : ""}
-    ${tempoRota.pausasDescanso ? "<br>🛑 Descanso legal (30min)" : ""}
+    <div class="tempo-total-extra">
+      ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)" : ""}
+      ${tempoRota.pausasDescanso ? "<br>🛑 Descanso legal (30min)" : ""}
+    </div>
   </div>
 
 </div>
+
 
 
 
