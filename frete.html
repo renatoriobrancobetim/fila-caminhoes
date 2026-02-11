@@ -101,8 +101,134 @@
 </div>
 
 <datalist id="cidadesMG"></datalist>
+  <datalist id="clientesLista"></datalist>
+
 
 <script>
+  async function distanciaBaseCliente(inputCliente) {
+  const lat = parseFloat(inputCliente.dataset.lat);
+  const lng = parseFloat(inputCliente.dataset.lng);
+
+  if (isNaN(lat) || isNaN(lng)) {
+    // fallback para cidade
+return distanciaBaseCidade(
+  normalizarCidade(
+    document.getElementById(
+      inputCliente.id.replace("cliente", "cidade")
+    ).value
+  )
+);
+
+  }
+
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/` +
+    `${BASE_COORDS.lng},${BASE_COORDS.lat};${lng},${lat}?overview=false`
+  );
+
+  const j = await r.json();
+  return j.routes[0].distance / 1000;
+}
+async function distanciaEntreClientes(clienteA, clienteB) {
+  const latA = parseFloat(clienteA?.dataset?.lat);
+  const lngA = parseFloat(clienteA?.dataset?.lng);
+  const latB = parseFloat(clienteB?.dataset?.lat);
+  const lngB = parseFloat(clienteB?.dataset?.lng);
+
+  // ✅ CASO 1 — COORDENADAS VÁLIDAS (PRIORIDADE TOTAL)
+  if (![latA, lngA, latB, lngB].some(isNaN)) {
+    const r = await fetch(
+      `https://router.project-osrm.org/route/v1/driving/` +
+      `${lngA},${latA};${lngB},${latB}?overview=false`
+    );
+    const j = await r.json();
+    return j.routes[0].distance / 1000;
+  }
+
+  // ✅ CASO 2 — FALLBACK POR CIDADE (100% NORMALIZADO)
+  const cidadeA = normalizarCidade(
+    document.getElementById(
+      clienteA.id.replace("cliente", "cidade")
+    ).value
+  );
+
+  const cidadeB = normalizarCidade(
+    document.getElementById(
+      clienteB.id.replace("cliente", "cidade")
+    ).value
+  );
+
+  if (!cidadesCoords[cidadeA] || !cidadesCoords[cidadeB]) {
+    throw new Error(`Cidade inválida: ${cidadeA} > ${cidadeB}`);
+  }
+
+  return distanciaCidades(cidadeA, cidadeB);
+}
+
+
+  function validarCoordenadaCliente(input) {
+  const lat = parseFloat(input.dataset.lat);
+  const lng = parseFloat(input.dataset.lng);
+
+  // Limites aproximados de MG
+  const MG_LAT_MIN = -23.5;
+  const MG_LAT_MAX = -14.0;
+  const MG_LNG_MIN = -51.0;
+  const MG_LNG_MAX = -39.0;
+
+  const invalida =
+    isNaN(lat) ||
+    isNaN(lng) ||
+    lat < MG_LAT_MIN ||
+    lat > MG_LAT_MAX ||
+    lng < MG_LNG_MIN ||
+    lng > MG_LNG_MAX;
+
+  if (invalida) {
+    input.classList.add("cliente-erro");
+    input.title = "⚠ Coordenada do cliente fora de MG. Verifique o cadastro.";
+  } else {
+    input.classList.remove("cliente-erro");
+    input.title = "";
+  }
+}
+
+  function aplicarCliente(idx) {
+  const input = document.getElementById("cliente" + idx);
+  if (!input.value) return;
+
+  const key = input.value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .trim();
+
+  const cliente = clientesCoords[key];
+  if (!cliente) return;
+
+  // Preenche cidade
+  const cidadeInput = document.getElementById("cidade" + idx);
+  cidadeInput.value = cliente.cidade;
+
+  // Salva coordenadas no próprio input (padrão industrial)
+  input.dataset.lat = cliente.lat;
+  input.dataset.lng = cliente.lng;
+
+  // 🔴 VALIDAÇÃO DE COORDENADA
+  validarCoordenadaCliente(input);
+}
+
+  function montarListaClientes() {
+  const dl = document.getElementById("clientesLista");
+  dl.innerHTML = "";
+
+  Object.values(clientesCoords).forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.cliente;
+    dl.appendChild(opt);
+  });
+}
+
 /* ================= UTIL ================= */
 function normalizarCidade(nome){
   return nome
@@ -122,9 +248,16 @@ const BASE_COORDS = {
 };
 
 let cidadesCoords={}, mapa, rotaLayer;
+let clientesCoords = {};
+let clientesCarregados = false;
+  
 let cidadesCarregadas = false;
 
 let infoDispersaoHTML = "";
+  let dispersoesCount = 0;
+  let distanciaCache = {};
+
+
 
 
 /* ================= FRETE TABELA ================= */
@@ -180,15 +313,54 @@ const moeda3=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimu
 const numero=v=>v.toLocaleString("pt-BR");
 
 /* ================= CIDADES ================= */
-fetch("cidades-mg.json").then(r=>r.json()).then(d=>{
-  cidadesCoords=d;
+fetch("cidades-mg.json").then(r => r.json()).then(d => {
+  cidadesCoords = {};
+
+  Object.entries(d).forEach(([cidade, coords]) => {
+    const key = normalizarCidade(cidade);
+    cidadesCoords[key] = coords;
+  });
+
   cidadesCarregadas = true;
-  const dl=document.getElementById("cidadesMG");
-  Object.keys(d).forEach(c=>{
-    const o=document.createElement("option");
-    o.value=c;
+
+  const dl = document.getElementById("cidadesMG");
+  Object.keys(cidadesCoords).forEach(c => {
+    const o = document.createElement("option");
+    o.value = c;
     dl.appendChild(o);
   });
+});
+
+Promise.all([
+  fetch("clientes_derivados.json").then(r => r.json()),
+  fetch("clientes_distribuidora.json").then(r => r.json())
+])
+.then(([derivados, distribuidora]) => {
+
+  [...derivados, ...distribuidora].forEach(c => {
+    if (!c.cliente || !c.lat || !c.lng) return;
+
+    const key = c.cliente
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .trim();
+
+    clientesCoords[key] = {
+      cliente: c.cliente,
+      cidade: c.cidade,
+      lat: c.lat,
+      lng: c.lng
+    };
+  });
+
+  montarListaClientes();
+  clientesCarregados = true;
+
+  console.log("Clientes carregados:", Object.keys(clientesCoords).length);
+})
+.catch(err => {
+  console.error("Erro ao carregar clientes", err);
 });
 
 /* ================= DISTÂNCIA ================= */
@@ -213,6 +385,10 @@ async function distanciaBaseCidade(cidade){
 
 // Cidade → Cidade
 async function distanciaCidades(cidadeA, cidadeB){
+
+  cidadeA = normalizarCidade(cidadeA);
+  cidadeB = normalizarCidade(cidadeB);
+
   if (!cidadesCoords[cidadeA] || !cidadesCoords[cidadeB]) {
     throw new Error("Cidade inválida: " + cidadeA + " → " + cidadeB);
   }
@@ -228,12 +404,60 @@ async function distanciaCidades(cidadeA, cidadeB){
   const j = await r.json();
   return j.routes[0].distance / 1000;
 }
+// Cliente → Cliente (usa coordenada se existir, senão cai para cidade)
+async function distanciaEntreClientes(clienteA, clienteB) {
+
+  const key = clienteA.id + "_" + clienteB.id;
+
+  if (distanciaCache[key]) {
+    return distanciaCache[key];
+  }
+
+  const latA = parseFloat(clienteA?.dataset?.lat);
+  const lngA = parseFloat(clienteA?.dataset?.lng);
+  const latB = parseFloat(clienteB?.dataset?.lat);
+  const lngB = parseFloat(clienteB?.dataset?.lng);
+
+  let distancia;
+
+  if ([latA, lngA, latB, lngB].some(isNaN)) {
+
+    const cidadeA = normalizarCidade(
+      document.getElementById(clienteA.id.replace("cliente", "cidade")).value
+    );
+
+    const cidadeB = normalizarCidade(
+      document.getElementById(clienteB.id.replace("cliente", "cidade")).value
+    );
+
+    distancia = await distanciaCidades(cidadeA, cidadeB);
+
+  } else {
+
+    const r = await fetch(
+      `https://router.project-osrm.org/route/v1/driving/` +
+      `${lngA},${latA};${lngB},${latB}?overview=false`
+    );
+
+    const j = await r.json();
+    distancia = j.routes[0].distance / 1000;
+  }
+
+  // 🔥 salva no cache nos dois sentidos
+  distanciaCache[key] = distancia;
+  distanciaCache[clienteB.id + "_" + clienteA.id] = distancia;
+
+  return distancia;
+}
+
 
 
 
 
 /* ================= TABELA ================= */
 function gerarTabela(){
+  distanciaCache = {};
+
   const tipo=document.getElementById("tipo").value;
   if(!tipo) return;
 
@@ -252,7 +476,15 @@ function gerarTabela(){
   compartimentos[tipo].forEach((l,i)=>{
     html+=`
     <tr data-row>
-      <td><input id="cliente${i}" class="uppercase"></td>
+      <td>
+  <input
+    id="cliente${i}"
+    class="uppercase cliente-input"
+    list="clientesLista"
+    onblur="aplicarCliente(${i})"
+  >
+</td>
+
       <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
@@ -310,16 +542,30 @@ async function otimizarRota(){
   try {
     const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-    const paradas = rows
-  .map(r => {
-    const cidade = r.querySelector(".cidade")?.value.trim();
+const paradas = rows
+  .map((r, i) => {
+    const clienteInput = r.querySelector("input[id^='cliente']");
+    const cidadeInput = r.querySelector(".cidade");
+
+    const lat = parseFloat(clienteInput?.dataset?.lat);
+    const lng = parseFloat(clienteInput?.dataset?.lng);
+
     return {
       row: r,
-      cidade,
-      cliente: r.querySelector("input[id^='cliente']")?.value || ""
+      idx: i,
+      clienteInput,
+      cidade: normalizarCidade(cidadeInput?.value || ""),
+      lat,
+      lng
     };
   })
-  .filter(p => p.cidade && cidadesCoords[p.cidade]);
+  .filter(p =>
+    (!isNaN(p.lat) && !isNaN(p.lng)) ||
+    (p.cidade && cidadesCoords[p.cidade])
+  );
+
+
+    
 if (paradas.length === 0) {
   alert("Informe pelo menos uma cidade válida para otimizar a rota.");
   spinner.style.display = "none";
@@ -330,27 +576,31 @@ if (paradas.length === 0) {
     let rota = [];
     let restantes = [...paradas];
     let atualCidade = null;
-
+    let atual = null;
     while (restantes.length) {
       let menor = Infinity;
       let escolhido = null;
 
-      for (const p of restantes) {
-const d = !atualCidade
-  ? await distanciaBaseCidade(p.cidade)
-  : await distanciaCidades(atualCidade, p.cidade);
+for (const p of restantes) {
+  const d = !atual
+    ? await distanciaBaseCliente(p.clienteInput)
+    : await distanciaEntreClientes(
+        document.getElementById("cliente" + atual.idx),
+        document.getElementById("cliente" + p.idx)
+      );
 
+  if (d < menor) {
+    menor = d;
+    escolhido = p;
+  }
+}
 
-
-        if (d < menor) {
-          menor = d;
-          escolhido = p;
-        }
-      }
 
 
       rota.push(escolhido);
-      restantes = restantes.filter(p => p !== escolhido);
+restantes = restantes.filter(p => p !== escolhido);
+atual = escolhido; // ✅ AGORA SIM
+
       atualCidade = escolhido.cidade;
     }
 
@@ -361,10 +611,14 @@ const d = !atualCidade
 dispersoes = [];
 
 for (let i = 0; i < rota.length - 1; i++) {
+
   const cidadeA = rota[i].cidade;
   const cidadeB = rota[i + 1].cidade;
 
-  const d = await distanciaCidades(cidadeA, cidadeB);
+  const clienteA = document.getElementById("cliente" + rota[i].idx);
+  const clienteB = document.getElementById("cliente" + rota[i + 1].idx);
+
+  const d = await distanciaEntreClientes(clienteA, clienteB);
 
   if (d >= 70) {
     dispersoes.push({
@@ -374,6 +628,10 @@ for (let i = 0; i < rota.length - 1; i++) {
     });
   }
 }
+
+// ✅ AGORA SIM — DEPOIS do loop
+dispersoesCount = dispersoes.length;
+
 
 
 // ================= PASSO 2 — MONTA TEXTO INFORMATIVO DE DISPERSÃO =================
@@ -431,33 +689,35 @@ document.getElementById("btnCalcular").classList.add("btn-destaque");
 
 /* ================= KM ================= */
 async function recalcularKM(){
-  const cidades = [...document.querySelectorAll(".cidade")]
-    .map(i => i.value)
-    .filter(v => v);
-  const clientes = cidades.length;
+  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-
-  if (cidades.length === 0) {
+  if (rows.length === 0) {
     document.getElementById("kmTotal").value = "0.00";
     return;
   }
 
   let km = 0;
 
-  // Empresa → primeira cidade
-  km += await distanciaBaseCidade(cidades[0]);
+  const primeiraRow = rows[0];
+  const primeiroCliente = primeiraRow.querySelector("input[id^='cliente']");
 
-  // Entre cidades
-for (let i = 0; i < cidades.length - 1; i++) {
-  km += await distanciaCidades(cidades[i], cidades[i + 1]);
-}
+  km += await distanciaBaseCliente(primeiroCliente);
 
+  for (let i = 0; i < rows.length - 1; i++) {
+    const clienteA = rows[i].querySelector("input[id^='cliente']");
+    const clienteB = rows[i + 1].querySelector("input[id^='cliente']");
 
-  // Última cidade → Empresa
-  km += await distanciaBaseCidade(cidades[cidades.length - 1]);
+    km += await distanciaEntreClientes(clienteA, clienteB);
+  }
+
+  const ultimaRow = rows[rows.length - 1];
+  const ultimoCliente = ultimaRow.querySelector("input[id^='cliente']");
+
+  km += await distanciaBaseCliente(ultimoCliente);
 
   document.getElementById("kmTotal").value = km.toFixed(2);
 }
+
 
 
 /* ================= MAPA ================= */
@@ -488,8 +748,18 @@ async function desenharMapa(rota){
   const pontos = [
   [BASE_COORDS.lat, BASE_COORDS.lng],
   ...rota.map(r => {
-    const [lat, lng] = cidadesCoords[r.cidade];
-    return [lat, lng];
+    const input = document.getElementById("cliente" + r.idx);
+
+const lat = parseFloat(input.dataset.lat);
+const lng = parseFloat(input.dataset.lng);
+
+if (isNaN(lat) || isNaN(lng)) {
+  const [cLat, cLng] = cidadesCoords[r.cidade];
+  return [cLat, cLng];
+}
+
+return [lat, lng];
+
   }),
   [BASE_COORDS.lat, BASE_COORDS.lng]
 ];
@@ -504,42 +774,80 @@ if (rotaLayer) {
     }
   });
 }
+  const iconBase = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32]
+});
+
+const iconCliente = L.icon({
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+
+const iconUltimo = L.icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+  iconSize: [34, 34],
+  iconAnchor: [17, 34],
+  popupAnchor: [0, -34]
+});
+
+function obterCoordsCliente(idx) {
+  const input = document.getElementById("cliente" + idx);
+  if (!input) return null;
+
+  const lat = parseFloat(input.dataset.lat);
+  const lng = parseFloat(input.dataset.lng);
+
+  if (!isNaN(lat) && !isNaN(lng)) {
+    return [lat, lng];
+  }
+
+  // fallback extremo (somente se cliente não tiver coord)
+  const cidade = document.getElementById("cidade" + idx)?.value;
+  return cidadesCoords[normalizarCidade(cidade)];
+}
 
 // Desenha BASE → 1ª cidade (sempre verde, sem regra)
-const primeira = rota[0];
-const [lat1, lng1] = cidadesCoords[primeira.cidade];
+// Desenha BASE → PRIMEIRO CLIENTE REAL
+const [lat1, lng1] = obterCoordsCliente(rota[0].idx);
 
 await desenharTrecho(
   BASE_COORDS.lat,
   BASE_COORDS.lng,
   lat1,
   lng1,
-  "#2e7d32" // verde
+  "#2e7d32"
 );
 
 // Desenha cidade → cidade com regra de dispersão
 for (let i = 0; i < rota.length - 1; i++) {
-  const atual = rota[i];
-  const proxima = rota[i + 1];
+  const [latA, lngA] = obterCoordsCliente(rota[i].idx);
+  const [latB, lngB] = obterCoordsCliente(rota[i + 1].idx);
 
-  const [latA, lngA] = cidadesCoords[atual.cidade];
-  const [latB, lngB] = cidadesCoords[proxima.cidade];
-
-  const distancia = await distanciaCidades(
-    atual.cidade,
-    proxima.cidade
+  const distancia = await distanciaEntreClientes(
+    document.getElementById("cliente" + rota[i].idx),
+    document.getElementById("cliente" + rota[i + 1].idx)
   );
 
-  const cor = distancia >= 70
-    ? "#c62828" // 🔴 dispersão
-    : "#2e7d32"; // 🟢 normal
+  const cor = distancia >= 70 ? "#c62828" : "#2e7d32";
 
   await desenharTrecho(latA, lngA, latB, lngB, cor);
 }
 
+
 // Desenha última cidade → BASE (opcional, verde)
-const ultima = rota[rota.length - 1];
-const [latU, lngU] = cidadesCoords[ultima.cidade];
+const [latU, lngU] = obterCoordsCliente(
+  rota[rota.length - 1].idx
+);
+
 
 await desenharTrecho(
   latU,
@@ -549,10 +857,54 @@ await desenharTrecho(
   "#2e7d32"
 );
 
-  pontos.forEach((p,i)=>{
-    let label=i===0||i===pontos.length-1?"BASE - BETIM":rota[i-1].cliente||rota[i-1].cidade;
-    L.marker(p).addTo(mapa).bindPopup(label);
-  });
+pontos.forEach((p, i) => {
+  let icon = iconCliente;
+  let popupHTML = "";
+
+  // 🟢 BASE
+  if (i === 0) {
+    icon = iconBase;
+    popupHTML = `
+      <strong>BASE OPERACIONAL</strong><br>
+      BETIM / MG
+    `;
+  }
+
+  // 🔴 ÚLTIMO PONTO (RETORNO)
+  else if (i === pontos.length - 1) {
+    icon = iconUltimo;
+    popupHTML = `
+      <strong>RETORNO À BASE</strong><br>
+      BETIM / MG
+    `;
+  }
+
+  // 🔵 CLIENTES
+  else {
+    const parada = rota[i - 1];
+    const idx = parada.idx;
+
+    const clienteInput = document.getElementById("cliente" + idx);
+    const cidadeInput  = document.getElementById("cidade" + idx);
+
+    const clienteNome = clienteInput?.value || "Cliente";
+    const cidadeNome  = cidadeInput?.value || parada.cidade || "-";
+    const litros      = compartimentos[
+      document.getElementById("tipo").value
+    ]?.[idx] || 0;
+
+    popupHTML = `
+      <strong>Parada ${i}</strong><br>
+      <strong>Cliente:</strong> ${clienteNome}<br>
+      <strong>Cidade:</strong> ${cidadeNome}<br>
+      <strong>Volume:</strong> ${litros.toLocaleString("pt-BR")} L
+    `;
+  }
+
+  L.marker(p, { icon }).addTo(mapa).bindPopup(popupHTML);
+});
+
+
 
   const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
@@ -641,13 +993,21 @@ const cidadeTabela = cidadesNormalizadas[0];
 const todasCidadesIguais = cidadesNormalizadas.every(c => c === cidadeTabela);
 
 const tipoTabela = tipo.startsWith("TRUCK") ? "TRUCK" : tipo;
+  const existeClienteComCoordenada = itens.some(i => {
+  const input = document.getElementById("cliente" + i.idx);
+  return !isNaN(parseFloat(input?.dataset?.lat)) &&
+         !isNaN(parseFloat(input?.dataset?.lng));
+});
+
 
 const usarFreteTabela =
   tabelaFreteCarregada &&
+  !existeClienteComCoordenada &&   // 🔥 LINHA CRÍTICA
   todosCompartimentosUsados &&
   todasCidadesIguais &&
   tabelaFrete[cidadeTabela] &&
   tabelaFrete[cidadeTabela][tipoTabela] !== undefined;
+
 
 console.log("DEBUG FRETE TABELA FINAL", {
   tabelaFreteCarregada,
@@ -847,32 +1207,49 @@ if (i.freteFixo !== null) {
 <div class="card-linha tempo-detalhado">
 
   <!-- TRECHOS -->
-  <div class="tempo-trechos">
-    ${tempoRota.etapas.map(e => `
-      <div class="tempo-card">
-        <div class="trecho-titulo">${e.trecho}</div>
-        <div class="trecho-dados">
-          🚚 ${Math.round(e.tempoViagemH * 60)} min
-          <span>|</span>
-          📦 ${Math.round(e.tempoDescargaH * 60)} min
-        </div>
+<div class="tempo-trechos">
+  ${tempoRota.etapas.map(e => `
+    <div class="tempo-card">
+      <div class="trecho-titulo">${e.trecho}</div>
+
+      <div class="trecho-dados">
+        🚚 ${Math.round(e.tempoViagemH * 60)} min
+        <span>|</span>
+        📦 ${Math.round(e.tempoDescargaH * 60)} min
       </div>
-    `).join("")}
-  </div>
+
+      <div class="trecho-km">
+        📍 ${e.km.toFixed(1)} km
+      </div>
+
+    </div>
+  `).join("")}
+</div>
+
+
 
   <!-- TOTAL -->
-  <div class="tempo-total-card">
-    <div class="tempo-total-titulo">⏱ TEMPO TOTAL DA OPERAÇÃO</div>
-    <div class="tempo-total-valor">${tempoRota.textoTotal}</div>
-  </div>
+ <div class="tempo-total-container">
 
-  <!-- PAUSAS -->
-  <div class="tempo-pausas">
-    ${tempoRota.incluiAlmoco ? "<div>🍽 Almoço (1h)</div>" : ""}
-    ${tempoRota.pausasDescanso ? "<div>🛑 Descanso legal (30min)</div>" : ""}
+  <div class="tempo-total-card-suave">
+    <div class="tempo-total-header">
+      ⏱ TEMPO TOTAL DA OPERAÇÃO
+    </div>
+
+    <div class="tempo-total-valor">
+      ${tempoRota.textoTotal}
+    </div>
+
+    <div class="tempo-total-extra">
+      ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)" : ""}
+      ${tempoRota.pausasDescanso ? "<br>🛑 Descanso legal (30min)" : ""}
+    </div>
   </div>
 
 </div>
+
+
+
 
 
 
@@ -892,9 +1269,10 @@ const observacaoFrete = `
 const alertasOperacionais = [];
 
 // dispersão
-if ((infoDispersaoHTML.match(/→/g) || []).length > 0) {
+if (dispersoesCount > 0) {
   alertasOperacionais.push("⚠️ Dispersão maior que 70 km identificada");
 }
+
 
 // rota longa
 if (tempoRota.tempoTotalH > 10) {
@@ -1027,57 +1405,80 @@ const progresso = isParcial
   requestAnimationFrame(step);
 }
 async function calcularTempoRota() {
-  const cidades = [...document.querySelectorAll(".cidade")]
-    .map(i => i.value.trim())
-    .filter(v => v);
+  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
   const TEMPO_DISPERSAO_MIN = 30;
+  const TEMPO_DESCARGA_MIN = 50;
 
-  // 🔹 CALCULA ETAPAS REAIS (OSRM)
-  const etapas = await calcularEtapasTempo(cidades);
+  const etapas = [];
 
-  // 🔹 SOMAS
+  if (rows.length === 0) {
+    return {
+      etapas: [],
+      tempoTotalH: 0,
+      textoTotal: "0h 0min"
+    };
+  }
+
+  // BASE → PRIMEIRO CLIENTE REAL
+  const primeiroCliente = rows[0].querySelector("input[id^='cliente']");
+  const kmBase = await distanciaBaseCliente(primeiroCliente);
+  const velBase = velocidadeMediaPorTrecho(kmBase);
+
+  etapas.push({
+    trecho: `Base → ${rows[0].querySelector(".cidade").value}`,
+    km: kmBase,
+    velocidade: velBase,
+    tempoViagemH: kmBase / velBase,
+    tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+  });
+
+  // ENTRE CLIENTES NA ORDEM REAL
+  for (let i = 0; i < rows.length - 1; i++) {
+    const clienteA = rows[i].querySelector("input[id^='cliente']");
+    const clienteB = rows[i + 1].querySelector("input[id^='cliente']");
+    const cidadeA = rows[i].querySelector(".cidade").value;
+    const cidadeB = rows[i + 1].querySelector(".cidade").value;
+
+    const kmTrecho = await distanciaEntreClientes(clienteA, clienteB);
+    const velTrecho = velocidadeMediaPorTrecho(kmTrecho);
+
+    etapas.push({
+      trecho: `${cidadeA} → ${cidadeB}`,
+      km: kmTrecho,
+      velocidade: velTrecho,
+      tempoViagemH: kmTrecho / velTrecho,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+  }
+
   const tempoDeslocamentoH = etapas.reduce(
     (s, e) => s + e.tempoViagemH,
     0
   );
 
-// 🔹 REGRA REAL DE DESCARGA
-const cidadesNormalizadas = cidades.map(c => c.toUpperCase());
-const clientesUnicos = [...new Set(cidadesNormalizadas)];
+  const tempoDescargaH = etapas.reduce(
+    (s, e) => s + e.tempoDescargaH,
+    0
+  );
 
-const TEMPO_DESCARGA_MIN = 50;
-
-// Se todos os clientes forem iguais → 1 descarga
-const qtDescargas = clientesUnicos.length === 1
-  ? 1
-  : clientesUnicos.length;
-
-const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
+ const tempoDispersaoH = (dispersoesCount * TEMPO_DISPERSAO_MIN) / 60;
 
 
-  // 🔹 DISPERSÕES
-  const qtDispersoes = (infoDispersaoHTML.match(/→/g) || []).length;
-  const tempoDispersaoH = (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
-
-  // 🔹 TEMPO BASE
   let tempoTotalH =
     tempoDeslocamentoH +
     tempoDescargaH +
     tempoDispersaoH;
 
-  // 🔹 ALMOÇO
   const incluiAlmoco = tempoTotalH > 6;
   if (incluiAlmoco) tempoTotalH += 1;
 
-  // 🔹 DESCANSO LEGAL
   let pausasDescanso = 0;
   if (tempoDeslocamentoH > 5.5) {
     pausasDescanso = 0.5;
     tempoTotalH += pausasDescanso;
   }
 
-  // 🔹 FORMATAÇÃO
   const horas = Math.floor(tempoTotalH);
   const minutos = Math.round((tempoTotalH - horas) * 60);
 
@@ -1092,6 +1493,7 @@ const tempoDescargaH = (qtDescargas * TEMPO_DESCARGA_MIN) / 60;
     textoTotal: `${horas}h ${minutos}min`
   };
 }
+
 // ================= VELOCIDADE MÉDIA POR TRECHO (INDUSTRIAL) =================
 function velocidadeMediaPorTrecho(km) {
   if (km <= 30) return 45;   // urbano / acesso
@@ -1103,9 +1505,10 @@ async function calcularEtapasTempo(cidades) {
   const TEMPO_DESCARGA_MIN = 50;
   const etapas = [];
 
-  // BASE → PRIMEIRA CIDADE
+  // BASE → PRIMEIRO CLIENTE
   if (cidades.length > 0) {
-    const kmBase = await distanciaBaseCidade(cidades[0]);
+    const cliente0 = document.getElementById("cliente0");
+    const kmBase = await distanciaBaseCliente(cliente0);
     const velBase = velocidadeMediaPorTrecho(kmBase);
 
     etapas.push({
@@ -1117,9 +1520,12 @@ async function calcularEtapasTempo(cidades) {
     });
   }
 
-  // ENTRE CIDADES
+  // ENTRE CLIENTES
   for (let i = 0; i < cidades.length - 1; i++) {
-    const kmTrecho = await distanciaCidades(cidades[i], cidades[i + 1]);
+    const clienteA = document.getElementById("cliente" + i);
+    const clienteB = document.getElementById("cliente" + (i + 1));
+
+    const kmTrecho = await distanciaEntreClientes(clienteA, clienteB);
     const velTrecho = velocidadeMediaPorTrecho(kmTrecho);
 
     etapas.push({
@@ -1133,6 +1539,7 @@ async function calcularEtapasTempo(cidades) {
 
   return etapas;
 }
+
 
 
 
