@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script src="auth.js"></script>
+<meta charset="UTF-8">
+<title>Administração de Clientes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="erp-header">
+  <div class="erp-left">
+    <span class="erp-logo">LOGÍSTICA</span>
+    <span class="erp-sub">Administração de Clientes</span>
+  </div>
+</header>
+
+<div class="container">
+  <div class="content">
+
+    <h2>MANUTENÇÃO DE CLIENTES</h2>
+
+    <div class="tabs">
+      <button onclick="trocarAba('distribuidora')" id="btnDistribuidora" class="tab active">
+        Distribuidora
+      </button>
+      <button onclick="trocarAba('derivados')" id="btnDerivados" class="tab">
+        Derivados
+      </button>
+    </div>
+
+    <div class="acoes-topo">
+      <input type="text" id="busca" placeholder="Buscar cliente..." oninput="renderTabela()">
+      <button onclick="novoCliente()">+ Novo Cliente</button>
+      <button onclick="exportarJSON()">Exportar JSON</button>
+    </div>
+
+    <div id="tabelaClientes"></div>
+
+  </div>
+</div>
+
+<script>
+
+// 🔒 PROTEÇÃO ADMIN
+if (localStorage.getItem("perfil") !== "admin") {
+  alert("Acesso restrito ao administrador.");
+  window.location.href = "painel.html";
+}
+
+// ================= VARIÁVEIS =================
+let clientesDistribuidora = [];
+let clientesDerivados = [];
+let abaAtual = "distribuidora";
+
+// ================= CARREGAMENTO =================
+Promise.all([
+  fetch("clientes_distribuidora.json").then(r => r.json()),
+  fetch("clientes_derivados.json").then(r => r.json())
+]).then(([dist, der]) => {
+  clientesDistribuidora = dist;
+  clientesDerivados = der;
+  renderTabela();
+});
+
+// ================= UTIL =================
+function validarMG(lat, lng) {
+  return lat >= -23.5 && lat <= -14.0 &&
+         lng >= -51.0 && lng <= -39.0;
+}
+
+// ================= TROCAR ABA =================
+function trocarAba(tipo) {
+  abaAtual = tipo;
+  document.getElementById("btnDistribuidora").classList.remove("active");
+  document.getElementById("btnDerivados").classList.remove("active");
+  document.getElementById(
+    tipo === "distribuidora" ? "btnDistribuidora" : "btnDerivados"
+  ).classList.add("active");
+
+  renderTabela();
+}
+
+// ================= RENDER =================
+function renderTabela() {
+
+  const lista = abaAtual === "distribuidora"
+    ? clientesDistribuidora
+    : clientesDerivados;
+
+  const filtro = document.getElementById("busca").value.toLowerCase();
+
+  let html = `
+    <table class="tabela-admin">
+      <tr>
+        <th>Cliente</th>
+        <th>Cidade</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Ações</th>
+      </tr>
+  `;
+
+  lista
+    .filter(c => c.cliente.toLowerCase().includes(filtro))
+    .forEach((c, i) => {
+
+      const erro = !validarMG(c.lat, c.lng) ? "linha-erro" : "";
+
+      html += `
+        <tr class="${erro}">
+          <td>${c.cliente}</td>
+          <td>${c.cidade}</td>
+          <td>${c.lat}</td>
+          <td>${c.lng}</td>
+          <td>
+            <button onclick="editar(${i})">Editar</button>
+            <button onclick="excluir(${i})" class="btn-excluir">Excluir</button>
+          </td>
+        </tr>
+      `;
+    });
+
+  html += "</table>";
+
+  document.getElementById("tabelaClientes").innerHTML = html;
+}
+
+// ================= NOVO =================
+function novoCliente() {
+  editar(null);
+}
+
+// ================= EDITAR =================
+function editar(index) {
+
+  const lista = abaAtual === "distribuidora"
+    ? clientesDistribuidora
+    : clientesDerivados;
+
+  const cliente = index !== null ? lista[index] : {
+    cliente: "",
+    cidade: "",
+    lat: "",
+    lng: ""
+  };
+
+  const nome = prompt("Nome do Cliente:", cliente.cliente);
+  if (!nome) return;
+
+  const cidade = prompt("Cidade:", cliente.cidade);
+  const lat = parseFloat(prompt("Latitude:", cliente.lat));
+  const lng = parseFloat(prompt("Longitude:", cliente.lng));
+
+  if (!validarMG(lat, lng)) {
+    alert("⚠ Coordenadas fora de MG.");
+  }
+
+  const novo = { cliente: nome, cidade, lat, lng };
+
+  if (index !== null) {
+    lista[index] = novo;
+  } else {
+    lista.push(novo);
+  }
+
+  renderTabela();
+}
+
+// ================= EXCLUIR =================
+function excluir(index) {
+  if (!confirm("Deseja excluir este cliente?")) return;
+
+  const lista = abaAtual === "distribuidora"
+    ? clientesDistribuidora
+    : clientesDerivados;
+
+  lista.splice(index, 1);
+  renderTabela();
+}
+
+// ================= EXPORTAR =================
+function exportarJSON() {
+
+  const lista = abaAtual === "distribuidora"
+    ? clientesDistribuidora
+    : clientesDerivados;
+
+  const nomeArquivo = abaAtual === "distribuidora"
+    ? "clientes_distribuidora.json"
+    : "clientes_derivados.json";
+
+  const blob = new Blob(
+    [JSON.stringify(lista, null, 2)],
+    { type: "application/json" }
+  );
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = nomeArquivo;
+  link.click();
+}
+
+</script>
+
+<style>
+
+.tabs {
+  margin-bottom:20px;
+}
+
+.tab {
+  padding:10px 20px;
+  border:none;
+  cursor:pointer;
+  background:#ddd;
+}
+
+.tab.active {
+  background:#1976d2;
+  color:#fff;
+}
+
+.acoes-topo {
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.acoes-topo input {
+  flex:1;
+  padding:8px;
+}
+
+.tabela-admin {
+  width:100%;
+  border-collapse:collapse;
+}
+
+.tabela-admin th,
+.tabela-admin td {
+  border:1px solid #ccc;
+  padding:8px;
+  text-align:center;
+}
+
+.btn-excluir {
+  background:#c62828;
+  color:#fff;
+}
+
+.linha-erro {
+  background:#ffe6e6;
+}
+
+</style>
+
+</body>
+</html>
