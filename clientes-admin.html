@@ -149,20 +149,19 @@ function renderTabela() {
           <td>${c.cidade}</td>
           <td>${c.lat}</td>
           <td>${c.lng}</td>
-          <td>
+         <td>
   <button 
-  data-lat="${c.lat}" 
-  data-lng="${c.lng}" 
-  data-nome="${c.cliente}"
-  onclick="verNoMapa(this)">
-  Ver no Mapa
-</button>
-
+    data-lat="${c.lat}" 
+    data-lng="${c.lng}" 
+    data-nome="${c.cliente}"
+    onclick="verNoMapa(this)">
     Ver no Mapa
   </button>
+
   <button onclick="abrirModal(${i})">Editar</button>
   <button class="btn-excluir" onclick="excluir(${i})">Excluir</button>
 </td>
+
 
         </tr>
       `;
