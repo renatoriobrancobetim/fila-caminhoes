@@ -140,9 +140,13 @@ function renderTabela() {
           <td>${c.lat}</td>
           <td>${c.lng}</td>
           <td>
-            <button onclick="abrirModal(${i})">Editar</button>
-            <button class="btn-excluir" onclick="excluir(${i})">Excluir</button>
-          </td>
+  <button onclick="verNoMapa(${c.lat}, ${c.lng}, '${c.cliente}')">
+    Ver no Mapa
+  </button>
+  <button onclick="abrirModal(${i})">Editar</button>
+  <button class="btn-excluir" onclick="excluir(${i})">Excluir</button>
+</td>
+
         </tr>
       `;
     });
@@ -225,6 +229,29 @@ function excluir(index) {
   lista.splice(index, 1);
   renderTabela();
 }
+// ================= VER NO MAPA =================
+function verNoMapa(lat, lng, nome) {
+
+  const url = `clientes-mapa.html?lat=${lat}&lng=${lng}&cliente=${encodeURIComponent(nome)}`;
+  window.open(url, "_blank");
+
+}
+  // ================= RECEBER PARAMETROS DA URL =================
+const params = new URLSearchParams(window.location.search);
+const lat = parseFloat(params.get("lat"));
+const lng = parseFloat(params.get("lng"));
+const cliente = params.get("cliente");
+
+if (!isNaN(lat) && !isNaN(lng)) {
+
+  map.setView([lat, lng], 13);
+
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(`<strong>${cliente}</strong>`)
+    .openPopup();
+}
+
 
 // ================= EXPORTAR =================
 function exportarJSON() {
