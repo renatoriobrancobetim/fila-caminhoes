@@ -254,6 +254,8 @@ let clientesCarregados = false;
 let cidadesCarregadas = false;
 
 let infoDispersaoHTML = "";
+  let dispersoesCount = 0;
+
 
 
 /* ================= FRETE TABELA ================= */
@@ -600,7 +602,7 @@ for (let i = 0; i < rota.length - 1; i++) {
 const clienteB = document.getElementById("cliente" + rota[i + 1].idx);
 
 const d = await distanciaEntreClientes(clienteA, clienteB);
-
+dispersoesCount = dispersoes.length;
 
   if (d >= 70) {
     dispersoes.push({
@@ -1247,9 +1249,10 @@ const observacaoFrete = `
 const alertasOperacionais = [];
 
 // dispersão
-if ((infoDispersaoHTML.match(/→/g) || []).length > 0) {
+if (dispersoesCount > 0) {
   alertasOperacionais.push("⚠️ Dispersão maior que 70 km identificada");
 }
+
 
 // rota longa
 if (tempoRota.tempoTotalH > 10) {
@@ -1382,61 +1385,80 @@ const progresso = isParcial
   requestAnimationFrame(step);
 }
 async function calcularTempoRota() {
-  const cidades = [...document.querySelectorAll(".cidade")]
-    .map(i => i.value.trim())
-    .filter(v => v);
+  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
   const TEMPO_DISPERSAO_MIN = 30;
+  const TEMPO_DESCARGA_MIN = 50;
 
-  // 🔹 CALCULA ETAPAS REAIS (OSRM)
-  const etapas = await calcularEtapasTempo(cidades);
+  const etapas = [];
 
-  // 🔹 SOMAS
+  if (rows.length === 0) {
+    return {
+      etapas: [],
+      tempoTotalH: 0,
+      textoTotal: "0h 0min"
+    };
+  }
+
+  // BASE → PRIMEIRO CLIENTE REAL
+  const primeiroCliente = rows[0].querySelector("input[id^='cliente']");
+  const kmBase = await distanciaBaseCliente(primeiroCliente);
+  const velBase = velocidadeMediaPorTrecho(kmBase);
+
+  etapas.push({
+    trecho: `Base → ${rows[0].querySelector(".cidade").value}`,
+    km: kmBase,
+    velocidade: velBase,
+    tempoViagemH: kmBase / velBase,
+    tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+  });
+
+  // ENTRE CLIENTES NA ORDEM REAL
+  for (let i = 0; i < rows.length - 1; i++) {
+    const clienteA = rows[i].querySelector("input[id^='cliente']");
+    const clienteB = rows[i + 1].querySelector("input[id^='cliente']");
+    const cidadeA = rows[i].querySelector(".cidade").value;
+    const cidadeB = rows[i + 1].querySelector(".cidade").value;
+
+    const kmTrecho = await distanciaEntreClientes(clienteA, clienteB);
+    const velTrecho = velocidadeMediaPorTrecho(kmTrecho);
+
+    etapas.push({
+      trecho: `${cidadeA} → ${cidadeB}`,
+      km: kmTrecho,
+      velocidade: velTrecho,
+      tempoViagemH: kmTrecho / velTrecho,
+      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    });
+  }
+
   const tempoDeslocamentoH = etapas.reduce(
     (s, e) => s + e.tempoViagemH,
     0
   );
 
-// 🔹 REGRA REAL DE DESCARGA
-const cidadesNormalizadas = cidades.map(c => c.toUpperCase());
-const clientesUnicos = [...new Set(cidadesNormalizadas)];
+  const tempoDescargaH = etapas.reduce(
+    (s, e) => s + e.tempoDescargaH,
+    0
+  );
 
-const TEMPO_DESCARGA_MIN = 50;
-
-// Se todos os clientes forem iguais → 1 descarga
-const qtDescargas = clientesUnicos.length === 1
-  ? 1
-  : clientesUnicos.length;
-
-const tempoDescargaH = etapas.reduce(
-  (s, e) => s + e.tempoDescargaH,
-  0
-);
+ const tempoDispersaoH = (dispersoesCount * TEMPO_DISPERSAO_MIN) / 60;
 
 
-
-  // 🔹 DISPERSÕES
-  const qtDispersoes = (infoDispersaoHTML.match(/→/g) || []).length;
-  const tempoDispersaoH = (qtDispersoes * TEMPO_DISPERSAO_MIN) / 60;
-
-  // 🔹 TEMPO BASE
   let tempoTotalH =
     tempoDeslocamentoH +
     tempoDescargaH +
     tempoDispersaoH;
 
-  // 🔹 ALMOÇO
   const incluiAlmoco = tempoTotalH > 6;
   if (incluiAlmoco) tempoTotalH += 1;
 
-  // 🔹 DESCANSO LEGAL
   let pausasDescanso = 0;
   if (tempoDeslocamentoH > 5.5) {
     pausasDescanso = 0.5;
     tempoTotalH += pausasDescanso;
   }
 
-  // 🔹 FORMATAÇÃO
   const horas = Math.floor(tempoTotalH);
   const minutos = Math.round((tempoTotalH - horas) * 60);
 
@@ -1451,6 +1473,7 @@ const tempoDescargaH = etapas.reduce(
     textoTotal: `${horas}h ${minutos}min`
   };
 }
+
 // ================= VELOCIDADE MÉDIA POR TRECHO (INDUSTRIAL) =================
 function velocidadeMediaPorTrecho(km) {
   if (km <= 30) return 45;   // urbano / acesso
