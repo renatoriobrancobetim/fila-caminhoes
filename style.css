@@ -1097,3 +1097,30 @@ th{
   opacity: 0.95;
   margin-top: 6px;
 }
+.tempo-total-wrapper {
+  margin-top: 18px;
+  padding: 18px;
+  border: 2px solid #2a5bd7;
+  border-radius: 10px;
+  background: #f8f9fb;
+  text-align: center;
+}
+
+.tempo-total-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f3f8f;
+  margin-bottom: 8px;
+}
+
+.tempo-total-valor {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 8px;
+}
+
+.tempo-total-extra {
+  font-size: 13px;
+  color: #444;
+}
