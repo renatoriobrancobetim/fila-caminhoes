@@ -1061,3 +1061,13 @@ th{
   border: 2px solid #c62828 !important;
   background: #fff4f4;
 }
+.trecho-km {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #1e3a8a;
+  font-weight: 600;
+  background: #e3f2fd;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
