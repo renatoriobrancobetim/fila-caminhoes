@@ -522,14 +522,18 @@ function gerarTabela(){
   >
 </td>
 
-      <td>
-  <input
-    id="cidade${i}"
-    class="cidade uppercase"
-    list="cidadesMG"
-    onblur="validarCidadeInput(this)"
-  >
+     <td>
+  <div class="cidade-wrapper">
+    <input
+      id="cidade${i}"
+      class="cidade uppercase"
+      list="cidadesMG"
+      onblur="validarCidadeInput(this)"
+    >
+    <span class="lock-icon">🔒</span>
+  </div>
 </td>
+
 
       <td><input id="horario${i}" type="time"></td>
       <td>
