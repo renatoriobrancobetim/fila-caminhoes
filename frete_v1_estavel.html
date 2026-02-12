@@ -1316,28 +1316,12 @@ if (i.freteFixo !== null) {
 <div class="tempo-detalhado">
 
   <!-- TRECHOS -->
-<div class="tempo-trechos">
-  ${tempoRota.etapas.map(e => `
-    <div class="tempo-card">
-      <div class="trecho-titulo">${e.trecho}</div>
-
-      <div class="trecho-dados">
-        🚚 ${Math.round(e.tempoViagemH * 60)} min
-        <span>|</span>
-        📦 ${Math.round(e.tempoDescargaH * 60)} min
-      </div>
-
-      <div class="trecho-km">
-        📍 ${e.km.toFixed(1)} km
-      </div>
-    </div>
-  `).join("")}
-</div>
-
-</div> <!-- fecha tempo-trechos -->
-
+  <div class="tempo-trechos">
+    ...
+  </div>
 
   <div class="tempo-total-card-suave">
+   
     <div class="tempo-total-header">
       ⏱ TEMPO TOTAL DA OPERAÇÃO
     </div>
@@ -1390,17 +1374,22 @@ if (tempoRota.pausasDescanso > 0) {
 if (alertasOperacionais.length > 0) {
   html += `
     <div class="alerta-performance">
-
-
       <div class="card-item full">
         <span>⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA</span>
         <strong>
           ${alertasOperacionais.join("<br>")}
         </strong>
       </div>
-
     </div>
   `;
+}
+
+html += `
+    </div> <!-- fecha performance-rota -->
+  </div> <!-- fecha resumo-cards -->
+</div> <!-- fecha resumo-box -->
+`;
+
 }
 
 
