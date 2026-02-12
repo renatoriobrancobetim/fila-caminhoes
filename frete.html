@@ -193,9 +193,15 @@ async function distanciaEntreClientes(clienteA, clienteB) {
   }
 }
 
-  function aplicarCliente(idx) {
+function aplicarCliente(idx) {
   const input = document.getElementById("cliente" + idx);
-  if (!input.value) return;
+  const cidadeInput = document.getElementById("cidade" + idx);
+
+  if (!input.value) {
+    cidadeInput.readOnly = false;
+    cidadeInput.classList.remove("cidade-travada");
+    return;
+  }
 
   const key = input.value
     .normalize("NFD")
@@ -204,19 +210,32 @@ async function distanciaEntreClientes(clienteA, clienteB) {
     .trim();
 
   const cliente = clientesCoords[key];
-  if (!cliente) return;
 
-  // Preenche cidade
-  const cidadeInput = document.getElementById("cidade" + idx);
-  cidadeInput.value = cliente.cidade;
+  // ✅ CLIENTE CADASTRADO
+  if (cliente) {
 
-  // Salva coordenadas no próprio input (padrão industrial)
-  input.dataset.lat = cliente.lat;
-  input.dataset.lng = cliente.lng;
+    cidadeInput.value = cliente.cidade;
+    input.dataset.lat = cliente.lat;
+    input.dataset.lng = cliente.lng;
 
-  // 🔴 VALIDAÇÃO DE COORDENADA
-  validarCoordenadaCliente(input);
+    validarCoordenadaCliente(input);
+
+    // 🔒 TRAVA CIDADE
+    cidadeInput.readOnly = true;
+    cidadeInput.classList.add("cidade-travada");
+
+  } else {
+
+    // 🔓 CLIENTE NÃO CADASTRADO
+    cidadeInput.readOnly = false;
+    cidadeInput.classList.remove("cidade-travada");
+
+    // limpa coordenadas
+    delete input.dataset.lat;
+    delete input.dataset.lng;
+  }
 }
+
 
   function montarListaClientes() {
   const dl = document.getElementById("clientesLista");
@@ -237,6 +256,24 @@ function normalizarCidade(nome){
     .replace(/[^A-Za-z\s]/g, "")
     .trim()
     .toUpperCase();
+}
+function validarCidadeInput(input) {
+  const valorDigitado = normalizarCidade(input.value);
+
+  if (!valorDigitado) {
+    input.value = "";
+    return;
+  }
+
+  if (!cidadesCoords[valorDigitado]) {
+    alert("Cidade inválida. Selecione uma cidade da lista.");
+    input.value = "";
+    input.focus();
+    return;
+  }
+
+  // 🔒 Normaliza visualmente para padrão oficial
+  input.value = valorDigitado;
 }
 
 /* ================= VARIÁVEIS ================= */
@@ -485,9 +522,26 @@ function gerarTabela(){
   >
 </td>
 
-      <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
+     <td>
+  <div class="cidade-wrapper">
+    <input
+      id="cidade${i}"
+      class="cidade uppercase"
+      list="cidadesMG"
+      onblur="validarCidadeInput(this)"
+    >
+    <span class="lock-icon">🔒</span>
+  </div>
+</td>
+
+
       <td><input id="horario${i}" type="time"></td>
-      <td>${numero(l)}</td>
+      <td>
+  <span class="badge-litros">
+    ${numero(l)} L
+  </span>
+</td>
+
       <td>
   <input
     id="freteFixo${i}"
@@ -510,6 +564,13 @@ function gerarTabela(){
 // NÃO libera calcular aqui
 document.getElementById("btnCalcular").disabled = true;
 document.getElementById("btnCalcular").classList.remove("btn-destaque");
+document.querySelectorAll(".cidade").forEach(input => {
+  input.addEventListener("input", function() {
+    if (this.readOnly) {
+      this.value = this.defaultValue;
+    }
+  });
+});
 
 
 // Agora: destaque visual no Otimizar
