@@ -1297,11 +1297,10 @@ if (i.freteFixo !== null) {
       <div class="trecho-km">
         📍 ${e.km.toFixed(1)} km
       </div>
-
     </div>
   `).join("")}
 </div>
-html += `
+
 <div class="card-linha ocupacao-card">
 
   <div class="card-item full">
@@ -1321,14 +1320,21 @@ html += `
       </div>
     </div>
 
-    <div 
-  class="barra-preenchida ${ 
-    percentualOcupacao >= 80 ? 'ocupacao-alta' :
-    percentualOcupacao >= 50 ? 'ocupacao-media' :
-    'ocupacao-baixa'
-  }"
-  style="width: ${percentualOcupacao}%"
-></div>
+    <div class="barra-ocupacao">
+      <div 
+        class="barra-preenchida ${ 
+          percentualOcupacao >= 80 ? 'ocupacao-alta' :
+          percentualOcupacao >= 50 ? 'ocupacao-media' :
+          'ocupacao-baixa'
+        }"
+        style="width: ${percentualOcupacao}%"
+      ></div>
+    </div>
+
+  </div>
+
+</div>
+
 
     </div>
 
