@@ -1179,3 +1179,32 @@ th{
   border: 1px solid #cbd5e1;
   cursor: not-allowed;
 }
+/* Wrapper da cidade */
+.cidade-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Ajuste no input */
+.cidade-wrapper input {
+  width: 100%;
+  padding-right: 30px; /* espaço pro cadeado */
+}
+
+/* Ícone cadeado */
+.lock-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Quando travado */
+.cidade-travada + .lock-icon {
+  opacity: 1;
+}
