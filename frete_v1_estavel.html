@@ -727,6 +727,16 @@ if (dispersoes.length > 0) {
 
     await recalcularKM();
     await desenharMapa(rota);
+    const link = gerarLinkGoogleMaps(rota);
+
+const btnCompartilhar = document.createElement("a");
+btnCompartilhar.href = link;
+btnCompartilhar.target = "_blank";
+btnCompartilhar.className = "btn-maps";
+btnCompartilhar.innerText = "📍 Abrir Rota no Google Maps";
+
+document.getElementById("mapaRota").appendChild(btnCompartilhar);
+
 
 document.querySelectorAll("input").forEach(i => i.disabled = true);
 
@@ -983,6 +993,29 @@ pontos.forEach((p, i) => {
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
   const j=await r.json();
   
+}
+function gerarLinkGoogleMaps(rota) {
+
+  const origem = `${BASE_COORDS.lat},${BASE_COORDS.lng}`;
+
+  const paradas = rota.map(r => {
+    const input = document.getElementById("cliente" + r.idx);
+    const lat = parseFloat(input.dataset.lat);
+    const lng = parseFloat(input.dataset.lng);
+
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return `${lat},${lng}`;
+    }
+
+    const cidade = document.getElementById("cidade" + r.idx).value;
+    return encodeURIComponent(cidade + " MG");
+  });
+
+  const destino = origem;
+
+  const url = `https://www.google.com/maps/dir/${origem}/${paradas.join("/")}/${destino}`;
+
+  return url;
 }
 
 /* ================= CALCULAR FRETE ================= */
