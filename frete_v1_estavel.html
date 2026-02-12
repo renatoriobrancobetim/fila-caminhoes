@@ -1124,6 +1124,9 @@ if (todosComFreteFixo) {
   
   const capacidadeTotal=litrosArr.reduce((a,b)=>a+b,0);
   const cargaParcial=litrosUsados<capacidadeTotal;
+  const percentualOcupacao = (litrosUsados / capacidadeTotal) * 100;
+const percentualFormatado = percentualOcupacao.toFixed(0);
+
   const somaFretesFixos = itensComFixo.reduce(
   (s, i) => s + (i.freteFixo * i.litros), 0
 );
@@ -1298,6 +1301,42 @@ if (i.freteFixo !== null) {
     </div>
   `).join("")}
 </div>
+html += `
+<div class="card-linha ocupacao-card">
+
+  <div class="card-item full">
+    <span>🚛 OCUPAÇÃO DO CAMINHÃO</span>
+  </div>
+
+  <div class="card-item full">
+    <div class="ocupacao-info">
+      <div>
+        <strong>Capacidade:</strong> ${numero(capacidadeTotal)} L
+      </div>
+      <div>
+        <strong>Utilizado:</strong> ${numero(litrosUsados)} L
+      </div>
+      <div>
+        <strong>Ocupação:</strong> ${percentualFormatado}%
+      </div>
+    </div>
+
+    <div 
+  class="barra-preenchida ${ 
+    percentualOcupacao >= 80 ? 'ocupacao-alta' :
+    percentualOcupacao >= 50 ? 'ocupacao-media' :
+    'ocupacao-baixa'
+  }"
+  style="width: ${percentualOcupacao}%"
+></div>
+
+    </div>
+
+  </div>
+
+</div>
+`;
+
 
 
 
