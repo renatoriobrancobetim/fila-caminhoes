@@ -1209,4 +1209,15 @@ th{
 .cidade-travada + .lock-icon {
   opacity: 1;
 }
+.ocupacao-alta {
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+.ocupacao-media {
+  background: linear-gradient(90deg, #eab308, #facc15);
+}
+
+.ocupacao-baixa {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+}
 
