@@ -238,6 +238,24 @@ function normalizarCidade(nome){
     .trim()
     .toUpperCase();
 }
+function validarCidadeInput(input) {
+  const valorDigitado = normalizarCidade(input.value);
+
+  if (!valorDigitado) {
+    input.value = "";
+    return;
+  }
+
+  if (!cidadesCoords[valorDigitado]) {
+    alert("Cidade inválida. Selecione uma cidade da lista.");
+    input.value = "";
+    input.focus();
+    return;
+  }
+
+  // 🔒 Normaliza visualmente para padrão oficial
+  input.value = valorDigitado;
+}
 
 /* ================= VARIÁVEIS ================= */
 /* ================= VARIÁVEIS ================= */
@@ -485,7 +503,15 @@ function gerarTabela(){
   >
 </td>
 
-      <td><input id="cidade${i}" class="cidade uppercase" list="cidadesMG"></td>
+      <td>
+  <input
+    id="cidade${i}"
+    class="cidade uppercase"
+    list="cidadesMG"
+    onblur="validarCidadeInput(this)"
+  >
+</td>
+
       <td><input id="horario${i}" type="time"></td>
       <td>${numero(l)}</td>
       <td>
