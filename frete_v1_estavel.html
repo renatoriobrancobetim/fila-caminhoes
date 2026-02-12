@@ -513,7 +513,12 @@ function gerarTabela(){
 </td>
 
       <td><input id="horario${i}" type="time"></td>
-      <td>${numero(l)}</td>
+      <td>
+  <span class="badge-litros">
+    ${numero(l)} L
+  </span>
+</td>
+
       <td>
   <input
     id="freteFixo${i}"
