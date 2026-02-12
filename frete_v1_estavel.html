@@ -1279,8 +1279,11 @@ if (i.freteFixo !== null) {
 `;
 
 
-  html += `
+ html += `
   <div class="resumo-cards">
+
+    <div class="performance-rota">
+
 
     <!-- MÉTRICAS DO FRETE -->
     <div class="card-linha azul">
@@ -1310,7 +1313,7 @@ if (i.freteFixo !== null) {
       </div>
     </div>
 
-<div class="card-linha tempo-detalhado">
+<div class="tempo-detalhado">
 
   <!-- TRECHOS -->
 <div class="tempo-trechos">
@@ -1331,14 +1334,8 @@ if (i.freteFixo !== null) {
   `).join("")}
 </div>
 
-</div>
+</div> <!-- fecha tempo-trechos -->
 
-</div>
-
-</div>
-
-<!-- TOTAL -->
-<div class="tempo-total-container">
 
   <div class="tempo-total-card-suave">
     <div class="tempo-total-header">
@@ -1392,7 +1389,8 @@ if (tempoRota.pausasDescanso > 0) {
 
 if (alertasOperacionais.length > 0) {
   html += `
-    <div class="card-linha alerta">
+    <div class="alerta-performance">
+
 
       <div class="card-item full">
         <span>⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA</span>
