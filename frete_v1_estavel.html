@@ -691,27 +691,39 @@ document.getElementById("btnCalcular").classList.add("btn-destaque");
 async function recalcularKM(){
   const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  if (rows.length === 0) {
+  // 🔥 FILTRA APENAS LINHAS COM CLIENTE OU CIDADE VÁLIDA
+  const rowsValidas = rows.filter(r => {
+    const clienteInput = r.querySelector("input[id^='cliente']");
+    const cidadeInput  = r.querySelector(".cidade");
+
+    const lat = parseFloat(clienteInput?.dataset?.lat);
+    const lng = parseFloat(clienteInput?.dataset?.lng);
+    const cidade = normalizarCidade(cidadeInput?.value || "");
+
+    return (
+      (!isNaN(lat) && !isNaN(lng)) ||
+      (cidade && cidadesCoords[cidade])
+    );
+  });
+
+  if (rowsValidas.length === 0) {
     document.getElementById("kmTotal").value = "0.00";
     return;
   }
 
   let km = 0;
 
-  const primeiraRow = rows[0];
-  const primeiroCliente = primeiraRow.querySelector("input[id^='cliente']");
-
+  const primeiroCliente = rowsValidas[0].querySelector("input[id^='cliente']");
   km += await distanciaBaseCliente(primeiroCliente);
 
-  for (let i = 0; i < rows.length - 1; i++) {
-    const clienteA = rows[i].querySelector("input[id^='cliente']");
-    const clienteB = rows[i + 1].querySelector("input[id^='cliente']");
-
+  for (let i = 0; i < rowsValidas.length - 1; i++) {
+    const clienteA = rowsValidas[i].querySelector("input[id^='cliente']");
+    const clienteB = rowsValidas[i + 1].querySelector("input[id^='cliente']");
     km += await distanciaEntreClientes(clienteA, clienteB);
   }
 
-  const ultimaRow = rows[rows.length - 1];
-  const ultimoCliente = ultimaRow.querySelector("input[id^='cliente']");
+  const ultimoCliente = rowsValidas[rowsValidas.length - 1]
+    .querySelector("input[id^='cliente']");
 
   km += await distanciaBaseCliente(ultimoCliente);
 
@@ -1405,20 +1417,31 @@ const progresso = isParcial
   requestAnimationFrame(step);
 }
 async function calcularTempoRota() {
-  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
+const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  const TEMPO_DISPERSAO_MIN = 30;
-  const TEMPO_DESCARGA_MIN = 50;
+// 🔥 FILTRA SOMENTE PARADAS VÁLIDAS
+const rowsValidas = rows.filter(r => {
+  const clienteInput = r.querySelector("input[id^='cliente']");
+  const cidadeInput  = r.querySelector(".cidade");
 
-  const etapas = [];
+  const lat = parseFloat(clienteInput?.dataset?.lat);
+  const lng = parseFloat(clienteInput?.dataset?.lng);
+  const cidade = normalizarCidade(cidadeInput?.value || "");
 
-  if (rows.length === 0) {
-    return {
-      etapas: [],
-      tempoTotalH: 0,
-      textoTotal: "0h 0min"
-    };
-  }
+  return (
+    (!isNaN(lat) && !isNaN(lng)) ||
+    (cidade && cidadesCoords[cidade])
+  );
+});
+
+if (rowsValidas.length === 0) {
+  return {
+    etapas: [],
+    tempoTotalH: 0,
+    textoTotal: "0h 0min"
+  };
+}
+
 
   // BASE → PRIMEIRO CLIENTE REAL
   const primeiroCliente = rows[0].querySelector("input[id^='cliente']");
