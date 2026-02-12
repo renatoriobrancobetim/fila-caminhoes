@@ -1235,4 +1235,25 @@ th{
 .btn-maps:hover {
   background: #1557b0;
 }
+.performance-rota {
+  margin-top: 25px;
+  padding: 20px;
+  border: 2px solid #2c5aa0;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.tempo-detalhado {
+  margin-bottom: 20px;
+}
+
+.alerta-performance {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff4f4;
+  border-left: 4px solid #c62828;
+  font-weight: 600;
+  color: #b71c1c;
+}
 
