@@ -1417,51 +1417,60 @@ const progresso = isParcial
   requestAnimationFrame(step);
 }
 async function calcularTempoRota() {
-const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-// 🔥 FILTRA SOMENTE PARADAS VÁLIDAS
-const rowsValidas = rows.filter(r => {
-  const clienteInput = r.querySelector("input[id^='cliente']");
-  const cidadeInput  = r.querySelector(".cidade");
+  const TEMPO_DISPERSAO_MIN = 30;
+  const TEMPO_DESCARGA_MIN = 50;
 
-  const lat = parseFloat(clienteInput?.dataset?.lat);
-  const lng = parseFloat(clienteInput?.dataset?.lng);
-  const cidade = normalizarCidade(cidadeInput?.value || "");
+  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  return (
-    (!isNaN(lat) && !isNaN(lng)) ||
-    (cidade && cidadesCoords[cidade])
-  );
-});
+  // 🔥 FILTRA SOMENTE PARADAS VÁLIDAS
+  const rowsValidas = rows.filter(r => {
+    const clienteInput = r.querySelector("input[id^='cliente']");
+    const cidadeInput  = r.querySelector(".cidade");
 
-if (rowsValidas.length === 0) {
-  return {
-    etapas: [],
-    tempoTotalH: 0,
-    textoTotal: "0h 0min"
-  };
-}
+    const lat = parseFloat(clienteInput?.dataset?.lat);
+    const lng = parseFloat(clienteInput?.dataset?.lng);
+    const cidade = normalizarCidade(cidadeInput?.value || "");
 
+    return (
+      (!isNaN(lat) && !isNaN(lng)) ||
+      (cidade && cidadesCoords[cidade])
+    );
+  });
 
-  // BASE → PRIMEIRO CLIENTE REAL
-  const primeiroCliente = rows[0].querySelector("input[id^='cliente']");
+  if (rowsValidas.length === 0) {
+    return {
+      etapas: [],
+      tempoTotalH: 0,
+      textoTotal: "0h 0min"
+    };
+  }
+
+  const etapas = [];
+
+  // ================= BASE → PRIMEIRO CLIENTE =================
+  const primeiroCliente = rowsValidas[0].querySelector("input[id^='cliente']");
+  const primeiraCidade  = rowsValidas[0].querySelector(".cidade").value;
+
   const kmBase = await distanciaBaseCliente(primeiroCliente);
   const velBase = velocidadeMediaPorTrecho(kmBase);
 
   etapas.push({
-    trecho: `Base → ${rows[0].querySelector(".cidade").value}`,
+    trecho: `Base → ${primeiraCidade}`,
     km: kmBase,
     velocidade: velBase,
     tempoViagemH: kmBase / velBase,
     tempoDescargaH: TEMPO_DESCARGA_MIN / 60
   });
 
-  // ENTRE CLIENTES NA ORDEM REAL
-  for (let i = 0; i < rows.length - 1; i++) {
-    const clienteA = rows[i].querySelector("input[id^='cliente']");
-    const clienteB = rows[i + 1].querySelector("input[id^='cliente']");
-    const cidadeA = rows[i].querySelector(".cidade").value;
-    const cidadeB = rows[i + 1].querySelector(".cidade").value;
+  // ================= ENTRE CLIENTES =================
+  for (let i = 0; i < rowsValidas.length - 1; i++) {
+
+    const clienteA = rowsValidas[i].querySelector("input[id^='cliente']");
+    const clienteB = rowsValidas[i + 1].querySelector("input[id^='cliente']");
+
+    const cidadeA = rowsValidas[i].querySelector(".cidade").value;
+    const cidadeB = rowsValidas[i + 1].querySelector(".cidade").value;
 
     const kmTrecho = await distanciaEntreClientes(clienteA, clienteB);
     const velTrecho = velocidadeMediaPorTrecho(kmTrecho);
@@ -1475,23 +1484,12 @@ if (rowsValidas.length === 0) {
     });
   }
 
-  const tempoDeslocamentoH = etapas.reduce(
-    (s, e) => s + e.tempoViagemH,
-    0
-  );
+  // ================= SOMATÓRIOS =================
+  const tempoDeslocamentoH = etapas.reduce((s, e) => s + e.tempoViagemH, 0);
+  const tempoDescargaH = etapas.reduce((s, e) => s + e.tempoDescargaH, 0);
+  const tempoDispersaoH = (dispersoesCount * TEMPO_DISPERSAO_MIN) / 60;
 
-  const tempoDescargaH = etapas.reduce(
-    (s, e) => s + e.tempoDescargaH,
-    0
-  );
-
- const tempoDispersaoH = (dispersoesCount * TEMPO_DISPERSAO_MIN) / 60;
-
-
-  let tempoTotalH =
-    tempoDeslocamentoH +
-    tempoDescargaH +
-    tempoDispersaoH;
+  let tempoTotalH = tempoDeslocamentoH + tempoDescargaH + tempoDispersaoH;
 
   const incluiAlmoco = tempoTotalH > 6;
   if (incluiAlmoco) tempoTotalH += 1;
@@ -1516,6 +1514,7 @@ if (rowsValidas.length === 0) {
     textoTotal: `${horas}h ${minutos}min`
   };
 }
+
 
 // ================= VELOCIDADE MÉDIA POR TRECHO (INDUSTRIAL) =================
 function velocidadeMediaPorTrecho(km) {
