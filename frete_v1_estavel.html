@@ -1342,21 +1342,25 @@ if (i.freteFixo !== null) {
   </div>
 
 
-  <div class="tempo-total-card-suave">
-   
-    <div class="tempo-total-header">
-      ⏱ TEMPO TOTAL DA OPERAÇÃO
-    </div>
+  <div class="card-trecho card-tempo-total">
 
-    <div class="tempo-total-valor">
-      ${tempoRota.textoTotal}
-    </div>
-
-    <div class="tempo-total-extra">
-      ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)" : ""}
-      ${tempoRota.pausasDescanso ? "<br>🛑 Descanso legal (30min)" : ""}
-    </div>
+  <div class="trecho-header">
+    ⏱ TEMPO TOTAL DA OPERAÇÃO
   </div>
+
+  <div class="trecho-info tempo-total-info">
+    <span class="tempo-total-grande">
+      ${tempoRota.textoTotal}
+    </span>
+  </div>
+
+  <div class="tempo-extra-info">
+    ${tempoRota.incluiAlmoco ? "🍽 Almoço (1h)" : ""}
+    ${tempoRota.pausasDescanso ? "<br>🛑 Descanso legal (30min)" : ""}
+  </div>
+
+</div>
+
 
 </div>
 
