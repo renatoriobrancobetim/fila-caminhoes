@@ -1277,41 +1277,44 @@ if (i.freteFixo !== null) {
   </div>
 </div>
 `;
+html += `
+<div class="card-linha azul card-metricas-superior">
+
+  <div class="card-item">
+    <span>KM TOTAL</span>
+    <strong>${kmLabel}</strong>
+  </div>
+
+  <div class="card-item">
+    <span>ÍNDICE</span>
+    <strong>${indiceLabel}</strong>
+  </div>
+
+  <div class="card-item">
+    <span>TAXA</span>
+    <strong>${taxaLabel}</strong>
+  </div>
+
+  <div class="card-item">
+    <span>M³ TOTAL</span>
+    <strong>${m3Total}</strong>
+  </div>
+
+  <div class="card-item">
+    <span>FRETE UNIT. MÉDIO</span>
+    <strong>${moeda3(freteUnitMedio)}</strong>
+  </div>
+
+  <div class="card-item destaque">
+    <span>FRETE TOTAL</span>
+    <strong>${moeda(freteTotal)}</strong>
+  </div>
+
+</div>
+`;
 
 
- html += `
-  <div class="resumo-cards">
 
-    <div class="performance-rota">
-
-
-    <!-- MÉTRICAS DO FRETE -->
-    <div class="card-linha azul">
-      <div class="card-item">
-        <span>KM TOTAL</span>
-        <strong>${kmLabel}</strong>
-      </div>
-      <div class="card-item">
-        <span>ÍNDICE</span>
-        <strong>${indiceLabel}</strong>
-      </div>
-      <div class="card-item">
-        <span>TAXA</span>
-        <strong>${taxaLabel}</strong>
-      </div>
-      <div class="card-item">
-        <span>M³ TOTAL</span>
-        <strong>${m3Total}</strong>
-      </div>
-      <div class="card-item">
-        <span>FRETE UNIT. MÉDIO</span>
-        <strong>${moeda3(freteUnitMedio)}</strong>
-      </div>
-      <div class="card-item destaque">
-        <span>FRETE TOTAL</span>
-        <strong>${moeda(freteTotal)}</strong>
-      </div>
-    </div>
 
 <div class="tempo-detalhado">
 
