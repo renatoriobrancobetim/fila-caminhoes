@@ -1317,8 +1317,30 @@ if (i.freteFixo !== null) {
 
   <!-- TRECHOS -->
   <div class="tempo-trechos">
-    ...
+    ${
+      tempoRota.etapas.map((e, index) => {
+
+        const tempoViagemMin = Math.round(e.tempoViagemH * 60);
+        const horas = Math.floor(tempoViagemMin / 60);
+        const minutos = tempoViagemMin % 60;
+
+        return `
+          <div class="card-trecho">
+            <div class="trecho-header">
+              🚚 ${e.trecho}
+            </div>
+
+            <div class="trecho-info">
+              <span>📍 ${e.km.toFixed(1)} km</span>
+              <span>⚡ ${e.velocidade} km/h</span>
+              <span>⏱ ${horas}h ${minutos}min</span>
+            </div>
+          </div>
+        `;
+      }).join("")
+    }
   </div>
+
 
   <div class="tempo-total-card-suave">
    
