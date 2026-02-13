@@ -1525,12 +1525,12 @@ const progresso = isParcial
 }
 async function calcularTempoRota() {
 
-  const TEMPO_DISPERSAO_MIN = 30;
   const TEMPO_DESCARGA_MIN = 50;
+  const JORNADA_DIARIA_H = 9.5; // 8h + 1h almoço + 0.5h descanso
 
   const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
 
-  // 🔥 FILTRA SOMENTE PARADAS VÁLIDAS
+  // ================= FILTRA PARADAS VÁLIDAS =================
   const rowsValidas = rows.filter(r => {
     const clienteInput = r.querySelector("input[id^='cliente']");
     const cidadeInput  = r.querySelector(".cidade");
@@ -1549,13 +1549,13 @@ async function calcularTempoRota() {
     return {
       etapas: [],
       tempoTotalH: 0,
-      textoTotal: "0h 0min"
+      textoTotal: "0 dias 0h 0min"
     };
   }
 
   const etapas = [];
 
-  // ================= BASE → PRIMEIRO CLIENTE =================
+  // ================= BASE → PRIMEIRO =================
   const primeiroCliente = rowsValidas[0].querySelector("input[id^='cliente']");
   const primeiraCidade  = rowsValidas[0].querySelector(".cidade").value;
 
@@ -1566,8 +1566,7 @@ async function calcularTempoRota() {
     trecho: `Base → ${primeiraCidade}`,
     km: kmBase,
     velocidade: velBase,
-    tempoViagemH: kmBase / velBase,
-    tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+    tempoViagemH: kmBase / velBase
   });
 
   // ================= ENTRE CLIENTES =================
@@ -1586,56 +1585,62 @@ async function calcularTempoRota() {
       trecho: `${cidadeA} → ${cidadeB}`,
       km: kmTrecho,
       velocidade: velTrecho,
-      tempoViagemH: kmTrecho / velTrecho,
-      tempoDescargaH: TEMPO_DESCARGA_MIN / 60
+      tempoViagemH: kmTrecho / velTrecho
     });
   }
-// ================= ÚLTIMO CLIENTE → BASE =================
-const ultimaRow = rowsValidas[rowsValidas.length - 1];
-const ultimoCliente = ultimaRow.querySelector("input[id^='cliente']");
-const ultimaCidade  = ultimaRow.querySelector(".cidade").value;
 
-const kmRetorno = await distanciaBaseCliente(ultimoCliente);
-const velRetorno = velocidadeMediaPorTrecho(kmRetorno);
+  // ================= ÚLTIMO → BASE =================
+  const ultimaRow = rowsValidas[rowsValidas.length - 1];
+  const ultimoCliente = ultimaRow.querySelector("input[id^='cliente']");
+  const ultimaCidade  = ultimaRow.querySelector(".cidade").value;
 
-etapas.push({
-  trecho: `${ultimaCidade} → Base`,
-  km: kmRetorno,
-  velocidade: velRetorno,
-  tempoViagemH: kmRetorno / velRetorno,
-  tempoDescargaH: 0 // não há descarga no retorno
-});
+  const kmRetorno = await distanciaBaseCliente(ultimoCliente);
+  const velRetorno = velocidadeMediaPorTrecho(kmRetorno);
 
-  // ================= SOMATÓRIOS =================
+  etapas.push({
+    trecho: `${ultimaCidade} → Base`,
+    km: kmRetorno,
+    velocidade: velRetorno,
+    tempoViagemH: kmRetorno / velRetorno
+  });
+
+  // ================= SOMA DESLOCAMENTO =================
   const tempoDeslocamentoH = etapas.reduce((s, e) => s + e.tempoViagemH, 0);
-  const tempoDescargaH = etapas.reduce((s, e) => s + e.tempoDescargaH, 0);
-  const tempoDispersaoH = (dispersoesCount * TEMPO_DISPERSAO_MIN) / 60;
 
-  let tempoTotalH = tempoDeslocamentoH + tempoDescargaH + tempoDispersaoH;
+  // ================= DESCARGA POR CLIENTE ÚNICO =================
+  const clientesUnicos = new Set(
+    rowsValidas.map(r =>
+      r.querySelector("input[id^='cliente']").value.trim().toUpperCase()
+    )
+  );
 
-  const incluiAlmoco = tempoTotalH > 6;
-  if (incluiAlmoco) tempoTotalH += 1;
+  const tempoDescargaH = (clientesUnicos.size * TEMPO_DESCARGA_MIN) / 60;
 
-  let pausasDescanso = 0;
-  if (tempoDeslocamentoH > 5.5) {
-    pausasDescanso = 0.5;
-    tempoTotalH += pausasDescanso;
+  // ================= TEMPO TOTAL BRUTO =================
+  const tempoTotalBrutoH = tempoDeslocamentoH + tempoDescargaH;
+
+  // ================= CÁLCULO DE DIAS =================
+  const dias = Math.ceil(tempoTotalBrutoH / JORNADA_DIARIA_H);
+
+  let horasRestantes = tempoTotalBrutoH;
+
+  if (dias > 1) {
+    horasRestantes = tempoTotalBrutoH - ((dias - 1) * JORNADA_DIARIA_H);
   }
 
-  const horas = Math.floor(tempoTotalH);
-  const minutos = Math.round((tempoTotalH - horas) * 60);
+  const horas = Math.floor(horasRestantes);
+  const minutos = Math.round((horasRestantes - horas) * 60);
 
   return {
     etapas,
     tempoDeslocamentoH,
     tempoDescargaH,
-    tempoDispersaoH,
-    incluiAlmoco,
-    pausasDescanso,
-    tempoTotalH,
-    textoTotal: `${horas}h ${minutos}min`
+    tempoTotalH: tempoTotalBrutoH,
+    dias,
+    textoTotal: `${dias} dia(s) e ${horas}h ${minutos}min`
   };
 }
+
 
 
 // ================= VELOCIDADE MÉDIA POR TRECHO (INDUSTRIAL) =================
