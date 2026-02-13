@@ -1320,4 +1320,22 @@ th{
   font-size: 13px;
   color: #555;
 }
+/* ================= CARD ALERTA OPERACIONAL ================= */
+
+.card-alerta-operacional {
+  border-left: 4px solid #c62828;
+  background: linear-gradient(135deg, #fff5f5, #ffecec);
+}
+
+.card-alerta-operacional:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(198,40,40,0.18);
+}
+
+.alerta-info {
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 500;
+  color: #b71c1c;
+}
 
