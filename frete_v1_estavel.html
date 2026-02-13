@@ -1399,16 +1399,20 @@ if (tempoRota.pausasDescanso > 0) {
 
 if (alertasOperacionais.length > 0) {
   html += `
-    <div class="alerta-performance">
-      <div class="card-item full">
-        <span>⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA</span>
-        <strong>
-          ${alertasOperacionais.join("<br>")}
-        </strong>
+    <div class="card-trecho card-alerta-operacional">
+
+      <div class="trecho-header">
+        ⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA
       </div>
+
+      <div class="trecho-info alerta-info">
+        ${alertasOperacionais.map(a => `<div>• ${a}</div>`).join("")}
+      </div>
+
     </div>
   `;
 }
+
 
 html += `
     </div> <!-- fecha performance-rota -->
