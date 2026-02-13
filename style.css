@@ -1293,4 +1293,31 @@ th{
   flex-wrap: wrap;
   color: #444;
 }
+/* ================= CARD TEMPO TOTAL ================= */
+
+.card-tempo-total {
+  border-left: 4px solid #0d47a1;
+  background: linear-gradient(135deg, #ffffff, #f3f6fb);
+  min-width: 280px;
+}
+
+.card-tempo-total:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.tempo-total-info {
+  justify-content: center;
+}
+
+.tempo-total-grande {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0d47a1;
+}
+
+.tempo-extra-info {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #555;
+}
 
