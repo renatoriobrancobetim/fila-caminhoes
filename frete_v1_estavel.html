@@ -1590,6 +1590,21 @@ async function calcularTempoRota() {
       tempoDescargaH: TEMPO_DESCARGA_MIN / 60
     });
   }
+// ================= ÚLTIMO CLIENTE → BASE =================
+const ultimaRow = rowsValidas[rowsValidas.length - 1];
+const ultimoCliente = ultimaRow.querySelector("input[id^='cliente']");
+const ultimaCidade  = ultimaRow.querySelector(".cidade").value;
+
+const kmRetorno = await distanciaBaseCliente(ultimoCliente);
+const velRetorno = velocidadeMediaPorTrecho(kmRetorno);
+
+etapas.push({
+  trecho: `${ultimaCidade} → Base`,
+  km: kmRetorno,
+  velocidade: velRetorno,
+  tempoViagemH: kmRetorno / velRetorno,
+  tempoDescargaH: 0 // não há descarga no retorno
+});
 
   // ================= SOMATÓRIOS =================
   const tempoDeslocamentoH = etapas.reduce((s, e) => s + e.tempoViagemH, 0);
