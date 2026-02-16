@@ -291,8 +291,10 @@ let clientesCarregados = false;
 let cidadesCarregadas = false;
 
 let infoDispersaoHTML = "";
-  let dispersoesCount = 0;
-  let distanciaCache = {};
+let dispersoesCount = 0;
+let dispersoesGlobais = []; // 👈 NOVA
+let distanciaCache = {};
+
 
 
 
@@ -681,17 +683,37 @@ for (let i = 0; i < rota.length - 1; i++) {
 
   const d = await distanciaEntreClientes(clienteA, clienteB);
 
-  if (d >= 70) {
-    dispersoes.push({
-      de: cidadeA,
-      para: cidadeB,
-      km: d.toFixed(1)
-    });
+if (d >= 70) {
+
+  let nivel = "";
+  let classe = "";
+
+  if (d >= 150) {
+    nivel = "CRÍTICA";
+    classe = "critica";
+  } else if (d >= 100) {
+    nivel = "ALTA";
+    classe = "alta";
+  } else {
+    nivel = "MODERADA";
+    classe = "moderada";
   }
+
+  dispersoes.push({
+    de: cidadeA,
+    para: cidadeB,
+    km: d.toFixed(1),
+    nivel,
+    classe
+  });
+}
+
 }
 
 // ✅ AGORA SIM — DEPOIS do loop
 dispersoesCount = dispersoes.length;
+dispersoesGlobais = dispersoes; // 👈 salva globalmente
+
 
 
 
@@ -712,9 +734,14 @@ if (dispersoes.length > 0) {
     <div class="condicao-texto">
            <strong>⚠️ Dispersão maior que 70 km identificada</strong></span>
        <ul>
-        ${dispersoes.map(d =>
-          `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
-        ).join("")}
+${dispersoes.map(d =>
+  `<li class="disp-${d.classe}">
+     ${d.de} → ${d.para} 
+     <strong>${d.km} km</strong> 
+     <span>(${d.nivel})</span>
+   </li>`
+).join("")}
+
       </ul>
         </div>
   </div>
@@ -1385,8 +1412,20 @@ const alertasOperacionais = [];
 
 // dispersão
 if (dispersoesCount > 0) {
-  alertasOperacionais.push("⚠️ Dispersão maior que 70 km identificada");
+
+ const existeCritica = dispersoesGlobais.some(d => d.nivel === "CRÍTICA");
+const existeAlta = dispersoesGlobais.some(d => d.nivel === "ALTA");
+
+
+  if (existeCritica) {
+    alertasOperacionais.push("🔴 Dispersão crítica – recomendável dividir a rota");
+  } else if (existeAlta) {
+    alertasOperacionais.push("🟠 Dispersão alta – avaliar divisão de rota");
+  } else {
+    alertasOperacionais.push("🟡 Dispersão moderada identificada");
+  }
 }
+
 
 
 // rota longa
@@ -1435,24 +1474,98 @@ if (tempoRota.pausasDescanso > 0) {
   alertasOperacionais.push("🛑 Exige pausa legal do motorista");
 }
 
+// ================= INDICADOR VISUAL DA ROTA =================
+let statusRota = {
+  texto: "🟢 ROTA COMPACTA",
+  classe: "rota-compacta"
+};
 
-if (alertasOperacionais.length > 0) {
-  html += `
-    <div class="card-trecho card-alerta-operacional">
+let kmDispersoTotal = 0;
+let maiorTrechoDisperso = 0;
+let percentualDispersao = 0;
 
-      <div class="trecho-header">
-        ⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA
-      </div>
+if (dispersoesGlobais.length > 0) {
 
-      <div class="trecho-info alerta-info">
-        ${alertasOperacionais.map(a => `<div>• ${a}</div>`).join("")}
-      </div>
+  kmDispersoTotal = dispersoesGlobais.reduce(
+    (s, d) => s + parseFloat(d.km),
+    0
+  );
 
-    </div>
-  `;
+  maiorTrechoDisperso = Math.max(
+    ...dispersoesGlobais.map(d => parseFloat(d.km))
+  );
+
+  const kmTotalAtual = parseFloat(
+    document.getElementById("kmTotal").value || 0
+  );
+
+  if (kmTotalAtual > 0) {
+    percentualDispersao = (kmDispersoTotal / kmTotalAtual) * 100;
+  }
+}
+
+if (dispersoesCount > 0) {
+
+  const existeCritica = dispersoesGlobais.some(d => d.nivel === "CRÍTICA");
+  const existeAlta = dispersoesGlobais.some(d => d.nivel === "ALTA");
+
+  let titulo = "";
+  let classe = "";
+
+  if (existeCritica) {
+    titulo = "🔴 ROTA CRÍTICA";
+    classe = "rota-critica";
+  } else if (existeAlta) {
+    titulo = "🟠 ROTA COM DISPERSÃO";
+    classe = "rota-alta";
+  } else {
+    titulo = "🟡 ROTA MODERADA";
+    classe = "rota-moderada";
+  }
+
+  statusRota = {
+    texto: `
+      ${titulo} – ${kmDispersoTotal.toFixed(0)} km dispersos
+      <br><small>
+      Maior trecho: ${maiorTrechoDisperso.toFixed(0)} km
+      <br>
+      Representa ${percentualDispersao.toFixed(0)}% da rota
+      </small>
+    `,
+    classe
+  };
 }
 
 
+
+
+
+// Sempre mostrar bloco operacional
+html += `
+  <div class="card-trecho card-alerta-operacional">
+
+    <div class="trecho-header">
+      ⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA
+    </div>
+
+    <div class="trecho-info alerta-info">
+
+      <div class="indicador-rota ${statusRota.classe}">
+        ${statusRota.texto}
+      </div>
+
+      ${
+        alertasOperacionais.length > 0
+          ? alertasOperacionais.map(a => `<div>• ${a}</div>`).join("")
+          : "<div>• Operação dentro dos parâmetros normais</div>"
+      }
+
+    </div>
+
+  </div>
+`;
+
+   
 html += `
 </div> <!-- fecha resumo-box -->
 `;
