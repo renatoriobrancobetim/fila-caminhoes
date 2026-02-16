@@ -681,13 +681,31 @@ for (let i = 0; i < rota.length - 1; i++) {
 
   const d = await distanciaEntreClientes(clienteA, clienteB);
 
-  if (d >= 70) {
-    dispersoes.push({
-      de: cidadeA,
-      para: cidadeB,
-      km: d.toFixed(1)
-    });
+if (d >= 70) {
+
+  let nivel = "";
+  let classe = "";
+
+  if (d >= 150) {
+    nivel = "CRÍTICA";
+    classe = "critica";
+  } else if (d >= 100) {
+    nivel = "ALTA";
+    classe = "alta";
+  } else {
+    nivel = "MODERADA";
+    classe = "moderada";
   }
+
+  dispersoes.push({
+    de: cidadeA,
+    para: cidadeB,
+    km: d.toFixed(1),
+    nivel,
+    classe
+  });
+}
+
 }
 
 // ✅ AGORA SIM — DEPOIS do loop
@@ -712,9 +730,14 @@ if (dispersoes.length > 0) {
     <div class="condicao-texto">
            <strong>⚠️ Dispersão maior que 70 km identificada</strong></span>
        <ul>
-        ${dispersoes.map(d =>
-          `<li>${d.de} → ${d.para} <span>(${d.km} km)</span></li>`
-        ).join("")}
+${dispersoes.map(d =>
+  `<li class="disp-${d.classe}">
+     ${d.de} → ${d.para} 
+     <strong>${d.km} km</strong> 
+     <span>(${d.nivel})</span>
+   </li>`
+).join("")}
+
       </ul>
         </div>
   </div>
@@ -1385,8 +1408,19 @@ const alertasOperacionais = [];
 
 // dispersão
 if (dispersoesCount > 0) {
-  alertasOperacionais.push("⚠️ Dispersão maior que 70 km identificada");
+
+  const existeCritica = dispersoes.some(d => d.nivel === "CRÍTICA");
+  const existeAlta = dispersoes.some(d => d.nivel === "ALTA");
+
+  if (existeCritica) {
+    alertasOperacionais.push("🔴 Dispersão crítica – recomendável dividir a rota");
+  } else if (existeAlta) {
+    alertasOperacionais.push("🟠 Dispersão alta – avaliar divisão de rota");
+  } else {
+    alertasOperacionais.push("🟡 Dispersão moderada identificada");
+  }
 }
+
 
 
 // rota longa
