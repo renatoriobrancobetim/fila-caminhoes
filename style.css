@@ -1341,4 +1341,7 @@ th{
 .card-metricas-superior {
   margin: 18px 0 28px 0;
 }
+.disp-moderada { color: #f9a825; }
+.disp-alta { color: #ef6c00; font-weight: bold; }
+.disp-critica { color: #c62828; font-weight: bold; }
 
