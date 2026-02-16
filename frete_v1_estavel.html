@@ -1475,10 +1475,21 @@ if (tempoRota.pausasDescanso > 0) {
 }
 
 // ================= INDICADOR VISUAL DA ROTA =================
-let statusRota = {
-  texto: "🟢 ROTA COMPACTA",
-  classe: "rota-compacta"
-};
+let kmDispersoTotal = 0;
+let maiorTrechoDisperso = 0;
+
+if (dispersoesGlobais.length > 0) {
+
+  kmDispersoTotal = dispersoesGlobais.reduce(
+    (s, d) => s + parseFloat(d.km),
+    0
+  );
+
+  maiorTrechoDisperso = Math.max(
+    ...dispersoesGlobais.map(d => parseFloat(d.km))
+  );
+}
+
 
 if (dispersoesCount > 0) {
 
@@ -1487,21 +1498,22 @@ if (dispersoesCount > 0) {
 
   if (existeCritica) {
     statusRota = {
-      texto: "🔴 ROTA CRÍTICA",
+      texto: `🔴 ROTA CRÍTICA – ${kmDispersoTotal.toFixed(0)} km de dispersão`,
       classe: "rota-critica"
     };
   } else if (existeAlta) {
     statusRota = {
-      texto: "🟠 ROTA COM DISPERSÃO",
+      texto: `🟠 ROTA COM DISPERSÃO – ${kmDispersoTotal.toFixed(0)} km de dispersão`,
       classe: "rota-alta"
     };
   } else {
     statusRota = {
-      texto: "🟡 ROTA MODERADA",
+      texto: `🟡 ROTA MODERADA – ${kmDispersoTotal.toFixed(0)} km de dispersão`,
       classe: "rota-moderada"
     };
   }
 }
+
 
 // Sempre mostrar bloco operacional
 html += `
