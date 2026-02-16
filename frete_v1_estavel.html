@@ -291,8 +291,10 @@ let clientesCarregados = false;
 let cidadesCarregadas = false;
 
 let infoDispersaoHTML = "";
-  let dispersoesCount = 0;
-  let distanciaCache = {};
+let dispersoesCount = 0;
+let dispersoesGlobais = []; // 👈 NOVA
+let distanciaCache = {};
+
 
 
 
@@ -710,6 +712,8 @@ if (d >= 70) {
 
 // ✅ AGORA SIM — DEPOIS do loop
 dispersoesCount = dispersoes.length;
+dispersoesGlobais = dispersoes; // 👈 salva globalmente
+
 
 
 
@@ -1409,8 +1413,9 @@ const alertasOperacionais = [];
 // dispersão
 if (dispersoesCount > 0) {
 
-  const existeCritica = dispersoes.some(d => d.nivel === "CRÍTICA");
-  const existeAlta = dispersoes.some(d => d.nivel === "ALTA");
+ const existeCritica = dispersoesGlobais.some(d => d.nivel === "CRÍTICA");
+const existeAlta = dispersoesGlobais.some(d => d.nivel === "ALTA");
+
 
   if (existeCritica) {
     alertasOperacionais.push("🔴 Dispersão crítica – recomendável dividir a rota");
