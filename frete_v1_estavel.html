@@ -1620,16 +1620,14 @@ async function calcularTempoRota() {
   const tempoTotalBrutoH = tempoDeslocamentoH + tempoDescargaH;
 
   // ================= CÁLCULO DE DIAS =================
-  const dias = Math.ceil(tempoTotalBrutoH / JORNADA_DIARIA_H);
+const totalMin = Math.round(tempoTotalBrutoH * 60);
 
-  let horasRestantes = tempoTotalBrutoH;
+const dias = Math.floor(totalMin / 1440); // 1440 = 24h
+const restoMin = totalMin % 1440;
 
-  if (dias > 1) {
-    horasRestantes = tempoTotalBrutoH - ((dias - 1) * JORNADA_DIARIA_H);
-  }
+const horas = Math.floor(restoMin / 60);
+const minutos = restoMin % 60;
 
-  const horas = Math.floor(horasRestantes);
-  const minutos = Math.round((horasRestantes - horas) * 60);
 
   return {
     etapas,
@@ -1637,7 +1635,10 @@ async function calcularTempoRota() {
     tempoDescargaH,
     tempoTotalH: tempoTotalBrutoH,
     dias,
-    textoTotal: `${dias} dia(s) e ${horas}h ${minutos}min`
+   textoTotal: dias > 0
+  ? `${dias} dia(s) e ${horas}h ${minutos}min`
+  : `${horas}h ${minutos}min`
+
   };
 }
 
