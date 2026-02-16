@@ -1390,9 +1390,30 @@ if (dispersoesCount > 0) {
 
 
 // rota longa
-if (tempoRota.tempoTotalH > 10) {
-  alertasOperacionais.push("🚨 Rota longa – risco operacional");
+const JORNADA_MOTORISTA = 9; // horas
+
+if (tempoRota.tempoTotalH > JORNADA_MOTORISTA) {
+
+  const totalMin = Math.round(tempoRota.tempoTotalH * 60);
+  const jornadaMin = JORNADA_MOTORISTA * 60;
+
+  const diasJornada = Math.floor(totalMin / jornadaMin);
+  const restoMin = totalMin % jornadaMin;
+
+  const horasRestantes = Math.floor(restoMin / 60);
+  const minutosRestantes = restoMin % 60;
+
+  let textoJornada;
+
+  if (restoMin === 0) {
+    textoJornada = `🚛 Exige ${diasJornada} dia(s) de jornada (9h/dia)`;
+  } else {
+    textoJornada = `🚛 Exige ${diasJornada + 1} dia(s) de jornada (9h/dia)`;
+  }
+
+  alertasOperacionais.push(textoJornada);
 }
+
 
 // pausa legal
 if (tempoRota.pausasDescanso > 0) {
