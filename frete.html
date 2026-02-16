@@ -1390,9 +1390,45 @@ if (dispersoesCount > 0) {
 
 
 // rota longa
-if (tempoRota.tempoTotalH > 10) {
-  alertasOperacionais.push("🚨 Rota longa – risco operacional");
+const JORNADA_MOTORISTA = 9; // horas
+
+if (tempoRota.tempoTotalH > JORNADA_MOTORISTA) {
+
+  const totalMin = Math.round(tempoRota.tempoTotalH * 60);
+  const jornadaMin = JORNADA_MOTORISTA * 60;
+
+  const dias = Math.ceil(totalMin / jornadaMin);
+
+  let minutosRestantes = totalMin;
+  let detalhamento = [];
+
+  for (let i = 1; i <= dias; i++) {
+
+    if (minutosRestantes >= jornadaMin) {
+      detalhamento.push(`${i}º dia: 9h`);
+      minutosRestantes -= jornadaMin;
+    } else {
+
+      const h = Math.floor(minutosRestantes / 60);
+      const m = minutosRestantes % 60;
+
+      detalhamento.push(
+        `${i}º dia: ${h}h ${m > 0 ? m + "min" : ""}`.trim()
+      );
+
+      minutosRestantes = 0;
+    }
+  }
+
+  const textoJornada = `
+🚛 Exige ${dias} dias de jornada
+(${detalhamento.join(" | ")})
+`;
+
+  alertasOperacionais.push(textoJornada);
 }
+
+
 
 // pausa legal
 if (tempoRota.pausasDescanso > 0) {
@@ -1620,16 +1656,14 @@ async function calcularTempoRota() {
   const tempoTotalBrutoH = tempoDeslocamentoH + tempoDescargaH;
 
   // ================= CÁLCULO DE DIAS =================
-  const dias = Math.ceil(tempoTotalBrutoH / JORNADA_DIARIA_H);
+const totalMin = Math.round(tempoTotalBrutoH * 60);
 
-  let horasRestantes = tempoTotalBrutoH;
+const dias = Math.floor(totalMin / 1440); // 1440 = 24h
+const restoMin = totalMin % 1440;
 
-  if (dias > 1) {
-    horasRestantes = tempoTotalBrutoH - ((dias - 1) * JORNADA_DIARIA_H);
-  }
+const horas = Math.floor(restoMin / 60);
+const minutos = restoMin % 60;
 
-  const horas = Math.floor(horasRestantes);
-  const minutos = Math.round((horasRestantes - horas) * 60);
 
   return {
     etapas,
@@ -1637,7 +1671,10 @@ async function calcularTempoRota() {
     tempoDescargaH,
     tempoTotalH: tempoTotalBrutoH,
     dias,
-    textoTotal: `${dias} dia(s) e ${horas}h ${minutos}min`
+   textoTotal: dias > 0
+  ? `${dias} dia(s) e ${horas}h ${minutos}min`
+  : `${horas}h ${minutos}min`
+
   };
 }
 
