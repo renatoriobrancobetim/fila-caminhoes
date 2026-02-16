@@ -1503,9 +1503,31 @@ if (dispersoesCount > 0) {
   }
 }
 
-if (alertasOperacionais.length > 0) {
-  html += `
-    <div class="card-trecho card-alerta-operacional">
+// Sempre mostrar bloco operacional
+html += `
+  <div class="card-trecho card-alerta-operacional">
+
+    <div class="trecho-header">
+      ⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA
+    </div>
+
+    <div class="trecho-info alerta-info">
+
+      <div class="indicador-rota ${statusRota.classe}">
+        ${statusRota.texto}
+      </div>
+
+      ${
+        alertasOperacionais.length > 0
+          ? alertasOperacionais.map(a => `<div>• ${a}</div>`).join("")
+          : "<div>• Operação dentro dos parâmetros normais</div>"
+      }
+
+    </div>
+
+  </div>
+`;
+
 
       <div class="trecho-header">
         ⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA
