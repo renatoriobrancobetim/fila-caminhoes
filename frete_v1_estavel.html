@@ -1474,6 +1474,34 @@ if (tempoRota.pausasDescanso > 0) {
   alertasOperacionais.push("🛑 Exige pausa legal do motorista");
 }
 
+// ================= INDICADOR VISUAL DA ROTA =================
+let statusRota = {
+  texto: "🟢 ROTA COMPACTA",
+  classe: "rota-compacta"
+};
+
+if (dispersoesCount > 0) {
+
+  const existeCritica = dispersoesGlobais.some(d => d.nivel === "CRÍTICA");
+  const existeAlta = dispersoesGlobais.some(d => d.nivel === "ALTA");
+
+  if (existeCritica) {
+    statusRota = {
+      texto: "🔴 ROTA CRÍTICA",
+      classe: "rota-critica"
+    };
+  } else if (existeAlta) {
+    statusRota = {
+      texto: "🟠 ROTA COM DISPERSÃO",
+      classe: "rota-alta"
+    };
+  } else {
+    statusRota = {
+      texto: "🟡 ROTA MODERADA",
+      classe: "rota-moderada"
+    };
+  }
+}
 
 if (alertasOperacionais.length > 0) {
   html += `
@@ -1483,9 +1511,16 @@ if (alertasOperacionais.length > 0) {
         ⚠️ INFORMAÇÕES OPERACIONAIS E LOGÍSTICA
       </div>
 
-      <div class="trecho-info alerta-info">
-        ${alertasOperacionais.map(a => `<div>• ${a}</div>`).join("")}
-      </div>
+<div class="trecho-info alerta-info">
+
+  <div class="indicador-rota ${statusRota.classe}">
+    ${statusRota.texto}
+  </div>
+
+  ${alertasOperacionais.map(a => `<div>• ${a}</div>`).join("")}
+
+</div>
+
 
     </div>
   `;
