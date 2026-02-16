@@ -1482,6 +1482,12 @@ let statusRota = {
 
 let kmDispersoTotal = 0;
 let maiorTrechoDisperso = 0;
+let percentualDispersao = 0;
+
+if (km > 0 && kmDispersoTotal > 0) {
+  percentualDispersao = (kmDispersoTotal / km) * 100;
+}
+
 
 if (dispersoesGlobais.length > 0) {
 
@@ -1500,23 +1506,33 @@ if (dispersoesCount > 0) {
   const existeCritica = dispersoesGlobais.some(d => d.nivel === "CRÍTICA");
   const existeAlta = dispersoesGlobais.some(d => d.nivel === "ALTA");
 
+  let titulo = "";
+  let classe = "";
+
   if (existeCritica) {
-    statusRota = {
-      texto: `🔴 ROTA CRÍTICA – ${kmDispersoTotal.toFixed(0)} km de dispersão`,
-      classe: "rota-critica"
-    };
+    titulo = "🔴 ROTA CRÍTICA";
+    classe = "rota-critica";
   } else if (existeAlta) {
-    statusRota = {
-      texto: `🟠 ROTA COM DISPERSÃO – ${kmDispersoTotal.toFixed(0)} km de dispersão`,
-      classe: "rota-alta"
-    };
+    titulo = "🟠 ROTA COM DISPERSÃO";
+    classe = "rota-alta";
   } else {
-    statusRota = {
-      texto: `🟡 ROTA MODERADA – ${kmDispersoTotal.toFixed(0)} km de dispersão`,
-      classe: "rota-moderada"
-    };
+    titulo = "🟡 ROTA MODERADA";
+    classe = "rota-moderada";
   }
+
+  statusRota = {
+    texto: `
+      ${titulo} – ${kmDispersoTotal.toFixed(0)} km dispersos
+      <br><small>
+      Maior trecho: ${maiorTrechoDisperso.toFixed(0)} km
+      <br>
+      Representa ${percentualDispersao.toFixed(0)}% da rota
+      </small>
+    `,
+    classe
+  };
 }
+
 
 
 
