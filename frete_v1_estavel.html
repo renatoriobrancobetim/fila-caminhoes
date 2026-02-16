@@ -1484,16 +1484,6 @@ let kmDispersoTotal = 0;
 let maiorTrechoDisperso = 0;
 let percentualDispersao = 0;
 
-const kmTotalAtual = parseFloat(
-  document.getElementById("kmTotal").value || 0
-);
-
-if (kmTotalAtual > 0 && kmDispersoTotal > 0) {
-  percentualDispersao = (kmDispersoTotal / kmTotalAtual) * 100;
-}
-
-
-
 if (dispersoesGlobais.length > 0) {
 
   kmDispersoTotal = dispersoesGlobais.reduce(
@@ -1504,6 +1494,14 @@ if (dispersoesGlobais.length > 0) {
   maiorTrechoDisperso = Math.max(
     ...dispersoesGlobais.map(d => parseFloat(d.km))
   );
+
+  const kmTotalAtual = parseFloat(
+    document.getElementById("kmTotal").value || 0
+  );
+
+  if (kmTotalAtual > 0) {
+    percentualDispersao = (kmDispersoTotal / kmTotalAtual) * 100;
+  }
 }
 
 if (dispersoesCount > 0) {
@@ -1537,6 +1535,7 @@ if (dispersoesCount > 0) {
     classe
   };
 }
+
 
 
 
