@@ -1397,22 +1397,37 @@ if (tempoRota.tempoTotalH > JORNADA_MOTORISTA) {
   const totalMin = Math.round(tempoRota.tempoTotalH * 60);
   const jornadaMin = JORNADA_MOTORISTA * 60;
 
-  const diasJornada = Math.floor(totalMin / jornadaMin);
-  const restoMin = totalMin % jornadaMin;
+  const dias = Math.ceil(totalMin / jornadaMin);
 
-  const horasRestantes = Math.floor(restoMin / 60);
-  const minutosRestantes = restoMin % 60;
+  let minutosRestantes = totalMin;
+  let detalhamento = [];
 
-  let textoJornada;
+  for (let i = 1; i <= dias; i++) {
 
-  if (restoMin === 0) {
-    textoJornada = `🚛 Exige ${diasJornada} dia(s) de jornada (9h/dia)`;
-  } else {
-    textoJornada = `🚛 Exige ${diasJornada + 1} dia(s) de jornada (9h/dia)`;
+    if (minutosRestantes >= jornadaMin) {
+      detalhamento.push(`${i}º dia: 9h`);
+      minutosRestantes -= jornadaMin;
+    } else {
+
+      const h = Math.floor(minutosRestantes / 60);
+      const m = minutosRestantes % 60;
+
+      detalhamento.push(
+        `${i}º dia: ${h}h ${m > 0 ? m + "min" : ""}`.trim()
+      );
+
+      minutosRestantes = 0;
+    }
   }
+
+  const textoJornada = `
+🚛 Exige ${dias} dias de jornada
+(${detalhamento.join(" | ")})
+`;
 
   alertasOperacionais.push(textoJornada);
 }
+
 
 
 // pausa legal
