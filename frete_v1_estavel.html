@@ -1475,6 +1475,11 @@ if (tempoRota.pausasDescanso > 0) {
 }
 
 // ================= INDICADOR VISUAL DA ROTA =================
+let statusRota = {
+  texto: "🟢 ROTA COMPACTA",
+  classe: "rota-compacta"
+};
+
 let kmDispersoTotal = 0;
 let maiorTrechoDisperso = 0;
 
@@ -1489,7 +1494,6 @@ if (dispersoesGlobais.length > 0) {
     ...dispersoesGlobais.map(d => parseFloat(d.km))
   );
 }
-
 
 if (dispersoesCount > 0) {
 
@@ -1513,6 +1517,7 @@ if (dispersoesCount > 0) {
     };
   }
 }
+
 
 
 // Sempre mostrar bloco operacional
