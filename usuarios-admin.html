@@ -43,8 +43,8 @@ button { padding: 10px; background: #1e3a8a; color: white; border: none; }
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -59,41 +59,38 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-window.criarUsuario = async function(){
+// Esconde página até validar
+document.documentElement.style.display = "none";
 
-  const nome = document.getElementById("nome").value;
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-  const perfil = document.getElementById("perfil").value;
+onAuthStateChanged(auth, async (user) => {
 
-  try {
-
-    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-    const uid = userCredential.user.uid;
-
-    await setDoc(doc(db, "usuarios", uid), {
-      nome: nome,
-      email: email,
-      perfil: perfil,
-      ativo: true,
-      menus: {
-        painel: document.getElementById("menuPainel").checked,
-        frete: document.getElementById("menuFrete").checked,
-        clientes: document.getElementById("menuClientes").checked,
-        usuarios: document.getElementById("menuUsuarios").checked
-      },
-      criadoEm: new Date()
-    });
-
-    document.getElementById("msg").innerText = "Usuário criado com sucesso.";
-
-  } catch (error) {
-    document.getElementById("msg").innerText = error.message;
+  if (!user) {
+    window.location.replace("login.html");
+    return;
   }
 
-}
+  const userRef = doc(db, "usuarios", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) {
+    window.location.replace("painel.html");
+    return;
+  }
+
+  const dados = userSnap.data();
+
+  if (dados.perfil !== "admin" || !dados.ativo) {
+    window.location.replace("painel.html");
+    return;
+  }
+
+  // Se chegou aqui → é admin
+  document.documentElement.style.display = "block";
+
+});
 
 </script>
+
 
 </body>
 </html>
