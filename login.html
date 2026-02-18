@@ -216,11 +216,11 @@ button:disabled {
   <p>Use suas credenciais para continuar.</p>
 
   <label>Usuário</label>
-  <input type="text" id="user" placeholder="Informe seu usuário">
+  <input type="email" id="email" placeholder="Informe seu email">
 
   <label>Senha</label>
   <div class="input-group">
-    <input type="password" id="pass" placeholder="Informe sua senha">
+    <input type="password" id="senha" placeholder="Informe sua senha">
     <span class="toggle-pass" onclick="toggleSenha()">👁</span>
   </div>
 
@@ -234,7 +234,7 @@ button:disabled {
     <div class="loader" id="loader"></div>
   </button>
 
-  <div class="error" id="error">Usuário ou senha inválidos</div>
+  <div class="error" id="erro">Usuário ou senha inválidos</div>
 
   <div class="login-footer">
     <span>IP: 179.83.208.30</span>
@@ -242,59 +242,8 @@ button:disabled {
   </div>
 
 </div>
-<script src="users.js"></script>
 
-<script>
-function toggleSenha(){
-  const input = document.getElementById("pass");
-  input.type = input.type === "password" ? "text" : "password";
-}
 
-function login(){
-  const usuario = user.value.trim();
-  const senha   = pass.value.trim();
-  const box     = document.getElementById("box");
-  const error   = document.getElementById("error");
-  const loader  = document.getElementById("loader");
-  const btnText = document.getElementById("btnText");
-  const btn     = document.getElementById("btn");
-  const lembrar = document.getElementById("remember").checked;
-
-  error.style.display = "none";
-  btn.disabled = true;
-  loader.style.display = "block";
-  btnText.textContent = "Entrando...";
-
-  setTimeout(() => {
-
-    const u = USERS[usuario];
-
-    if (u && u.senha === senha) {
-
-      localStorage.setItem("logado", "true");
-      localStorage.setItem("usuario", usuario);
-      localStorage.setItem("perfil", u.perfil);
-      localStorage.setItem("nome", u.nome);
-
-      if (lembrar) localStorage.setItem("lembrar", "1");
-      else localStorage.removeItem("lembrar");
-
-      window.location.href = "painel.html";
-
-    } else {
-      loader.style.display = "none";
-      btnText.textContent = "Entrar";
-      btn.disabled = false;
-
-      error.style.display = "block";
-      box.classList.add("shake");
-      setTimeout(() => box.classList.remove("shake"), 400);
-    }
-
-  }, 800);
-}
-
-</script>
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -312,23 +261,40 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-window.login = function() {
+window.login = function(){
 
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+
+  const loader  = document.getElementById("loader");
+  const btnText = document.getElementById("btnText");
+  const btn     = document.getElementById("btn");
+  const erro    = document.getElementById("erro");
+  const box     = document.getElementById("box");
+
+  erro.style.display = "none";
+  btn.disabled = true;
+  loader.style.display = "block";
+  btnText.textContent = "Entrando...";
 
   signInWithEmailAndPassword(auth, email, senha)
     .then(() => {
       window.location.href = "painel.html";
     })
     .catch(() => {
-      document.getElementById("erro").innerText =
-        "Usuário ou senha inválidos.";
-    });
 
+      loader.style.display = "none";
+      btnText.textContent = "Entrar";
+      btn.disabled = false;
+
+      erro.style.display = "block";
+      box.classList.add("shake");
+      setTimeout(() => box.classList.remove("shake"), 400);
+    });
 };
 
 </script>
+
 
 </body>
 </html>
