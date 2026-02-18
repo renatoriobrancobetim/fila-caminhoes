@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Controle de Usuários</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body { font-family: Arial; padding: 20px; background: #f4f6f9; }
+.card { background: #fff; padding: 20px; border-radius: 10px; max-width: 500px; }
+input, select { width: 100%; padding: 8px; margin-bottom: 10px; }
+button { padding: 10px; background: #1e3a8a; color: white; border: none; }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Novo Usuário</h2>
+
+<input type="text" id="nome" placeholder="Nome completo">
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="senha" placeholder="Senha">
+
+<label>Perfil</label>
+<select id="perfil">
+  <option value="vendedor">Vendedor</option>
+  <option value="admin">Administrador</option>
+</select>
+
+<h4>Permissões</h4>
+<label><input type="checkbox" id="menuPainel"> Painel</label><br>
+<label><input type="checkbox" id="menuFrete"> Frete</label><br>
+<label><input type="checkbox" id="menuClientes"> Clientes</label><br>
+<label><input type="checkbox" id="menuUsuarios"> Usuários</label><br><br>
+
+<button onclick="criarUsuario()">Criar Usuário</button>
+
+<div id="msg"></div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+  authDomain: "tabela-frete-rio-branco.firebaseapp.com",
+  projectId: "tabela-frete-rio-branco",
+  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
+  messagingSenderId: "765019849831",
+  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.criarUsuario = async function(){
+
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
+  const perfil = document.getElementById("perfil").value;
+
+  try {
+
+    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+    const uid = userCredential.user.uid;
+
+    await setDoc(doc(db, "usuarios", uid), {
+      nome: nome,
+      email: email,
+      perfil: perfil,
+      ativo: true,
+      menus: {
+        painel: document.getElementById("menuPainel").checked,
+        frete: document.getElementById("menuFrete").checked,
+        clientes: document.getElementById("menuClientes").checked,
+        usuarios: document.getElementById("menuUsuarios").checked
+      },
+      criadoEm: new Date()
+    });
+
+    document.getElementById("msg").innerText = "Usuário criado com sucesso.";
+
+  } catch (error) {
+    document.getElementById("msg").innerText = error.message;
+  }
+
+}
+
+</script>
+
+</body>
+</html>
