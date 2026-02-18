@@ -109,11 +109,38 @@ onAuthStateChanged(auth, async (user) => {
 
   const dados = userSnap.data();
 
-  // 🔹 Mostrar nome no topo
+  // Mostrar nome no topo
   document.getElementById("usuarioLogado").innerText =
     "Usuário: " + dados.nome + " (" + dados.perfil.toUpperCase() + ")";
 
+  // 🔐 LIBERAR MENUS CONFORME PERMISSÃO
+
+  if (dados.menus?.painel) {
+    document.getElementById("cardPainelFila").style.display = "block";
+  }
+
+  if (dados.menus?.frete) {
+    document.getElementById("cardFrete").style.display = "block";
+  }
+
+  if (dados.menus?.clientes) {
+    document.getElementById("cardClientes").style.display = "block";
+    document.getElementById("cardMapa").style.display = "block";
+  }
+
+  if (dados.menus?.usuarios) {
+    document.getElementById("cardUsuarios").style.display = "block";
+  }
+
+  // Se for admin, libera tudo
+  if (dados.perfil === "admin") {
+    document.querySelectorAll(".card").forEach(card => {
+      card.style.display = "block";
+    });
+  }
+
 });
+
 
 
 // Logout
@@ -150,49 +177,50 @@ window.logout = function() {
 <main>
   <div class="cards">
 
-    <a class="card" href="usuarios-admin.html" id="cardUsuarios" style="display:none;">
+ <a class="card" href="usuarios-admin.html" id="cardUsuarios" style="display:none;">
   <div class="icon">👤</div>
   <div class="title">Controle de Usuários</div>
   <div class="desc">Gestão de acessos e permissões</div>
 </a>
 
 
-    <a class="card" href="leitura.html">
+    <a class="card" href="leitura.html" id="cardFila" style="display:none;">
       <div class="icon">🕒</div>
       <div class="title">Fila de Espera</div>
       <div class="desc">Visualização da fila de caminhões</div>
     </a>
 
-    <a class="card" href="index.html">
+   <a class="card" href="index.html" id="cardPainelFila" style="display:none;">
       <div class="icon">🎛️</div>
       <div class="title">Painel da Fila</div>
       <div class="desc">Controle operacional da fila</div>
     </a>
 
-    <a class="card" href="motoristas.html">
+    <a class="card" href="motoristas.html" id="cardDisponibilidade" style="display:none;">
       <div class="icon">📍</div>
       <div class="title">Disponibilidade</div>
       <div class="desc">Fila de disponibilidade de motoristas</div>
     </a>
 
-    <a class="card" href="cadastro.html">
+    <a class="card" href="cadastro.html" id="cardCadastro" style="display:none;">
       <div class="icon">🚛</div>
       <div class="title">Cadastro de Caminhões</div>
       <div class="desc">Registro e gestão de veículos</div>
     </a>
 
-    <a class="card" href="clientes-mapa.html">
+    <a class="card" href="clientes-mapa.html" id="cardMapa" style="display:none;">
       <div class="icon">🗺️</div>
       <div class="title">Mapa de Clientes</div>
       <div class="desc">Visualização geográfica dos clientes</div>
     </a>
 
-    <a class="card" href="frete.html">
+    <a class="card" href="frete.html" id="cardFrete" style="display:none;">
       <div class="icon">🧮</div>
       <div class="title">Cálculo de Frete</div>
       <div class="desc">Cálculo de frete por rota</div>
     </a>
-    <a class="card" href="clientes-admin.html">
+  
+    <a class="card" href="clientes-admin.html" id="cardClientes" style="display:none;">
   <div class="icon">🗂️</div>
   <div class="title">Administração de Clientes</div>
   <div class="desc">Gestão e manutenção dos clientes do sistema</div>
