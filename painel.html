@@ -77,6 +77,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -89,16 +90,33 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+
   if (!user) {
     window.location.href = "login.html";
-  } else {
-    console.log("Usuário logado:", user.email);
+    return;
   }
+
+  const userRef = doc(db, "usuarios", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const dados = userSnap.data();
+
+  // Mostrar card de usuários apenas se tiver permissão
+  if (dados.menus && dados.menus.usuarios === true) {
+    document.getElementById("cardUsuarios").style.display = "block";
+  }
+
 });
 
-// função logout
+// Logout
 window.logout = function() {
   signOut(auth).then(() => {
     window.location.href = "login.html";
@@ -106,6 +124,7 @@ window.logout = function() {
 };
 
 </script>
+
 
 <header>
   <button onclick="logout()" style="
@@ -128,6 +147,13 @@ window.logout = function() {
 
 <main>
   <div class="cards">
+
+    <a class="card" href="usuarios-admin.html" id="cardUsuarios" style="display:none;">
+  <div class="icon">👤</div>
+  <div class="title">Controle de Usuários</div>
+  <div class="desc">Gestão de acessos e permissões</div>
+</a>
+
 
     <a class="card" href="leitura.html">
       <div class="icon">🕒</div>
