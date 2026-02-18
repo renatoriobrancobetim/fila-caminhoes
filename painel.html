@@ -109,12 +109,12 @@ onAuthStateChanged(auth, async (user) => {
 
   const dados = userSnap.data();
 
-  // Mostrar card de usuários apenas se tiver permissão
-  if (dados.menus && dados.menus.usuarios === true) {
-    document.getElementById("cardUsuarios").style.display = "block";
-  }
+  // 🔹 Mostrar nome no topo
+  document.getElementById("usuarioLogado").innerText =
+    "Usuário: " + dados.nome + " (" + dados.perfil.toUpperCase() + ")";
 
 });
+
 
 // Logout
 window.logout = function() {
@@ -143,6 +143,8 @@ window.logout = function() {
 
   <h1>🚚 Painel Operacional Logístico</h1>
   <p>Central unificada dos sistemas da operação</p>
+  <p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:0.9;"></p>
+
 </header>
 
 <main>
