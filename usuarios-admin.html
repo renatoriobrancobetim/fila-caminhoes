@@ -6,10 +6,85 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { font-family: Arial; padding: 20px; background: #f4f6f9; }
-.card { background: #fff; padding: 20px; border-radius: 10px; max-width: 500px; }
-input, select { width: 100%; padding: 8px; margin-bottom: 10px; }
-button { padding: 10px; background: #1e3a8a; color: white; border: none; }
+* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg,#0f2a5c 0%,#1e3a8a 45%,#7f1d1d 75%,#b91c1c 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(180deg,#0b1633,#050b1e);
+  border-radius: 16px;
+  padding: 30px;
+  color: #fff;
+  box-shadow: 0 25px 60px rgba(0,0,0,.45);
+}
+
+h2 { margin-top: 0; }
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  background: #020617;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+label { font-size: 13px; color: #cbd5f5; }
+
+.permissoes {
+  background: rgba(255,255,255,.05);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg,#1e3a8a,#dc2626);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.msg {
+  margin-top: 15px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #0b1633;
+  padding: 25px;
+  border-radius: 14px;
+  width: 320px;
+  color: #fff;
+}
+
+.modal button {
+  margin-top: 10px;
+}
 </style>
 </head>
 
@@ -21,6 +96,7 @@ button { padding: 10px; background: #1e3a8a; color: white; border: none; }
 <input type="text" id="nome" placeholder="Nome completo">
 <input type="email" id="email" placeholder="Email">
 <input type="password" id="senha" placeholder="Senha">
+<input type="password" id="confirmarSenha" placeholder="Confirmar senha">
 
 <label>Perfil</label>
 <select id="perfil">
@@ -28,16 +104,26 @@ button { padding: 10px; background: #1e3a8a; color: white; border: none; }
   <option value="admin">Administrador</option>
 </select>
 
+<div class="permissoes">
 <h4>Permissões</h4>
 <label><input type="checkbox" id="menuPainel"> Painel</label><br>
 <label><input type="checkbox" id="menuFrete"> Frete</label><br>
 <label><input type="checkbox" id="menuClientes"> Clientes</label><br>
-<label><input type="checkbox" id="menuUsuarios"> Usuários</label><br><br>
+<label><input type="checkbox" id="menuUsuarios"> Usuários</label>
+</div>
 
-<button onclick="criarUsuario()">Criar Usuário</button>
+<button onclick="abrirConfirmacao()">Criar Usuário</button>
 
-<div id="msg"></div>
+<div class="msg" id="msg"></div>
+</div>
 
+<!-- Modal senha admin -->
+<div class="modal-bg" id="modalConfirmacao">
+  <div class="modal">
+    <h4>Confirme sua senha de administrador</h4>
+    <input type="password" id="senhaAdmin" placeholder="Senha do administrador">
+    <button onclick="criarUsuario()">Confirmar</button>
+  </div>
 </div>
 
 <script type="module">
@@ -70,89 +156,74 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔒 BLOQUEIO ADMIN
 document.documentElement.style.display = "none";
 
 onAuthStateChanged(auth, async (user) => {
 
-  if (!user) {
-    window.location.replace("login.html");
-    return;
-  }
+  if (!user) return window.location.replace("login.html");
 
-  const userRef = doc(db, "usuarios", user.uid);
-  const userSnap = await getDoc(userRef);
+  const userSnap = await getDoc(doc(db,"usuarios",user.uid));
 
-  if (!userSnap.exists()) {
-    window.location.replace("painel.html");
-    return;
-  }
-
-  const dados = userSnap.data();
-
-  if (dados.perfil !== "admin" || !dados.ativo) {
-    window.location.replace("painel.html");
-    return;
-  }
+  if (!userSnap.exists() || userSnap.data().perfil !== "admin")
+    return window.location.replace("painel.html");
 
   document.documentElement.style.display = "block";
 });
 
-// 👤 CRIAR USUÁRIO
+window.abrirConfirmacao = function(){
+
+  const senha = document.getElementById("senha").value;
+  const confirmar = document.getElementById("confirmarSenha").value;
+  const msg = document.getElementById("msg");
+
+  if(!senha || senha !== confirmar){
+    msg.innerText = "As senhas não conferem.";
+    return;
+  }
+
+  document.getElementById("modalConfirmacao").style.display = "flex";
+};
+
 window.criarUsuario = async function(){
 
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
   const perfil = document.getElementById("perfil").value;
+  const senhaAdmin = document.getElementById("senhaAdmin").value;
   const msg = document.getElementById("msg");
-
-  if(!nome || !email || !senha){
-    msg.innerText = "Preencha todos os campos.";
-    return;
-  }
 
   try {
 
-    // 🔥 Cria instância secundária
-    const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+    const secondaryApp = initializeApp(firebaseConfig,"Secondary");
     const secondaryAuth = getAuth(secondaryApp);
 
-    const userCredential = await createUserWithEmailAndPassword(
-      secondaryAuth, 
-      email, 
-      senha
+    const cred = await createUserWithEmailAndPassword(
+      secondaryAuth,email,senha
     );
 
-    const uid = userCredential.user.uid;
-
-    await setDoc(doc(db, "usuarios", uid), {
-      nome: nome,
-      email: email,
-      perfil: perfil,
-      ativo: true,
-      menus: {
-        painel: document.getElementById("menuPainel").checked,
-        frete: document.getElementById("menuFrete").checked,
-        clientes: document.getElementById("menuClientes").checked,
-        usuarios: document.getElementById("menuUsuarios").checked
+    await setDoc(doc(db,"usuarios",cred.user.uid),{
+      nome,email,perfil,ativo:true,
+      menus:{
+        painel:menuPainel.checked,
+        frete:menuFrete.checked,
+        clientes:menuClientes.checked,
+        usuarios:menuUsuarios.checked
       },
-      criadoEm: new Date()
+      criadoEm:new Date()
     });
-
-    msg.innerText = "Usuário criado com sucesso.";
 
     await secondaryAuth.signOut();
 
-  } catch (error) {
-    msg.innerText = error.message;
-  }
+    document.getElementById("modalConfirmacao").style.display = "none";
+    msg.innerText="Usuário criado com sucesso.";
 
+  } catch(error){
+    msg.innerText=error.message;
+  }
 };
 
-
 </script>
-
 
 </body>
 </html>
