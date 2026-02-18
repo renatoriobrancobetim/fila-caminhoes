@@ -114,11 +114,16 @@ window.criarUsuario = async function(){
 
   try {
 
-    // Salva email admin atual
-    const adminEmail = auth.currentUser.email;
-    const adminPassword = prompt("Confirme sua senha de admin para continuar:");
+    // 🔥 Cria instância secundária
+    const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+    const secondaryAuth = getAuth(secondaryApp);
 
-    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+    const userCredential = await createUserWithEmailAndPassword(
+      secondaryAuth, 
+      email, 
+      senha
+    );
+
     const uid = userCredential.user.uid;
 
     await setDoc(doc(db, "usuarios", uid), {
@@ -135,16 +140,16 @@ window.criarUsuario = async function(){
       criadoEm: new Date()
     });
 
-    // Re-logar como admin
-    await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
-
     msg.innerText = "Usuário criado com sucesso.";
+
+    await secondaryAuth.signOut();
 
   } catch (error) {
     msg.innerText = error.message;
   }
 
 };
+
 
 </script>
 
