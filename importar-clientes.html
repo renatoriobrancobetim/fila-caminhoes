@@ -2,17 +2,20 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Importar Clientes</title>
+<title>Importar Clientes - Produção</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body { font-family: Arial; padding:20px; }
+body { font-family: Arial; padding:20px; background:#f4f6f9; }
 button { padding:10px 15px; margin:5px; }
-#log { margin-top:20px; font-size:13px; }
+#log { margin-top:20px; font-size:13px; background:#fff; padding:15px; border-radius:8px; }
+.success { color:green; }
+.error { color:red; }
 </style>
 </head>
 <body>
 
-<h2>Importação de Clientes</h2>
+<h2>Importação Oficial de Clientes</h2>
 
 <label>Distribuidora</label><br>
 <input type="file" id="arquivo1"><br><br>
@@ -20,7 +23,7 @@ button { padding:10px 15px; margin:5px; }
 <label>Derivados</label><br>
 <input type="file" id="arquivo2"><br><br>
 
-<button onclick="importar()">Importar para Firebase</button>
+<button onclick="importar()">Importar / Atualizar Firebase</button>
 
 <div id="log"></div>
 
@@ -42,7 +45,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+function normalizarNome(nome){
+  return nome
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function corrigirCoordenada(valor){
+  let numero = Number(valor);
+
+  if (isNaN(numero)) return null;
+
+  if (Math.abs(numero) < 10) {
+    numero = numero * 10;
+  }
+
+  return numero;
+}
+
+function gerarIdSeguro(nome){
+  return nome
+    .replace(/\//g,"-")
+    .replace(/[^a-zA-Z0-9-_ ]/g,"")
+    .trim();
+}
+
 window.importar = async function(){
+
+  const log = document.getElementById("log");
+  log.innerHTML = "";
 
   const file1 = document.getElementById("arquivo1").files[0];
   const file2 = document.getElementById("arquivo2").files[0];
@@ -52,86 +85,63 @@ window.importar = async function(){
     return;
   }
 
-  const json1 = JSON.parse(await file1.text());
-  const json2 = JSON.parse(await file2.text());
+  try {
 
-const todos = [
-  ...json1.map(c => {
+    const json1 = JSON.parse(await file1.text());
+    const json2 = JSON.parse(await file2.text());
 
-    let lat = Number(c.lat);
-    let lng = Number(c.lng);
+    const todos = [
+      ...json1.map(c => montarCliente(c,"distribuidora")),
+      ...json2.map(c => montarCliente(c,"derivado"))
+    ];
 
-    // Correção automática decimal
-    if (!isNaN(lat) && Math.abs(lat) < 10) lat = lat * 10;
-    if (!isNaN(lng) && Math.abs(lng) < 10) lng = lng * 10;
+    log.innerHTML += `Total de registros: ${todos.length}<br><br>`;
+
+    const loteMax = 400;
+    let contador = 0;
+
+    while(contador < todos.length){
+
+      const batch = writeBatch(db);
+      const fatia = todos.slice(contador, contador + loteMax);
+
+      fatia.forEach(cliente => {
+        const idSeguro = gerarIdSeguro(cliente.nome);
+        const ref = doc(db, "clientes", idSeguro);
+        batch.set(ref, cliente, { merge:true });
+      });
+
+      await batch.commit();
+
+      contador += fatia.length;
+      log.innerHTML += `Importados ${contador} registros...<br>`;
+    }
+
+    log.innerHTML += "<br><span class='success'><b>Importação concluída com sucesso!</b></span>";
+
+  } catch (erro) {
+
+    console.error(erro);
+    log.innerHTML += "<br><span class='error'><b>Erro durante importação.</b></span>";
+  }
+};
+
+function montarCliente(c, tipo){
+
+  const lat = corrigirCoordenada(c.lat);
+  const lng = corrigirCoordenada(c.lng);
 
   return {
-  nome: c.cliente,
-  nomeBusca: c.cliente.toLowerCase(),
-  cidade: c.cidade,
-  latitude: lat,
-  longitude: lng,
-  tipo: "distribuidora"
-};
-
-
-  }),
-
-  ...json2.map(c => {
-
-    let lat = Number(c.lat);
-    let lng = Number(c.lng);
-
-    if (!isNaN(lat) && Math.abs(lat) < 10) lat = lat * 10;
-    if (!isNaN(lng) && Math.abs(lng) < 10) lng = lng * 10;
-
-    return {
-      nome: c.cliente,
-      cidade: c.cidade,
-      latitude: lat,
-      longitude: lng,
-      tipo: "derivado"
-    };
-
-  })
-];
-
-
-  const log = document.getElementById("log");
-  log.innerHTML = "Iniciando importação...<br>";
-
-  const loteMax = 400;
-  let contador = 0;
-
-  while(contador < todos.length){
-
-    const batch = writeBatch(db);
-    const fatia = todos.slice(contador, contador + loteMax);
-
-    fatia.forEach(cliente => {
-      const idSeguro = cliente.nome
-  .normalize("NFD")               // remove acentos
-  .replace(/[\u0300-\u036f]/g, "")
-  .replace(/\//g, "-")
-  .replace(/\./g, "")
-  .replace(/[^a-zA-Z0-9-_ ]/g, "")
-  .trim();
-
-const ref = doc(db, "clientes", idSeguro);
-
-      batch.set(ref, cliente);
-    });
-
-    await batch.commit();
-
-    contador += fatia.length;
-    log.innerHTML += `Importados ${contador} registros...<br>`;
-  }
-
-  log.innerHTML += "<b>Importação concluída com sucesso!</b>";
-};
+    nome: c.cliente,
+    nomeBusca: normalizarNome(c.cliente),
+    cidade: c.cidade,
+    latitude: lat,
+    longitude: lng,
+    tipo: tipo,
+    atualizadoEm: new Date()
+  };
+}
 
 </script>
-
 </body>
 </html>
