@@ -11,8 +11,13 @@ self.addEventListener("install", event => {
   );
 });
 
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
-  );
+self.addEventListener("fetch", function(event) {
+
+  // 🔥 IGNORA requisições do Firebase
+  if (event.request.url.includes("firestore.googleapis.com") ||
+      event.request.url.includes("firebase") ) {
+    return;
+  }
+
 });
+
