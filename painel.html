@@ -96,6 +96,42 @@ main{
   50%{transform:scale(1.15)}
   100%{transform:scale(1)}
 }
+<!-- KPI DASHBOARD -->
+<div class="kpi-container" id="kpiContainer" style="display:none;">
+
+  <div class="kpi-card">
+    <div class="kpi-info">
+      <span class="kpi-title">Total de Clientes</span>
+      <span class="kpi-number" id="kpiClientes">0</span>
+    </div>
+    <div class="kpi-icon bg-blue">👥</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-info">
+      <span class="kpi-title">Coord. Inválidas</span>
+      <span class="kpi-number" id="kpiInvalidas">0</span>
+    </div>
+    <div class="kpi-icon bg-red">🧭</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-info">
+      <span class="kpi-title">Caminhões</span>
+      <span class="kpi-number" id="kpiCaminhoes">0</span>
+    </div>
+    <div class="kpi-icon bg-green">🚛</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-info">
+      <span class="kpi-title">Motoristas</span>
+      <span class="kpi-number" id="kpiMotoristas">0</span>
+    </div>
+    <div class="kpi-icon bg-orange">📍</div>
+  </div>
+
+</div>
 
 /* SKELETON */
 .skeleton{
@@ -211,6 +247,60 @@ footer{
 </footer>
 
 <script type="module">
+  async function carregarKPIs(){
+
+  const clientesSnap = await getDocs(collection(db,"clientes"));
+  const caminhoesSnap = await getDocs(collection(db,"caminhoes"));
+  const motoristasSnap = await getDocs(collection(db,"motoristas"));
+
+  const totalClientes = clientesSnap.size;
+  const totalCaminhoes = caminhoesSnap.size;
+  const totalMotoristas = motoristasSnap.size;
+
+  let invalidos = 0;
+
+  const MG_LAT_MIN=-23.5, MG_LAT_MAX=-14.0;
+  const MG_LNG_MIN=-51.0, MG_LNG_MAX=-39.0;
+
+  clientesSnap.forEach(docSnap=>{
+    const d = docSnap.data();
+    const lat = Number(d.latitude);
+    const lng = Number(d.longitude);
+
+    if(
+      isNaN(lat) || isNaN(lng) ||
+      lat<MG_LAT_MIN || lat>MG_LAT_MAX ||
+      lng<MG_LNG_MIN || lng>MG_LNG_MAX
+    ){
+      invalidos++;
+    }
+  });
+
+  animarNumero("kpiClientes", totalClientes);
+  animarNumero("kpiInvalidas", invalidos);
+  animarNumero("kpiCaminhoes", totalCaminhoes);
+  animarNumero("kpiMotoristas", totalMotoristas);
+
+  document.getElementById("kpiContainer").style.display="grid";
+}
+function animarNumero(id, valorFinal){
+  const el = document.getElementById(id);
+  const duracao = 800;
+  const inicio = performance.now();
+
+  function step(agora){
+    const progresso = Math.min((agora-inicio)/duracao,1);
+    const valor = Math.floor(valorFinal * progresso);
+    el.innerText = valor.toLocaleString("pt-BR");
+
+    if(progresso<1){
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -240,6 +330,8 @@ onAuthStateChanged(auth, async (user)=>{
   if(dados.perfil === "admin"){
     document.querySelectorAll(".card").forEach(c=>c.style.display="block");
     await contarCoordenadasInvalidas();
+    await carregarKPIs();
+
   }
 
   /* NÃO ADMIN */
