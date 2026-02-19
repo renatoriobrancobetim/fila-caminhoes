@@ -149,8 +149,6 @@ Sistema Logístico · Monitoramento Firebase
 </footer>
 
 <script type="module">
-import { writeBatch, doc } from 
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 window.corrigirCoordenadas = async function(){
 
@@ -228,7 +226,14 @@ window.corrigirCoordenadas = async function(){
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getFirestore, 
+  collection, 
+  getDocs,
+  writeBatch,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -244,11 +249,15 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // 🔐 PROTEÇÃO ADMIN
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "login.html";
+    return;
   }
+
+  await carregarConsumo();
 });
+
 
 // 📊 CONTAR CLIENTES (sem consumir 6.000 leituras)
 async function carregarConsumo() {
@@ -294,10 +303,10 @@ async function carregarConsumo() {
 
   // 🔹 Atualiza Cards
   document.getElementById("totalClientes").innerText = total.toLocaleString("pt-BR");
-  document.getElementById("clientesDerivados").innerText = derivados.toLocaleString("pt-BR");
-  document.getElementById("clientesDistribuidora").innerText = distribuidora.toLocaleString("pt-BR");
-  document.getElementById("coordsValidas").innerText = validos.toLocaleString("pt-BR");
-  document.getElementById("coordsInvalidas").innerText = invalidos.toLocaleString("pt-BR");
+  document.getElementById("totalDerivados").innerText = derivados.toLocaleString("pt-BR");
+  document.getElementById("totalDistribuidora").innerText = distribuidora.toLocaleString("pt-BR");
+  document.getElementById("coordValidas").innerText = validos.toLocaleString("pt-BR");
+  document.getElementById("coordInvalidas").innerText = invalidos.toLocaleString("pt-BR");
 
   // 🔹 Indicador de saúde
   const percentualValido = ((validos / total) * 100).toFixed(1);
@@ -307,9 +316,6 @@ async function carregarConsumo() {
     percentualValido > 85 ? "Atenção" :
     "Crítico";
 }
-
-
-carregarConsumo();
 
 </script>
 
