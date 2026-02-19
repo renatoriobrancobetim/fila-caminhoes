@@ -251,30 +251,65 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // 📊 CONTAR CLIENTES (sem consumir 6.000 leituras)
-async function carregarDados(){
+async function carregarConsumo() {
 
-  const coll = collection(db, "clientes");
-  const snapshot = await getCountFromServer(coll);
-  const total = snapshot.data().count;
+  const snapshot = await getDocs(collection(db,"clientes"));
 
-  document.getElementById("totalClientes").innerText =
-    total.toLocaleString("pt-BR");
+  let total = 0;
+  let derivados = 0;
+  let distribuidora = 0;
+  let validos = 0;
+  let invalidos = 0;
 
-  // Estimativa simples de uso (caso tenha feito 1 importação completa)
-  const usoEstimado = Math.min((total / 20000) * 100, 100);
+  const MG_LAT_MIN = -23.5;
+  const MG_LAT_MAX = -14.0;
+  const MG_LNG_MIN = -51.0;
+  const MG_LNG_MAX = -39.0;
 
-  document.getElementById("usoAtual").innerText =
-    usoEstimado.toFixed(1) + "%";
+  snapshot.forEach(docSnap => {
 
-  document.getElementById("barraUso").style.width =
-    usoEstimado + "%";
+    total++;
 
-  if (usoEstimado > 80) {
-    document.getElementById("statusProjeto").innerText = "Atenção";
-  }
+    const d = docSnap.data();
+
+    // 🔹 Tipo
+    if (d.tipo === "derivados") derivados++;
+    if (d.tipo === "distribuidora") distribuidora++;
+
+    // 🔹 Coordenadas
+    const lat = Number(d.latitude);
+    const lng = Number(d.longitude);
+
+    const invalida =
+      isNaN(lat) ||
+      isNaN(lng) ||
+      lat < MG_LAT_MIN ||
+      lat > MG_LAT_MAX ||
+      lng < MG_LNG_MIN ||
+      lng > MG_LNG_MAX;
+
+    if (invalida) invalidos++;
+    else validos++;
+  });
+
+  // 🔹 Atualiza Cards
+  document.getElementById("totalClientes").innerText = total.toLocaleString("pt-BR");
+  document.getElementById("clientesDerivados").innerText = derivados.toLocaleString("pt-BR");
+  document.getElementById("clientesDistribuidora").innerText = distribuidora.toLocaleString("pt-BR");
+  document.getElementById("coordsValidas").innerText = validos.toLocaleString("pt-BR");
+  document.getElementById("coordsInvalidas").innerText = invalidos.toLocaleString("pt-BR");
+
+  // 🔹 Indicador de saúde
+  const percentualValido = ((validos / total) * 100).toFixed(1);
+
+  document.getElementById("statusProjeto").innerText =
+    percentualValido > 95 ? "Estável" :
+    percentualValido > 85 ? "Atenção" :
+    "Crítico";
 }
 
-carregarDados();
+
+carregarConsumo();
 
 </script>
 
