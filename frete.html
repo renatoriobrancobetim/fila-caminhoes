@@ -779,6 +779,8 @@ coords.unshift(`${BASE_COORDS.lng},${BASE_COORDS.lat}`);
 
 const url = `https://router.project-osrm.org/trip/v1/driving/${coords.join(";")}?source=first&roundtrip=false`;
 
+// ================= NOVA OTIMIZAÇÃO COM OSRM TRIP =================
+
 const response = await fetch(url);
 const data = await response.json();
 
@@ -786,13 +788,21 @@ if (data.code !== "Ok") {
   throw new Error("Erro na otimização da rota (OSRM)");
 }
 
-// ordena pelos índices da viagem
+if (!data.trips || !data.trips[0]) {
+  throw new Error("OSRM não retornou rota válida.");
+}
+
 const trip = data.trips[0];
 
+// remove base (posição 0)
 let rota = trip.waypoints
-  .filter(w => w.location[0] !== BASE_COORDS.lng) // ignora base
+  .filter(w => w.waypoint_index !== 0)
   .sort((a, b) => a.waypoint_index - b.waypoint_index)
-  .map(w => paradas[w.trips_index - 1]);
+  .map(w => {
+    const idxReal = w.waypoint_index - 1;
+    return paradas[idxReal];
+  });
+
 
 
 
