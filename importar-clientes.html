@@ -71,6 +71,11 @@ function gerarIdSeguro(nome){
     .replace(/[^a-zA-Z0-9-_ ]/g,"")
     .trim();
 }
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const auth = getAuth();
+
+console.log("Usuário atual:", auth.currentUser);
 
 window.importar = async function(){
 
