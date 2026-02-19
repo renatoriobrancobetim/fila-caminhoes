@@ -250,7 +250,13 @@ return distanciaBaseCidade(
   );
 
   const j = await r.json();
-  return j.routes[0].distance / 1000;
+
+if (!j.routes || !j.routes[0]) {
+  throw new Error("Erro ao calcular rota. Coordenadas inválidas.");
+}
+
+return j.routes[0].distance / 1000;
+
 }
 async function distanciaEntreClientes(clienteA, clienteB) {
   const latA = parseFloat(clienteA?.dataset?.lat);
