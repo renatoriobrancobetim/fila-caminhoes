@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Importar Clientes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: Arial; padding:20px; }
+button { padding:10px 15px; margin:5px; }
+#log { margin-top:20px; font-size:13px; }
+</style>
+</head>
+<body>
+
+<h2>Importação de Clientes</h2>
+
+<label>Distribuidora</label><br>
+<input type="file" id="arquivo1"><br><br>
+
+<label>Derivados</label><br>
+<input type="file" id="arquivo2"><br><br>
+
+<button onclick="importar()">Importar para Firebase</button>
+
+<div id="log"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, writeBatch, doc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+  authDomain: "tabela-frete-rio-branco.firebaseapp.com",
+  projectId: "tabela-frete-rio-branco",
+  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
+  messagingSenderId: "765019849831",
+  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.importar = async function(){
+
+  const file1 = document.getElementById("arquivo1").files[0];
+  const file2 = document.getElementById("arquivo2").files[0];
+
+  if(!file1 || !file2){
+    alert("Selecione os dois arquivos JSON");
+    return;
+  }
+
+  const json1 = JSON.parse(await file1.text());
+  const json2 = JSON.parse(await file2.text());
+
+const todos = [
+  ...json1.map(c => {
+
+    let lat = Number(c.lat);
+    let lng = Number(c.lng);
+
+    // Correção automática decimal
+    if (!isNaN(lat) && Math.abs(lat) < 10) lat = lat * 10;
+    if (!isNaN(lng) && Math.abs(lng) < 10) lng = lng * 10;
+
+    return {
+      nome: c.cliente,
+      cidade: c.cidade,
+      latitude: lat,
+      longitude: lng,
+      tipo: "distribuidora"
+    };
+
+  }),
+
+  ...json2.map(c => {
+
+    let lat = Number(c.lat);
+    let lng = Number(c.lng);
+
+    if (!isNaN(lat) && Math.abs(lat) < 10) lat = lat * 10;
+    if (!isNaN(lng) && Math.abs(lng) < 10) lng = lng * 10;
+
+    return {
+      nome: c.cliente,
+      cidade: c.cidade,
+      latitude: lat,
+      longitude: lng,
+      tipo: "derivado"
+    };
+
+  })
+];
+
+
+  const log = document.getElementById("log");
+  log.innerHTML = "Iniciando importação...<br>";
+
+  const loteMax = 400;
+  let contador = 0;
+
+  while(contador < todos.length){
+
+    const batch = writeBatch(db);
+    const fatia = todos.slice(contador, contador + loteMax);
+
+    fatia.forEach(cliente => {
+      const ref = doc(db, "clientes", cliente.nome);
+      batch.set(ref, cliente);
+    });
+
+    await batch.commit();
+
+    contador += fatia.length;
+    log.innerHTML += `Importados ${contador} registros...<br>`;
+  }
+
+  log.innerHTML += "<b>Importação concluída com sucesso!</b>";
+};
+
+</script>
+
+</body>
+</html>
