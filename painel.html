@@ -6,326 +6,265 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f1f5f9;
-  }
+body{
+  margin:0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background:#f1f5f9;
+}
 
-  header {
-    background: linear-gradient(90deg, #1e3a8a, #dc2626);
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-  }
+/* HEADER */
+header{
+  background:linear-gradient(90deg,#1e3a8a,#dc2626);
+  color:#fff;
+  padding:25px;
+  text-align:center;
+  position:relative;
+}
 
-  main {
-    padding: 30px;
-    max-width: 1100px;
-    margin: auto;
-  }
+.logout-btn{
+  position:absolute;
+  right:20px;
+  top:20px;
+  background:#dc2626;
+  border:none;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+}
 
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-  }
+/* MAIN */
+main{
+  padding:40px;
+  max-width:1200px;
+  margin:auto;
+}
 
-  .card {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-    color: #1f2937;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
+/* GRID */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+  opacity:0;
+  transform:translateY(15px);
+  transition:all .6s ease;
+}
 
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-  }
+.cards.loaded{
+  opacity:1;
+  transform:translateY(0);
+}
 
-  .icon {
-    font-size: 36px;
-    margin-bottom: 10px;
-  }
+/* CARD */
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:25px;
+  text-align:center;
+  text-decoration:none;
+  color:#1f2937;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  transition:all .3s ease;
+  position:relative;
+}
 
-  .title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 6px;
-  }
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 28px rgba(0,0,0,0.15);
+}
 
-  .desc {
-    font-size: 13px;
-    color: #475569;
-  }
+.icon{
+  font-size:40px;
+  margin-bottom:12px;
+}
 
-  footer {
-    text-align: center;
-    padding: 15px;
-    font-size: 12px;
-    color: #64748b;
-  }
+.title{
+  font-size:17px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.desc{
+  font-size:13px;
+  color:#64748b;
+}
+
+/* BADGE */
+.badge-alerta{
+  position:absolute;
+  top:15px;
+  right:15px;
+  background:#dc2626;
+  color:#fff;
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:20px;
+  display:none;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+  100%{transform:scale(1)}
+}
+
+/* SKELETON */
+.skeleton{
+  background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+  background-size:200% 100%;
+  animation:loading 1.2s infinite;
+  border-radius:14px;
+  height:140px;
+}
+
+@keyframes loading{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+  font-size:12px;
+  color:#64748b;
+}
 </style>
 </head>
 
 <body>
+
+<header>
+<button class="logout-btn" onclick="logout()">Sair</button>
+<h1>🚚 Painel Operacional Logístico</h1>
+<p>Central unificada dos sistemas</p>
+<p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:.9;"></p>
+</header>
+
+<main>
+
+<!-- Skeleton Loading -->
+<div id="skeletonContainer" class="cards">
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
+</div>
+
+<!-- Cards reais -->
+<div class="cards" id="cardsContainer" style="display:none;">
+
+<a class="card" href="frete.html" id="cardFrete" style="display:none;">
+<div class="icon">🧮</div>
+<div class="title">Cálculo de Frete</div>
+<div class="desc">Frete por rota otimizada</div>
+</a>
+
+<a class="card" href="index.html" id="cardPainelFila" style="display:none;">
+<div class="icon">🎛️</div>
+<div class="title">Painel da Fila</div>
+<div class="desc">Controle operacional</div>
+</a>
+
+<a class="card" href="clientes-admin.html" id="cardClientes" style="display:none;">
+<div class="icon">🗂️</div>
+<div class="title">Administração Clientes</div>
+<div class="desc">Gestão e manutenção</div>
+</a>
+
+<a class="card" href="coordenadas-invalidas.html" id="cardCoordenadas" style="display:none;">
+<div class="icon">🧭</div>
+<div class="title">Revisar Coordenadas</div>
+<div class="desc">Correção automática e manual</div>
+<div id="badgeCoords" class="badge-alerta">0</div>
+</a>
+
+<a class="card" href="usuarios-admin.html" id="cardUsuarios" style="display:none;">
+<div class="icon">👤</div>
+<div class="title">Controle Usuários</div>
+<div class="desc">Gestão de acessos</div>
+</a>
+
+</div>
+
+</main>
+
+<footer>
+2026 · Sistema Operacional Logístico - © Renato Monteiro
+</footer>
+
 <script type="module">
-import { doc, getDoc } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-async function contarCoordenadasInvalidas(){
-
-  const snap = await getDoc(doc(db,"estatisticas","clientes"));
-
-  if(!snap.exists()) return;
-
-  const dados = snap.data();
-
-  const invalidos = dados.coordInvalidas || 0;
-
-  if(invalidos > 0){
-    const badge = document.getElementById("badgeCoords");
-    badge.innerText = invalidos;
-    badge.style.display = "block";
-  }
-}
-
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
-  authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco",
-  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
-  messagingSenderId: "765019849831",
-  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
+  apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+  authDomain:"tabela-frete-rio-branco.firebaseapp.com",
+  projectId:"tabela-frete-rio-branco"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async (user)=>{
 
-  if (!user) {
-    window.location.href = "login.html";
+  if(!user){
+    window.location.href="login.html";
     return;
   }
 
-  const userRef = doc(db, "usuarios", user.uid);
-  const userSnap = await getDoc(userRef);
+  const snap = await getDoc(doc(db,"usuarios",user.uid));
 
-  if (!userSnap.exists()) {
-    window.location.href = "login.html";
+  if(!snap.exists()){
+    window.location.href="login.html";
     return;
   }
 
-  const dados = userSnap.data();
+  const dados = snap.data();
 
-  // 🔒 Ferramentas administrativas
-if (dados.perfil === "admin") {
-  document.getElementById("cardImportar").style.display = "block";
-  document.getElementById("cardConsumo").style.display = "block";
-  document.getElementById("cardCoordenadas").style.display = "block";
-
-  await contarCoordenadasInvalidas();
-}
-
-
-  // Mostrar nome no topo
   document.getElementById("usuarioLogado").innerText =
-    "Usuário: " + dados.nome + " (" + dados.perfil.toUpperCase() + ")";
+    "Usuário: "+dados.nome+" ("+dados.perfil.toUpperCase()+")";
 
-  // 🔐 LIBERAR MENUS CONFORME PERMISSÃO
+  /* LIBERA MENUS */
+  if(dados.menus?.frete) document.getElementById("cardFrete").style.display="block";
+  if(dados.menus?.painel) document.getElementById("cardPainelFila").style.display="block";
+  if(dados.menus?.clientes) document.getElementById("cardClientes").style.display="block";
+  if(dados.menus?.usuarios) document.getElementById("cardUsuarios").style.display="block";
 
-  if (dados.menus?.painel) {
-    document.getElementById("cardPainelFila").style.display = "block";
+  if(dados.perfil==="admin"){
+    document.getElementById("cardCoordenadas").style.display="block";
+    await contarInvalidos();
   }
 
-  if (dados.menus?.frete) {
-    document.getElementById("cardFrete").style.display = "block";
-  }
-
-  if (dados.menus?.clientes) {
-    document.getElementById("cardClientes").style.display = "block";
-    document.getElementById("cardMapa").style.display = "block";
-  }
-
-  if (dados.menus?.usuarios) {
-    document.getElementById("cardUsuarios").style.display = "block";
-  }
-// 🔒 Ferramentas administrativas
-if (dados.perfil === "admin") {
-  document.getElementById("cardImportar").style.display = "block";
-  document.getElementById("cardConsumo").style.display = "block";
-}
-
-
+  /* REMOVE SKELETON */
+  document.getElementById("skeletonContainer").style.display="none";
+  const cards = document.getElementById("cardsContainer");
+  cards.style.display="grid";
+  setTimeout(()=>cards.classList.add("loaded"),50);
 });
 
-async function contarCoordenadasInvalidas(){
-
+async function contarInvalidos(){
   const snapshot = await getDocs(collection(db,"clientes"));
 
-  const MG_LAT_MIN = -23.5;
-  const MG_LAT_MAX = -14.0;
-  const MG_LNG_MIN = -51.0;
-  const MG_LNG_MAX = -39.0;
-
-  let invalidos = 0;
-
+  let invalidos=0;
   snapshot.forEach(docSnap=>{
     const d = docSnap.data();
-
-    const lat = Number(d.latitude);
-    const lng = Number(d.longitude);
-
-    const invalida =
-      isNaN(lat) ||
-      isNaN(lng) ||
-      lat < MG_LAT_MIN ||
-      lat > MG_LAT_MAX ||
-      lng < MG_LNG_MIN ||
-      lng > MG_LNG_MAX;
-
-    if(invalida) invalidos++;
+    if(!d.latitude || !d.longitude) invalidos++;
   });
 
-  if(invalidos > 0){
+  if(invalidos>0){
     const badge = document.getElementById("badgeCoords");
-    badge.innerText = invalidos;
-    badge.style.display = "block";
+    badge.innerText=invalidos;
+    badge.style.display="block";
   }
 }
 
-
-// Logout
-window.logout = function() {
-  signOut(auth).then(() => {
-    window.location.href = "login.html";
-  });
-};
-
+window.logout = function(){
+  signOut(auth).then(()=>window.location.href="login.html");
+}
 </script>
-
-
-<header>
-  <button onclick="logout()" style="
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  background: #dc2626;
-  color: #fff;
-  cursor: pointer;
-">
-  Sair
-</button>
-
-  <h1>🚚 Painel Operacional Logístico</h1>
-  <p>Central unificada dos sistemas da operação</p>
-  <p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:0.9;"></p>
-
-</header>
-
-<main>
-  <div class="cards">
-<a class="card" href="importar-clientes.html" id="cardImportar" style="display:none;">
-  <div class="icon">📥</div>
-  <div class="title">Importar Clientes</div>
-  <div class="desc">Carga massiva e atualização de clientes</div>
-</a>
-
-<a class="card" href="consumo-firestore.html" id="cardConsumo" style="display:none;">
-  <div class="icon">📊</div>
-  <div class="title">Consumo Firestore</div>
-  <div class="desc">Monitoramento de leituras e gravações</div>
-</a>
-
- <a class="card" href="usuarios-admin.html" id="cardUsuarios" style="display:none;">
-  <div class="icon">👤</div>
-  <div class="title">Controle de Usuários</div>
-  <div class="desc">Gestão de acessos e permissões</div>
-</a>
-
-
-    <a class="card" href="leitura.html" id="cardFila" style="display:none;">
-      <div class="icon">🕒</div>
-      <div class="title">Fila de Espera</div>
-      <div class="desc">Visualização da fila de caminhões</div>
-    </a>
-
-   <a class="card" href="index.html" id="cardPainelFila" style="display:none;">
-      <div class="icon">🎛️</div>
-      <div class="title">Painel da Fila</div>
-      <div class="desc">Controle operacional da fila</div>
-    </a>
-
-    <a class="card" href="motoristas.html" id="cardDisponibilidade" style="display:none;">
-      <div class="icon">📍</div>
-      <div class="title">Disponibilidade</div>
-      <div class="desc">Fila de disponibilidade de motoristas</div>
-    </a>
-
-    <a class="card" href="cadastro.html" id="cardCadastro" style="display:none;">
-      <div class="icon">🚛</div>
-      <div class="title">Cadastro de Caminhões</div>
-      <div class="desc">Registro e gestão de veículos</div>
-    </a>
-
-    <a class="card" href="clientes-mapa.html" id="cardMapa" style="display:none;">
-      <div class="icon">🗺️</div>
-      <div class="title">Mapa de Clientes</div>
-      <div class="desc">Visualização geográfica dos clientes</div>
-    </a>
-
-    <a class="card" href="frete.html" id="cardFrete" style="display:none;">
-      <div class="icon">🧮</div>
-      <div class="title">Cálculo de Frete</div>
-      <div class="desc">Cálculo de frete por rota</div>
-    </a>
-  
-    <a class="card" href="clientes-admin.html" id="cardClientes" style="display:none;">
-  <div class="icon">🗂️</div>
-  <div class="title">Administração de Clientes</div>
-  <div class="desc">Gestão e manutenção dos clientes do sistema</div>
-</a>
-   <a class="card" 
-   href="coordenadas-invalidas.html" 
-   id="cardCoordenadas" 
-   style="display:none; position:relative;">
-
-  <div class="icon">🧭</div>
-  <div class="title">Revisar Coordenadas</div>
-  <div class="desc">
-    Ajuste manual e correção de coordenadas inválidas
-  </div>
-
-  <!-- Badge contador -->
-  <div id="badgeCoords" class="badge-alerta" style="display:none;">0</div>
-
-</a>
-
-
-</a>
-
-
-
-  </div>
-</main>
-
-<footer>
-   2026 · Sistema Operacional Logístico - © Renato Monteiro
-</footer>
 
 </body>
 </html>
