@@ -118,19 +118,6 @@ footer{
   font-size:12px;
   color:#64748b;
 }
-</style>
-</head>
-
-<body>
-
-<header>
-<button class="logout-btn" onclick="logout()">Sair</button>
-<h1>🚚 Painel Operacional Logístico</h1>
-<p>Central unificada dos sistemas</p>
-<p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:.9;"></p>
-</header>
-
-<main>
   /* ================= KPI DASHBOARD ================= */
 
 .kpi-container{
@@ -189,7 +176,20 @@ footer{
 .bg-red{background:#dc2626;}
 .bg-orange{background:#ea580c;}
 
-<!-- KPI DASHBOARD -->
+</style>
+</head>
+
+<body>
+
+<header>
+<button class="logout-btn" onclick="logout()">Sair</button>
+<h1>🚚 Painel Operacional Logístico</h1>
+<p>Central unificada dos sistemas</p>
+<p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:.9;"></p>
+</header>
+
+<main>
+ <!-- KPI DASHBOARD -->
 <div class="kpi-container" id="kpiContainer" style="display:none;">
 
   <div class="kpi-card">
@@ -225,6 +225,9 @@ footer{
   </div>
 
 </div>
+
+
+
 
 <!-- SKELETON -->
 <div id="skeletonContainer" class="cards">
