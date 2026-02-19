@@ -108,9 +108,17 @@ function montarCliente(c, tipo){
   const lat = corrigirCoordenada(c.lat);
   const lng = corrigirCoordenada(c.lng);
 
+  const nomeNormalizado = normalizarNome(c.cliente);
+
+  const palavras = nomeNormalizado
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(" ")
+    .filter(p => p.length > 2); // ignora palavras muito curtas
+
   return {
     nome: c.cliente,
-    nomeBusca: normalizarNome(c.cliente),
+    nomeBusca: nomeNormalizado,
+    nomeBuscaArray: palavras,   // 🔥 NOVO CAMPO
     cidade: c.cidade,
     latitude: lat,
     longitude: lng,
@@ -118,6 +126,7 @@ function montarCliente(c, tipo){
     atualizadoEm: new Date()
   };
 }
+
 
 
 /* ================= IMPORTAÇÃO ================= */
