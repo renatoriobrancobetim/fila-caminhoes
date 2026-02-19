@@ -4,7 +4,22 @@
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  const db = getFirestore(app);
+
+
+import { 
+  getFirestore, 
+  collection, 
+  query, 
+  orderBy, 
+  startAt, 
+  endAt, 
+  limit, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -398,34 +413,7 @@ fetch("cidades-mg.json").then(r => r.json()).then(d => {
   });
 });
 
-Promise.all([
-  fetch("clientes_derivados.json").then(r => r.json()),
-  fetch("clientes_distribuidora.json").then(r => r.json())
-])
-.then(([derivados, distribuidora]) => {
 
-  [...derivados, ...distribuidora].forEach(c => {
-    if (!c.cliente || !c.lat || !c.lng) return;
-
-    const key = c.cliente
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toUpperCase()
-      .trim();
-
-    clientesCoords[key] = {
-      cliente: c.cliente,
-      cidade: c.cidade,
-      lat: c.lat,
-      lng: c.lng
-    };
-  });
-
-  montarListaClientes();
-  clientesCarregados = true;
-
-  console.log("Clientes carregados:", Object.keys(clientesCoords).length);
-})
 .catch(err => {
   console.error("Erro ao carregar clientes", err);
 });
@@ -544,12 +532,16 @@ function gerarTabela(){
     html+=`
     <tr data-row>
       <td>
+<div class="busca-wrapper">
   <input
     id="cliente${i}"
     class="uppercase cliente-input"
-    list="clientesLista"
-    onblur="aplicarCliente(${i})"
+    autocomplete="off"
+    oninput="buscarCliente(this)"
   >
+  <div class="resultado-busca"></div>
+</div>
+
 </td>
 
      <td>
@@ -1865,6 +1857,61 @@ async function calcularEtapasTempo(cidades) {
   }
 
   return etapas;
+}
+async function buscarCliente(input) {
+
+  const termo = input.value.toLowerCase().trim();
+
+  const container = input.parentElement.querySelector(".resultado-busca");
+
+  if (termo.length < 2) {
+    container.style.display = "none";
+    return;
+  }
+
+  const clientesRef = collection(db, "clientes");
+
+  const q = query(
+    clientesRef,
+    orderBy("nomeBusca"),
+    startAt(termo),
+    endAt(termo + "\uf8ff"),
+    limit(8)
+  );
+
+  const snapshot = await getDocs(q);
+
+  container.innerHTML = "";
+
+  snapshot.forEach(docSnap => {
+
+    const cliente = docSnap.data();
+
+    const item = document.createElement("div");
+    item.className = "item-busca";
+    item.innerText = cliente.nome + " - " + cliente.cidade;
+
+    item.onclick = () => {
+
+      input.value = cliente.nome;
+
+      input.dataset.lat = cliente.latitude;
+      input.dataset.lng = cliente.longitude;
+
+      const idx = input.id.replace("cliente","");
+      const cidadeInput = document.getElementById("cidade" + idx);
+
+      cidadeInput.value = cliente.cidade;
+      cidadeInput.readOnly = true;
+      cidadeInput.classList.add("cidade-travada");
+
+      container.style.display = "none";
+    };
+
+    container.appendChild(item);
+  });
+
+  container.style.display = "block";
 }
 
 
