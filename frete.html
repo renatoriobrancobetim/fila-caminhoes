@@ -58,11 +58,12 @@ const db = getFirestore(app);
 
 window.buscarCliente = async function(input) {
 
-  const termo = input.value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim();
+const termo = input.value
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toUpperCase()
+  .trim();
+
 
   const container = input.parentElement.querySelector(".resultado-busca");
 
