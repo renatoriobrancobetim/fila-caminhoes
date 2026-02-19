@@ -399,28 +399,30 @@ const moeda3=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimu
 const numero=v=>v.toLocaleString("pt-BR");
 
 /* ================= CIDADES ================= */
-fetch("cidades-mg.json").then(r => r.json()).then(d => {
-  cidadesCoords = {};
+fetch("cidades-mg.json")
+  .then(r => r.json())
+  .then(d => {
 
-  Object.entries(d).forEach(([cidade, coords]) => {
-    const key = normalizarCidade(cidade);
-    cidadesCoords[key] = coords;
+    cidadesCoords = {};
+
+    Object.entries(d).forEach(([cidade, coords]) => {
+      const key = normalizarCidade(cidade);
+      cidadesCoords[key] = coords;
+    });
+
+    cidadesCarregadas = true;
+
+    const dl = document.getElementById("cidadesMG");
+    Object.keys(cidadesCoords).forEach(c => {
+      const o = document.createElement("option");
+      o.value = c;
+      dl.appendChild(o);
+    });
+
+  })
+  .catch(err => {
+    console.error("Erro ao carregar cidades", err);
   });
-
-  cidadesCarregadas = true;
-
-  const dl = document.getElementById("cidadesMG");
-  Object.keys(cidadesCoords).forEach(c => {
-    const o = document.createElement("option");
-    o.value = c;
-    dl.appendChild(o);
-  });
-});
-
-
-.catch(err => {
-  console.error("Erro ao carregar clientes", err);
-});
 
 /* ================= DISTÂNCIA ================= */
 
