@@ -143,50 +143,93 @@ footer{
 
 <main>
 
-<!-- Skeleton Loading -->
+<main>
+
+<!-- SKELETON -->
 <div id="skeletonContainer" class="cards">
   <div class="skeleton"></div>
   <div class="skeleton"></div>
   <div class="skeleton"></div>
   <div class="skeleton"></div>
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
 </div>
 
-<!-- Cards reais -->
+<!-- CARDS REAIS -->
 <div class="cards" id="cardsContainer" style="display:none;">
 
-<a class="card" href="frete.html" id="cardFrete" style="display:none;">
-<div class="icon">🧮</div>
-<div class="title">Cálculo de Frete</div>
-<div class="desc">Frete por rota otimizada</div>
+<a class="card" href="importar-clientes.html" id="cardImportar" style="display:none;">
+  <div class="icon">📥</div>
+  <div class="title">Importar Clientes</div>
+  <div class="desc">Carga massiva e atualização</div>
 </a>
 
-<a class="card" href="index.html" id="cardPainelFila" style="display:none;">
-<div class="icon">🎛️</div>
-<div class="title">Painel da Fila</div>
-<div class="desc">Controle operacional</div>
-</a>
-
-<a class="card" href="clientes-admin.html" id="cardClientes" style="display:none;">
-<div class="icon">🗂️</div>
-<div class="title">Administração Clientes</div>
-<div class="desc">Gestão e manutenção</div>
-</a>
-
-<a class="card" href="coordenadas-invalidas.html" id="cardCoordenadas" style="display:none;">
-<div class="icon">🧭</div>
-<div class="title">Revisar Coordenadas</div>
-<div class="desc">Correção automática e manual</div>
-<div id="badgeCoords" class="badge-alerta">0</div>
+<a class="card" href="consumo-firestore.html" id="cardConsumo" style="display:none;">
+  <div class="icon">📊</div>
+  <div class="title">Consumo Firestore</div>
+  <div class="desc">Monitoramento de leituras</div>
 </a>
 
 <a class="card" href="usuarios-admin.html" id="cardUsuarios" style="display:none;">
-<div class="icon">👤</div>
-<div class="title">Controle Usuários</div>
-<div class="desc">Gestão de acessos</div>
+  <div class="icon">👤</div>
+  <div class="title">Controle de Usuários</div>
+  <div class="desc">Gestão de acessos</div>
+</a>
+
+<a class="card" href="leitura.html" id="cardFila" style="display:none;">
+  <div class="icon">🕒</div>
+  <div class="title">Fila de Espera</div>
+  <div class="desc">Visualização da fila</div>
+</a>
+
+<a class="card" href="index.html" id="cardPainelFila" style="display:none;">
+  <div class="icon">🎛️</div>
+  <div class="title">Painel da Fila</div>
+  <div class="desc">Controle operacional</div>
+</a>
+
+<a class="card" href="motoristas.html" id="cardDisponibilidade" style="display:none;">
+  <div class="icon">📍</div>
+  <div class="title">Disponibilidade</div>
+  <div class="desc">Gestão de motoristas</div>
+</a>
+
+<a class="card" href="cadastro.html" id="cardCadastro" style="display:none;">
+  <div class="icon">🚛</div>
+  <div class="title">Cadastro de Caminhões</div>
+  <div class="desc">Registro de veículos</div>
+</a>
+
+<a class="card" href="clientes-mapa.html" id="cardMapa" style="display:none;">
+  <div class="icon">🗺️</div>
+  <div class="title">Mapa de Clientes</div>
+  <div class="desc">Visualização geográfica</div>
+</a>
+
+<a class="card" href="frete.html" id="cardFrete" style="display:none;">
+  <div class="icon">🧮</div>
+  <div class="title">Cálculo de Frete</div>
+  <div class="desc">Frete por rota otimizada</div>
+</a>
+
+<a class="card" href="clientes-admin.html" id="cardClientes" style="display:none;">
+  <div class="icon">🗂️</div>
+  <div class="title">Administração de Clientes</div>
+  <div class="desc">Gestão e manutenção</div>
+</a>
+
+<a class="card" href="coordenadas-invalidas.html"
+   id="cardCoordenadas"
+   style="display:none; position:relative;">
+
+  <div class="icon">🧭</div>
+  <div class="title">Revisar Coordenadas</div>
+  <div class="desc">Correção automática e manual</div>
+
+  <div id="badgeCoords" class="badge-alerta">0</div>
 </a>
 
 </div>
-
 </main>
 
 <footer>
