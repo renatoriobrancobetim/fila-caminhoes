@@ -855,6 +855,8 @@ ${dispersoes.map(d =>
 
 
     await recalcularKM();
+    console.log("Rota final:", rota);
+
     await desenharMapa(rota);
     const link = gerarLinkGoogleMaps(rota);
 
@@ -951,6 +953,11 @@ async function recalcularKM(){
 }
 /* ================= MAPA ================= */
 async function desenharMapa(rota){
+  if (!rota || rota.length === 0) {
+  console.warn("Rota vazia — nada para desenhar.");
+  return;
+}
+
   document.getElementById("mapaRota").style.display="block";
   if(!mapa){
     mapa=L.map("mapaRota");
