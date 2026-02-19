@@ -389,15 +389,24 @@ onAuthStateChanged(auth, async (user)=>{
     "Usuário: "+dados.nome+" ("+dados.perfil.toUpperCase()+")";
 
   /* ADMIN VÊ TUDO */
-  if(dados.perfil === "admin"){
-    document.querySelectorAll("#cardsContainer .card").forEach(c=>{
-  c.style.display="block";
-});
+if(dados.perfil === "admin"){
+  document.querySelectorAll("#cardsContainer .card").forEach(c=>{
+    c.style.display="block";
+  });
 
+  try{
     await contarCoordenadasInvalidas();
-    await carregarKPIs();
-
+  }catch(e){
+    console.error("Erro coordenadas:", e);
   }
+
+  try{
+    await carregarKPIs();
+  }catch(e){
+    console.error("Erro KPIs:", e);
+  }
+}
+
 
   /* NÃO ADMIN */
   else{
