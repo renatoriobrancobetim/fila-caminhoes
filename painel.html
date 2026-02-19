@@ -271,16 +271,34 @@ onAuthStateChanged(auth, async (user)=>{
   document.getElementById("usuarioLogado").innerText =
     "Usuário: "+dados.nome+" ("+dados.perfil.toUpperCase()+")";
 
-  /* LIBERA MENUS */
-  if(dados.menus?.frete) document.getElementById("cardFrete").style.display="block";
-  if(dados.menus?.painel) document.getElementById("cardPainelFila").style.display="block";
-  if(dados.menus?.clientes) document.getElementById("cardClientes").style.display="block";
-  if(dados.menus?.usuarios) document.getElementById("cardUsuarios").style.display="block";
+// ADMIN vê tudo
+if (dados.perfil === "admin") {
 
-  if(dados.perfil==="admin"){
-    document.getElementById("cardCoordenadas").style.display="block";
-    await contarInvalidos();
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = "block";
+  });
+
+  await contarCoordenadasInvalidas();
+}
+
+// NÃO ADMIN → usa menus
+else {
+
+  if (dados.menus?.painel)
+    document.getElementById("cardPainelFila").style.display = "block";
+
+  if (dados.menus?.frete)
+    document.getElementById("cardFrete").style.display = "block";
+
+  if (dados.menus?.clientes) {
+    document.getElementById("cardClientes").style.display = "block";
+    document.getElementById("cardMapa").style.display = "block";
   }
+
+  if (dados.menus?.usuarios)
+    document.getElementById("cardUsuarios").style.display = "block";
+}
+
 
   /* REMOVE SKELETON */
   document.getElementById("skeletonContainer").style.display="none";
