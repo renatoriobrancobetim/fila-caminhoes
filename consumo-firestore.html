@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel de Consumo Firestore</title>
+<style>
+body { font-family: Arial; padding: 30px; background:#f4f6f9; }
+.card { background:#fff; padding:20px; border-radius:10px; margin-bottom:15px; }
+.valor { font-size:24px; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<h2>📊 Monitoramento Firestore</h2>
+
+<div id="painel"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, getDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = { /* seu config */ };
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const hoje = new Date().toISOString().split("T")[0];
+
+const ref = doc(db, "monitoramentoFirestore", hoje);
+const snap = await getDoc(ref);
+
+if (snap.exists()) {
+
+  const d = snap.data();
+
+  document.getElementById("painel").innerHTML = `
+    <div class="card">
+      <div>Leituras hoje</div>
+      <div class="valor">${d.leituras || 0}</div>
+    </div>
+
+    <div class="card">
+      <div>Escritas hoje</div>
+      <div class="valor">${d.escritas || 0}</div>
+    </div>
+
+    <div class="card">
+      <div>Exclusões hoje</div>
+      <div class="valor">${d.exclusoes || 0}</div>
+    </div>
+  `;
+}
+
+</script>
+</body>
+</html>
