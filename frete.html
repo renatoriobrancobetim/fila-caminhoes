@@ -55,71 +55,67 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
   let usuarioLogado = null;
+  let listaClientesCache = [];
 
-window.buscarCliente = async function(input) {
+async function carregarClientesCache(){
+  const snapshot = await getDocs(collection(db, "clientes"));
+  listaClientesCache = snapshot.docs.map(doc => doc.data());
+}
 
-const termo = input.value
-  .normalize("NFD")
-  .replace(/[\u0300-\u036f]/g, "")
-  .toUpperCase()
-  .trim();
+await carregarClientesCache();
 
+
+window.buscarCliente = function(input) {
+
+  const termo = input.value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .trim();
 
   const container = input.parentElement.querySelector(".resultado-busca");
 
-  if (termo.length < 3) {
+  if (termo.length < 2) {
     container.style.display = "none";
     return;
   }
 
-  try {
+  container.innerHTML = "";
 
-    const clientesRef = collection(db, "clientes");
+  const resultados = listaClientesCache
+    .filter(c =>
+      c.nomeBusca &&
+      c.nomeBusca.includes(termo)
+    )
+    .slice(0,8);
 
-    const q = query(
-      clientesRef,
-      orderBy("nomeBusca"),
-      startAt(termo),
-      endAt(termo + "\uf8ff"),
-      limit(8)
-    );
+  resultados.forEach(cliente => {
 
-    const snapshot = await getDocs(q);
+    const item = document.createElement("div");
+    item.className = "item-busca";
+    item.innerText = cliente.nome + " - " + cliente.cidade;
 
-    container.innerHTML = "";
+    item.onclick = () => {
+      input.value = cliente.nome;
+      input.dataset.lat = cliente.latitude;
+      input.dataset.lng = cliente.longitude;
 
-    snapshot.forEach(docSnap => {
+      const idx = input.id.replace("cliente","");
+      const cidadeInput = document.getElementById("cidade" + idx);
 
-      const cliente = docSnap.data();
+      cidadeInput.value = cliente.cidade;
+      cidadeInput.readOnly = true;
+      cidadeInput.classList.add("cidade-travada");
 
-      const item = document.createElement("div");
-      item.className = "item-busca";
-      item.innerText = cliente.nome + " - " + cliente.cidade;
+      container.style.display = "none";
+    };
 
-      item.onclick = () => {
-        input.value = cliente.nome;
-        input.dataset.lat = cliente.latitude;
-        input.dataset.lng = cliente.longitude;
+    container.appendChild(item);
+  });
 
-        const idx = input.id.replace("cliente","");
-        const cidadeInput = document.getElementById("cidade" + idx);
-
-        cidadeInput.value = cliente.cidade;
-        cidadeInput.readOnly = true;
-        cidadeInput.classList.add("cidade-travada");
-
-        container.style.display = "none";
-      };
-
-      container.appendChild(item);
-    });
-
-    container.style.display = snapshot.size > 0 ? "block" : "none";
-
-  } catch (err) {
-    console.error("Erro na busca:", err);
-  }
+  container.style.display = resultados.length > 0 ? "block" : "none";
 };
+
 
 
 
