@@ -765,36 +765,37 @@ if (paradas.length === 0) {
 }
 
 
-    let rota = [];
-    let restantes = [...paradas];
-    let atualCidade = null;
-    let atual = null;
-    while (restantes.length) {
-      let menor = Infinity;
-      let escolhido = null;
+// ================= NOVA OTIMIZAÇÃO COM OSRM TRIP =================
 
-for (const p of restantes) {
-  const d = !atual
-    ? await distanciaBaseCliente(p.clienteInput)
-    : await distanciaEntreClientes(
-        document.getElementById("cliente" + atual.idx),
-        document.getElementById("cliente" + p.idx)
-      );
-
-  if (d < menor) {
-    menor = d;
-    escolhido = p;
+const coords = paradas.map(p => {
+  if (!isNaN(p.lat) && !isNaN(p.lng)) {
+    return `${p.lng},${p.lat}`;
+  } else {
+    const [cLat, cLng] = cidadesCoords[p.cidade];
+    return `${cLng},${cLat}`;
   }
+});
+
+// adiciona base no início
+coords.unshift(`${BASE_COORDS.lng},${BASE_COORDS.lat}`);
+
+const url = `https://router.project-osrm.org/trip/v1/driving/${coords.join(";")}?source=first&roundtrip=false`;
+
+const response = await fetch(url);
+const data = await response.json();
+
+if (data.code !== "Ok") {
+  throw new Error("Erro na otimização da rota (OSRM)");
 }
 
+// ordem otimizada (ignora base índice 0)
+const ordem = data.waypoints
+  .slice(1)
+  .sort((a, b) => a.waypoint_index - b.waypoint_index);
 
+// monta rota final
+let rota = ordem.map(o => paradas[o.trips_index]);
 
-      rota.push(escolhido);
-restantes = restantes.filter(p => p !== escolhido);
-atual = escolhido; // ✅ AGORA SIM
-
-      atualCidade = escolhido.cidade;
-    }
 
     rota.forEach(p =>
       document.querySelector("#freteTable").appendChild(p.row)
@@ -1152,9 +1153,9 @@ pontos.forEach((p, i) => {
 
 
 
-  const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
+   /* const osrm=pontos.map(p=>`${p[1]},${p[0]}`).join(";");
   const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${osrm}?overview=full&geometries=geojson`);
-  const j=await r.json();
+  const j=await r.json(); */
   
 }
 function gerarLinkGoogleMaps(rota) {
