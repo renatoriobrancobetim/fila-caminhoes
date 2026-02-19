@@ -787,11 +787,14 @@ if (data.code !== "Ok") {
 }
 
 // ordena pelos índices da viagem
-const ordem = data.waypoints
-  .slice(1)
-  .sort((a, b) => a.waypoint_index - b.waypoint_index);
+const trip = data.trips[0];
 
-let rota = ordem.map(o => paradas[o.trips_index]);
+let rota = trip.waypoints
+  .filter(w => w.location[0] !== BASE_COORDS.lng) // ignora base
+  .sort((a, b) => a.waypoint_index - b.waypoint_index)
+  .map(w => paradas[w.trips_index - 1]);
+
+
 
 rotaGlobal = rota; // salva ordem otimizada
 
