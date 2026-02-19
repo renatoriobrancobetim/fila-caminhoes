@@ -107,7 +107,16 @@ const todos = [
     const fatia = todos.slice(contador, contador + loteMax);
 
     fatia.forEach(cliente => {
-      const ref = doc(db, "clientes", cliente.nome);
+      const idSeguro = cliente.nome
+  .normalize("NFD")               // remove acentos
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/\//g, "-")
+  .replace(/\./g, "")
+  .replace(/[^a-zA-Z0-9-_ ]/g, "")
+  .trim();
+
+const ref = doc(db, "clientes", idSeguro);
+
       batch.set(ref, cliente);
     });
 
