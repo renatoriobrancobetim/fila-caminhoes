@@ -156,6 +156,26 @@ async function carregarInvalidos(){
   document.getElementById("contador").innerText =
     totalInvalidos + " clientes inválidos";
 }
+function ajustarCoordenada(valor, tipo){
+
+  if (isNaN(valor)) return "";
+
+  const min = tipo === "lat" ? -23.5 : -51.0;
+  const max = tipo === "lat" ? -14.0 : -39.0;
+
+  // 🔁 Move o ponto para esquerda enquanto estiver muito grande
+  while (valor < min || valor > max) {
+    valor = valor / 10;
+  }
+
+  // 🔁 Move o ponto para direita se estiver pequeno demais
+  while (Math.abs(valor) < 10) {
+    valor = valor * 10;
+  }
+
+  // 🧹 Remove excesso de casas decimais
+  return Number(valor.toFixed(6));
+}
 
 window.autoFix = function(id){
 
@@ -165,27 +185,37 @@ window.autoFix = function(id){
   let lat = Number(latInput.value);
   let lng = Number(lngInput.value);
 
-  if(Math.abs(lat) < 10) lat *= 10;
-  if(Math.abs(lng) < 10) lng *= 10;
+  lat = ajustarCoordenada(lat, "lat");
+  lng = ajustarCoordenada(lng, "lng");
 
   latInput.value = lat;
   lngInput.value = lng;
 }
 
+
 window.salvar = async function(id){
 
-  const lat = Number(document.getElementById("lat-"+id).value);
-  const lng = Number(document.getElementById("lng-"+id).value);
+  try {
 
-  await updateDoc(doc(db,"clientes",id),{
-    latitude: lat,
-    longitude: lng,
-    atualizadoEm: new Date()
-  });
+    const lat = Number(document.getElementById("lat-"+id).value);
+    const lng = Number(document.getElementById("lng-"+id).value);
 
-  alert("Coordenada atualizada");
-  await carregarInvalidos(); // atualiza a lista
+    await updateDoc(doc(db,"clientes",id),{
+      latitude: lat,
+      longitude: lng,
+      atualizadoEm: new Date()
+    });
+
+    alert("Coordenada atualizada com sucesso.");
+    await carregarInvalidos();
+
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao salvar. Verifique permissões.");
+  }
+
 }
+
 
 // 🔐 PROTEÇÃO DE LOGIN (OBRIGATÓRIA)
 onAuthStateChanged(auth, async (user) => {
