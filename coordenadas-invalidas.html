@@ -213,47 +213,33 @@ window.salvar = async function(id){
 
   try {
 
-    botao.classList.add("loading");
-    botao.innerText = "Salvando";
+    botao.disabled = true;
+    botao.innerHTML = "⏳ Salvando...";
 
     const lat = Number(document.getElementById("lat-"+id).value);
     const lng = Number(document.getElementById("lng-"+id).value);
 
- await updateDoc(doc(db,"clientes",id),{
-  latitude: lat,
-  longitude: lng,
-  atualizadoEm: new Date()
-});
+    await updateDoc(doc(db,"clientes",id),{
+      latitude: lat,
+      longitude: lng,
+      atualizadoEm: new Date()
+    });
 
-const linha = document.getElementById("row-" + id);
-linha.classList.add("linha-corrigida");
+    const linha = document.getElementById("row-" + id);
+    linha.classList.add("linha-corrigida");
 
-const botao = document.getElementById("save-" + id);
-botao.classList.remove("loading");
-botao.innerHTML = "<span class='badge-ok'>✔ Corrigido</span>";
-
-
-    botao.classList.remove("loading");
-    botao.innerText = "✔ Salvo";
-
-    setTimeout(() => {
-      botao.innerText = "💾 Salvar";
-    }, 2000);
+    botao.innerHTML = "<span class='badge-ok'>✔ Corrigido</span>";
 
   } catch (e) {
 
-    console.error(e);
+    console.error("ERRO REAL:", e);
 
-    botao.classList.remove("loading");
-    botao.innerText = "❌ Erro";
-
-    setTimeout(() => {
-      botao.innerText = "💾 Salvar";
-    }, 2000);
+    botao.disabled = false;
+    botao.innerHTML = "❌ Erro";
 
   }
-
 }
+
 window.corrigirLote = async function(){
 
   if (!confirm("Deseja corrigir TODOS os inválidos?")) return;
