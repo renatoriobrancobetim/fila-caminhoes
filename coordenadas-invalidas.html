@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Revisão de Coordenadas Inválidas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f1f5f9;
+}
+
+header{
+  background:linear-gradient(90deg,#1e3a8a,#dc2626);
+  color:#fff;
+  padding:20px;
+  text-align:center;
+}
+
+main{
+  padding:30px;
+  max-width:1200px;
+  margin:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+th,td{
+  padding:10px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:center;
+  font-size:13px;
+}
+
+th{
+  background:#f8fafc;
+}
+
+button{
+  padding:6px 10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.btn-fix{
+  background:#f59e0b;
+  color:#fff;
+}
+
+.btn-save{
+  background:#16a34a;
+  color:#fff;
+}
+
+.btn-top{
+  margin-bottom:20px;
+  background:#1e3a8a;
+  color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "tabela-frete-rio-branco.firebaseapp.com",
+  projectId: "tabela-frete-rio-branco",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const MG_LAT_MIN = -23.5;
+const MG_LAT_MAX = -14.0;
+const MG_LNG_MIN = -51.0;
+const MG_LNG_MAX = -39.0;
+
+function coordenadaInvalida(lat,lng){
+  return (
+    isNaN(lat) ||
+    isNaN(lng) ||
+    lat < MG_LAT_MIN ||
+    lat > MG_LAT_MAX ||
+    lng < MG_LNG_MIN ||
+    lng > MG_LNG_MAX
+  );
+}
+
+async function carregarInvalidos(){
+
+  const snapshot = await getDocs(collection(db,"clientes"));
+  const tabela = document.getElementById("tbody");
+  tabela.innerHTML="";
+
+  let totalInvalidos=0;
+
+  snapshot.forEach(docSnap=>{
+    const d = docSnap.data();
+    const lat = Number(d.latitude);
+    const lng = Number(d.longitude);
+
+    if(coordenadaInvalida(lat,lng)){
+
+      totalInvalidos++;
+
+      tabela.innerHTML += `
+        <tr>
+          <td>${d.nome}</td>
+          <td>${d.cidade}</td>
+          <td><input value="${lat || ""}" id="lat-${docSnap.id}"></td>
+          <td><input value="${lng || ""}" id="lng-${docSnap.id}"></td>
+          <td>
+            <button class="btn-fix" onclick="autoFix('${docSnap.id}')">
+              🔧 Auto
+            </button>
+          </td>
+          <td>
+            <button class="btn-save" onclick="salvar('${docSnap.id}')">
+              💾 Salvar
+            </button>
+          </td>
+        </tr>
+      `;
+    }
+  });
+
+  document.getElementById("contador").innerText =
+    totalInvalidos + " clientes inválidos";
+
+}
+
+window.autoFix = function(id){
+
+  const latInput = document.getElementById("lat-"+id);
+  const lngInput = document.getElementById("lng-"+id);
+
+  let lat = Number(latInput.value);
+  let lng = Number(lngInput.value);
+
+  if(Math.abs(lat) < 10) lat *= 10;
+  if(Math.abs(lng) < 10) lng *= 10;
+
+  latInput.value = lat;
+  lngInput.value = lng;
+}
+
+window.salvar = async function(id){
+
+  const lat = Number(document.getElementById("lat-"+id).value);
+  const lng = Number(document.getElementById("lng-"+id).value);
+
+  await updateDoc(doc(db,"clientes",id),{
+    latitude: lat,
+    longitude: lng,
+    atualizadoEm: new Date()
+  });
+
+  alert("Coordenada atualizada");
+  carregarInvalidos();
+}
+
+carregarInvalidos();
+
+</script>
+
+<header>
+<h1>🔎 Revisão de Coordenadas Inválidas</h1>
+<p id="contador"></p>
+</header>
+
+<main>
+
+<button class="btn-top" onclick="location.reload()">
+🔄 Atualizar Lista
+</button>
+
+<table>
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Cidade</th>
+<th>Latitude</th>
+<th>Longitude</th>
+<th>Auto Correção</th>
+<th>Salvar</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+
+</main>
+
+</body>
+</html>
