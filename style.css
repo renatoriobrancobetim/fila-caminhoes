@@ -1375,4 +1375,28 @@ th{
   color: #c62828;
   border: 1px solid #e53935;
 }
+.btn-save.loading {
+  position: relative;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.btn-save.loading::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
 
