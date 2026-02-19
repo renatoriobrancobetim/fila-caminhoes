@@ -7,7 +7,7 @@
 
 <style>
 body { font-family: Arial; padding:20px; background:#f4f6f9; }
-button { padding:10px 15px; margin:5px; }
+button { padding:10px 15px; margin:5px; cursor:pointer; }
 #log { margin-top:20px; font-size:13px; background:#fff; padding:15px; border-radius:8px; }
 .success { color:green; }
 .error { color:red; }
@@ -30,8 +30,20 @@ button { padding:10px 15px; margin:5px; }
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, writeBatch, doc } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getAuth, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import { 
+  getFirestore, 
+  collection, 
+  writeBatch, 
+  doc 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+
+/* ================= CONFIG FIREBASE ================= */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -43,7 +55,27 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
+
+/* ================= BLOQUEIO DE ACESSO DIRETO ================= */
+
+document.documentElement.style.display = "none";
+
+onAuthStateChanged(auth, (user) => {
+
+  if (!user) {
+    window.location.replace("login.html");
+    return;
+  }
+
+  console.log("Importador autenticado:", user.uid);
+  document.documentElement.style.display = "block";
+
+});
+
+
+/* ================= FUNÇÕES UTIL ================= */
 
 function normalizarNome(nome){
   return nome
@@ -55,7 +87,6 @@ function normalizarNome(nome){
 
 function corrigirCoordenada(valor){
   let numero = Number(valor);
-
   if (isNaN(numero)) return null;
 
   if (Math.abs(numero) < 10) {
@@ -71,13 +102,34 @@ function gerarIdSeguro(nome){
     .replace(/[^a-zA-Z0-9-_ ]/g,"")
     .trim();
 }
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const auth = getAuth();
+function montarCliente(c, tipo){
 
-console.log("Usuário atual:", auth.currentUser);
+  const lat = corrigirCoordenada(c.lat);
+  const lng = corrigirCoordenada(c.lng);
+
+  return {
+    nome: c.cliente,
+    nomeBusca: normalizarNome(c.cliente),
+    cidade: c.cidade,
+    latitude: lat,
+    longitude: lng,
+    tipo: tipo,
+    atualizadoEm: new Date()
+  };
+}
+
+
+/* ================= IMPORTAÇÃO ================= */
 
 window.importar = async function(){
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Usuário não autenticado.");
+    return;
+  }
 
   const log = document.getElementById("log");
   log.innerHTML = "";
@@ -97,7 +149,7 @@ window.importar = async function(){
 
     const todos = [
       ...json1.map(c => montarCliente(c,"distribuidora")),
-      ...json2.map(c => montarCliente(c,"derivado"))
+      ...json2.map(c => montarCliente(c,"derivados"))
     ];
 
     log.innerHTML += `Total de registros: ${todos.length}<br><br>`;
@@ -111,9 +163,12 @@ window.importar = async function(){
       const fatia = todos.slice(contador, contador + loteMax);
 
       fatia.forEach(cliente => {
+
         const idSeguro = gerarIdSeguro(cliente.nome);
         const ref = doc(db, "clientes", idSeguro);
+
         batch.set(ref, cliente, { merge:true });
+
       });
 
       await batch.commit();
@@ -131,22 +186,7 @@ window.importar = async function(){
   }
 };
 
-function montarCliente(c, tipo){
-
-  const lat = corrigirCoordenada(c.lat);
-  const lng = corrigirCoordenada(c.lng);
-
-  return {
-    nome: c.cliente,
-    nomeBusca: normalizarNome(c.cliente),
-    cidade: c.cidade,
-    latitude: lat,
-    longitude: lng,
-    tipo: tipo,
-    atualizadoEm: new Date()
-  };
-}
-
 </script>
+
 </body>
 </html>
