@@ -65,13 +65,15 @@ const todos = [
     if (!isNaN(lat) && Math.abs(lat) < 10) lat = lat * 10;
     if (!isNaN(lng) && Math.abs(lng) < 10) lng = lng * 10;
 
-    return {
-      nome: c.cliente,
-      cidade: c.cidade,
-      latitude: lat,
-      longitude: lng,
-      tipo: "distribuidora"
-    };
+  return {
+  nome: c.cliente,
+  nomeBusca: c.cliente.toLowerCase(),
+  cidade: c.cidade,
+  latitude: lat,
+  longitude: lng,
+  tipo: "distribuidora"
+};
+
 
   }),
 
