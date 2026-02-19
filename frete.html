@@ -779,36 +779,29 @@ coords.unshift(`${BASE_COORDS.lng},${BASE_COORDS.lat}`);
 
 const url = `https://router.project-osrm.org/trip/v1/driving/${coords.join(";")}?source=first&roundtrip=false`;
 
-// ================= NOVA OTIMIZAÇÃO COM OSRM TRIP =================
+// ================= OTIMIZAÇÃO OPERACIONAL INTELIGENTE =================
 
-const response = await fetch(url);
-const data = await response.json();
+// cidade da base (ajuste se mudar base no futuro)
+const baseCidade = "BETIM";
 
-if (data.code !== "Ok") {
-  throw new Error("Erro na otimização da rota (OSRM)");
+// 1️⃣ separa clientes da mesma cidade da base
+const mesmaCidade = paradas.filter(p => p.cidade === baseCidade);
+const outrasCidades = paradas.filter(p => p.cidade !== baseCidade);
+
+// 2️⃣ calcula distância da base para cada parada restante
+for (let p of outrasCidades) {
+  p.distBase = await distanciaBaseCliente(p.clienteInput);
 }
 
-if (!data.trips || !data.trips[0]) {
-  throw new Error("OSRM não retornou rota válida.");
-}
+// 3️⃣ ordena por menor distância até a base
+outrasCidades.sort((a, b) => a.distBase - b.distBase);
 
-// usa waypoints da raiz, não de trip
-const waypoints = data.waypoints;
+// 4️⃣ monta rota final
+let rota = [...mesmaCidade, ...outrasCidades];
 
-// remove base (primeiro ponto)
-let rota = waypoints
-  .filter(w => w.waypoint_index !== 0)
-  .sort((a, b) => a.waypoint_index - b.waypoint_index)
-  .map(w => {
-    const idxReal = w.waypoint_index - 1;
-    return paradas[idxReal];
-  });
+// salva ordem otimizada global
+rotaGlobal = rota;
 
-
-
-
-
-rotaGlobal = rota; // salva ordem otimizada
 
 
 // ================= DISPERSÃO REAL (PÓS-ROTA OTIMIZADA) =================
