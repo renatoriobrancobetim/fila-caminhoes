@@ -444,7 +444,7 @@ let infoDispersaoHTML = "";
 let dispersoesCount = 0;
 let dispersoesGlobais = []; // 👈 NOVA
 let distanciaCache = {};
-
+let rotaGlobal = null;
 
 
 
@@ -788,18 +788,16 @@ if (data.code !== "Ok") {
   throw new Error("Erro na otimização da rota (OSRM)");
 }
 
-// ordem otimizada (ignora base índice 0)
+// ordena pelos índices da viagem
 const ordem = data.waypoints
   .slice(1)
   .sort((a, b) => a.waypoint_index - b.waypoint_index);
 
-// monta rota final
-let rota = ordem.map(o => paradas[o.trips_index]);
+// monta rota baseada na ordem correta
+let rota = ordem.map(o => paradas[o.waypoint_index - 1]);
+rotaGlobal = rota; // salva ordem otimizada
 
 
-    rota.forEach(p =>
-      document.querySelector("#freteTable").appendChild(p.row)
-    );
 // ================= DISPERSÃO REAL (PÓS-ROTA OTIMIZADA) =================
 dispersoes = [];
 
@@ -919,7 +917,9 @@ document.getElementById("btnCalcular").classList.add("btn-destaque");
 
 /* ================= KM ================= */
 async function recalcularKM(){
-  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
+  const rows = rotaGlobal ? rotaGlobal.map(r => r.row)
+                        : [...document.querySelectorAll("#freteTable tr[data-row]")];
+
 
   // 🔥 FILTRA APENAS LINHAS COM CLIENTE OU CIDADE VÁLIDA
   const rowsValidas = rows.filter(r => {
@@ -1204,12 +1204,7 @@ try {
 
   // 🔧 GARANTE que o KM seja calculado antes do frete
   await recalcularKM();
-
-
   const km = parseFloat(document.getElementById("kmTotal").value || 0);
-
-
-
   const dados=tipo.startsWith("TRUCK")?baseFrete.TRUCK:baseFrete[tipo];
   const litrosArr=compartimentos[tipo];
   const rows=[...document.querySelectorAll("#freteTable tr[data-row]")];
@@ -1814,7 +1809,10 @@ async function calcularTempoRota() {
   const TEMPO_DESCARGA_MIN = 50;
   const JORNADA_DIARIA_H = 9.5; // 8h + 1h almoço + 0.5h descanso
 
-  const rows = [...document.querySelectorAll("#freteTable tr[data-row]")];
+  const rows = rotaGlobal
+  ? rotaGlobal.map(r => r.row)
+  : [...document.querySelectorAll("#freteTable tr[data-row]")];
+
 
   // ================= FILTRA PARADAS VÁLIDAS =================
   const rowsValidas = rows.filter(r => {
