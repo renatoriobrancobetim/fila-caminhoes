@@ -77,15 +77,13 @@ window.buscarCliente = async function(input) {
 
     const q = query(
       clientesRef,
-      where("nomeBuscaArray", "array-contains", termo),
+      orderBy("nomeBusca"),
+      startAt(termo),
+      endAt(termo + "\uf8ff"),
       limit(8)
     );
 
     const snapshot = await getDocs(q);
-    await registrarConsumo("leituras", snapshot.size);
-
-
-    console.log("Resultados encontrados:", snapshot.size);
 
     container.innerHTML = "";
 
@@ -98,7 +96,6 @@ window.buscarCliente = async function(input) {
       item.innerText = cliente.nome + " - " + cliente.cidade;
 
       item.onclick = () => {
-
         input.value = cliente.nome;
         input.dataset.lat = cliente.latitude;
         input.dataset.lng = cliente.longitude;
@@ -122,6 +119,7 @@ window.buscarCliente = async function(input) {
     console.error("Erro na busca:", err);
   }
 };
+
 
 
   window.db = db;
