@@ -32,6 +32,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+  window.db = db;
+window.collection = collection;
+window.query = query;
+window.orderBy = orderBy;
+window.startAt = startAt;
+window.endAt = endAt;
+window.limit = limit;
+window.getDocs = getDocs;
 
 // 🔥 TORNA db GLOBAL PARA O SCRIPT PRINCIPAL
 window.db = db;
