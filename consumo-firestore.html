@@ -115,6 +115,9 @@ footer {
   <h3>Coordenadas Inválidas</h3>
   <div class="metric" id="coordInvalidas">...</div>
 </div>
+<button onclick="corrigirCoordenadas()">
+  🔧 Corrigir Coordenadas Inválidas
+</button>
 
   <div class="card">
     <h3>Limite Diário de Gravações</h3>
@@ -146,6 +149,82 @@ Sistema Logístico · Monitoramento Firebase
 </footer>
 
 <script type="module">
+import { writeBatch, doc } from 
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+window.corrigirCoordenadas = async function(){
+
+  if (!confirm("Deseja corrigir automaticamente coordenadas inválidas?")) {
+    return;
+  }
+
+  const coll = collection(db, "clientes");
+  const snapshot = await getDocs(coll);
+
+  const MG_LAT_MIN = -23.5;
+  const MG_LAT_MAX = -14.0;
+  const MG_LNG_MIN = -51.0;
+  const MG_LNG_MAX = -39.0;
+
+  let corrigidos = 0;
+  let batch = writeBatch(db);
+  let contadorBatch = 0;
+
+  snapshot.forEach(docSnap => {
+
+    const d = docSnap.data();
+    let lat = Number(d.latitude);
+    let lng = Number(d.longitude);
+    let alterado = false;
+
+    if (isNaN(lat) || isNaN(lng)) return;
+
+    // 🔧 REGRA 1 – Casa decimal errada
+    if (Math.abs(lat) < 10) {
+      lat = lat * 10;
+      alterado = true;
+    }
+
+    if (Math.abs(lng) < 10) {
+      lng = lng * 10;
+      alterado = true;
+    }
+
+    // 🔧 REGRA 2 – Ainda fora de MG
+    const invalida =
+      lat < MG_LAT_MIN ||
+      lat > MG_LAT_MAX ||
+      lng < MG_LNG_MIN ||
+      lng > MG_LNG_MAX;
+
+    if (alterado && !invalida) {
+
+      const ref = doc(db, "clientes", docSnap.id);
+
+      batch.update(ref, {
+        latitude: lat,
+        longitude: lng,
+        atualizadoEm: new Date()
+      });
+
+      corrigidos++;
+      contadorBatch++;
+
+      if (contadorBatch === 400) {
+        batch.commit();
+        batch = writeBatch(db);
+        contadorBatch = 0;
+      }
+    }
+
+  });
+
+  if (contadorBatch > 0) {
+    await batch.commit();
+  }
+
+  alert(`Correção concluída. ${corrigidos} registros ajustados.`);
+};
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
