@@ -86,15 +86,13 @@ function normalizarNome(nome){
 }
 
 function corrigirCoordenada(valor){
-  let numero = Number(valor);
+  const numero = Number(valor);
+
   if (isNaN(numero)) return null;
 
-  if (Math.abs(numero) < 10) {
-    numero = numero * 10;
-  }
-
-  return numero;
+  return numero; // NÃO corrige mais automaticamente
 }
+
 
 function gerarIdSeguro(nome){
   return nome
