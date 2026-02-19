@@ -801,6 +801,13 @@ let rota = [...mesmaCidade, ...outrasCidades];
 
 // salva ordem otimizada global
 rotaGlobal = rota;
+    
+// 🔥 REORDENA VISUALMENTE A TABELA
+const tabela = document.getElementById("freteTable");
+
+rota.forEach(p => {
+  tabela.appendChild(p.row);
+});
 
 
 
