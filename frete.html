@@ -791,8 +791,8 @@ const ordem = data.waypoints
   .slice(1)
   .sort((a, b) => a.waypoint_index - b.waypoint_index);
 
-// monta rota baseada na ordem correta
-let rota = ordem.map(o => paradas[o.waypoint_index - 1]);
+let rota = ordem.map(o => paradas[o.trips_index]);
+
 rotaGlobal = rota; // salva ordem otimizada
 
 
