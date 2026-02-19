@@ -96,6 +96,41 @@ main{
   50%{transform:scale(1.15)}
   100%{transform:scale(1)}
 }
+
+
+/* SKELETON */
+.skeleton{
+  background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+  background-size:200% 100%;
+  animation:loading 1.2s infinite;
+  border-radius:14px;
+  height:140px;
+}
+
+@keyframes loading{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+  font-size:12px;
+  color:#64748b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<button class="logout-btn" onclick="logout()">Sair</button>
+<h1>🚚 Painel Operacional Logístico</h1>
+<p>Central unificada dos sistemas</p>
+<p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:.9;"></p>
+</header>
+
+<main>
 <!-- KPI DASHBOARD -->
 <div class="kpi-container" id="kpiContainer" style="display:none;">
 
@@ -132,40 +167,6 @@ main{
   </div>
 
 </div>
-
-/* SKELETON */
-.skeleton{
-  background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
-  background-size:200% 100%;
-  animation:loading 1.2s infinite;
-  border-radius:14px;
-  height:140px;
-}
-
-@keyframes loading{
-  0%{background-position:200% 0}
-  100%{background-position:-200% 0}
-}
-
-footer{
-  text-align:center;
-  padding:20px;
-  font-size:12px;
-  color:#64748b;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-<button class="logout-btn" onclick="logout()">Sair</button>
-<h1>🚚 Painel Operacional Logístico</h1>
-<p>Central unificada dos sistemas</p>
-<p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:.9;"></p>
-</header>
-
-<main>
 
 <!-- SKELETON -->
 <div id="skeletonContainer" class="cards">
