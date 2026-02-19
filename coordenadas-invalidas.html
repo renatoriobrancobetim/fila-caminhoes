@@ -163,19 +163,32 @@ function ajustarCoordenada(valor, tipo){
   const min = tipo === "lat" ? -23.5 : -51.0;
   const max = tipo === "lat" ? -14.0 : -39.0;
 
-  // 🔁 Move o ponto para esquerda enquanto estiver muito grande
-  while (valor < min || valor > max) {
-    valor = valor / 10;
+  let tentativa = valor;
+
+  // 🔧 Tenta corrigir até 3 deslocamentos
+  for (let i = 0; i < 3; i++) {
+
+    if (tentativa >= min && tentativa <= max) {
+      return Number(tentativa.toFixed(6));
+    }
+
+    // Se muito grande → divide
+    if (Math.abs(tentativa) > 100) {
+      tentativa = tentativa / 10;
+    }
+    // Se pequeno demais → multiplica
+    else if (Math.abs(tentativa) < 10) {
+      tentativa = tentativa * 10;
+    }
+    else {
+      tentativa = tentativa / 10;
+    }
   }
 
-  // 🔁 Move o ponto para direita se estiver pequeno demais
-  while (Math.abs(valor) < 10) {
-    valor = valor * 10;
-  }
-
-  // 🧹 Remove excesso de casas decimais
+  // Se não conseguiu corrigir, retorna original formatado
   return Number(valor.toFixed(6));
 }
+
 
 window.autoFix = function(id){
 
