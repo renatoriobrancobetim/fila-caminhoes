@@ -133,7 +133,7 @@ async function carregarInvalidos(){
       totalInvalidos++;
 
       tabela.innerHTML += `
-        <tr>
+        <tr id="row-${docSnap.id}">
           <td>${d.nome}</td>
           <td>${d.cidade}</td>
           <td><input value="${lat || ""}" id="lat-${docSnap.id}"></td>
@@ -219,11 +219,19 @@ window.salvar = async function(id){
     const lat = Number(document.getElementById("lat-"+id).value);
     const lng = Number(document.getElementById("lng-"+id).value);
 
-    await updateDoc(doc(db,"clientes",id),{
-      latitude: lat,
-      longitude: lng,
-      atualizadoEm: new Date()
-    });
+ await updateDoc(doc(db,"clientes",id),{
+  latitude: lat,
+  longitude: lng,
+  atualizadoEm: new Date()
+});
+
+const linha = document.getElementById("row-" + id);
+linha.classList.add("linha-corrigida");
+
+const botao = document.getElementById("save-" + id);
+botao.classList.remove("loading");
+botao.innerHTML = "<span class='badge-ok'>✔ Corrigido</span>";
+
 
     botao.classList.remove("loading");
     botao.innerText = "✔ Salvo";
@@ -246,6 +254,58 @@ window.salvar = async function(id){
   }
 
 }
+window.corrigirLote = async function(){
+
+  if (!confirm("Deseja corrigir TODOS os inválidos?")) return;
+
+  const snapshot = await getDocs(collection(db,"clientes"));
+
+  const docsInvalidos = [];
+
+  snapshot.forEach(docSnap => {
+    const d = docSnap.data();
+    const lat = Number(d.latitude);
+    const lng = Number(d.longitude);
+
+    if (coordenadaInvalida(lat,lng)) {
+      docsInvalidos.push({ id: docSnap.id, lat, lng });
+    }
+  });
+
+  const total = docsInvalidos.length;
+  let processados = 0;
+
+  for (const item of docsInvalidos) {
+
+    let novaLat = ajustarCoordenada(item.lat,"lat");
+    let novaLng = ajustarCoordenada(item.lng,"lng");
+
+    await updateDoc(doc(db,"clientes",item.id),{
+      latitude: novaLat,
+      longitude: novaLng,
+      atualizadoEm: new Date()
+    });
+
+    processados++;
+
+    // Atualiza barra
+    const percentual = Math.round((processados / total) * 100);
+    document.getElementById("barraLote").style.width = percentual + "%";
+    document.getElementById("statusLote").innerText =
+      `Corrigindo ${processados} de ${total}`;
+
+    // Marca linha verde se estiver visível
+    const linha = document.getElementById("row-" + item.id);
+    if (linha) {
+      linha.classList.add("linha-corrigida");
+    }
+
+  }
+
+  document.getElementById("statusLote").innerText =
+    "✔ Correção em lote concluída";
+
+};
 
 
 
@@ -270,6 +330,18 @@ onAuthStateChanged(auth, async (user) => {
 </header>
 
 <main>
+<button class="btn-top" onclick="corrigirLote()">
+🚀 Corrigir Todos Inválidos
+</button>
+
+<div style="margin:15px 0;">
+  <div style="height:10px;background:#e5e7eb;border-radius:6px;">
+    <div id="barraLote"
+         style="height:100%;width:0%;background:#16a34a;border-radius:6px;transition:width 0.3s;">
+    </div>
+  </div>
+  <div id="statusLote" style="font-size:12px;margin-top:6px;"></div>
+</div>
 
 <button class="btn-top" onclick="location.reload()">
 🔄 Atualizar Lista
