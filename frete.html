@@ -792,16 +792,18 @@ if (!data.trips || !data.trips[0]) {
   throw new Error("OSRM não retornou rota válida.");
 }
 
-const trip = data.trips[0];
+// usa waypoints da raiz, não de trip
+const waypoints = data.waypoints;
 
-// remove base (posição 0)
-let rota = trip.waypoints
+// remove base (primeiro ponto)
+let rota = waypoints
   .filter(w => w.waypoint_index !== 0)
   .sort((a, b) => a.waypoint_index - b.waypoint_index)
   .map(w => {
     const idxReal = w.waypoint_index - 1;
     return paradas[idxReal];
   });
+
 
 
 
