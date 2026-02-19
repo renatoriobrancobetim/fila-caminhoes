@@ -144,9 +144,10 @@ async function carregarInvalidos(){
             </button>
           </td>
           <td>
-            <button class="btn-save" onclick="salvar('${docSnap.id}')">
-              💾 Salvar
-            </button>
+            <button class="btn-save" id="save-${docSnap.id}" onclick="salvar('${docSnap.id}')">
+  💾 Salvar
+</button>
+
           </td>
         </tr>
       `;
@@ -208,7 +209,12 @@ window.autoFix = function(id){
 
 window.salvar = async function(id){
 
+  const botao = document.getElementById("save-" + id);
+
   try {
+
+    botao.classList.add("loading");
+    botao.innerText = "Salvando";
 
     const lat = Number(document.getElementById("lat-"+id).value);
     const lng = Number(document.getElementById("lng-"+id).value);
@@ -219,15 +225,28 @@ window.salvar = async function(id){
       atualizadoEm: new Date()
     });
 
-    alert("Coordenada atualizada com sucesso.");
-    await carregarInvalidos();
+    botao.classList.remove("loading");
+    botao.innerText = "✔ Salvo";
+
+    setTimeout(() => {
+      botao.innerText = "💾 Salvar";
+    }, 2000);
 
   } catch (e) {
+
     console.error(e);
-    alert("Erro ao salvar. Verifique permissões.");
+
+    botao.classList.remove("loading");
+    botao.innerText = "❌ Erro";
+
+    setTimeout(() => {
+      botao.innerText = "💾 Salvar";
+    }, 2000);
+
   }
 
 }
+
 
 
 // 🔐 PROTEÇÃO DE LOGIN (OBRIGATÓRIA)
