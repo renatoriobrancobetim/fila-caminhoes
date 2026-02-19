@@ -95,10 +95,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 onAuthStateChanged(auth, async (user) => {
-if (dados.perfil === "admin") {
-  document.getElementById("cardCoordenadas").style.display = "block";
-  await contarCoordenadasInvalidas();
-}
 
   if (!user) {
     window.location.href = "login.html";
@@ -114,6 +110,16 @@ if (dados.perfil === "admin") {
   }
 
   const dados = userSnap.data();
+
+  // 🔒 Ferramentas administrativas
+if (dados.perfil === "admin") {
+  document.getElementById("cardImportar").style.display = "block";
+  document.getElementById("cardConsumo").style.display = "block";
+  document.getElementById("cardCoordenadas").style.display = "block";
+
+  await contarCoordenadasInvalidas();
+}
+
 
   // Mostrar nome no topo
   document.getElementById("usuarioLogado").innerText =
@@ -143,12 +149,6 @@ if (dados.perfil === "admin") {
   document.getElementById("cardConsumo").style.display = "block";
 }
 
-  // Se for admin, libera tudo
-  if (dados.perfil === "admin") {
-    document.querySelectorAll(".card").forEach(card => {
-      card.style.display = "block";
-    });
-  }
 
 });
 
