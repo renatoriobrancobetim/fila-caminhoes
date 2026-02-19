@@ -1872,9 +1872,15 @@ async function calcularEtapasTempo(cidades) {
 
   return etapas;
 }
-async function buscarCliente(input) {
+window.buscarCliente = async function(input) {
 
-  const termo = input.value.toLowerCase().trim();
+
+ const termo = input.value
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .trim();
+
 
   const container = input.parentElement.querySelector(".resultado-busca");
 
