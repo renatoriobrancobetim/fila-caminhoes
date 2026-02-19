@@ -2,6 +2,25 @@
 <html lang="pt-BR">
 <head>
 <script type="module">
+  import { 
+  doc, 
+  setDoc, 
+  increment 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+async function registrarConsumo(tipo, quantidade = 1){
+
+  const hoje = new Date().toISOString().split("T")[0];
+
+  const ref = doc(db, "monitoramentoFirestore", hoje);
+
+  await setDoc(ref, {
+    data: hoje,
+    [tipo]: increment(quantidade),
+    atualizadoEm: new Date()
+  }, { merge: true });
+}
+
   import { where } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -63,6 +82,8 @@ window.buscarCliente = async function(input) {
     );
 
     const snapshot = await getDocs(q);
+    await registrarConsumo("leituras", snapshot.size);
+
 
     console.log("Resultados encontrados:", snapshot.size);
 
