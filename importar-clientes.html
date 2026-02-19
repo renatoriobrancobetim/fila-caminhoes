@@ -179,6 +179,8 @@ window.importar = async function(){
       });
 
       await batch.commit();
+      await registrarConsumo("escritas", fatia.length);
+
 
       contador += fatia.length;
       log.innerHTML += `Importados ${contador} registros...<br>`;
