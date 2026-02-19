@@ -32,14 +32,71 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+  window.buscarCliente = async function(input) {
+
+  const termo = input.value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+  const container = input.parentElement.querySelector(".resultado-busca");
+
+  if (termo.length < 2) {
+    container.style.display = "none";
+    return;
+  }
+
+  try {
+
+    const clientesRef = collection(db, "clientes");
+
+    const q = query(
+      clientesRef,
+      orderBy("nomeBusca"),
+      startAt(termo),
+      endAt(termo + "\uf8ff"),
+      limit(8)
+    );
+
+    const snapshot = await getDocs(q);
+
+    container.innerHTML = "";
+
+    snapshot.forEach(docSnap => {
+      const cliente = docSnap.data();
+
+      const item = document.createElement("div");
+      item.className = "item-busca";
+      item.innerText = cliente.nome + " - " + cliente.cidade;
+
+      item.onclick = () => {
+
+        input.value = cliente.nome;
+        input.dataset.lat = cliente.latitude;
+        input.dataset.lng = cliente.longitude;
+
+        const idx = input.id.replace("cliente","");
+        const cidadeInput = document.getElementById("cidade" + idx);
+
+        cidadeInput.value = cliente.cidade;
+        cidadeInput.readOnly = true;
+        cidadeInput.classList.add("cidade-travada");
+
+        container.style.display = "none";
+      };
+
+      container.appendChild(item);
+    });
+
+    container.style.display = "block";
+
+  } catch (err) {
+    console.error("Erro na busca:", err);
+  }
+};
+
   window.db = db;
-window.collection = collection;
-window.query = query;
-window.orderBy = orderBy;
-window.startAt = startAt;
-window.endAt = endAt;
-window.limit = limit;
-window.getDocs = getDocs;
 
 // 🔥 TORNA db GLOBAL PARA O SCRIPT PRINCIPAL
 window.db = db;
@@ -1872,71 +1929,6 @@ async function calcularEtapasTempo(cidades) {
 
   return etapas;
 }
-window.buscarCliente = async function(input) {
-
-
- const termo = input.value
-  .normalize("NFD")
-  .replace(/[\u0300-\u036f]/g, "")
-  .toLowerCase()
-  .trim();
-
-
-  const container = input.parentElement.querySelector(".resultado-busca");
-
-  if (termo.length < 2) {
-    container.style.display = "none";
-    return;
-  }
-
-  const clientesRef = collection(db, "clientes");
-
-  const q = query(
-    clientesRef,
-    orderBy("nomeBusca"),
-    startAt(termo),
-    endAt(termo + "\uf8ff"),
-    limit(8)
-  );
-
-  const snapshot = await getDocs(q);
-
-  container.innerHTML = "";
-
-  snapshot.forEach(docSnap => {
-
-    const cliente = docSnap.data();
-
-    const item = document.createElement("div");
-    item.className = "item-busca";
-    item.innerText = cliente.nome + " - " + cliente.cidade;
-
-    item.onclick = () => {
-
-      input.value = cliente.nome;
-
-      input.dataset.lat = cliente.latitude;
-      input.dataset.lng = cliente.longitude;
-
-      const idx = input.id.replace("cliente","");
-      const cidadeInput = document.getElementById("cidade" + idx);
-
-      cidadeInput.value = cliente.cidade;
-      cidadeInput.readOnly = true;
-      cidadeInput.classList.add("cidade-travada");
-
-      container.style.display = "none";
-    };
-
-    container.appendChild(item);
-  });
-
-  container.style.display = "block";
-}
-
-
-
-
 
 </script>
 <script>
