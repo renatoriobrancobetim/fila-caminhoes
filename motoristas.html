@@ -233,6 +233,9 @@ window.enviar = async function(status){
       setLoading(false);
       return;
     }
+    if(status === "INDISPONÍVEL"){
+  await deleteDoc(doc(db,"fila",placa));
+}
 
     /* 📍 VALIDAR LOCALIZAÇÃO */
     const pos = await obterLocalizacao();
