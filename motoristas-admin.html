@@ -40,7 +40,6 @@ body{
   margin:auto;
 }
 
-/* CARD */
 .card{
   background:#fff;
   padding:25px;
@@ -60,7 +59,7 @@ body{
   gap:15px;
 }
 
-input{
+input, select{
   padding:12px;
   border:1px solid #ddd;
   border-radius:8px;
@@ -75,22 +74,10 @@ button{
   font-weight:600;
 }
 
-.btn-azul{
-  background:var(--azul);
-  color:#fff;
-}
+.btn-azul{ background:var(--azul); color:#fff; }
+.btn-vermelho{ background:var(--vermelho); color:#fff; }
+.btn-sec{ background:#6c757d; color:#fff; }
 
-.btn-vermelho{
-  background:var(--vermelho);
-  color:#fff;
-}
-
-.btn-sec{
-  background:#6c757d;
-  color:#fff;
-}
-
-/* TABELA */
 .tabela{
   width:100%;
   border-collapse:collapse;
@@ -115,6 +102,29 @@ button{
 .actions{
   display:flex;
   gap:8px;
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  background:#fff;
+  padding:30px;
+  border-radius:14px;
+  width:100%;
+  max-width:400px;
+}
+
+.modal-content h3{
+  margin-top:0;
+  color:var(--azul);
 }
 
 .footer{
@@ -175,8 +185,9 @@ window.salvar = async function(){
   const placa = placaEl.value.trim().toUpperCase();
   const nome = nomeEl.value.trim();
   const senha = senhaEl.value.trim();
+  const tipo = tipoEl.value;
 
-  if(!placa || !nome || !senha){
+  if(!placa || !nome || !senha || !tipo){
     alert("Preencha todos os campos");
     return;
   }
@@ -185,6 +196,7 @@ window.salvar = async function(){
     placa,
     nome,
     senha,
+    tipoCompartimento: tipo,
     ativo:true,
     criadoEm: serverTimestamp()
   });
@@ -193,17 +205,33 @@ window.salvar = async function(){
   carregar();
 };
 
-/* ================= ALTERAR SENHA ================= */
+/* ================= ALTERAR SENHA MODAL ================= */
 
-window.alterarSenha = async function(placa){
+let placaSelecionada = null;
 
-  const nova = prompt("Digite a nova senha:");
-  if(!nova) return;
+window.abrirModalSenha = function(placa){
+  placaSelecionada = placa;
+  document.getElementById("modalSenha").style.display="flex";
+};
 
-  await updateDoc(doc(db,"motoristas_cadastro",placa),{
-    senha:nova
+window.fecharModal = function(){
+  document.getElementById("modalSenha").style.display="none";
+  novaSenha.value="";
+  confirmarSenha.value="";
+};
+
+window.salvarNovaSenha = async function(){
+
+  if(novaSenha.value !== confirmarSenha.value){
+    alert("As senhas não coincidem");
+    return;
+  }
+
+  await updateDoc(doc(db,"motoristas_cadastro",placaSelecionada),{
+    senha: novaSenha.value
   });
 
+  fecharModal();
   alert("Senha alterada com sucesso!");
 };
 
@@ -212,7 +240,6 @@ window.alterarSenha = async function(placa){
 async function carregar(){
 
   const snap = await getDocs(collection(db,"motoristas_cadastro"));
-
   const tbody = document.getElementById("tbody");
   tbody.innerHTML="";
 
@@ -223,14 +250,14 @@ async function carregar(){
       <tr>
         <td><b>${m.placa}</b></td>
         <td>${m.nome}</td>
-        <td>${m.ativo ? "Ativo" : "Inativo"}</td>
+        <td>${m.tipoCompartimento || "-"}</td>
         <td>
           <div class="actions">
-            <button class="btn-sec" onclick="alterarSenha('${m.placa}')">
+            <button class="btn-sec" onclick="abrirModalSenha('${m.placa}')">
               🔑 Senha
             </button>
             <button class="btn-vermelho" onclick="excluir('${m.placa}')">
-              ❌ Excluir
+              ❌
             </button>
           </div>
         </td>
@@ -252,11 +279,15 @@ function limpar(){
   placaEl.value="";
   nomeEl.value="";
   senhaEl.value="";
+  tipoEl.value="";
 }
 
 const placaEl = document.getElementById("placa");
 const nomeEl = document.getElementById("nome");
 const senhaEl = document.getElementById("senha");
+const tipoEl = document.getElementById("tipo");
+const novaSenha = document.getElementById("novaSenha");
+const confirmarSenha = document.getElementById("confirmarSenha");
 
 </script>
 </head>
@@ -276,7 +307,15 @@ const senhaEl = document.getElementById("senha");
     <div class="form-grid">
       <input id="placa" placeholder="Placa">
       <input id="nome" placeholder="Nome do motorista">
-      <input id="senha" placeholder="Senha">
+      <select id="tipo">
+        <option value="">Tipo de Compartimento</option>
+        <option>Granel</option>
+        <option>Tanque</option>
+        <option>Baú</option>
+        <option>Sider</option>
+        <option>Carreta LS</option>
+      </select>
+      <input id="senha" type="password" placeholder="Senha">
       <button class="btn-azul" onclick="salvar()">Salvar</button>
     </div>
   </div>
@@ -289,7 +328,7 @@ const senhaEl = document.getElementById("senha");
         <tr>
           <th>Placa</th>
           <th>Nome</th>
-          <th>Status</th>
+          <th>Compartimento</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -299,8 +338,20 @@ const senhaEl = document.getElementById("senha");
 
 </div>
 
+<!-- MODAL SENHA -->
+<div class="modal" id="modalSenha">
+  <div class="modal-content">
+    <h3>Alterar Senha</h3>
+    <input id="novaSenha" type="password" placeholder="Nova senha">
+    <input id="confirmarSenha" type="password" placeholder="Confirmar senha">
+    <br><br>
+    <button class="btn-azul" onclick="salvarNovaSenha()">Salvar</button>
+    <button class="btn-vermelho" onclick="fecharModal()">Cancelar</button>
+  </div>
+</div>
+
 <div class="footer">
-  © 2026 • Sistema ERP Logístico
+  © 2026 • Renato Monteiro
 </div>
 
 </body>
