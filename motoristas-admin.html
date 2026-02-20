@@ -185,7 +185,7 @@ window.salvar = async function(){
   const placa = placaEl.value.trim().toUpperCase();
   const nome = nomeEl.value.trim();
   const senha = senhaEl.value.trim();
-  const tipo = tipoEl.value;
+  const config = configEl.value;
 
   if(!placa || !nome || !senha || !tipo){
     alert("Preencha todos os campos");
@@ -196,7 +196,7 @@ window.salvar = async function(){
     placa,
     nome,
     senha,
-    tipoCompartimento: tipo,
+    configEixos: config,
     ativo:true,
     criadoEm: serverTimestamp()
   });
@@ -250,7 +250,7 @@ async function carregar(){
       <tr>
         <td><b>${m.placa}</b></td>
         <td>${m.nome}</td>
-        <td>${m.tipoCompartimento || "-"}</td>
+        <td>${m.configEixos || "-"}</td>
         <td>
           <div class="actions">
             <button class="btn-sec" onclick="abrirModalSenha('${m.placa}')">
@@ -279,13 +279,13 @@ function limpar(){
   placaEl.value="";
   nomeEl.value="";
   senhaEl.value="";
-  tipoEl.value="";
+  configEl.value="";
 }
 
 const placaEl = document.getElementById("placa");
 const nomeEl = document.getElementById("nome");
 const senhaEl = document.getElementById("senha");
-const tipoEl = document.getElementById("tipo");
+const configEl = document.getElementById("config");
 const novaSenha = document.getElementById("novaSenha");
 const confirmarSenha = document.getElementById("confirmarSenha");
 
@@ -307,14 +307,15 @@ const confirmarSenha = document.getElementById("confirmarSenha");
     <div class="form-grid">
       <input id="placa" placeholder="Placa">
       <input id="nome" placeholder="Nome do motorista">
-      <select id="tipo">
-        <option value="">Tipo de Compartimento</option>
-        <option>Granel</option>
-        <option>Tanque</option>
-        <option>Baú</option>
-        <option>Sider</option>
-        <option>Carreta LS</option>
-      </select>
+      <select id="config">
+  <option value="">Configuração de Eixos</option>
+  <option value="532 - TOCO">532 - TOCO</option>
+  <option value="555 - TRUCK">555 - TRUCK</option>
+  <option value="5532 - TRUCK">5532 - TRUCK</option>
+  <option value="53232 - TRUCK">53232 - TRUCK</option>
+  <option value="5555 - BITRUCK">5555 - BITRUCK</option>
+  <option value="555555 - CARRETA">555555 - CARRETA</option>
+</select>
       <input id="senha" type="password" placeholder="Senha">
       <button class="btn-azul" onclick="salvar()">Salvar</button>
     </div>
