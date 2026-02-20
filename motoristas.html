@@ -28,8 +28,7 @@ html,body{
   color:#fff;
 }
 
-/* ================= SPLASH ================= */
-
+/* SPLASH */
 .splash{
   position:fixed;
   inset:0;
@@ -40,40 +39,21 @@ html,body{
   align-items:center;
   z-index:9999;
   animation:fadeOut 1s ease forwards;
-  animation-delay:2.2s;
+  animation-delay:2s;
 }
-
-.splash h1{
-  font-size:26px;
-  margin:20px 0 8px 0;
-  letter-spacing:1px;
-}
-
-.splash p{
-  font-size:14px;
-  opacity:.8;
-}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
 
 .logo-anim{
   font-size:50px;
   animation:pulse 1.4s infinite;
 }
-
 @keyframes pulse{
   0%{transform:scale(1)}
   50%{transform:scale(1.08)}
   100%{transform:scale(1)}
 }
 
-@keyframes fadeOut{
-  to{
-    opacity:0;
-    visibility:hidden;
-  }
-}
-
-/* ================= APP ================= */
-
+/* APP */
 .app{
   min-height:100vh;
   padding:30px 20px 40px 20px;
@@ -156,8 +136,23 @@ button{
   animation:spin 1s linear infinite;
   margin:auto;
 }
-
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ALERTA */
+@keyframes piscando{
+  0%{opacity:1}
+  50%{opacity:0.4}
+  100%{opacity:1}
+}
+
+.alerta-box{
+  display:none;
+  background:#dc3545;
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+  animation:piscando 1s infinite;
+}
 
 footer{
   margin-top:auto;
@@ -170,14 +165,12 @@ footer{
 
 <body>
 
-<!-- SPLASH -->
 <div class="splash">
   <div class="logo-anim">🚚</div>
   <h1>MOTORISTAS RIO BRANCO</h1>
   <p>© 2026 • Renato Monteiro</p>
 </div>
 
-<!-- APP -->
 <div class="app">
 
   <div class="logo">Motorista</div>
@@ -203,6 +196,14 @@ footer{
 
   <div class="feedback" id="feedback"></div>
 
+  <!-- ALERTA FORTE -->
+  <div id="alertaChamado" class="alerta-box">
+    <h2>🚚 SUA VEZ CHEGOU!</h2>
+    <button id="btnConfirmar">
+      ✅ CONFIRMAR CHAMADO
+    </button>
+  </div>
+
   <footer>
     © 2026 • Renato Monteiro
   </footer>
@@ -211,107 +212,90 @@ footer{
 
 <script type="module">
 
-/* ================= FIREBASE ================= */
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
-  getFirestore, 
-  doc, 
-  setDoc, 
-  deleteDoc, 
-  getDoc,
-  onSnapshot,
-  serverTimestamp
+  getFirestore, doc, setDoc, deleteDoc, getDoc,
+  onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import { 
-  getMessaging, 
-  getToken, 
-  onMessage 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
-
 const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+  apiKey: "AIzaSy...",
   authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco",
-  messagingSenderId: "765019849831",
-  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
+  projectId: "tabela-frete-rio-branco"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const messaging = getMessaging(app);
 
-/* ================= ELEMENTOS ================= */
+const EMPRESA_LAT = -19.959843;
+const EMPRESA_LNG = -44.089041;
+const RAIO_MAX_KM = 100;
 
 const feedback = document.getElementById("feedback");
 const statusBox = document.getElementById("statusAtual");
 const distanciaBox = document.getElementById("distancia");
 const placaInput = document.getElementById("placa");
 
-const EMPRESA_LAT = -19.959843;
-const EMPRESA_LNG = -44.089041;
-const RAIO_MAX_KM = 100;
+let alertaAtivo=false;
+let audioAlerta;
+let vibracaoInterval;
 
-/* ================= TOKEN PUSH ================= */
+/* ================= ALERTA FORTE ================= */
 
-async function registrarToken(placa){
+function dispararNotificacao(){
 
-  const permission = await Notification.requestPermission();
-  if(permission !== "granted") return;
+  if(alertaAtivo) return;
+  alertaAtivo=true;
 
- const registration = await navigator.serviceWorker.register(
-  "/fila-caminhoes/firebase-messaging-sw.js"
-);
+  document.getElementById("alertaChamado").style.display="block";
 
-const token = await getToken(messaging, {
-  vapidKey: "BOzu9G4ChbQkg1GsoegHqhd5-KNxAh6aNoJzw_4kY5cZrG4imUkvj9Sp_I7eQdNPYn3x8GJIV8OS2iKjlRkv8vQ",
-  serviceWorkerRegistration: registration
-});
+  audioAlerta=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+  audioAlerta.loop=true;
+  audioAlerta.volume=1.0;
+  audioAlerta.play().catch(()=>{});
 
-  if(token){
-    await setDoc(doc(db,"tokens",placa),{
-      token
-    });
+  if(navigator.vibrate){
+    vibracaoInterval=setInterval(()=>{
+      navigator.vibrate([500,300,500]);
+    },1300);
   }
 }
 
-/* Push com app aberto */
-onMessage(messaging, (payload) => {
-  alert(payload.notification.title);
+document.getElementById("btnConfirmar").addEventListener("click",()=>{
+  alertaAtivo=false;
+  document.getElementById("alertaChamado").style.display="none";
+
+  if(audioAlerta){
+    audioAlerta.pause();
+    audioAlerta.currentTime=0;
+  }
+
+  if(vibracaoInterval){
+    clearInterval(vibracaoInterval);
+    navigator.vibrate(0);
+  }
 });
 
-/* ================= UTIL ================= */
+/* ================= MONITORAR CHAMADO ================= */
 
-function distanciaMetros(lat1, lon1, lat2, lon2){
-  const R=6371000;
-  const toRad=x=>x*Math.PI/180;
-  const dLat=toRad(lat2-lat1);
-  const dLon=toRad(lon2-lon1);
-  const a=Math.sin(dLat/2)**2+
-  Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
-  Math.sin(dLon/2)**2;
-  return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-
-function obterLocalizacao(){
-  return new Promise((resolve,reject)=>{
-    navigator.geolocation.getCurrentPosition(
-      p=>resolve({lat:p.coords.latitude,lng:p.coords.longitude}),
-      ()=>reject("Permita a localização"),
-      {enableHighAccuracy:true,timeout:10000}
-    );
+function monitorarChamado(placa){
+  onSnapshot(doc(db,"fila",placa),(snap)=>{
+    if(!snap.exists()) return;
+    const dados=snap.data();
+    if(dados.status==="CHAMADO"){
+      dispararNotificacao();
+    }
   });
 }
 
 /* ================= ENVIAR ================= */
 
-window.enviar = async function(status){
+window.enviar=async function(status){
 
-  const placa = placaInput.value.trim().toUpperCase();
-  const senha = document.getElementById("senha").value.trim();
+  const placa=placaInput.value.trim().toUpperCase();
+  const senha=document.getElementById("senha").value.trim();
 
-  if(!placa || !senha){
+  if(!placa||!senha){
     feedback.innerHTML="⚠️ Informe placa e senha";
     return;
   }
@@ -319,7 +303,6 @@ window.enviar = async function(status){
   feedback.innerHTML='<div class="spinner"></div>';
 
   try{
-
     const snap=await getDoc(doc(db,"motoristas_cadastro",placa));
     if(!snap.exists()){
       feedback.innerHTML="❌ Não cadastrado";
@@ -327,21 +310,25 @@ window.enviar = async function(status){
     }
 
     const dados=snap.data();
-
     if(dados.senha!==senha){
       feedback.innerHTML="❌ Senha incorreta";
       return;
     }
 
-    const pos=await obterLocalizacao();
-    const distKm=distanciaMetros(
-      pos.lat,pos.lng,
-      EMPRESA_LAT,EMPRESA_LNG
-    )/1000;
+    const pos=await new Promise((res,rej)=>{
+      navigator.geolocation.getCurrentPosition(
+        p=>res(p),
+        ()=>rej("Permita a localização"),
+        {enableHighAccuracy:true}
+      );
+    });
 
-    distanciaBox.innerHTML=
-      "📍 Distância da empresa: "+
-      distKm.toFixed(2)+" km";
+    const distKm=(
+      (Math.hypot(pos.coords.latitude-EMPRESA_LAT,
+                  pos.coords.longitude-EMPRESA_LNG))*111
+    );
+
+    distanciaBox.innerHTML="📍 Distância: "+distKm.toFixed(2)+" km";
 
     if(status==="DISPONÍVEL" && distKm>RAIO_MAX_KM){
       feedback.innerHTML="❌ Fora do raio permitido (100km)";
@@ -355,32 +342,32 @@ window.enviar = async function(status){
     await setDoc(doc(db,"motoristas",placa),{
       placa,
       nome:dados.nome,
-      configEixos:dados.configEixos||null,
       status,
-      lat:pos.lat,
-      lng:pos.lng,
       atualizadoEm:serverTimestamp()
     });
 
     localStorage.setItem("placaMotorista",placa);
+    monitorarChamado(placa);
 
-    /* 🔔 registra token push */
-    await registrarToken(placa);
-
-    statusBox.className=
-      "status-box "+
-      (status==="DISPONÍVEL"?"disponivel":"indisponivel");
-
+    statusBox.className="status-box "+(status==="DISPONÍVEL"?"disponivel":"indisponivel");
     statusBox.innerHTML="Status: "+status;
 
     feedback.innerHTML="✅ Atualizado com sucesso";
-
     setTimeout(()=>feedback.innerHTML="",1500);
 
   }catch(e){
-    feedback.innerHTML="❌ "+e.message;
+    feedback.innerHTML="❌ "+e;
   }
 };
+
+/* AUTO CARREGAR PLACA */
+window.addEventListener("load",()=>{
+  const salva=localStorage.getItem("placaMotorista");
+  if(salva){
+    placaInput.value=salva;
+    monitorarChamado(salva);
+  }
+});
 
 </script>
 
