@@ -351,23 +351,31 @@ window.addFila = async function(placa){
 
 window.chamarProximo = async function(){
 
-  const q = query(collection(db,"fila"), orderBy("entradaEm"));
-  const snap = await getDocs(q);
+  try{
 
-  if(snap.empty) return;
+    const q = query(collection(db,"fila"), orderBy("entradaEm"));
+    const snap = await getDocs(q);
 
-  const primeiro = snap.docs[0];
+    if(snap.empty){
+      alert("Fila vazia");
+      return;
+    }
 
-  // 🔔 Marca como chamado
-  await setDoc(doc(db,"fila",primeiro.id),{
-    ...primeiro.data(),
-    status:"CHAMADO"
-  });
+    const primeiro = snap.docs[0];
 
-  // ⏳ Aguarda 2 segundos para motorista receber notificação
-  setTimeout(async ()=>{
-    await deleteDoc(doc(db,"fila",primeiro.id));
-  },2000);
+    await setDoc(doc(db,"fila",primeiro.id),{
+      ...primeiro.data(),
+      status:"CHAMADO"
+    });
+
+    setTimeout(async ()=>{
+      await deleteDoc(doc(db,"fila",primeiro.id));
+    },2000);
+
+  }catch(e){
+    console.error(e);
+    alert("Erro: "+e.message);
+  }
 
 };
 
