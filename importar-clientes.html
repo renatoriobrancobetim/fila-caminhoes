@@ -39,7 +39,8 @@ import {
   getFirestore, 
   collection, 
   writeBatch, 
-  doc 
+  doc,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 
@@ -160,14 +161,32 @@ window.importar = async function(){
     ];
 
     log.innerHTML += `Total de registros: ${todos.length}<br><br>`;
+    // 🔥 Buscar clientes já existentes
+const snapshot = await getDocs(collection(db, "clientes"));
+
+const idsExistentes = new Set();
+
+snapshot.forEach(docSnap => {
+  idsExistentes.add(docSnap.id);
+});
+
+log.innerHTML += `Clientes já existentes no banco: ${idsExistentes.size}<br><br>`;
+
+// 🔥 Filtrar somente novos
+const novos = todos.filter(cliente => {
+  const idSeguro = gerarIdSeguro(cliente.nome);
+  return !idsExistentes.has(idSeguro);
+});
+
+log.innerHTML += `Clientes novos para importar: ${novos.length}<br><br>`;
 
     const loteMax = 400;
     let contador = 0;
 
-    while(contador < todos.length){
+    while(contador < novos.length){
 
       const batch = writeBatch(db);
-      const fatia = todos.slice(contador, contador + loteMax);
+     const fatia = novos.slice(contador, contador + loteMax);
 
       fatia.forEach(cliente => {
 
