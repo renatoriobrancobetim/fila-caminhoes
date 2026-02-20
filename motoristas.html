@@ -293,13 +293,14 @@ function monitorarChamado(placa){
 
   onSnapshot(docRef, (snap)=>{
 
-    if(snap.exists()){
+    if(!snap.exists()) return;
 
-      const dados = snap.data();
+    const dados = snap.data();
 
-      if(dados.status === "CHAMADO"){
-        dispararNotificacao();
-      }
+    // 🔥 Só dispara se acabou de ser chamado
+    if(dados.status === "CHAMADO" && dados.chamadoEm){
+
+      dispararNotificacao();
 
     }
 
@@ -329,6 +330,9 @@ function obterLocalizacao(){
 }
 
 window.enviar = async function(status){
+  // 🔓 Desbloqueia áudio no navegador (necessário para tocar som depois)
+const unlock = new Audio();
+unlock.play().catch(()=>{});
 
   const placa = placaInput.value.trim().toUpperCase();
   const senha = document.getElementById("senha").value.trim();
