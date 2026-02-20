@@ -210,7 +210,7 @@ footer{
 </div>
 
 <script type="module">
-
+import { onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, doc, setDoc, deleteDoc, getDoc, serverTimestamp }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -243,7 +243,51 @@ window.addEventListener("load",()=>{
 function vibrar(){
   if(navigator.vibrate) navigator.vibrate([200,100,200]);
 }
+function monitorarChamado(placa){
 
+  const docRef = doc(db,"fila",placa);
+
+  onSnapshot(docRef, (snap)=>{
+
+    // Se não existir mais, foi chamado
+    if(!snap.exists()){
+
+      // Só dispara se ele estava disponível
+      if(statusBox.innerText.includes("DISPONÍVEL")){
+
+        dispararNotificacao();
+      }
+    }
+
+  });
+
+}
+  function dispararNotificacao(){
+
+  // Vibração forte
+  if(navigator.vibrate){
+    navigator.vibrate([300,150,300,150,500]);
+  }
+
+  // Notificação visual
+  if("Notification" in window){
+
+    Notification.requestPermission().then(permission=>{
+      if(permission==="granted"){
+        new Notification("🚚 Sua vez chegou!",{
+          body:"Dirija-se ao carregamento imediatamente.",
+          icon:"icon-192.png"
+        });
+      }
+    });
+
+  }
+
+  // Som
+  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+  audio.play().catch(()=>{});
+
+}
 function distanciaMetros(lat1, lon1, lat2, lon2){
   const R=6371000;
   const toRad=x=>x*Math.PI/180;
@@ -310,6 +354,7 @@ window.enviar = async function(status){
     });
 
     localStorage.setItem("placaMotorista",placa);
+    monitorarChamado(placa);
 
     statusBox.className="status-box "+(status==="DISPONÍVEL"?"disponivel":"indisponivel");
     statusBox.innerHTML="Status: "+status;
