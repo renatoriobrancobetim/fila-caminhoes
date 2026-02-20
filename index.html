@@ -357,18 +357,17 @@ window.chamarProximo = async function(){
   if(snap.empty) return;
 
   const primeiro = snap.docs[0];
-  const placa = primeiro.id;
 
-  // 1️⃣ MARCA COMO CHAMADO
-  await setDoc(doc(db,"fila",placa),{
+  // 🔔 Marca como chamado
+  await setDoc(doc(db,"fila",primeiro.id),{
     ...primeiro.data(),
     status:"CHAMADO"
   });
 
-  // 2️⃣ Remove depois de 3 segundos
+  // ⏳ Aguarda 2 segundos para motorista receber notificação
   setTimeout(async ()=>{
-    await deleteDoc(doc(db,"fila",placa));
-  },3000);
+    await deleteDoc(doc(db,"fila",primeiro.id));
+  },2000);
 
 };
 
