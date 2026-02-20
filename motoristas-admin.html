@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Cadastro de Motoristas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="erp.css">
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  doc, 
+  setDoc, 
+  getDocs, 
+  deleteDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+import { getAuth, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_DOMINIO.firebaseapp.com",
+  projectId: "tabela-frete-rio-branco"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+document.documentElement.style.display="none";
+
+onAuthStateChanged(auth,user=>{
+  if(!user){
+    window.location="login.html";
+  }else{
+    document.documentElement.style.display="block";
+    carregar();
+  }
+});
+
+/* ================= CADASTRAR ================= */
+
+window.salvar = async function(){
+
+  const placa = document.getElementById("placa").value.trim().toUpperCase();
+  const nome = document.getElementById("nome").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+
+  if(!placa || !nome || !senha){
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  await setDoc(doc(db,"motoristas_cadastro",placa),{
+    placa,
+    nome,
+    senha,
+    ativo:true,
+    criadoEm: serverTimestamp()
+  });
+
+  alert("Motorista cadastrado!");
+  limpar();
+  carregar();
+};
+
+function limpar(){
+  placa.value="";
+  nome.value="";
+  senha.value="";
+}
+
+/* ================= LISTAR ================= */
+
+async function carregar(){
+
+  const snap = await getDocs(collection(db,"motoristas_cadastro"));
+
+  const lista = document.getElementById("lista");
+  lista.innerHTML="";
+
+  snap.forEach(d=>{
+
+    const m = d.data();
+
+    lista.innerHTML+=`
+      <div class="item">
+        <div>
+          <b>${m.placa}</b><br>
+          ${m.nome}
+        </div>
+
+        <div>
+          <button onclick="excluir('${m.placa}')">
+            ❌
+          </button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* ================= EXCLUIR ================= */
+
+window.excluir = async function(placa){
+  if(confirm("Excluir motorista?")){
+    await deleteDoc(doc(db,"motoristas_cadastro",placa));
+    carregar();
+  }
+};
+
+</script>
+</head>
+
+<body class="container">
+
+<h2>🚚 Cadastro de Motoristas</h2>
+
+<div class="card">
+
+<input id="placa" placeholder="Placa">
+<input id="nome" placeholder="Nome do motorista">
+<input id="senha" placeholder="Senha">
+
+<button onclick="salvar()" class="btn btn-primario">
+Salvar
+</button>
+
+</div>
+
+<h3>📋 Motoristas Cadastrados</h3>
+
+<div id="lista"></div>
+
+</body>
+</html>
