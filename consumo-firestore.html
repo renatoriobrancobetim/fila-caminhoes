@@ -148,7 +148,12 @@ footer{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  setPersistence, 
+  browserLocalPersistence 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
   getFirestore,
   collection,
@@ -158,7 +163,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
+  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
   authDomain: "tabela-frete-rio-branco.firebaseapp.com",
   projectId: "tabela-frete-rio-branco"
 };
@@ -167,10 +172,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* 🔒 Esconde página até validar login */
+/* 🔐 FORÇA persistência local */
+await setPersistence(auth, browserLocalPersistence);
+
+/* 🔒 Esconde página até validar */
 document.documentElement.style.display = "none";
 
-onAuthStateChanged(auth, async (user) => {
+/* 🧠 Espera Firebase terminar de restaurar sessão */
+auth.onAuthStateChanged(async (user) => {
 
   if (user) {
     document.documentElement.style.display = "block";
@@ -188,8 +197,6 @@ async function count(coll, q=null){
 
 async function carregarDashboard(){
 
-  /* ===== Motoristas ===== */
-
   const totalMotoristas = await count("motoristas");
 
   const totalDisponiveis = await count(
@@ -200,8 +207,6 @@ async function carregarDashboard(){
 
   const totalIndisponiveis = totalMotoristas - totalDisponiveis;
 
-  /* ===== Fila ===== */
-
   const totalFila = await count("fila");
 
   const totalChamados = await count(
@@ -209,8 +214,6 @@ async function carregarDashboard(){
     query(collection(db,"fila"),
     where("status","==","CHAMADO"))
   );
-
-  /* ===== Sistema ===== */
 
   const totalTokens = await count("tokens");
 
@@ -221,17 +224,13 @@ async function carregarDashboard(){
 
   const uso = ((totalDocs / 20000) * 100).toFixed(2);
 
-  /* ===== Render ===== */
-
   document.getElementById("totalMotoristas").innerText = totalMotoristas;
   document.getElementById("totalDisponiveis").innerText = totalDisponiveis;
   document.getElementById("totalIndisponiveis").innerText = totalIndisponiveis;
   document.getElementById("totalFila").innerText = totalFila;
   document.getElementById("totalChamados").innerText = totalChamados;
-
   document.getElementById("totalTokens").innerText = totalTokens;
   document.getElementById("totalDocs").innerText = totalDocs;
-
   document.getElementById("usoAtual").innerText = uso + "%";
   document.getElementById("barraUso").style.width = uso + "%";
 
