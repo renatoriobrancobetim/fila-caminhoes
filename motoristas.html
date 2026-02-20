@@ -130,21 +130,37 @@ footer{
 <footer>
   © <span id="ano"></span> · Copywriter Renato Monteiro
 </footer>
+<script type="module">
 
-<script>
-/* ================= CONFIG ================= */
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbxSR_bB4R1bO91DvlYuyGsolLA907lltv1phcjw9boqFpqdFAMPScN0OEVnliqoXH3e/exec";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  onSnapshot, 
+  collection, 
+  query, 
+  orderBy 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const CSV_DISP =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
+/* ================= FIREBASE ================= */
+
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_DOMINIO.firebaseapp.com",
+  projectId: "tabela-frete-rio-branco"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 /* 📍 LOCAL DA EMPRESA */
-const EMPRESA_LAT = -19.959843;   // ⬅️ AJUSTE
-const EMPRESA_LNG = -44.089041;   // ⬅️ AJUSTE
-const RAIO_MAX_METROS = 100000;     // ⬅️ AJUSTE (1 km)
+const EMPRESA_LAT = -19.959843;
+const EMPRESA_LNG = -44.089041;
+const RAIO_MAX_METROS = 100000;
 
 /* ================= UTIL ================= */
+
 const feedback = document.getElementById("feedback");
 const listaDisp = document.getElementById("listaDisp");
 document.getElementById("ano").textContent = new Date().getFullYear();
@@ -153,7 +169,6 @@ function setLoading(v){
   document.querySelectorAll("button").forEach(b=>b.disabled=v);
 }
 
-/* 🌍 DISTÂNCIA (HAVERSINE) */
 function distanciaMetros(lat1, lon1, lat2, lon2){
   const R = 6371000;
   const toRad = x => x * Math.PI / 180;
@@ -166,12 +181,8 @@ function distanciaMetros(lat1, lon1, lat2, lon2){
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-/* 📡 GEOLOCALIZAÇÃO */
 function obterLocalizacao(){
   return new Promise((resolve,reject)=>{
-    if(!navigator.geolocation)
-      reject("Geolocalização não suportada");
-
     navigator.geolocation.getCurrentPosition(
       p => resolve({lat:p.coords.latitude,lng:p.coords.longitude}),
       () => reject("Permita o acesso à localização"),
@@ -181,7 +192,9 @@ function obterLocalizacao(){
 }
 
 /* ================= ENVIAR ================= */
-async function enviar(status){
+
+window.enviar = async function(status){
+
   const placa = placaEl.value.trim().toUpperCase();
   const senha = senhaEl.value.trim();
 
@@ -197,77 +210,76 @@ async function enviar(status){
     const pos = await obterLocalizacao();
     const dist = distanciaMetros(pos.lat,pos.lng,EMPRESA_LAT,EMPRESA_LNG);
 
-    feedback.innerHTML =
-      `<div class="result info">
-        📍 Localização detectada com sucesso<br>
-        📏 Distância: ${(dist/1000).toFixed(2)} km
-      </div>`;
-
     if(status==="DISPONÍVEL" && dist > RAIO_MAX_METROS){
-      setTimeout(()=>{
-        feedback.innerHTML =
-          `<div class="result erro">
-            ❌ Fora do raio permitido (${RAIO_MAX_METROS/1000} km)
-          </div>`;
-        setLoading(false);
-      },1200);
+      feedback.innerHTML =
+        `<div class="result erro">
+          ❌ Fora do raio permitido
+        </div>`;
+      setLoading(false);
       return;
     }
 
-    fetch(SCRIPT_URL,{
-      method:"POST",
-      body:new URLSearchParams({
-        acao:"disponibilidade",
-        placa, senha, status,
-        lat:pos.lat, lng:pos.lng
-      })
-    })
-    .then(r=>r.text())
-    .then(t=>{
-      feedback.innerHTML =
-        t.trim()==="OK"
-          ? `<div class="result ok">✅ OK</div>`
-          : `<div class="result erro">${t}</div>`;
-
-      setTimeout(()=>{
-        feedback.innerHTML="";
-        setLoading(false);
-        carregarDisponibilidade();
-      },2000);
+    await setDoc(doc(db,"motoristas",placa),{
+      placa,
+      status,
+      lat: pos.lat,
+      lng: pos.lng,
+      atualizadoEm: new Date()
     });
+
+    feedback.innerHTML =
+      `<div class="result ok">✅ Atualizado com sucesso</div>`;
+
+    setTimeout(()=>{
+      feedback.innerHTML="";
+      setLoading(false);
+    },1500);
 
   }catch(e){
     feedback.innerHTML=`<div class="result erro">❌ ${e}</div>`;
     setLoading(false);
   }
-}
+};
 
-/* ================= LISTA ================= */
-async function carregarDisponibilidade(){
-  listaDisp.innerHTML=`<div class="spinner"></div>`;
-  try{
-    const r = await fetch(CSV_DISP+"&t="+Date.now());
-    const t = await r.text();
-    const dados = t.split("\n").slice(1).map(l=>l.split(",")).filter(c=>c[0]);
+/* ================= LISTA TEMPO REAL ================= */
 
-    dados.sort((a,b)=>a[1]==="DISPONÍVEL"?-1:1);
-    listaDisp.innerHTML = dados.length
-      ? dados.map(c=>`
+function carregarDisponibilidade(){
+
+  const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","desc"));
+
+  onSnapshot(q, snapshot => {
+
+    if(snapshot.empty){
+      listaDisp.innerHTML = `<div class="item">Nenhum caminhão</div>`;
+      return;
+    }
+
+    let html = "";
+
+    snapshot.forEach(docSnap => {
+      const c = docSnap.data();
+
+      html += `
         <div class="item">
-          <span>${c[0]}</span>
-          <span class="status ${c[1]==="DISPONÍVEL"?"ok":"off"}">${c[1]}</span>
-        </div>`).join("")
-      : `<div class="item">Nenhum caminhão</div>`;
-  }catch{
-    listaDisp.innerHTML=`<div class="item">Erro ao carregar</div>`;
-  }
+          <span>${c.placa}</span>
+          <span class="status ${c.status==="DISPONÍVEL"?"ok":"off"}">
+            ${c.status}
+          </span>
+        </div>
+      `;
+    });
+
+    listaDisp.innerHTML = html;
+
+  });
+
 }
 
 /* INIT */
 const placaEl = document.getElementById("placa");
 const senhaEl = document.getElementById("senha");
 carregarDisponibilidade();
-setInterval(carregarDisponibilidade,30000);
+
 </script>
 
 <script>
