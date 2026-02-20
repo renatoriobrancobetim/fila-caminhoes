@@ -2,78 +2,101 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard Consumo Firestore</title>
+<title>Dashboard Executivo | ERP Logístico</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:#f1f5f9;
+:root{
+  --azul:#0A3D91;
+  --azul-claro:#1557c0;
+  --vermelho:#dc2626;
+  --cinza:#f1f5f9;
 }
 
-header {
-  background:linear-gradient(90deg,#1e3a8a,#dc2626);
+body{
+  margin:0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:var(--cinza);
+}
+
+header{
+  background:linear-gradient(90deg,var(--azul),var(--azul-claro));
   color:#fff;
-  padding:20px;
+  padding:22px;
   text-align:center;
 }
 
-main {
+main{
   padding:30px;
-  max-width:1100px;
+  max-width:1300px;
   margin:auto;
 }
 
-.grid {
+.section-title{
+  margin:30px 0 15px;
+  font-size:18px;
+  font-weight:bold;
+  color:var(--azul);
+}
+
+.grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:20px;
 }
 
-.card {
+.card{
   background:#fff;
   padding:20px;
-  border-radius:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  border-top:4px solid var(--azul);
 }
 
-.card h3 {
+.card.red{
+  border-top:4px solid var(--vermelho);
+}
+
+.card h3{
   margin:0 0 10px;
-  font-size:15px;
-  color:#475569;
+  font-size:14px;
+  color:#64748b;
 }
 
-.metric {
+.metric{
   font-size:26px;
   font-weight:bold;
-  color:#1e3a8a;
+  color:var(--azul);
 }
 
-.progress {
-  margin-top:10px;
+.metric.red{
+  color:var(--vermelho);
+}
+
+.small{
+  font-size:12px;
+  color:#64748b;
+  margin-top:6px;
+}
+
+.progress{
+  margin-top:8px;
   height:8px;
   background:#e2e8f0;
   border-radius:6px;
   overflow:hidden;
 }
 
-.progress-bar {
+.progress-bar{
   height:100%;
-  background:#dc2626;
+  background:var(--vermelho);
   width:0%;
-  transition:width 0.6s ease;
+  transition:.6s;
 }
 
-.small {
-  font-size:12px;
-  color:#64748b;
-  margin-top:5px;
-}
-
-footer {
+footer{
   text-align:center;
-  padding:15px;
+  padding:20px;
   font-size:12px;
   color:#64748b;
 }
@@ -83,233 +106,163 @@ footer {
 <body>
 
 <header>
-  <h1>📊 Dashboard Consumo Firestore</h1>
-  <p>Monitoramento operacional do banco de dados</p>
+  <h1>📊 Dashboard Executivo Operacional</h1>
+  <p>ERP Logístico • Monitoramento Firebase</p>
 </header>
 
 <main>
 
+<div class="section-title">🚚 Operação Logística</div>
 <div class="grid">
-
-  <div class="card">
-    <h3>Total de Clientes</h3>
-    <div class="metric" id="totalClientes">...</div>
-    <div class="small">Documentos na coleção clientes</div>
-  </div>
-<div class="card">
-  <h3>Clientes Derivados</h3>
-  <div class="metric" id="totalDerivados">...</div>
+  <div class="card"><h3>Total Motoristas</h3><div class="metric" id="totalMotoristas">...</div></div>
+  <div class="card"><h3>Disponíveis</h3><div class="metric" id="totalDisponiveis">...</div></div>
+  <div class="card"><h3>Indisponíveis</h3><div class="metric" id="totalIndisponiveis">...</div></div>
+  <div class="card red"><h3>Na Fila</h3><div class="metric red" id="totalFila">...</div></div>
+  <div class="card red"><h3>Chamados</h3><div class="metric red" id="totalChamados">...</div></div>
 </div>
 
-<div class="card">
-  <h3>Clientes Distribuidora</h3>
-  <div class="metric" id="totalDistribuidora">...</div>
+<div class="section-title">👥 Clientes</div>
+<div class="grid">
+  <div class="card"><h3>Total Clientes</h3><div class="metric" id="totalClientes">...</div></div>
+  <div class="card"><h3>Derivados</h3><div class="metric" id="totalDerivados">...</div></div>
+  <div class="card"><h3>Distribuidora</h3><div class="metric" id="totalDistribuidora">...</div></div>
+  <div class="card"><h3>Coordenadas Válidas</h3><div class="metric" id="coordValidas">...</div></div>
+  <div class="card red"><h3>Coordenadas Inválidas</h3><div class="metric red" id="coordInvalidas">...</div></div>
 </div>
 
-<div class="card">
-  <h3>Coordenadas Válidas</h3>
-  <div class="metric" id="coordValidas">...</div>
-</div>
-
-<div class="card">
-  <h3>Coordenadas Inválidas</h3>
-  <div class="metric" id="coordInvalidas">...</div>
-</div>
-  <div class="card">
-    <h3>Limite Diário de Gravações</h3>
-    <div class="metric">20.000</div>
-    <div class="small">Plano Spark (gratuito)</div>
-  </div>
-
-  <div class="card">
-    <h3>Uso Estimado Atual</h3>
-    <div class="metric" id="usoAtual">0%</div>
+<div class="section-title">⚙️ Sistema</div>
+<div class="grid">
+  <div class="card"><h3>Tokens Push</h3><div class="metric" id="totalTokens">...</div></div>
+  <div class="card"><h3>Total Documentos</h3><div class="metric" id="totalDocs">...</div></div>
+  <div class="card"><h3>Status Operacional</h3><div class="metric" id="statusProjeto">Estável</div></div>
+  <div class="card red">
+    <h3>Uso Plano Gratuito</h3>
+    <div class="metric red" id="usoAtual">0%</div>
     <div class="progress">
       <div class="progress-bar" id="barraUso"></div>
     </div>
-    <div class="small">Baseado em importações realizadas</div>
   </div>
-
-  <div class="card">
-    <h3>Status do Projeto</h3>
-    <div class="metric" id="statusProjeto">Estável</div>
-    <div class="small">Sem picos recentes de gravação</div>
-  </div>
-
 </div>
 
 </main>
 
 <footer>
-Sistema Logístico · Monitoramento Firebase
+© 2026 • ERP Logístico Rio Branco
 </footer>
 
 <script type="module">
 
-window.corrigirCoordenadas = async function(){
-
-  if (!confirm("Deseja corrigir automaticamente coordenadas inválidas?")) {
-    return;
-  }
-
-  const coll = collection(db, "clientes");
-  const snapshot = await getDocs(coll);
-
-  const MG_LAT_MIN = -23.5;
-  const MG_LAT_MAX = -14.0;
-  const MG_LNG_MIN = -51.0;
-  const MG_LNG_MAX = -39.0;
-
-  let corrigidos = 0;
-  let batch = writeBatch(db);
-  let contadorBatch = 0;
-
-  snapshot.forEach(docSnap => {
-
-    const d = docSnap.data();
-    let lat = Number(d.latitude);
-    let lng = Number(d.longitude);
-    let alterado = false;
-
-    if (isNaN(lat) || isNaN(lng)) return;
-
-    // 🔧 REGRA 1 – Casa decimal errada
-    if (Math.abs(lat) < 10) {
-      lat = lat * 10;
-      alterado = true;
-    }
-
-    if (Math.abs(lng) < 10) {
-      lng = lng * 10;
-      alterado = true;
-    }
-
-    // 🔧 REGRA 2 – Ainda fora de MG
-    const invalida =
-      lat < MG_LAT_MIN ||
-      lat > MG_LAT_MAX ||
-      lng < MG_LNG_MIN ||
-      lng > MG_LNG_MAX;
-
-    if (alterado && !invalida) {
-
-      const ref = doc(db, "clientes", docSnap.id);
-
-      batch.update(ref, {
-        latitude: lat,
-        longitude: lng,
-        atualizadoEm: new Date()
-      });
-
-      corrigidos++;
-      contadorBatch++;
-
-      if (contadorBatch === 400) {
-        batch.commit();
-        batch = writeBatch(db);
-        contadorBatch = 0;
-      }
-    }
-
-  });
-
-  if (contadorBatch > 0) {
-    await batch.commit();
-  }
-
-  alert(`Correção concluída. ${corrigidos} registros ajustados.`);
-};
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
-  getFirestore, 
-  collection, 
+  getFirestore,
+  collection,
   getDocs,
-  writeBatch,
-  doc
+  query,
+  where,
+  getCountFromServer
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-
 const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+  apiKey: "SUA_API_KEY",
   authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco",
-  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
-  messagingSenderId: "765019849831",
-  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
+  projectId: "tabela-frete-rio-branco"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔐 PROTEÇÃO ADMIN
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "login.html";
+  if(!user){
+    window.location="login.html";
     return;
   }
-
-  await carregarConsumo();
+  await carregarDashboard();
 });
 
+async function count(coll, q=null){
+  const snap = await getCountFromServer(q || collection(db,coll));
+  return snap.data().count;
+}
 
-// 📊 CONTAR CLIENTES (sem consumir 6.000 leituras)
-async function carregarConsumo() {
+async function carregarDashboard(){
 
-  const snapshot = await getDocs(collection(db,"clientes"));
+  /* ===== Motoristas ===== */
 
-  let total = 0;
-  let derivados = 0;
-  let distribuidora = 0;
-  let validos = 0;
-  let invalidos = 0;
+  const totalMotoristas = await count("motoristas");
+  const totalDisponiveis = await count("motoristas",
+    query(collection(db,"motoristas"), where("status","==","DISPONÍVEL"))
+  );
+  const totalIndisponiveis = totalMotoristas - totalDisponiveis;
 
-  const MG_LAT_MIN = -23.5;
-  const MG_LAT_MAX = -14.0;
-  const MG_LNG_MIN = -51.0;
-  const MG_LNG_MAX = -39.0;
+  const totalFila = await count("fila");
+  const totalChamados = await count("fila",
+    query(collection(db,"fila"), where("status","==","CHAMADO"))
+  );
 
-  snapshot.forEach(docSnap => {
+  /* ===== Clientes ===== */
 
-    total++;
+  const clientesSnap = await getDocs(collection(db,"clientes"));
 
-    const d = docSnap.data();
+  let totalClientes=0, derivados=0, distribuidora=0, validos=0, invalidos=0;
 
-    // 🔹 Tipo
-    if (d.tipo === "derivados") derivados++;
-    if (d.tipo === "distribuidora") distribuidora++;
+  const MG_LAT_MIN=-23.5, MG_LAT_MAX=-14.0;
+  const MG_LNG_MIN=-51.0, MG_LNG_MAX=-39.0;
 
-    // 🔹 Coordenadas
-    const lat = Number(d.latitude);
-    const lng = Number(d.longitude);
+  clientesSnap.forEach(docSnap=>{
+    totalClientes++;
+    const d=docSnap.data();
+
+    if(d.tipo==="derivados") derivados++;
+    if(d.tipo==="distribuidora") distribuidora++;
+
+    const lat=Number(d.latitude);
+    const lng=Number(d.longitude);
 
     const invalida =
-      isNaN(lat) ||
-      isNaN(lng) ||
-      lat < MG_LAT_MIN ||
-      lat > MG_LAT_MAX ||
-      lng < MG_LNG_MIN ||
-      lng > MG_LNG_MAX;
+      isNaN(lat)||isNaN(lng)||
+      lat<MG_LAT_MIN||lat>MG_LAT_MAX||
+      lng<MG_LNG_MIN||lng>MG_LNG_MAX;
 
-    if (invalida) invalidos++;
-    else validos++;
+    invalida?invalidos++:validos++;
   });
 
-  // 🔹 Atualiza Cards
-  document.getElementById("totalClientes").innerText = total.toLocaleString("pt-BR");
-  document.getElementById("totalDerivados").innerText = derivados.toLocaleString("pt-BR");
-  document.getElementById("totalDistribuidora").innerText = distribuidora.toLocaleString("pt-BR");
-  document.getElementById("coordValidas").innerText = validos.toLocaleString("pt-BR");
-  document.getElementById("coordInvalidas").innerText = invalidos.toLocaleString("pt-BR");
+  /* ===== Sistema ===== */
 
-  // 🔹 Indicador de saúde
-  const percentualValido = ((validos / total) * 100).toFixed(1);
+  const totalTokens = await count("tokens");
+
+  const totalDocs =
+    totalMotoristas +
+    totalFila +
+    totalClientes +
+    totalTokens;
+
+  const uso = ((totalDocs / 20000) * 100).toFixed(1);
+
+  /* ===== Render ===== */
+
+  document.getElementById("totalMotoristas").innerText=totalMotoristas;
+  document.getElementById("totalDisponiveis").innerText=totalDisponiveis;
+  document.getElementById("totalIndisponiveis").innerText=totalIndisponiveis;
+  document.getElementById("totalFila").innerText=totalFila;
+  document.getElementById("totalChamados").innerText=totalChamados;
+
+  document.getElementById("totalClientes").innerText=totalClientes;
+  document.getElementById("totalDerivados").innerText=derivados;
+  document.getElementById("totalDistribuidora").innerText=distribuidora;
+  document.getElementById("coordValidas").innerText=validos;
+  document.getElementById("coordInvalidas").innerText=invalidos;
+
+  document.getElementById("totalTokens").innerText=totalTokens;
+  document.getElementById("totalDocs").innerText=totalDocs;
+
+  document.getElementById("usoAtual").innerText=uso+"%";
+  document.getElementById("barraUso").style.width=uso+"%";
 
   document.getElementById("statusProjeto").innerText =
-    percentualValido > 95 ? "Estável" :
-    percentualValido > 85 ? "Atenção" :
+    uso < 50 ? "Estável" :
+    uso < 80 ? "Atenção" :
     "Crítico";
 }
 
