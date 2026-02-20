@@ -210,6 +210,8 @@ footer{
 </div>
 
 <script type="module">
+  
+import { onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, doc, setDoc, deleteDoc, getDoc, serverTimestamp }
@@ -284,6 +286,46 @@ function monitorarChamado(placa){
   }
 
   // Som
+  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+  audio.play().catch(()=>{});
+
+}
+  function monitorarChamado(placa){
+
+  const docRef = doc(db,"fila",placa);
+
+  onSnapshot(docRef, (snap)=>{
+
+    if(snap.exists()){
+
+      const dados = snap.data();
+
+      if(dados.status === "CHAMADO"){
+        dispararNotificacao();
+      }
+
+    }
+
+  });
+
+}
+  function dispararNotificacao(){
+
+  if(navigator.vibrate){
+    navigator.vibrate([400,200,400,200,800]);
+  }
+
+  if("Notification" in window){
+    Notification.requestPermission().then(permission=>{
+      if(permission==="granted"){
+        new Notification("🚚 SUA VEZ CHEGOU!",{
+          body:"Dirija-se imediatamente ao carregamento.",
+          icon:"icon-192.png"
+        });
+      }
+    });
+  }
+
   const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
   audio.play().catch(()=>{});
 
