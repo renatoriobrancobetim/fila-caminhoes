@@ -250,7 +250,7 @@ function carregarFila(){
 
 function carregarDisponibilidade(){
 
-  const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","desc"));
+  const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
 
   onSnapshot(q, snapshot => {
 
