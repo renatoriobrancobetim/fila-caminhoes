@@ -2,134 +2,160 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Disponibilidade do Motorista</title>
+<title>Disponibilidade | Motorista</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0A3D91">
 
 <style>
+:root{
+  --azul:#0A3D91;
+  --verde:#28a745;
+  --vermelho:#dc3545;
+  --cinza:#f4f6f9;
+}
+
 body{
   margin:0;
-  font-family:Arial,sans-serif;
-  background:#0A3D91;
-  color:#fff;
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:linear-gradient(180deg,#0A3D91,#062b66);
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   min-height:100vh;
-  flex-direction:column;
 }
-.container{
-  background:#fff;
-  color:#000;
-  padding:24px;
-  border-radius:16px;
-  width:100%;
-  max-width:360px;
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
-}
-h2,h3{text-align:center;margin-top:0;}
 
-input,button{
+.app{
   width:100%;
-  padding:14px;
-  font-size:16px;
-  margin-top:12px;
+  max-width:420px;
+  background:#fff;
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
 }
-input{text-transform:uppercase;}
+
+.logo{
+  text-align:center;
+  color:var(--azul);
+  font-weight:700;
+  font-size:20px;
+  margin-bottom:20px;
+}
+
+.status-box{
+  text-align:center;
+  margin-bottom:20px;
+  padding:16px;
+  border-radius:14px;
+  font-weight:bold;
+  font-size:18px;
+}
+
+.status-box.disponivel{
+  background:#e6f4ea;
+  color:var(--verde);
+}
+
+.status-box.indisponivel{
+  background:#fdecea;
+  color:var(--vermelho);
+}
+
+input{
+  width:100%;
+  padding:16px;
+  margin-bottom:14px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:16px;
+  text-transform:uppercase;
+}
 
 button{
+  width:100%;
+  padding:16px;
   border:none;
-  border-radius:10px;
-  cursor:pointer;
+  border-radius:14px;
+  font-size:16px;
   font-weight:bold;
+  cursor:pointer;
+  margin-bottom:12px;
 }
-button:disabled{opacity:.6;cursor:not-allowed;}
 
-.btn-ok{background:#28a745;color:#fff;}
-.btn-off{background:#dc3545;color:#fff;}
+.btn-disponivel{
+  background:var(--verde);
+  color:#fff;
+}
+
+.btn-indisponivel{
+  background:var(--vermelho);
+  color:#fff;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
 
 .feedback{
-  margin-top:16px;
   text-align:center;
-  min-height:40px;
+  min-height:30px;
+  font-size:14px;
+  margin-top:10px;
 }
 
 .spinner{
-  width:32px;
-  height:32px;
-  border:4px solid #ddd;
-  border-top:4px solid #0A3D91;
+  width:30px;
+  height:30px;
+  border:4px solid #eee;
+  border-top:4px solid var(--azul);
   border-radius:50%;
   animation:spin 1s linear infinite;
   margin:auto;
 }
 
-.result{
-  font-size:16px;
-  font-weight:bold;
-  animation:pop .4s ease;
-}
-.result.ok{color:#28a745;}
-.result.erro{color:#dc3545;}
-.result.info{color:#0A3D91;}
-
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-
-.lista{
-  margin-top:14px;
-  background:#f4f4f4;
-  border-radius:10px;
-  overflow:hidden;
-}
-.item{
-  padding:10px;
-  border-bottom:1px solid #ddd;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.status{
-  font-size:11px;
-  font-weight:bold;
-  padding:4px 8px;
-  border-radius:6px;
-}
-.status.ok{background:#28a745;color:#fff;}
-.status.off{background:#dc3545;color:#fff;}
 
 footer{
-  margin-top:18px;
-  font-size:12px;
-  opacity:.75;
   text-align:center;
+  margin-top:16px;
+  font-size:12px;
+  color:#777;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h2>🚚 Disponibilidade</h2>
+<div class="app">
 
-  <input id="placa" placeholder="Placa do caminhão"
+  <div class="logo">🚚 Motorista Rio Branco</div>
+
+  <div id="statusAtual" class="status-box indisponivel">
+    Status: INDISPONÍVEL
+  </div>
+
+  <input id="placa" placeholder="Placa do Caminhão"
     oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
-  <input id="senha" type="password" placeholder="Senha do motorista">
+  <input id="senha" type="password" placeholder="Senha">
 
-  <button class="btn-ok" onclick="enviar('DISPONÍVEL')">✅ Estou Disponível</button>
-  <button class="btn-off" onclick="enviar('INDISPONÍVEL')">❌ Indisponível</button>
+  <button class="btn-disponivel" onclick="enviar('DISPONÍVEL')">
+    ✅ Estou Disponível
+  </button>
+
+  <button class="btn-indisponivel" onclick="enviar('INDISPONÍVEL')">
+    ❌ Ficar Indisponível
+  </button>
 
   <div class="feedback" id="feedback"></div>
 
-  <h3>📋 Caminhões</h3>
-  <div class="lista" id="listaDisp"></div>
+  <footer>
+    © 2026 • ERP Logístico
+  </footer>
+
 </div>
 
-<footer>
-  © <span id="ano"></span> · Copywriter Renato Monteiro
-</footer>
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -138,15 +164,9 @@ import {
   doc, 
   setDoc, 
   deleteDoc,
-  onSnapshot, 
-  collection, 
-  query, 
-  orderBy,
   getDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-/* ================= FIREBASE ================= */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -157,170 +177,76 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* 📍 LOCAL DA EMPRESA */
-const EMPRESA_LAT = -19.959843;
-const EMPRESA_LNG = -44.089041;
-const RAIO_MAX_METROS = 100000;
-
-/* ================= UTIL ================= */
-
 const feedback = document.getElementById("feedback");
-const listaDisp = document.getElementById("listaDisp");
-document.getElementById("ano").textContent = new Date().getFullYear();
+const statusBox = document.getElementById("statusAtual");
 
 function setLoading(v){
   document.querySelectorAll("button").forEach(b=>b.disabled=v);
 }
 
-function distanciaMetros(lat1, lon1, lat2, lon2){
-  const R = 6371000;
-  const toRad = x => x * Math.PI / 180;
-  const dLat = toRad(lat2-lat1);
-  const dLon = toRad(lon2-lon1);
-  const a =
-    Math.sin(dLat/2)**2 +
-    Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
-    Math.sin(dLon/2)**2;
-  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-}
-
-function obterLocalizacao(){
-  return new Promise((resolve,reject)=>{
-    navigator.geolocation.getCurrentPosition(
-      p => resolve({lat:p.coords.latitude,lng:p.coords.longitude}),
-      () => reject("Permita o acesso à localização"),
-      {enableHighAccuracy:true,timeout:10000}
-    );
-  });
-}
-
-/* ================= ENVIAR ================= */
-
 window.enviar = async function(status){
 
-  const placa = placaEl.value.trim().toUpperCase();
-  const senha = senhaEl.value.trim();
+  const placa = document.getElementById("placa").value.trim().toUpperCase();
+  const senha = document.getElementById("senha").value.trim();
 
   if(!placa || !senha){
-    feedback.innerHTML=`<div class="result erro">⚠️ Informe placa e senha</div>`;
+    feedback.innerHTML="⚠️ Informe placa e senha";
     return;
   }
 
   setLoading(true);
-  feedback.innerHTML=`<div class="spinner"></div>`;
+  feedback.innerHTML='<div class="spinner"></div>';
 
   try{
 
-    /* 🔎 VALIDAR CADASTRO */
-    const docRef = doc(db,"motoristas_cadastro",placa);
-    const snap = await getDoc(docRef);
+    const snap = await getDoc(doc(db,"motoristas_cadastro",placa));
 
     if(!snap.exists()){
-      feedback.innerHTML = `<div class="result erro">❌ Placa não cadastrada</div>`;
+      feedback.innerHTML="❌ Placa não cadastrada";
       setLoading(false);
       return;
     }
 
-    const dadosMotorista = snap.data();
+    const dados = snap.data();
 
-    if(!dadosMotorista.ativo){
-      feedback.innerHTML = `<div class="result erro">❌ Motorista inativo</div>`;
+    if(!dados.ativo){
+      feedback.innerHTML="❌ Motorista inativo";
       setLoading(false);
       return;
     }
 
-    if(dadosMotorista.senha !== senha){
-      feedback.innerHTML = `<div class="result erro">❌ Senha incorreta</div>`;
-      setLoading(false);
-      return;
-    }
-    if(status === "INDISPONÍVEL"){
-  await deleteDoc(doc(db,"fila",placa));
-}
-
-    /* 📍 VALIDAR LOCALIZAÇÃO */
-    const pos = await obterLocalizacao();
-    const dist = distanciaMetros(pos.lat,pos.lng,EMPRESA_LAT,EMPRESA_LNG);
-
-    if(status==="DISPONÍVEL" && dist > RAIO_MAX_METROS){
-      feedback.innerHTML =
-        `<div class="result erro">
-          ❌ Fora do raio permitido
-        </div>`;
+    if(dados.senha !== senha){
+      feedback.innerHTML="❌ Senha incorreta";
       setLoading(false);
       return;
     }
 
-    /* ✅ GRAVAR DISPONIBILIDADE */
+    if(status==="INDISPONÍVEL"){
+      await deleteDoc(doc(db,"fila",placa));
+    }
+
     await setDoc(doc(db,"motoristas",placa),{
       placa,
-      nome: dadosMotorista.nome,
-      configEixos: dadosMotorista.configEixos || null,
+      nome:dados.nome,
+      configEixos:dados.configEixos||null,
       status,
-      lat: pos.lat,
-      lng: pos.lng,
-      atualizadoEm: serverTimestamp()
+      atualizadoEm:serverTimestamp()
     });
 
-    feedback.innerHTML =
-      `<div class="result ok">✅ Status atualizado com sucesso</div>`;
+    statusBox.className="status-box "+(status==="DISPONÍVEL"?"disponivel":"indisponivel");
+    statusBox.innerHTML="Status: "+status;
 
-    setTimeout(()=>{
-      feedback.innerHTML="";
-      setLoading(false);
-    },1500);
+    feedback.innerHTML="✅ Atualizado com sucesso";
+
+    setTimeout(()=>feedback.innerHTML="",1500);
 
   }catch(e){
-    feedback.innerHTML=`<div class="result erro">❌ ${e.message}</div>`;
-    setLoading(false);
+    feedback.innerHTML="❌ "+e.message;
   }
+
+  setLoading(false);
 };
 
-/* ================= LISTA TEMPO REAL ================= */
-
-function carregarDisponibilidade(){
-
-  const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","desc"));
-
-  onSnapshot(q, snapshot => {
-
-    if(snapshot.empty){
-      listaDisp.innerHTML = `<div class="item">Nenhum caminhão</div>`;
-      return;
-    }
-
-    let html = "";
-
-    snapshot.forEach(docSnap => {
-      const c = docSnap.data();
-
-      html += `
-        <div class="item">
-          <span>${c.placa}</span>
-          <span class="status ${c.status==="DISPONÍVEL"?"ok":"off"}">
-            ${c.status}
-          </span>
-        </div>
-      `;
-    });
-
-    listaDisp.innerHTML = html;
-
-  });
-
-}
-
-/* INIT */
-const placaEl = document.getElementById("placa");
-const senhaEl = document.getElementById("senha");
-carregarDisponibilidade();
-
-</script>
-
-<script>
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js");
-}
 </script>
 
 </body>
