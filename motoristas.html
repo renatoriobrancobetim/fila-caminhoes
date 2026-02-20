@@ -7,7 +7,6 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0A3D91">
 
-<!-- 🔵 ÍCONE DO APP -->
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 
@@ -158,7 +157,7 @@ footer{
   <div class="feedback" id="feedback"></div>
 
   <footer>
-    © 2026 • ERP Logístico
+    © 2026 • Copywriter Renato Monteiro
   </footer>
 
 </div>
@@ -184,20 +183,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* 📍 LOCAL DA EMPRESA */
+/* 📍 LOCAL EMPRESA */
 const EMPRESA_LAT = -19.959843;
 const EMPRESA_LNG = -44.089041;
+const RAIO_MAX_KM = 100;
 
 const feedback = document.getElementById("feedback");
 const statusBox = document.getElementById("statusAtual");
 const distanciaBox = document.getElementById("distancia");
+const placaInput = document.getElementById("placa");
 
+/* 🔄 Carregar placa salva */
+window.addEventListener("load", ()=>{
+  const placaSalva = localStorage.getItem("placaMotorista");
+  if(placaSalva){
+    placaInput.value = placaSalva;
+  }
+});
+
+/* 📳 Vibração */
 function vibrar(){
   if(navigator.vibrate){
     navigator.vibrate([200,100,200]);
   }
 }
 
+/* 📏 Distância */
 function distanciaMetros(lat1, lon1, lat2, lon2){
   const R = 6371000;
   const toRad = x => x * Math.PI / 180;
@@ -222,7 +233,7 @@ function obterLocalizacao(){
 
 window.enviar = async function(status){
 
-  const placa = document.getElementById("placa").value.trim().toUpperCase();
+  const placa = placaInput.value.trim().toUpperCase();
   const senha = document.getElementById("senha").value.trim();
 
   if(!placa || !senha){
@@ -254,9 +265,18 @@ window.enviar = async function(status){
     }
 
     const pos = await obterLocalizacao();
-    const dist = distanciaMetros(pos.lat,pos.lng,EMPRESA_LAT,EMPRESA_LNG);
+    const distMetros = distanciaMetros(pos.lat,pos.lng,EMPRESA_LAT,EMPRESA_LNG);
+    const distKm = distMetros / 1000;
+
     distanciaBox.innerHTML =
-      "📍 Distância da empresa: "+(dist/1000).toFixed(2)+" km";
+      "📍 Distância da empresa: "+distKm.toFixed(2)+" km";
+
+    /* 🚫 BLOQUEAR FORA DO RAIO */
+    if(status==="DISPONÍVEL" && distKm > RAIO_MAX_KM){
+      feedback.innerHTML="❌ Fora do raio permitido (100 km)";
+      vibrar();
+      return;
+    }
 
     if(status==="INDISPONÍVEL"){
       await deleteDoc(doc(db,"fila",placa));
@@ -271,6 +291,9 @@ window.enviar = async function(status){
       lng:pos.lng,
       atualizadoEm:serverTimestamp()
     });
+
+    /* 💾 SALVAR PLACA LOCAL */
+    localStorage.setItem("placaMotorista",placa);
 
     statusBox.className="status-box "+(status==="DISPONÍVEL"?"disponivel":"indisponivel");
     statusBox.innerHTML="Status: "+status;
