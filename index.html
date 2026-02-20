@@ -350,11 +350,26 @@ window.addFila = async function(placa){
 };
 
 window.chamarProximo = async function(){
+
   const q = query(collection(db,"fila"), orderBy("entradaEm"));
   const snap = await getDocs(q);
+
   if(snap.empty) return;
 
-  await deleteDoc(doc(db,"fila",snap.docs[0].id));
+  const primeiro = snap.docs[0];
+  const placa = primeiro.id;
+
+  // 1️⃣ MARCA COMO CHAMADO
+  await setDoc(doc(db,"fila",placa),{
+    ...primeiro.data(),
+    status:"CHAMADO"
+  });
+
+  // 2️⃣ Remove depois de 3 segundos
+  setTimeout(async ()=>{
+    await deleteDoc(doc(db,"fila",placa));
+  },3000);
+
 };
 
 </script>
