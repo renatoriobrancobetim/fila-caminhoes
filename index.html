@@ -127,6 +127,21 @@ body{
   font-size:13px;
   color:#666;
 }
+  .item.alerta{
+  background:#fff3cd;
+  border-left:6px solid #dc3545;
+}
+  .item.critico{
+  background:#ffe5e5;
+  border-left:6px solid #dc3545;
+  animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+  0%{opacity:1}
+  50%{opacity:.6}
+  100%{opacity:1}
+}
 </style>
 </head>
 
@@ -215,65 +230,66 @@ const listaDisp = document.getElementById("listaDisp");
 
 /* ================= FILA ================= */
 
-function carregarFila(){
+snapshot.forEach((docSnap,i)=>{
 
-  const q = query(collection(db,"fila"), orderBy("entradaEm"));
+  const c = docSnap.data();
+  const minutos = calcularMinutos(c.entradaEm);
 
-  onSnapshot(q, snapshot => {
-
-    if(snapshot.empty){
-      listaFila.innerHTML = "<div class='item'>Fila vazia</div>";
-      return;
-    }
-
-    let html = "";
-
-    snapshot.forEach((docSnap,i)=>{
-      const c = docSnap.data();
-
-      html += `
-        <div class="item ${i===0 ? "proximo" : ""}">
-          <div>
-            <b>${c.placa}</b><br>
-            ${c.configEixos || "-"}
-          </div>
-        </div>
-      `;
-    });
-
-    listaFila.innerHTML = html;
-
-  });
-}
+  html += `
+    <div class="item ${i===0 ? "proximo" : ""}">
+      <div>
+        <b>${c.placa}</b><br>
+        <small>⏱ ${minutos} min na fila</small>
+      </div>
+    </div>
+  `;
+});
 
 /* ================= DISPONIBILIDADE ================= */
 
 function carregarDisponibilidade(){
 
-  const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
+  const qFila = query(collection(db,"fila"));
 
-  onSnapshot(q, snapshot => {
+  onSnapshot(qFila, snapFila => {
 
-    listaDisp.innerHTML = "";
+    const placasNaFila = new Set();
+    snapFila.forEach(doc => placasNaFila.add(doc.id));
 
-    snapshot.forEach(docSnap => {
+    const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
 
-      const c = docSnap.data();
+    onSnapshot(q, snapshot => {
 
-      if(c.status !== "DISPONÍVEL") return;
+      listaDisp.innerHTML = "";
 
-      listaDisp.innerHTML += `
-        <div class="item">
-          <div>
-            <b>${c.placa}</b><br>
-            <span class="status ok">${c.status}</span>
+      snapshot.forEach(docSnap => {
+
+        const c = docSnap.data();
+
+        if(c.status !== "DISPONÍVEL") return;
+
+        // 🔒 Oculta quem já está na fila
+        if(placasNaFila.has(c.placa)) return;
+
+        const minutos = calcularMinutos(c.atualizadoEm);
+        const classeCritica = minutos >= 60 ? "critico" : "";
+
+        const alerta = minutos >= 30 ? "alerta" : "";
+
+        listaDisp.innerHTML += `
+          <div class="item ${alerta}">
+            <div>
+              <b>${c.placa}</b><br>
+              <small>⏱ ${minutos} min aguardando</small>
+            </div>
+
+            <button class="btn btn-sec" onclick="addFila('${c.placa}')">
+              ➕ Fila
+            </button>
           </div>
+        `;
+      });
 
-          <button class="btn btn-sec" onclick="addFila('${c.placa}')">
-            ➕ Fila
-          </button>
-        </div>
-      `;
     });
 
   });
@@ -308,7 +324,15 @@ window.chamarProximo = async function(){
   const primeiro = snap.docs[0];
   await deleteDoc(doc(db,"fila",primeiro.id));
 };
+function calcularMinutos(timestamp){
 
+  if(!timestamp) return 0;
+
+  const data = timestamp.toDate();
+  const agora = new Date();
+
+  return Math.floor((agora - data) / 60000);
+}
 </script>
 
 </body>
