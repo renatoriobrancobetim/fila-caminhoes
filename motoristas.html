@@ -2,17 +2,20 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Disponibilidade | Motorista</title>
+<title>Motorista | Rio Branco</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0A3D91">
+
+<!-- 🔵 ÍCONE DO APP -->
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 
 <style>
 :root{
   --azul:#0A3D91;
   --verde:#28a745;
   --vermelho:#dc3545;
-  --cinza:#f4f6f9;
 }
 
 body{
@@ -36,29 +39,36 @@ body{
 
 .logo{
   text-align:center;
-  color:var(--azul);
   font-weight:700;
   font-size:20px;
+  color:var(--azul);
   margin-bottom:20px;
 }
 
 .status-box{
   text-align:center;
-  margin-bottom:20px;
   padding:16px;
   border-radius:14px;
   font-weight:bold;
   font-size:18px;
+  margin-bottom:12px;
 }
 
-.status-box.disponivel{
+.disponivel{
   background:#e6f4ea;
   color:var(--verde);
 }
 
-.status-box.indisponivel{
+.indisponivel{
   background:#fdecea;
   color:var(--vermelho);
+}
+
+.distancia{
+  text-align:center;
+  font-size:14px;
+  margin-bottom:18px;
+  color:#555;
 }
 
 input{
@@ -82,15 +92,8 @@ button{
   margin-bottom:12px;
 }
 
-.btn-disponivel{
-  background:var(--verde);
-  color:#fff;
-}
-
-.btn-indisponivel{
-  background:var(--vermelho);
-  color:#fff;
-}
+.btn-ok{background:var(--verde);color:#fff;}
+.btn-off{background:var(--vermelho);color:#fff;}
 
 button:disabled{
   opacity:.6;
@@ -101,7 +104,7 @@ button:disabled{
   text-align:center;
   min-height:30px;
   font-size:14px;
-  margin-top:10px;
+  margin-top:8px;
 }
 
 .spinner{
@@ -135,16 +138,20 @@ footer{
     Status: INDISPONÍVEL
   </div>
 
+  <div id="distancia" class="distancia">
+    📍 Distância da empresa: --
+  </div>
+
   <input id="placa" placeholder="Placa do Caminhão"
     oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
   <input id="senha" type="password" placeholder="Senha">
 
-  <button class="btn-disponivel" onclick="enviar('DISPONÍVEL')">
+  <button class="btn-ok" onclick="enviar('DISPONÍVEL')">
     ✅ Estou Disponível
   </button>
 
-  <button class="btn-indisponivel" onclick="enviar('INDISPONÍVEL')">
+  <button class="btn-off" onclick="enviar('INDISPONÍVEL')">
     ❌ Ficar Indisponível
   </button>
 
@@ -177,11 +184,40 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* 📍 LOCAL DA EMPRESA */
+const EMPRESA_LAT = -19.959843;
+const EMPRESA_LNG = -44.089041;
+
 const feedback = document.getElementById("feedback");
 const statusBox = document.getElementById("statusAtual");
+const distanciaBox = document.getElementById("distancia");
 
-function setLoading(v){
-  document.querySelectorAll("button").forEach(b=>b.disabled=v);
+function vibrar(){
+  if(navigator.vibrate){
+    navigator.vibrate([200,100,200]);
+  }
+}
+
+function distanciaMetros(lat1, lon1, lat2, lon2){
+  const R = 6371000;
+  const toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2-lat1);
+  const dLon = toRad(lon2-lon1);
+  const a =
+    Math.sin(dLat/2)**2 +
+    Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
+    Math.sin(dLon/2)**2;
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function obterLocalizacao(){
+  return new Promise((resolve,reject)=>{
+    navigator.geolocation.getCurrentPosition(
+      p => resolve({lat:p.coords.latitude,lng:p.coords.longitude}),
+      () => reject("Permita o acesso à localização"),
+      {enableHighAccuracy:true,timeout:10000}
+    );
+  });
 }
 
 window.enviar = async function(status){
@@ -194,7 +230,6 @@ window.enviar = async function(status){
     return;
   }
 
-  setLoading(true);
   feedback.innerHTML='<div class="spinner"></div>';
 
   try{
@@ -203,7 +238,6 @@ window.enviar = async function(status){
 
     if(!snap.exists()){
       feedback.innerHTML="❌ Placa não cadastrada";
-      setLoading(false);
       return;
     }
 
@@ -211,15 +245,18 @@ window.enviar = async function(status){
 
     if(!dados.ativo){
       feedback.innerHTML="❌ Motorista inativo";
-      setLoading(false);
       return;
     }
 
     if(dados.senha !== senha){
       feedback.innerHTML="❌ Senha incorreta";
-      setLoading(false);
       return;
     }
+
+    const pos = await obterLocalizacao();
+    const dist = distanciaMetros(pos.lat,pos.lng,EMPRESA_LAT,EMPRESA_LNG);
+    distanciaBox.innerHTML =
+      "📍 Distância da empresa: "+(dist/1000).toFixed(2)+" km";
 
     if(status==="INDISPONÍVEL"){
       await deleteDoc(doc(db,"fila",placa));
@@ -230,6 +267,8 @@ window.enviar = async function(status){
       nome:dados.nome,
       configEixos:dados.configEixos||null,
       status,
+      lat:pos.lat,
+      lng:pos.lng,
       atualizadoEm:serverTimestamp()
     });
 
@@ -237,14 +276,13 @@ window.enviar = async function(status){
     statusBox.innerHTML="Status: "+status;
 
     feedback.innerHTML="✅ Atualizado com sucesso";
+    vibrar();
 
     setTimeout(()=>feedback.innerHTML="",1500);
 
   }catch(e){
     feedback.innerHTML="❌ "+e.message;
   }
-
-  setLoading(false);
 };
 
 </script>
