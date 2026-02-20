@@ -210,34 +210,8 @@ footer{
 </div>
 
 <script type="module">
-  import { getMessaging, getToken, onMessage } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
-const messaging = getMessaging(app);
-
-// Solicitar permissão
-Notification.requestPermission().then(async (permission) => {
-  if (permission === "granted") {
-
-    const token = await getToken(messaging, {
-      vapidKey: "SUA_VAPID_KEY_AQUI"
-    });
-
-    if (token) {
-      console.log("Token:", token);
-
-      // Salvar token no Firestore
-      await setDoc(doc(db,"tokens",placaInput.value || "temp"),{
-        token
-      });
-    }
-  }
-});
-
-// Quando app estiver aberto
-onMessage(messaging, (payload) => {
-  alert(payload.notification.title);
-});
+/* ================= FIREBASE ================= */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
@@ -250,91 +224,59 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+import { 
+  getMessaging, 
+  getToken, 
+  onMessage 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
   authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco"
+  projectId: "tabela-frete-rio-branco",
+  messagingSenderId: "765019849831",
+  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const messaging = getMessaging(app);
 
-const EMPRESA_LAT = -19.959843;
-const EMPRESA_LNG = -44.089041;
-const RAIO_MAX_KM = 100;
+/* ================= ELEMENTOS ================= */
 
 const feedback = document.getElementById("feedback");
 const statusBox = document.getElementById("statusAtual");
 const distanciaBox = document.getElementById("distancia");
 const placaInput = document.getElementById("placa");
 
-window.addEventListener("load",()=>{
-  
-  if(navigator.vibrate) navigator.vibrate(80);
-  const placaSalva = localStorage.getItem("placaMotorista");
-  if(placaSalva) placaInput.value = placaSalva;
-});
-  window.addEventListener("load", async ()=>{
+const EMPRESA_LAT = -19.959843;
+const EMPRESA_LNG = -44.089041;
+const RAIO_MAX_KM = 100;
 
-  if(navigator.vibrate) navigator.vibrate(80);
+/* ================= TOKEN PUSH ================= */
 
-  const placaSalva = localStorage.getItem("placaMotorista");
+async function registrarToken(placa){
 
-  if(placaSalva){
-    placaInput.value = placaSalva;
+  const permission = await Notification.requestPermission();
+  if(permission !== "granted") return;
 
-    // 🔔 Inicia monitoramento automaticamente
-    monitorarChamado(placaSalva);
-  }
-
-});
-  
-
-function vibrar(){
-  if(navigator.vibrate){
-    navigator.vibrate([300,150,300,150,500]);
-  }
-}
-
-function dispararNotificacao(){
-
-  vibrar();
-
-  if("Notification" in window){
-    Notification.requestPermission().then(permission=>{
-      if(permission==="granted"){
-        new Notification("🚚 SUA VEZ CHEGOU!",{
-          body:"Dirija-se imediatamente ao carregamento.",
-          icon:"icon-192.png"
-        });
-      }
-    });
-  }
-
-  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
-  audio.play().catch(()=>{});
-}
-
-function monitorarChamado(placa){
-
-  const docRef = doc(db,"fila",placa);
-
-  onSnapshot(docRef, (snap)=>{
-
-    if(!snap.exists()) return;
-
-    const dados = snap.data();
-
-    // 🔥 Só dispara se acabou de ser chamado
-    if(dados.status === "CHAMADO" && dados.chamadoEm){
-
-      dispararNotificacao();
-
-    }
-
+  const token = await getToken(messaging, {
+    vapidKey: "COLE_AQUI_SUA_VAPID_PUBLIC_KEY"
   });
 
+  if(token){
+    await setDoc(doc(db,"tokens",placa),{
+      token
+    });
+  }
 }
+
+/* Push com app aberto */
+onMessage(messaging, (payload) => {
+  alert(payload.notification.title);
+});
+
+/* ================= UTIL ================= */
 
 function distanciaMetros(lat1, lon1, lat2, lon2){
   const R=6371000;
@@ -357,15 +299,14 @@ function obterLocalizacao(){
   });
 }
 
+/* ================= ENVIAR ================= */
+
 window.enviar = async function(status){
-  // 🔓 Desbloqueia áudio no navegador (necessário para tocar som depois)
-const unlock = new Audio();
-unlock.play().catch(()=>{});
 
   const placa = placaInput.value.trim().toUpperCase();
   const senha = document.getElementById("senha").value.trim();
 
-  if(!placa||!senha){
+  if(!placa || !senha){
     feedback.innerHTML="⚠️ Informe placa e senha";
     return;
   }
@@ -375,19 +316,30 @@ unlock.play().catch(()=>{});
   try{
 
     const snap=await getDoc(doc(db,"motoristas_cadastro",placa));
-    if(!snap.exists()){ feedback.innerHTML="❌ Não cadastrado"; return; }
+    if(!snap.exists()){
+      feedback.innerHTML="❌ Não cadastrado";
+      return;
+    }
 
     const dados=snap.data();
-    if(dados.senha!==senha){ feedback.innerHTML="❌ Senha incorreta"; return; }
+
+    if(dados.senha!==senha){
+      feedback.innerHTML="❌ Senha incorreta";
+      return;
+    }
 
     const pos=await obterLocalizacao();
-    const distKm=distanciaMetros(pos.lat,pos.lng,EMPRESA_LAT,EMPRESA_LNG)/1000;
+    const distKm=distanciaMetros(
+      pos.lat,pos.lng,
+      EMPRESA_LAT,EMPRESA_LNG
+    )/1000;
 
-    distanciaBox.innerHTML="📍 Distância da empresa: "+distKm.toFixed(2)+" km";
+    distanciaBox.innerHTML=
+      "📍 Distância da empresa: "+
+      distKm.toFixed(2)+" km";
 
     if(status==="DISPONÍVEL" && distKm>RAIO_MAX_KM){
       feedback.innerHTML="❌ Fora do raio permitido (100km)";
-      vibrar();
       return;
     }
 
@@ -406,9 +358,14 @@ unlock.play().catch(()=>{});
     });
 
     localStorage.setItem("placaMotorista",placa);
-    monitorarChamado(placa);
 
-    statusBox.className="status-box "+(status==="DISPONÍVEL"?"disponivel":"indisponivel");
+    /* 🔔 registra token push */
+    await registrarToken(placa);
+
+    statusBox.className=
+      "status-box "+
+      (status==="DISPONÍVEL"?"disponivel":"indisponivel");
+
     statusBox.innerHTML="Status: "+status;
 
     feedback.innerHTML="✅ Atualizado com sucesso";
