@@ -218,7 +218,7 @@ window.enviar = async function(status){
       setLoading(false);
       return;
     }
-
+import { getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     await setDoc(doc(db,"motoristas",placa),{
       placa,
       status,
@@ -239,6 +239,20 @@ window.enviar = async function(status){
     feedback.innerHTML=`<div class="result erro">❌ ${e}</div>`;
     setLoading(false);
   }
+  const docRef = doc(db,"motoristas_cadastro",placa);
+const snap = await getDoc(docRef);
+
+if(!snap.exists()){
+  feedback.innerHTML = `<div class="result erro">Placa não cadastrada</div>`;
+  setLoading(false);
+  return;
+}
+
+if(snap.data().senha !== senha){
+  feedback.innerHTML = `<div class="result erro">Senha incorreta</div>`;
+  setLoading(false);
+  return;
+}
 };
 
 /* ================= LISTA TEMPO REAL ================= */
