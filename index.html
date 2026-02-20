@@ -32,7 +32,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ESCONDE A PÁGINA ATÉ VALIDAR LOGIN
 document.documentElement.style.display = "none";
 
 onAuthStateChanged(auth, (user) => {
@@ -40,97 +39,13 @@ onAuthStateChanged(auth, (user) => {
     window.location.replace("login.html");
   } else {
     document.documentElement.style.display = "block";
+    carregarFila();
+    carregarDisponibilidade();
   }
 });
 
-window.db = db; // disponibiliza globalmente
-
-</script>
-
-  <title>Fila de Caminhões | Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="erp.css">
-</head>
-
-<body>
-
-<header class="erp-header">
-  <div class="erp-left">
-    <span class="erp-logo">LOGÍSTICA</span>
-    <span class="erp-sub">Sistema Operacional</span>
-  </div>
-
-  <nav class="erp-nav">
-    <a href="painel.html" class="nav-item">Painel</a>
-    <a href="frete.html" class="nav-item">Frete</a>
-    <a href="index.html" class="nav-item ativo">Controle Fila</a>
-    <a href="leitura.html" class="nav-item">CT's Disponíveis</a>
-    <a href="motoristas.html" class="nav-item">Disponibilidade</a>
-    <a href="clientes-mapa.html" class="nav-item">Clientes</a>
-  </nav>
-</header>
-
-<div class="container">
-  <div class="card" style="max-width:620px;margin:auto">
-    <h2 style="margin-top:0;text-align:center">
-      🚚 Fila de Caminhões
-    </h2>
-  </div>
-</div>
-
-<button class="btn btn-primario btn-call" onclick="chamarProximo()">
-  🔔 Chamar Próximo
-</button>
-
-<!-- FILA -->
-<div class="lista" id="listaFila">
-  <div class="spinner"></div>
-</div>
-
-<h3 style="margin-top:26px">📋 Disponibilidade</h3>
-
-<!-- DISPONIBILIDADE -->
-<div class="lista" id="listaDisp">
-  <div class="spinner"></div>
-</div>
-
-<div class="footer" style="cursor:pointer" onclick="logout()">
-  🚪 Sair do sistema
-</div>
-
-<iframe name="hidden_iframe" style="display:none;"></iframe>
-
-<script>
-
-/* ================= VARIÁVEIS ================= */
-
-let disponibilidade = {};
-let filaPlacas = {};
-
 const listaFila = document.getElementById("listaFila");
 const listaDisp = document.getElementById("listaDisp");
-
-/* ================= POST ================= */
-
-function post(dados){
-  const f = document.createElement("form");
-  f.method = "POST";
-  f.action = SCRIPT_URL;
-  f.target = "hidden_iframe";
-
-  Object.keys(dados).forEach(k => {
-    const i = document.createElement("input");
-    i.type = "hidden";
-    i.name = k;
-    i.value = dados[k];
-    f.appendChild(i);
-  });
-
-  document.body.appendChild(f);
-  f.submit();
-  f.remove();
-}
 
 /* ================= FILA ================= */
 
@@ -148,7 +63,6 @@ function carregarFila(){
     let html = "";
 
     snapshot.forEach((docSnap,i)=>{
-
       const c = docSnap.data();
 
       html += `
@@ -199,35 +113,6 @@ function carregarDisponibilidade(){
   });
 }
 
-function renderDisp(){
-  listaDisp.innerHTML = "";
-
-  Object.entries(disponibilidade)
-    .filter(([p]) => !filaPlacas[p])
-    .sort((a,b)=> a[1]==="DISPONÍVEL" ? -1 : 1)
-    .forEach(([p,s])=>{
-
-      const classe = s==="DISPONÍVEL" ? "disp-ok" : "disp-off";
-      const badge  = s==="DISPONÍVEL" ? "ok" : "off";
-
-      listaDisp.innerHTML += `
-        <div class="item ${classe}">
-          <div>
-            <b>${p}</b><br>
-            <span class="status ${badge}">${s}</span>
-          </div>
-
-          ${
-            s==="DISPONÍVEL"
-            ? `<button class="btn btn-secundario" onclick="addFila('${p}')">
-                ➕ Fila
-              </button>`
-            : ""
-          }
-        </div>`;
-    });
-}
-
 /* ================= AÇÕES ================= */
 
 window.addFila = async function(placa){
@@ -244,10 +129,10 @@ window.addFila = async function(placa){
     entradaEm: serverTimestamp(),
     status: "AGUARDANDO"
   });
-
 };
 
- window.chamarProximo = async function(){
+window.chamarProximo = async function(){
+
   const q = query(collection(db,"fila"), orderBy("entradaEm"));
   const snap = await getDocs(q);
 
@@ -257,19 +142,6 @@ window.addFila = async function(placa){
   await deleteDoc(doc(db,"fila",primeiro.id));
 };
 
-/* ================= UPDATE ================= */
-
-async function atualizar(){
-  listaFila.innerHTML = '<div class="spinner"></div>';
-  listaDisp.innerHTML = '<div class="spinner"></div>';
-
-  await carregarDisponibilidade();
-  await carregarFila();
-  renderDisp();
-}
-
-carregarFila();
-carregarDisponibilidade();
 </script>
 <script>
 const perfil = localStorage.getItem("perfil");
