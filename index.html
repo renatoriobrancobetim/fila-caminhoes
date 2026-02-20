@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
- <script type="module">
+<script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -17,6 +30,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 // ESCONDE A PÁGINA ATÉ VALIDAR LOGIN
 document.documentElement.style.display = "none";
@@ -28,6 +42,8 @@ onAuthStateChanged(auth, (user) => {
     document.documentElement.style.display = "block";
   }
 });
+
+window.db = db; // disponibiliza globalmente
 
 </script>
 
@@ -86,18 +102,6 @@ onAuthStateChanged(auth, (user) => {
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-/* ================= CONFIG ================= */
-
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbxSR_bB4R1bO91DvlYuyGsolLA907lltv1phcjw9boqFpqdFAMPScN0OEVnliqoXH3e/exec";
-
-const CSV_FILA =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=0&single=true&output=csv";
-
-const CSV_DISP =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRpTNysgwTFGT-r19Vxbrtd0zWMJz8LbJ5JVWTaUCtP4ExpJzNXHvsPDs3v6ThYbMo2OifA4oNY7op9/pub?gid=1775926778&single=true&output=csv";
-
-const SENHA_ADMIN = "Rio2026@";
 
 /* ================= VARIÁVEIS ================= */
 
@@ -130,46 +134,68 @@ function post(dados){
 
 /* ================= FILA ================= */
 
-async function carregarFila(){
-  filaPlacas = {};
-  const r = await fetch(CSV_FILA + "&t=" + Date.now());
-  const t = await r.text();
-  const linhas = t.split("\n").slice(1);
+function carregarFila(){
 
-  listaFila.innerHTML = "";
+  const q = query(collection(db,"fila"), orderBy("entradaEm"));
 
-  if(!linhas.length){
-    listaFila.innerHTML = "<div class='item'>Fila vazia</div>";
-    return;
-  }
+  onSnapshot(q, snapshot => {
 
-  linhas.forEach((l,i)=>{
-    const c = l.split(",");
-    if(!c[1]) return;
+    if(snapshot.empty){
+      listaFila.innerHTML = "<div class='item'>Fila vazia</div>";
+      return;
+    }
 
-    filaPlacas[c[1]] = true;
+    let html = "";
 
-    listaFila.innerHTML += `
-      <div class="item ${i===0 ? "proximo" : ""}">
-        <div>
-          <b>${c[1]}</b><br>
-          Comp: ${c[2] || "-"}
+    snapshot.forEach((docSnap,i)=>{
+
+      const c = docSnap.data();
+
+      html += `
+        <div class="item ${i===0 ? "proximo" : ""}">
+          <div>
+            <b>${c.placa}</b><br>
+            ${c.configEixos || "-"}
+          </div>
         </div>
-      </div>`;
+      `;
+    });
+
+    listaFila.innerHTML = html;
+
   });
 }
 
 /* ================= DISPONIBILIDADE ================= */
 
-async function carregarDisponibilidade(){
-  const r = await fetch(CSV_DISP + "&t=" + Date.now());
-  const t = await r.text();
+function carregarDisponibilidade(){
 
-  disponibilidade = {};
+  const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","desc"));
 
-  t.split("\n").slice(1).forEach(l=>{
-    const c = l.split(",");
-    if(c[0]) disponibilidade[c[0]] = c[1];
+  onSnapshot(q, snapshot => {
+
+    listaDisp.innerHTML = "";
+
+    snapshot.forEach(docSnap => {
+
+      const c = docSnap.data();
+
+      if(c.status !== "DISPONÍVEL") return;
+
+      listaDisp.innerHTML += `
+        <div class="item">
+          <div>
+            <b>${c.placa}</b><br>
+            <span class="status ok">${c.status}</span>
+          </div>
+
+          <button class="btn btn-secundario" onclick="addFila('${c.placa}')">
+            ➕ Fila
+          </button>
+        </div>
+      `;
+    });
+
   });
 }
 
@@ -204,20 +230,32 @@ function renderDisp(){
 
 /* ================= AÇÕES ================= */
 
-function addFila(placa){
-  post({acao:"inserir", placa, senha:SENHA_ADMIN});
-  setTimeout(atualizar, 800);
-}
+window.addFila = async function(placa){
 
-function chamarProximo(){
-  post({acao:"chamar", senha:SENHA_ADMIN});
-  setTimeout(atualizar, 800);
-}
+  const snap = await getDoc(doc(db,"motoristas",placa));
+  if(!snap.exists()) return;
 
-function logout(){
-  localStorage.removeItem("logado");
-  window.location.href = "login.html";
-}
+  const dados = snap.data();
+
+  await setDoc(doc(db,"fila",placa),{
+    placa,
+    nome: dados.nome || "",
+    configEixos: dados.configEixos || "",
+    entradaEm: serverTimestamp(),
+    status: "AGUARDANDO"
+  });
+
+};
+
+ window.chamarProximo = async function(){
+  const q = query(collection(db,"fila"), orderBy("entradaEm"));
+  const snap = await getDocs(q);
+
+  if(snap.empty) return;
+
+  const primeiro = snap.docs[0];
+  await deleteDoc(doc(db,"fila",primeiro.id));
+};
 
 /* ================= UPDATE ================= */
 
@@ -230,8 +268,8 @@ async function atualizar(){
   renderDisp();
 }
 
-atualizar();
-setInterval(atualizar, 30000);
+carregarFila();
+carregarDisponibilidade();
 </script>
 <script>
 const perfil = localStorage.getItem("perfil");
