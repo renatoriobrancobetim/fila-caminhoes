@@ -365,15 +365,16 @@ window.chamarProximo = async function(){
 
     await setDoc(doc(db,"fila",primeiro.id),{
       ...primeiro.data(),
-      status:"CHAMADO"
+      status:"CHAMADO",
+      chamadoEm: serverTimestamp()
     });
 
+    // 🔥 Espera 5 segundos
     setTimeout(async ()=>{
       await deleteDoc(doc(db,"fila",primeiro.id));
-    },2000);
+    },5000);
 
   }catch(e){
-    console.error(e);
     alert("Erro: "+e.message);
   }
 
