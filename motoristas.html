@@ -241,10 +241,26 @@ const distanciaBox = document.getElementById("distancia");
 const placaInput = document.getElementById("placa");
 
 window.addEventListener("load",()=>{
+  
   if(navigator.vibrate) navigator.vibrate(80);
   const placaSalva = localStorage.getItem("placaMotorista");
   if(placaSalva) placaInput.value = placaSalva;
 });
+  window.addEventListener("load", async ()=>{
+
+  if(navigator.vibrate) navigator.vibrate(80);
+
+  const placaSalva = localStorage.getItem("placaMotorista");
+
+  if(placaSalva){
+    placaInput.value = placaSalva;
+
+    // 🔔 Inicia monitoramento automaticamente
+    monitorarChamado(placaSalva);
+  }
+
+});
+  
 
 function vibrar(){
   if(navigator.vibrate){
@@ -276,12 +292,17 @@ function monitorarChamado(placa){
   const docRef = doc(db,"fila",placa);
 
   onSnapshot(docRef, (snap)=>{
+
     if(snap.exists()){
+
       const dados = snap.data();
+
       if(dados.status === "CHAMADO"){
         dispararNotificacao();
       }
+
     }
+
   });
 
 }
