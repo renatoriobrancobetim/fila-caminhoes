@@ -182,24 +182,24 @@ onAuthStateChanged(auth,user=>{
 
 window.salvar = async function(){
 
-  const placa = placaEl.value.trim().toUpperCase();
-  const nome = nomeEl.value.trim();
-  const senha = senhaEl.value.trim();
-  const config = configEl.value;
+const placa = placaEl.value.trim().toUpperCase();
+const nome = nomeEl.value.trim();
+const senha = senhaEl.value.trim();
+const config = configEl.value;
 
-  if(!placa || !nome || !senha || !tipo){
-    alert("Preencha todos os campos");
-    return;
-  }
+if(!placa || !nome || !senha || !config){
+  alert("Preencha todos os campos");
+  return;
+}
 
-  await setDoc(doc(db,"motoristas_cadastro",placa),{
-    placa,
-    nome,
-    senha,
-    configEixos: config,
-    ativo:true,
-    criadoEm: serverTimestamp()
-  });
+await setDoc(doc(db,"motoristas_cadastro",placa),{
+  placa,
+  nome,
+  senha,
+  configEixos: config,
+  ativo:true,
+  criadoEm: serverTimestamp()
+});
 
   limpar();
   carregar();
