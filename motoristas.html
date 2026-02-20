@@ -210,6 +210,34 @@ footer{
 </div>
 
 <script type="module">
+  import { getMessaging, getToken, onMessage } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
+const messaging = getMessaging(app);
+
+// Solicitar permissão
+Notification.requestPermission().then(async (permission) => {
+  if (permission === "granted") {
+
+    const token = await getToken(messaging, {
+      vapidKey: "SUA_VAPID_KEY_AQUI"
+    });
+
+    if (token) {
+      console.log("Token:", token);
+
+      // Salvar token no Firestore
+      await setDoc(doc(db,"tokens",placaInput.value || "temp"),{
+        token
+      });
+    }
+  }
+});
+
+// Quando app estiver aberto
+onMessage(messaging, (payload) => {
+  alert(payload.notification.title);
+});
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
