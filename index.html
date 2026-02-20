@@ -297,22 +297,43 @@ function carregarDisponibilidade(){
 
 /* ================= AÇÕES ================= */
 
-window.addFila = async function(placa){
+/* ================= FILA ================= */
 
-  const snap = await getDoc(doc(db,"motoristas",placa));
-  if(!snap.exists()) return;
+function carregarFila(){
 
-  const dados = snap.data();
+  const q = query(collection(db,"fila"), orderBy("entradaEm"));
 
-  await setDoc(doc(db,"fila",placa),{
-    placa,
-    nome: dados.nome || "",
-    configEixos: dados.configEixos || "",
-    entradaEm: serverTimestamp(),
-    status: "AGUARDANDO"
+  onSnapshot(q, snapshot => {
+
+    if(snapshot.empty){
+      listaFila.innerHTML = "<div class='item'>Fila vazia</div>";
+      return;
+    }
+
+    let html = "";
+
+    snapshot.forEach((docSnap,i)=>{
+
+      const c = docSnap.data();
+      const minutos = calcularMinutos(c.entradaEm);
+
+      const classeCritica = minutos >= 60 ? "critico" : "";
+      const classeAlerta  = minutos >= 30 ? "alerta" : "";
+
+      html += `
+        <div class="item ${i===0 ? "proximo" : ""} ${classeCritica || classeAlerta}">
+          <div>
+            <b>${c.placa}</b><br>
+            <small>⏱ ${minutos} min na fila</small>
+          </div>
+        </div>
+      `;
+    });
+
+    listaFila.innerHTML = html;
+
   });
-
-};
+}
 
 window.chamarProximo = async function(){
 
