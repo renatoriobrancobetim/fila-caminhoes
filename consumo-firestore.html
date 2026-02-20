@@ -28,7 +28,7 @@ header{
 
 main{
   padding:30px;
-  max-width:1300px;
+  max-width:1200px;
   margin:auto;
 }
 
@@ -64,7 +64,7 @@ main{
 }
 
 .metric{
-  font-size:26px;
+  font-size:28px;
   font-weight:bold;
   color:var(--azul);
 }
@@ -80,7 +80,7 @@ main{
 }
 
 .progress{
-  margin-top:8px;
+  margin-top:10px;
   height:8px;
   background:#e2e8f0;
   border-radius:6px;
@@ -121,26 +121,21 @@ footer{
   <div class="card red"><h3>Chamados</h3><div class="metric red" id="totalChamados">...</div></div>
 </div>
 
-<div class="section-title">👥 Clientes</div>
-<div class="grid">
-  <div class="card"><h3>Total Clientes</h3><div class="metric" id="totalClientes">...</div></div>
-  <div class="card"><h3>Derivados</h3><div class="metric" id="totalDerivados">...</div></div>
-  <div class="card"><h3>Distribuidora</h3><div class="metric" id="totalDistribuidora">...</div></div>
-  <div class="card"><h3>Coordenadas Válidas</h3><div class="metric" id="coordValidas">...</div></div>
-  <div class="card red"><h3>Coordenadas Inválidas</h3><div class="metric red" id="coordInvalidas">...</div></div>
-</div>
-
 <div class="section-title">⚙️ Sistema</div>
 <div class="grid">
   <div class="card"><h3>Tokens Push</h3><div class="metric" id="totalTokens">...</div></div>
   <div class="card"><h3>Total Documentos</h3><div class="metric" id="totalDocs">...</div></div>
-  <div class="card"><h3>Status Operacional</h3><div class="metric" id="statusProjeto">Estável</div></div>
+  <div class="card">
+    <h3>Status Operacional</h3>
+    <div class="metric" id="statusProjeto">Estável</div>
+  </div>
   <div class="card red">
-    <h3>Uso Plano Gratuito</h3>
+    <h3>Uso Plano Spark</h3>
     <div class="metric red" id="usoAtual">0%</div>
     <div class="progress">
       <div class="progress-bar" id="barraUso"></div>
     </div>
+    <div class="small">Baseado em total de documentos</div>
   </div>
 </div>
 
@@ -157,7 +152,6 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { 
   getFirestore,
   collection,
-  getDocs,
   query,
   where,
   getCountFromServer
@@ -191,42 +185,24 @@ async function carregarDashboard(){
   /* ===== Motoristas ===== */
 
   const totalMotoristas = await count("motoristas");
-  const totalDisponiveis = await count("motoristas",
-    query(collection(db,"motoristas"), where("status","==","DISPONÍVEL"))
+
+  const totalDisponiveis = await count(
+    "motoristas",
+    query(collection(db,"motoristas"),
+    where("status","==","DISPONÍVEL"))
   );
+
   const totalIndisponiveis = totalMotoristas - totalDisponiveis;
 
+  /* ===== Fila ===== */
+
   const totalFila = await count("fila");
-  const totalChamados = await count("fila",
-    query(collection(db,"fila"), where("status","==","CHAMADO"))
+
+  const totalChamados = await count(
+    "fila",
+    query(collection(db,"fila"),
+    where("status","==","CHAMADO"))
   );
-
-  /* ===== Clientes ===== */
-
-  const clientesSnap = await getDocs(collection(db,"clientes"));
-
-  let totalClientes=0, derivados=0, distribuidora=0, validos=0, invalidos=0;
-
-  const MG_LAT_MIN=-23.5, MG_LAT_MAX=-14.0;
-  const MG_LNG_MIN=-51.0, MG_LNG_MAX=-39.0;
-
-  clientesSnap.forEach(docSnap=>{
-    totalClientes++;
-    const d=docSnap.data();
-
-    if(d.tipo==="derivados") derivados++;
-    if(d.tipo==="distribuidora") distribuidora++;
-
-    const lat=Number(d.latitude);
-    const lng=Number(d.longitude);
-
-    const invalida =
-      isNaN(lat)||isNaN(lng)||
-      lat<MG_LAT_MIN||lat>MG_LAT_MAX||
-      lng<MG_LNG_MIN||lng>MG_LNG_MAX;
-
-    invalida?invalidos++:validos++;
-  });
 
   /* ===== Sistema ===== */
 
@@ -235,30 +211,23 @@ async function carregarDashboard(){
   const totalDocs =
     totalMotoristas +
     totalFila +
-    totalClientes +
     totalTokens;
 
-  const uso = ((totalDocs / 20000) * 100).toFixed(1);
+  const uso = ((totalDocs / 20000) * 100).toFixed(2);
 
   /* ===== Render ===== */
 
-  document.getElementById("totalMotoristas").innerText=totalMotoristas;
-  document.getElementById("totalDisponiveis").innerText=totalDisponiveis;
-  document.getElementById("totalIndisponiveis").innerText=totalIndisponiveis;
-  document.getElementById("totalFila").innerText=totalFila;
-  document.getElementById("totalChamados").innerText=totalChamados;
+  document.getElementById("totalMotoristas").innerText = totalMotoristas;
+  document.getElementById("totalDisponiveis").innerText = totalDisponiveis;
+  document.getElementById("totalIndisponiveis").innerText = totalIndisponiveis;
+  document.getElementById("totalFila").innerText = totalFila;
+  document.getElementById("totalChamados").innerText = totalChamados;
 
-  document.getElementById("totalClientes").innerText=totalClientes;
-  document.getElementById("totalDerivados").innerText=derivados;
-  document.getElementById("totalDistribuidora").innerText=distribuidora;
-  document.getElementById("coordValidas").innerText=validos;
-  document.getElementById("coordInvalidas").innerText=invalidos;
+  document.getElementById("totalTokens").innerText = totalTokens;
+  document.getElementById("totalDocs").innerText = totalDocs;
 
-  document.getElementById("totalTokens").innerText=totalTokens;
-  document.getElementById("totalDocs").innerText=totalDocs;
-
-  document.getElementById("usoAtual").innerText=uso+"%";
-  document.getElementById("barraUso").style.width=uso+"%";
+  document.getElementById("usoAtual").innerText = uso + "%";
+  document.getElementById("barraUso").style.width = uso + "%";
 
   document.getElementById("statusProjeto").innerText =
     uso < 50 ? "Estável" :
