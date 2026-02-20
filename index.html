@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Fila de Caminhões | Admin</title>
+<title>Controle de Fila | ERP Logístico</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -34,25 +34,16 @@ body{
   font-size:20px;
 }
 
-.nav{
-  display:flex;
-  gap:15px;
-}
-
 .nav a{
   color:#fff;
   text-decoration:none;
+  margin-left:18px;
   font-size:14px;
-  opacity:.9;
-}
-
-.nav a:hover{
-  opacity:1;
 }
 
 .container{
   padding:30px;
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
 }
 
@@ -68,6 +59,8 @@ body{
   margin-top:0;
   color:var(--azul);
 }
+
+/* FILA */
 
 .lista{
   margin-top:15px;
@@ -86,24 +79,72 @@ body{
   border-left:6px solid var(--azul);
 }
 
-.status{
-  font-size:12px;
-  font-weight:bold;
-  padding:4px 8px;
-  border-radius:6px;
+.item.alerta{
+  background:#fff3cd;
+  border-left:6px solid #ffc107;
 }
 
-.status.ok{
-  background:#28a745;
-  color:#fff;
+.item.critico{
+  background:#ffe5e5;
+  border-left:6px solid var(--vermelho);
+  animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+  0%{opacity:1}
+  50%{opacity:.6}
+  100%{opacity:1}
+}
+
+/* DISPONÍVEIS GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:15px;
+  margin-top:20px;
+}
+
+.card-veiculo{
+  background:#fff;
+  border-radius:12px;
+  padding:18px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+  border-top:4px solid var(--azul);
+  transition:.2s;
+}
+
+.card-veiculo:hover{
+  transform:translateY(-3px);
+}
+
+.card-veiculo.alerta{
+  border-top:4px solid #ffc107;
+}
+
+.card-veiculo.critico{
+  border-top:4px solid var(--vermelho);
+}
+
+.card-veiculo h3{
+  margin:0;
+  color:var(--azul);
+}
+
+.card-veiculo small{
+  display:block;
+  margin-top:6px;
+  color:#666;
 }
 
 .btn{
+  margin-top:12px;
   padding:8px 12px;
   border:none;
   border-radius:8px;
   cursor:pointer;
   font-weight:600;
+  width:100%;
 }
 
 .btn-azul{
@@ -116,31 +157,11 @@ body{
   color:#fff;
 }
 
-.btn-sec{
-  background:#6c757d;
-  color:#fff;
-}
-
 .footer{
   text-align:center;
-  padding:20px;
+  padding:25px;
   font-size:13px;
-  color:#666;
-}
-  .item.alerta{
-  background:#fff3cd;
-  border-left:6px solid #dc3545;
-}
-  .item.critico{
-  background:#ffe5e5;
-  border-left:6px solid #dc3545;
-  animation:pulse 1.2s infinite;
-}
-
-@keyframes pulse{
-  0%{opacity:1}
-  50%{opacity:.6}
-  100%{opacity:1}
+  color:#777;
 }
 </style>
 </head>
@@ -171,7 +192,7 @@ body{
 
   <div class="card">
     <h2>🚛 Caminhões Disponíveis</h2>
-    <div class="lista" id="listaDisp">
+    <div class="grid" id="listaDisp">
       <div>Carregando...</div>
     </div>
   </div>
@@ -179,7 +200,7 @@ body{
 </div>
 
 <div class="footer">
-  © 2026 • Sistema ERP Logístico
+  © 2026 • ERP Logístico
 </div>
 
 <script type="module">
@@ -203,23 +224,20 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
   authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco",
-  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
-  messagingSenderId: "765019849831",
-  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
+  projectId: "tabela-frete-rio-branco"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-document.documentElement.style.display = "none";
+document.documentElement.style.display="none";
 
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.replace("login.html");
-  } else {
-    document.documentElement.style.display = "block";
+onAuthStateChanged(auth,user=>{
+  if(!user){
+    window.location="login.html";
+  }else{
+    document.documentElement.style.display="block";
     carregarFila();
     carregarDisponibilidade();
   }
@@ -228,100 +246,39 @@ onAuthStateChanged(auth, (user) => {
 const listaFila = document.getElementById("listaFila");
 const listaDisp = document.getElementById("listaDisp");
 
-/* ================= FILA ================= */
+/* ===== UTIL ===== */
 
-snapshot.forEach((docSnap,i)=>{
-
-  const c = docSnap.data();
-  const minutos = calcularMinutos(c.entradaEm);
-
-  html += `
-    <div class="item ${i===0 ? "proximo" : ""}">
-      <div>
-        <b>${c.placa}</b><br>
-        <small>⏱ ${minutos} min na fila</small>
-      </div>
-    </div>
-  `;
-});
-
-/* ================= DISPONIBILIDADE ================= */
-
-function carregarDisponibilidade(){
-
-  const qFila = query(collection(db,"fila"));
-
-  onSnapshot(qFila, snapFila => {
-
-    const placasNaFila = new Set();
-    snapFila.forEach(doc => placasNaFila.add(doc.id));
-
-    const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
-
-    onSnapshot(q, snapshot => {
-
-      listaDisp.innerHTML = "";
-
-      snapshot.forEach(docSnap => {
-
-        const c = docSnap.data();
-
-        if(c.status !== "DISPONÍVEL") return;
-
-        // 🔒 Oculta quem já está na fila
-        if(placasNaFila.has(c.placa)) return;
-
-        const minutos = calcularMinutos(c.atualizadoEm);
-        const classeCritica = minutos >= 60 ? "critico" : "";
-
-        const alerta = minutos >= 30 ? "alerta" : "";
-
-        listaDisp.innerHTML += `
-          <div class="item ${alerta}">
-            <div>
-              <b>${c.placa}</b><br>
-              <small>⏱ ${minutos} min aguardando</small>
-            </div>
-
-            <button class="btn btn-sec" onclick="addFila('${c.placa}')">
-              ➕ Fila
-            </button>
-          </div>
-        `;
-      });
-
-    });
-
-  });
+function calcularMinutos(timestamp){
+  if(!timestamp) return 0;
+  const data = timestamp.toDate();
+  return Math.floor((new Date()-data)/60000);
 }
 
-/* ================= AÇÕES ================= */
-
-/* ================= FILA ================= */
+/* ===== FILA ===== */
 
 function carregarFila(){
 
   const q = query(collection(db,"fila"), orderBy("entradaEm"));
 
-  onSnapshot(q, snapshot => {
+  onSnapshot(q,snapshot=>{
 
     if(snapshot.empty){
-      listaFila.innerHTML = "<div class='item'>Fila vazia</div>";
+      listaFila.innerHTML="<div class='item'>Fila vazia</div>";
       return;
     }
 
-    let html = "";
+    let html="";
 
     snapshot.forEach((docSnap,i)=>{
-
       const c = docSnap.data();
       const minutos = calcularMinutos(c.entradaEm);
 
-      const classeCritica = minutos >= 60 ? "critico" : "";
-      const classeAlerta  = minutos >= 30 ? "alerta" : "";
+      let classe="";
+      if(minutos>=60) classe="critico";
+      else if(minutos>=30) classe="alerta";
 
-      html += `
-        <div class="item ${i===0 ? "proximo" : ""} ${classeCritica || classeAlerta}">
+      html+=`
+        <div class="item ${i===0?"proximo":""} ${classe}">
           <div>
             <b>${c.placa}</b><br>
             <small>⏱ ${minutos} min na fila</small>
@@ -330,30 +287,76 @@ function carregarFila(){
       `;
     });
 
-    listaFila.innerHTML = html;
-
+    listaFila.innerHTML=html;
   });
 }
 
-window.chamarProximo = async function(){
+/* ===== DISPONÍVEIS ===== */
 
+function carregarDisponibilidade(){
+
+  const qFila = query(collection(db,"fila"));
+
+  onSnapshot(qFila,snapFila=>{
+
+    const placasFila=new Set();
+    snapFila.forEach(d=>placasFila.add(d.id));
+
+    const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
+
+    onSnapshot(q,snapshot=>{
+
+      listaDisp.innerHTML="";
+
+      snapshot.forEach(docSnap=>{
+
+        const c = docSnap.data();
+        if(c.status!=="DISPONÍVEL") return;
+        if(placasFila.has(c.placa)) return;
+
+        const minutos = calcularMinutos(c.atualizadoEm);
+
+        let classe="";
+        if(minutos>=60) classe="critico";
+        else if(minutos>=30) classe="alerta";
+
+        listaDisp.innerHTML+=`
+          <div class="card-veiculo ${classe}">
+            <h3>${c.placa}</h3>
+            <small>⏱ ${minutos} min aguardando</small>
+            <button class="btn btn-azul" onclick="addFila('${c.placa}')">
+              ➕ Adicionar à Fila
+            </button>
+          </div>
+        `;
+      });
+    });
+  });
+}
+
+/* ===== AÇÕES ===== */
+
+window.addFila = async function(placa){
+  const snap = await getDoc(doc(db,"motoristas",placa));
+  if(!snap.exists()) return;
+
+  const dados = snap.data();
+
+  await setDoc(doc(db,"fila",placa),{
+    placa,
+    configEixos: dados.configEixos||"",
+    entradaEm: serverTimestamp()
+  });
+};
+
+window.chamarProximo = async function(){
   const q = query(collection(db,"fila"), orderBy("entradaEm"));
   const snap = await getDocs(q);
-
   if(snap.empty) return;
 
-  const primeiro = snap.docs[0];
-  await deleteDoc(doc(db,"fila",primeiro.id));
+  await deleteDoc(doc(db,"fila",snap.docs[0].id));
 };
-function calcularMinutos(timestamp){
 
-  if(!timestamp) return 0;
-
-  const data = timestamp.toDate();
-  const agora = new Date();
-
-  return Math.floor((agora - data) / 60000);
-}
 </script>
 
 </body>
