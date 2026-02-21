@@ -320,15 +320,17 @@ function carregarDisponibilidade(){
         if(minutos>=60) classe="critico";
         else if(minutos>=30) classe="alerta";
 
-        listaDisp.innerHTML+=`
-          <div class="card-veiculo ${classe}">
-            <h3>${c.placa}</h3>
-            <small>⏱ ${minutos} min aguardando</small>
-            <button class="btn btn-azul" onclick="addFila('${c.placa}')">
-              ➕ Adicionar à Fila
-            </button>
-          </div>
-        `;
+listaDisp.innerHTML+=`
+  <div class="card-veiculo ${classe}">
+    <h3>${c.placa}</h3>
+    <small>⏱ ${minutos} min aguardando</small>
+    <small>📍 ${c.endereco || "Localização não informada"}</small>
+
+    <button class="btn btn-azul" onclick="addFila('${c.placa}')">
+      ➕ Adicionar à Fila
+    </button>
+  </div>
+`;
       });
     });
   });
