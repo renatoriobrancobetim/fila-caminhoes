@@ -309,6 +309,8 @@ function carregarDisponibilidade(){
       listaDisp.innerHTML="";
 
       snapshot.forEach(docSnap=>{
+  const c = docSnap.data();
+  console.log("Motorista:", c);
 
         const c = docSnap.data();
         if((c.status || "").toUpperCase() !== "DISPONÍVEL") return;
