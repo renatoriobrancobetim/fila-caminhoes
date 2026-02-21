@@ -198,6 +198,13 @@ body{
       <div>Carregando...</div>
     </div>
   </div>
+  
+  <div class="card">
+  <h2>🚧 Em Atendimento</h2>
+  <div class="grid" id="listaAtendimento">
+    <div>Carregando...</div>
+  </div>
+</div>
 
   <div class="card">
     <h2>🚛 Caminhões Disponíveis</h2>
@@ -249,11 +256,13 @@ onAuthStateChanged(auth,user=>{
     document.documentElement.style.display="block";
     carregarFila();
     carregarDisponibilidade();
+    carregarAtendimento();
   }
 });
 
 const listaFila = document.getElementById("listaFila");
 const listaDisp = document.getElementById("listaDisp");
+  const listaAtendimento = document.getElementById("listaAtendimento");
 
 /* ===== UTIL ===== */
 
@@ -353,6 +362,43 @@ function carregarDisponibilidade(){
       `;
     });
   }
+}
+  function carregarAtendimento(){
+
+  const q = collection(db,"motoristas");
+
+  onSnapshot(q, snapshot=>{
+
+    listaAtendimento.innerHTML="";
+
+    let encontrou=false;
+
+    snapshot.forEach(docSnap=>{
+
+      const c = docSnap.data();
+
+      if((c.status || "").toUpperCase() !== "EM_ATENDIMENTO") return;
+
+      encontrou=true;
+
+      listaAtendimento.innerHTML+=`
+        <div class="card-veiculo critico">
+          <h3>${c.placa}</h3>
+          <small>🚧 Em atendimento</small>
+          <small>📍 ${c.latitude?.toFixed(5)}, ${c.longitude?.toFixed(5)}</small>
+          <a href="https://www.google.com/maps?q=${c.latitude},${c.longitude}" target="_blank">
+            📍 Ver no Mapa
+          </a>
+        </div>
+      `;
+    });
+
+    if(!encontrou){
+      listaAtendimento.innerHTML="<div>Nenhum motorista em atendimento</div>";
+    }
+
+  });
+
 }
 
 /* ===== AÇÕES ===== */
