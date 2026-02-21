@@ -7,9 +7,6 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0A3D91">
 
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-
 <style>
 :root{
   --azul:#0A3D91;
@@ -28,32 +25,6 @@ html,body{
   color:#fff;
 }
 
-/* SPLASH */
-.splash{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(180deg,#0A3D91,#062b66);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-  animation:fadeOut 1s ease forwards;
-  animation-delay:2s;
-}
-@keyframes fadeOut{to{opacity:0;visibility:hidden}}
-
-.logo-anim{
-  font-size:50px;
-  animation:pulse 1.4s infinite;
-}
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.08)}
-  100%{transform:scale(1)}
-}
-
-/* APP */
 .app{
   min-height:100vh;
   padding:30px 20px 40px 20px;
@@ -87,13 +58,6 @@ html,body{
   background:rgba(220,53,69,0.2);
   color:#FF8A8A;
   border:2px solid #dc3545;
-}
-
-.distancia{
-  text-align:center;
-  font-size:15px;
-  margin-bottom:25px;
-  opacity:.9;
 }
 
 input{
@@ -137,39 +101,10 @@ button{
   margin:auto;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ALERTA */
-@keyframes piscando{
-  0%{opacity:1}
-  50%{opacity:0.4}
-  100%{opacity:1}
-}
-
-.alerta-box{
-  display:none;
-  background:#dc3545;
-  padding:20px;
-  border-radius:16px;
-  text-align:center;
-  animation:piscando 1s infinite;
-}
-
-footer{
-  margin-top:auto;
-  text-align:center;
-  font-size:13px;
-  opacity:.7;
-}
 </style>
 </head>
 
 <body>
-
-<div class="splash">
-  <div class="logo-anim">🚚</div>
-  <h1>MOTORISTAS RIO BRANCO</h1>
-  <p>© 2026 • Renato Monteiro</p>
-</div>
 
 <div class="app">
 
@@ -177,10 +112,6 @@ footer{
 
   <div id="statusAtual" class="status-box indisponivel">
     Status: INDISPONÍVEL
-  </div>
-
-  <div id="distancia" class="distancia">
-    📍 Distância da empresa: --
   </div>
 
   <input id="placa" placeholder="Placa do Caminhão">
@@ -196,18 +127,6 @@ footer{
 
   <div class="feedback" id="feedback"></div>
 
-  <!-- ALERTA FORTE -->
-  <div id="alertaChamado" class="alerta-box">
-    <h2>🚚 SUA VEZ CHEGOU!</h2>
-    <button id="btnConfirmar">
-      ✅ CONFIRMAR CHAMADO
-    </button>
-  </div>
-
-  <footer>
-    © 2026 • Renato Monteiro
-  </footer>
-
 </div>
 
 <script type="module">
@@ -215,7 +134,7 @@ footer{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
   getFirestore, doc, setDoc, deleteDoc, getDoc,
-  onSnapshot, serverTimestamp
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -227,75 +146,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const EMPRESA_LAT = -19.959843;
-const EMPRESA_LNG = -44.089041;
-const RAIO_MAX_KM = 100;
-
 const feedback = document.getElementById("feedback");
 const statusBox = document.getElementById("statusAtual");
-const distanciaBox = document.getElementById("distancia");
 const placaInput = document.getElementById("placa");
 
-let alertaAtivo=false;
-let audioAlerta;
-let vibracaoInterval;
+window.enviar = async function(status){
 
-/* ================= ALERTA FORTE ================= */
+  const placa = placaInput.value.trim().toUpperCase();
+  const senha = document.getElementById("senha").value.trim();
 
-function dispararNotificacao(){
-
-  if(alertaAtivo) return;
-  alertaAtivo=true;
-
-  document.getElementById("alertaChamado").style.display="block";
-
-  audioAlerta=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
-  audioAlerta.loop=true;
-  audioAlerta.volume=1.0;
-  audioAlerta.play().catch(()=>{});
-
-  if(navigator.vibrate){
-    vibracaoInterval=setInterval(()=>{
-      navigator.vibrate([500,300,500]);
-    },1300);
-  }
-}
-
-document.getElementById("btnConfirmar").addEventListener("click",()=>{
-  alertaAtivo=false;
-  document.getElementById("alertaChamado").style.display="none";
-
-  if(audioAlerta){
-    audioAlerta.pause();
-    audioAlerta.currentTime=0;
-  }
-
-  if(vibracaoInterval){
-    clearInterval(vibracaoInterval);
-    navigator.vibrate(0);
-  }
-});
-
-/* ================= MONITORAR CHAMADO ================= */
-
-function monitorarChamado(placa){
-  onSnapshot(doc(db,"fila",placa),(snap)=>{
-    if(!snap.exists()) return;
-    const dados=snap.data();
-    if(dados.status==="CHAMADO"){
-      dispararNotificacao();
-    }
-  });
-}
-
-/* ================= ENVIAR ================= */
-
-window.enviar=async function(status){
-
-  const placa=placaInput.value.trim().toUpperCase();
-  const senha=document.getElementById("senha").value.trim();
-
-  if(!placa||!senha){
+  if(!placa || !senha){
     feedback.innerHTML="⚠️ Informe placa e senha";
     return;
   }
@@ -303,57 +163,40 @@ window.enviar=async function(status){
   feedback.innerHTML='<div class="spinner"></div>';
 
   try{
-    const snap=await getDoc(doc(db,"motoristas_cadastro",placa));
+
+    const snap = await getDoc(doc(db,"motoristas_cadastro",placa));
     if(!snap.exists()){
       feedback.innerHTML="❌ Não cadastrado";
       return;
     }
 
-    const dados=snap.data();
-    if(dados.senha!==senha){
+    const dados = snap.data();
+    if(dados.senha !== senha){
       feedback.innerHTML="❌ Senha incorreta";
       return;
     }
 
-    const pos=await new Promise((res,rej)=>{
+    const pos = await new Promise((resolve,reject)=>{
       navigator.geolocation.getCurrentPosition(
-        p=>res(p),
-        ()=>rej("Permita a localização"),
+        p=>resolve(p),
+        ()=>reject("Permita a localização"),
         {enableHighAccuracy:true}
       );
     });
 
-    const distKm=(
-      (Math.hypot(pos.coords.latitude-EMPRESA_LAT,
-                  pos.coords.longitude-EMPRESA_LNG))*111
-    );
-
-    distanciaBox.innerHTML="📍 Distância: "+distKm.toFixed(2)+" km";
-
-    if(status==="DISPONÍVEL" && distKm>RAIO_MAX_KM){
-      feedback.innerHTML="❌ Fora do raio permitido (100km)";
-      return;
-    }
-
-    if(status==="INDISPONÍVEL"){
+    // Se ficar indisponível, remove da fila
+    if(status === "INDISPONÍVEL"){
       await deleteDoc(doc(db,"fila",placa));
     }
 
-   navigator.geolocation.getCurrentPosition(async (pos)=>{
-
-  const latitude = pos.coords.latitude;
-  const longitude = pos.coords.longitude;
-
-await setDoc(doc(db,"motoristas",placa),{
-  status:"DISPONÍVEL",
-  endereco:enderecoAtual,
-  atualizadoEm: serverTimestamp()
-},{ merge:true });
-
-});
-
-    localStorage.setItem("placaMotorista",placa);
-    monitorarChamado(placa);
+    // 🔥 SALVA STATUS CORRETAMENTE
+    await setDoc(doc(db,"motoristas",placa),{
+      placa,
+      status,
+      latitude: pos.coords.latitude,
+      longitude: pos.coords.longitude,
+      atualizadoEm: serverTimestamp()
+    },{ merge:true });
 
     statusBox.className="status-box "+(status==="DISPONÍVEL"?"disponivel":"indisponivel");
     statusBox.innerHTML="Status: "+status;
@@ -361,17 +204,19 @@ await setDoc(doc(db,"motoristas",placa),{
     feedback.innerHTML="✅ Atualizado com sucesso";
     setTimeout(()=>feedback.innerHTML="",1500);
 
+    localStorage.setItem("placaMotorista",placa);
+
   }catch(e){
     feedback.innerHTML="❌ "+e;
   }
+
 };
 
-/* AUTO CARREGAR PLACA */
+// Auto carregar placa salva
 window.addEventListener("load",()=>{
-  const salva=localStorage.getItem("placaMotorista");
+  const salva = localStorage.getItem("placaMotorista");
   if(salva){
-    placaInput.value=salva;
-    monitorarChamado(salva);
+    placaInput.value = salva;
   }
 });
 
