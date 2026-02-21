@@ -100,7 +100,7 @@ body{
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
   gap:15px;
   margin-top:20px;
 }
@@ -135,6 +135,15 @@ body{
   display:block;
   margin-top:6px;
   color:#666;
+}
+
+.card-veiculo a{
+  display:inline-block;
+  margin-top:8px;
+  font-size:13px;
+  color:var(--azul);
+  text-decoration:none;
+  font-weight:600;
 }
 
 .btn{
@@ -257,11 +266,9 @@ function calcularMinutos(timestamp){
 /* ===== FILA ===== */
 
 function carregarFila(){
-
   const q = query(collection(db,"fila"), orderBy("entradaEm"));
 
   onSnapshot(q,snapshot=>{
-
     if(snapshot.empty){
       listaFila.innerHTML="<div class='item'>Fila vazia</div>";
       return;
@@ -323,8 +330,10 @@ function carregarDisponibilidade(){
         <div class="card-veiculo ${classe}">
           <h3>${c.placa}</h3>
           <small>⏱ ${minutos} min aguardando</small>
-          <small>📍 ${c.endereco || "Localização não informada"}</small>
-
+          <small>📍 ${c.latitude?.toFixed(5)}, ${c.longitude?.toFixed(5)}</small>
+          <a href="https://www.google.com/maps?q=${c.latitude},${c.longitude}" target="_blank">
+            📍 Ver no Mapa
+          </a>
           <button class="btn btn-azul" onclick="addFila('${c.placa}')">
             ➕ Adicionar à Fila
           </button>
@@ -351,9 +360,7 @@ window.addFila = async function(placa){
 };
 
 window.chamarProximo = async function(){
-
   try{
-
     const q = query(collection(db,"fila"), orderBy("entradaEm"));
     const snap = await getDocs(q);
 
@@ -370,7 +377,6 @@ window.chamarProximo = async function(){
       chamadoEm: serverTimestamp()
     });
 
-    // 🔥 Espera 5 segundos
     setTimeout(async ()=>{
       await deleteDoc(doc(db,"fila",primeiro.id));
     },5000);
@@ -378,7 +384,6 @@ window.chamarProximo = async function(){
   }catch(e){
     alert("Erro: "+e.message);
   }
-
 };
 
 </script>
