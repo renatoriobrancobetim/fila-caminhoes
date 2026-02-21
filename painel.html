@@ -232,6 +232,16 @@ footer{
   <div class="icon">🧮</div>
   <div class="title">Cálculo de Frete</div>
 </a>
+  <a class="card" href="usuarios-admin.html" id="cardUsuarios" style="display:none;">
+  <div class="icon">👤</div>
+  <div class="title">Controle de Usuários</div>
+</a>
+
+<a class="card" href="consumo-firestore.html" id="cardConsumo" style="display:none;">
+  <div class="icon">📊</div>
+  <div class="title">Consumo Firestore</div>
+  <div class="desc">Monitoramento de uso</div>
+</a>
 
 </div>
 
@@ -273,13 +283,21 @@ onAuthStateChanged(auth, async (user)=>{
       c.style.display="block";
     });
     await carregarKPIs();
-  }else{
-    if(dados.menus?.painel)
-      document.getElementById("cardPainelFila").style.display="block";
+}else{
 
-    if(dados.menus?.frete)
-      document.getElementById("cardFrete").style.display="block";
-  }
+  if(dados.menus?.painel)
+    document.getElementById("cardPainelFila").style.display="block";
+
+  if(dados.menus?.frete)
+    document.getElementById("cardFrete").style.display="block";
+
+  if(dados.menus?.usuarios)
+    document.getElementById("cardUsuarios").style.display="block";
+
+  if(dados.menus?.consumo)
+    document.getElementById("cardConsumo").style.display="block";
+
+}
 
   document.getElementById("skeletonContainer").style.display="none";
   const cards=document.getElementById("cardsContainer");
