@@ -387,6 +387,9 @@ window.chamarProximo = async function(){
       status:"CHAMADO",
       chamadoEm: serverTimestamp()
     });
+    await setDoc(doc(db,"motoristas",primeiro.id),{
+  status:"EM_ATENDIMENTO"
+},{ merge:true });
 
     setTimeout(async ()=>{
       await deleteDoc(doc(db,"fila",primeiro.id));
