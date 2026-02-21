@@ -147,6 +147,24 @@ body{
   font-size:13px;
   color:#777;
 }
+  /* BADGE PRÓXIMO */
+.badge-proximo{
+  background:#28a745;
+  color:#fff;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+  display:inline-block;
+  margin-bottom:8px;
+  font-weight:600;
+  animation:floatBadge 1.8s ease-in-out infinite;
+}
+
+@keyframes floatBadge{
+  0%{ transform:translateY(0px); }
+  50%{ transform:translateY(-4px); }
+  100%{ transform:translateY(0px); }
+}
 </style>
 </head>
 
@@ -261,51 +279,41 @@ onSnapshot(qMotoristas, snap=>{
     render();
   });
 
-  function render(){
-    listaDisp.innerHTML="";
-    motoristas.forEach((docSnap,index)=>{
-      const c=docSnap.data();
-      if((c.status||"").toUpperCase()!=="DISPONÍVEL") return;
-      if(fila.includes(docSnap.id)) return;
+function render(){
+  listaDisp.innerHTML="";
 
-  listaDisp.innerHTML+=`
-  <div class="card-veiculo">
-    ${index===0 ? `
-      <div style="
-        background:#28a745;
-        color:#fff;
-        padding:4px 8px;
-        border-radius:20px;
-        font-size:12px;
-        display:inline-block;
-        margin-bottom:8px;
-        font-weight:600;
-      ">
-        🟢 PRÓXIMO
+  motoristas.forEach((docSnap,index)=>{
+    const c = docSnap.data();
+
+    if((c.status||"").toUpperCase()!=="DISPONÍVEL") return;
+    if(fila.includes(docSnap.id)) return;
+
+    listaDisp.innerHTML+=`
+      <div class="card-veiculo">
+        ${index===0 ? `<div class="badge-proximo">🟢 PRÓXIMO</div>` : ""}
+
+        <h3>${c.placa}</h3>
+
+        <small>
+          ⏱ Disponível desde:
+          ${c.atualizadoEm?.toDate().toLocaleTimeString()}
+        </small>
+
+        <small>
+          📍 ${c.latitude?.toFixed(5)}, ${c.longitude?.toFixed(5)}
+        </small>
+
+        <a href="https://www.google.com/maps?q=${c.latitude},${c.longitude}" target="_blank">
+          Ver no mapa
+        </a>
+
+        <button class="btn btn-azul" onclick="addFila('${c.placa}')">
+          ➕ Adicionar à Fila
+        </button>
       </div>
-    ` : ""}
-
-    <h3>${c.placa}</h3>
-    <small>
-      ⏱ Disponível desde: 
-      ${c.atualizadoEm?.toDate().toLocaleTimeString()}
-    </small>
-
-    <button class="btn btn-azul" onclick="addFila('${c.placa}')">
-      ➕ Adicionar à Fila
-    </button>
-  </div>
-`;
-          <h3>${c.placa}</h3>
-          <small>📍 ${c.latitude?.toFixed(5)}, ${c.longitude?.toFixed(5)}</small>
-          <a href="https://www.google.com/maps?q=${c.latitude},${c.longitude}" target="_blank">Ver no mapa</a>
-          <button class="btn btn-azul" onclick="addFila('${c.placa}')">
-            ➕ Adicionar à Fila
-          </button>
-        </div>
-      `;
-    });
-  }
+    `;
+  });
+}
 }
 
 /* ATENDIMENTO */
