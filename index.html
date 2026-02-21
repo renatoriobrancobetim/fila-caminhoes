@@ -200,19 +200,19 @@ body{
   </div>
   
   <div class="card">
-  <h2>🚧 Em Atendimento</h2>
-  <div class="grid" id="listaAtendimento">
-    <div>Carregando...</div>
-  </div>
-</div>
-
-  <div class="card">
     <h2>🚛 Caminhões Disponíveis</h2>
     <div class="grid" id="listaDisp">
       <div>Carregando...</div>
     </div>
   </div>
-
+  
+  <div class="card">
+  <h2>🚧 Em Atendimento</h2>
+  <div class="grid" id="listaAtendimento">
+    <div>Carregando...</div>
+  </div>
+</div>
+  
 </div>
 
 <div class="footer">
@@ -437,9 +437,34 @@ window.chamarProximo = async function(){
   status:"EM_ATENDIMENTO"
 },{ merge:true });
 
-    setTimeout(async ()=>{
-      await deleteDoc(doc(db,"fila",primeiro.id));
-    },5000);
+window.chamarProximo = async function(){
+
+  try{
+
+    const q = query(collection(db,"fila"), orderBy("entradaEm"));
+    const snap = await getDocs(q);
+
+    if(snap.empty){
+      alert("Fila vazia");
+      return;
+    }
+
+    const primeiro = snap.docs[0];
+    const placa = primeiro.id;
+
+    // 🔥 1️⃣ Atualiza motorista para EM_ATENDIMENTO
+    await setDoc(doc(db,"motoristas",placa),{
+      status:"EM_ATENDIMENTO"
+    },{ merge:true });
+
+    // 🔥 2️⃣ Remove da fila
+    await deleteDoc(doc(db,"fila",placa));
+
+  }catch(e){
+    alert("Erro: "+e.message);
+  }
+
+};
 
   }catch(e){
     alert("Erro: "+e.message);
