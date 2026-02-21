@@ -19,6 +19,7 @@ body{
   background:var(--cinza-bg);
 }
 
+/* HEADER */
 .header{
   background:linear-gradient(90deg,var(--azul),var(--azul-claro));
   color:#fff;
@@ -26,6 +27,18 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
+}
+
+.header h1{
+  margin:0;
+  font-size:20px;
+}
+
+.nav a{
+  color:#fff;
+  text-decoration:none;
+  margin-left:18px;
+  font-size:14px;
 }
 
 .container{
@@ -42,6 +55,40 @@ body{
   margin-bottom:30px;
 }
 
+.card h2{
+  margin-top:0;
+  color:var(--azul);
+}
+
+/* FILA */
+.lista{
+  margin-top:15px;
+}
+
+.item{
+  padding:15px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.item.proximo{
+  background:#e9f1ff;
+  border-left:6px solid var(--azul);
+}
+
+.item.alerta{
+  background:#fff3cd;
+  border-left:6px solid #ffc107;
+}
+
+.item.critico{
+  background:#ffe5e5;
+  border-left:6px solid var(--vermelho);
+}
+
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
@@ -61,6 +108,26 @@ body{
   border-top:4px solid var(--vermelho);
 }
 
+.card-veiculo h3{
+  margin:0;
+  color:var(--azul);
+}
+
+.card-veiculo small{
+  display:block;
+  margin-top:6px;
+  color:#666;
+}
+
+.card-veiculo a{
+  display:inline-block;
+  margin-top:8px;
+  font-size:13px;
+  color:var(--azul);
+  text-decoration:none;
+  font-weight:600;
+}
+
 .btn{
   margin-top:12px;
   padding:8px 12px;
@@ -73,11 +140,6 @@ body{
 
 .btn-azul{ background:var(--azul); color:#fff; }
 .btn-vermelho{ background:var(--vermelho); color:#fff; }
-
-.lista .item{
-  padding:15px;
-  border-bottom:1px solid #eee;
-}
 
 .footer{
   text-align:center;
@@ -92,10 +154,16 @@ body{
 
 <div class="header">
   <h1>🚚 Controle de Fila</h1>
+  <div class="nav">
+    <a href="painel.html">Painel</a>
+    <a href="frete.html">Frete</a>
+    <a href="motoristas.html">Disponibilidade</a>
+  </div>
 </div>
 
 <div class="container">
 
+  <!-- FILA -->
   <div class="card">
     <h2>📋 Fila Atual</h2>
     <button class="btn btn-vermelho" onclick="chamarProximo()">
@@ -104,11 +172,13 @@ body{
     <div class="lista" id="listaFila"></div>
   </div>
 
+  <!-- DISPONÍVEIS -->
   <div class="card">
     <h2>🚛 Caminhões Disponíveis</h2>
     <div class="grid" id="listaDisp"></div>
   </div>
 
+  <!-- ATENDIMENTO -->
   <div class="card">
     <h2>🚧 Em Atendimento</h2>
     <div class="grid" id="listaAtendimento"></div>
@@ -125,17 +195,9 @@ body{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
-  getFirestore,
-  collection,
-  doc,
-  setDoc,
-  deleteDoc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  query,
-  orderBy,
-  serverTimestamp
+  getFirestore, collection, doc, setDoc,
+  deleteDoc, getDocs, onSnapshot,
+  query, orderBy, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -162,16 +224,15 @@ onAuthStateChanged(auth,user=>{
   }
 });
 
-/* ================= FILA ================= */
-
+/* FILA */
 function carregarFila(){
   const q = query(collection(db,"fila"), orderBy("entradaEm"));
   onSnapshot(q,snapshot=>{
     listaFila.innerHTML="";
-    snapshot.forEach(docSnap=>{
+    snapshot.forEach((docSnap,i)=>{
       const c = docSnap.data();
-      listaFila.innerHTML += `
-        <div class="item">
+      listaFila.innerHTML+=`
+        <div class="item ${i===0?"proximo":""}">
           <b>${c.placa}</b>
         </div>
       `;
@@ -179,36 +240,34 @@ function carregarFila(){
   });
 }
 
-/* ================= DISPONÍVEIS ================= */
-
+/* DISPONÍVEIS */
 function carregarDisponibilidade(){
 
-  const qMotoristas = collection(db,"motoristas");
-  const qFila = collection(db,"fila");
+  let motoristas=[];
+  let fila=[];
 
-  let motoristas = [];
-  let fila = [];
-
-  onSnapshot(qMotoristas, snap=>{
-    motoristas = snap.docs;
+  onSnapshot(collection(db,"motoristas"), snap=>{
+    motoristas=snap.docs;
     render();
   });
 
-  onSnapshot(qFila, snap=>{
-    fila = snap.docs.map(d=>d.id);
+  onSnapshot(collection(db,"fila"), snap=>{
+    fila=snap.docs.map(d=>d.id);
     render();
   });
 
   function render(){
     listaDisp.innerHTML="";
     motoristas.forEach(docSnap=>{
-      const c = docSnap.data();
-      if((c.status||"").toUpperCase() !== "DISPONÍVEL") return;
+      const c=docSnap.data();
+      if((c.status||"").toUpperCase()!=="DISPONÍVEL") return;
       if(fila.includes(docSnap.id)) return;
 
-      listaDisp.innerHTML += `
+      listaDisp.innerHTML+=`
         <div class="card-veiculo">
           <h3>${c.placa}</h3>
+          <small>📍 ${c.latitude?.toFixed(5)}, ${c.longitude?.toFixed(5)}</small>
+          <a href="https://www.google.com/maps?q=${c.latitude},${c.longitude}" target="_blank">Ver no mapa</a>
           <button class="btn btn-azul" onclick="addFila('${c.placa}')">
             ➕ Adicionar à Fila
           </button>
@@ -218,16 +277,14 @@ function carregarDisponibilidade(){
   }
 }
 
-/* ================= ATENDIMENTO ================= */
-
+/* ATENDIMENTO */
 function carregarAtendimento(){
   onSnapshot(collection(db,"motoristas"), snapshot=>{
     listaAtendimento.innerHTML="";
     snapshot.forEach(docSnap=>{
-      const c = docSnap.data();
-      if((c.status||"").toUpperCase() !== "EM_ATENDIMENTO") return;
-
-      listaAtendimento.innerHTML += `
+      const c=docSnap.data();
+      if((c.status||"").toUpperCase()!=="EM_ATENDIMENTO") return;
+      listaAtendimento.innerHTML+=`
         <div class="card-veiculo critico">
           <h3>${c.placa}</h3>
           <small>🚧 Em atendimento</small>
@@ -237,37 +294,33 @@ function carregarAtendimento(){
   });
 }
 
-/* ================= AÇÕES ================= */
-
-window.addFila = async function(placa){
+/* AÇÕES */
+window.addFila=async function(placa){
   await setDoc(doc(db,"fila",placa),{
     placa,
-    entradaEm: serverTimestamp()
+    entradaEm:serverTimestamp()
   });
 };
 
-window.chamarProximo = async function(){
-  const q = query(collection(db,"fila"), orderBy("entradaEm"));
-  const snap = await getDocs(q);
+window.chamarProximo=async function(){
+  const q=query(collection(db,"fila"),orderBy("entradaEm"));
+  const snap=await getDocs(q);
 
   if(snap.empty){
     alert("Fila vazia");
     return;
   }
 
-  const primeiro = snap.docs[0];
-  const placa = primeiro.id;
+  const primeiro=snap.docs[0];
+  const placa=primeiro.id;
 
-  // Vai para atendimento
   await setDoc(doc(db,"motoristas",placa),{
     status:"EM_ATENDIMENTO"
-  },{ merge:true });
+  },{merge:true});
 
-  // Remove da fila
   await deleteDoc(doc(db,"fila",placa));
 };
 
 </script>
-
 </body>
 </html>
