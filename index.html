@@ -305,15 +305,27 @@ function carregarDisponibilidade(){
   const qMotoristas = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
   const qFila = collection(db,"fila");
 
-  onSnapshot(qMotoristas, async snapshot=>{
+  let motoristasSnapshot = [];
+  let filaSnapshot = [];
 
-    const snapFila = await getDocs(qFila);
+  onSnapshot(qMotoristas, snapshot=>{
+    motoristasSnapshot = snapshot.docs;
+    renderizarDisponiveis();
+  });
+
+  onSnapshot(qFila, snapshot=>{
+    filaSnapshot = snapshot.docs;
+    renderizarDisponiveis();
+  });
+
+  function renderizarDisponiveis(){
+
     const placasFila = new Set();
-    snapFila.forEach(d=>placasFila.add(d.id));
+    filaSnapshot.forEach(d=>placasFila.add(d.id));
 
     listaDisp.innerHTML="";
 
-    snapshot.forEach(docSnap=>{
+    motoristasSnapshot.forEach(docSnap=>{
 
       const c = docSnap.data();
 
@@ -340,8 +352,7 @@ function carregarDisponibilidade(){
         </div>
       `;
     });
-
-  });
+  }
 }
 
 /* ===== AÇÕES ===== */
