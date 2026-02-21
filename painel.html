@@ -40,7 +40,52 @@ main{
   margin:auto;
 }
 
-/* KPI */
+/* GRID */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+  opacity:0;
+  transform:translateY(15px);
+  transition:all .6s ease;
+}
+
+.cards.loaded{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:25px;
+  text-align:center;
+  text-decoration:none;
+  color:#1f2937;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  transition:all .3s ease;
+  position:relative;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 28px rgba(0,0,0,0.15);
+}
+
+.icon{font-size:40px;margin-bottom:12px;}
+.title{font-size:17px;font-weight:600;margin-bottom:8px;}
+.desc{font-size:13px;color:#64748b;}
+
+footer{
+  text-align:center;
+  padding:20px;
+  font-size:12px;
+  color:#64748b;
+}
+
+/* ================= KPI DASHBOARD ================= */
+
 .kpi-container{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -61,6 +106,7 @@ main{
 
 .kpi-card:hover{
   transform:translateY(-4px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
 .kpi-title{
@@ -72,6 +118,7 @@ main{
 .kpi-number{
   font-size:28px;
   font-weight:700;
+  color:#1e293b;
 }
 
 .kpi-icon{
@@ -85,42 +132,22 @@ main{
   color:#fff;
 }
 
-.bg-blue{background:#1e3a8a;}
 .bg-green{background:#16a34a;}
-.bg-red{background:#dc2626;}
+.bg-blue{background:#1e3a8a;}
 .bg-orange{background:#ea580c;}
+.bg-red{background:#dc2626;}
 
-/* GRID CARDS */
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:25px;
-}
-
-.card{
-  background:#fff;
+.skeleton{
+  background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+  background-size:200% 100%;
+  animation:loading 1.2s infinite;
   border-radius:14px;
-  padding:25px;
-  text-align:center;
-  text-decoration:none;
-  color:#1f2937;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  transition:.3s;
+  height:140px;
 }
 
-.card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 12px 28px rgba(0,0,0,0.15);
-}
-
-.icon{font-size:40px;margin-bottom:12px;}
-.title{font-size:17px;font-weight:600;margin-bottom:8px;}
-
-footer{
-  text-align:center;
-  padding:20px;
-  font-size:12px;
-  color:#64748b;
+@keyframes loading{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
 }
 </style>
 </head>
@@ -130,14 +157,14 @@ footer{
 <header>
 <button class="logout-btn" onclick="logout()">Sair</button>
 <h1>🚚 Painel Operacional Logístico</h1>
-<p>Central Operacional da Frota</p>
+<p>Central unificada da Frota</p>
 <p id="usuarioLogado" style="margin-top:8px;font-size:13px;opacity:.9;"></p>
 </header>
 
 <main>
 
-<!-- KPI OPERACIONAL -->
-<div class="kpi-container" id="kpiContainer">
+<!-- KPI -->
+<div class="kpi-container" id="kpiContainer" style="display:none;">
 
   <div class="kpi-card">
     <div>
@@ -173,25 +200,35 @@ footer{
 
 </div>
 
-<!-- CARDS DE SISTEMA -->
-<div class="cards">
+<!-- SKELETON -->
+<div id="skeletonContainer" class="cards">
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
+</div>
 
-<a class="card" href="index.html">
+<!-- CARDS -->
+<div class="cards" id="cardsContainer" style="display:none;">
+
+<a class="card" href="index.html" id="cardPainelFila" style="display:none;">
   <div class="icon">🎛️</div>
   <div class="title">Painel da Fila</div>
 </a>
 
-<a class="card" href="motoristas.html">
+<a class="card" href="motoristas.html" id="cardDisponibilidade" style="display:none;">
   <div class="icon">📍</div>
-  <div class="title">Disponibilidade Motoristas</div>
+  <div class="title">Disponibilidade</div>
 </a>
 
-<a class="card" href="motoristas-admin.html">
+<a href="motoristas-admin.html" 
+   class="card"
+   id="cardMotoristasAdmin"
+   style="display:none;">
   <div class="icon">👤</div>
-  <div class="title">Administração Motoristas</div>
+  <div class="title">Motoristas Admin</div>
 </a>
 
-<a class="card" href="frete.html">
+<a class="card" href="frete.html" id="cardFrete" style="display:none;">
   <div class="icon">🧮</div>
   <div class="title">Cálculo de Frete</div>
 </a>
@@ -208,7 +245,7 @@ footer{
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const app = initializeApp({
   apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -220,12 +257,34 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 onAuthStateChanged(auth, async (user)=>{
+
   if(!user){ window.location.href="login.html"; return; }
 
-  document.getElementById("usuarioLogado").innerText =
-    "Usuário autenticado";
+  const snap = await getDoc(doc(db,"usuarios",user.uid));
+  if(!snap.exists()){ window.location.href="login.html"; return; }
 
-  carregarKPIs();
+  const dados = snap.data();
+
+  document.getElementById("usuarioLogado").innerText =
+    "Usuário: "+dados.nome+" ("+dados.perfil.toUpperCase()+")";
+
+  if(dados.perfil === "admin"){
+    document.querySelectorAll("#cardsContainer .card").forEach(c=>{
+      c.style.display="block";
+    });
+    await carregarKPIs();
+  }else{
+    if(dados.menus?.painel)
+      document.getElementById("cardPainelFila").style.display="block";
+
+    if(dados.menus?.frete)
+      document.getElementById("cardFrete").style.display="block";
+  }
+
+  document.getElementById("skeletonContainer").style.display="none";
+  const cards=document.getElementById("cardsContainer");
+  cards.style.display="grid";
+  setTimeout(()=>cards.classList.add("loaded"),50);
 });
 
 async function carregarKPIs(){
@@ -247,6 +306,8 @@ async function carregarKPIs(){
   document.getElementById("kpiDisponiveis").innerText = disponiveis;
   document.getElementById("kpiFila").innerText = filaSnap.size;
   document.getElementById("kpiAtendimento").innerText = atendimento;
+
+  document.getElementById("kpiContainer").style.display="grid";
 }
 
 window.logout=()=>signOut(auth).then(()=>window.location.href="login.html");
