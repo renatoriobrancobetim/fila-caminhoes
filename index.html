@@ -295,46 +295,43 @@ function carregarFila(){
 
 function carregarDisponibilidade(){
 
-  const qFila = query(collection(db,"fila"));
+  const qMotoristas = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
+  const qFila = collection(db,"fila");
 
-  onSnapshot(qFila,snapFila=>{
+  onSnapshot(qMotoristas, async snapshot=>{
 
-    const placasFila=new Set();
+    const snapFila = await getDocs(qFila);
+    const placasFila = new Set();
     snapFila.forEach(d=>placasFila.add(d.id));
 
-    const q = query(collection(db,"motoristas"), orderBy("atualizadoEm","asc"));
+    listaDisp.innerHTML="";
 
-    onSnapshot(q,snapshot=>{
+    snapshot.forEach(docSnap=>{
 
-      listaDisp.innerHTML="";
+      const c = docSnap.data();
 
-      snapshot.forEach(docSnap=>{
-  const c = docSnap.data();
-  console.log("Motorista:", c);
+      if((c.status || "").toUpperCase() !== "DISPONÍVEL") return;
+      if(placasFila.has(docSnap.id)) return;
 
-        const c = docSnap.data();
-        if((c.status || "").toUpperCase() !== "DISPONÍVEL") return;
-        if(placasFila.has(c.placa)) return;
+      const minutos = calcularMinutos(c.atualizadoEm);
 
-        const minutos = calcularMinutos(c.atualizadoEm);
+      let classe="";
+      if(minutos>=60) classe="critico";
+      else if(minutos>=30) classe="alerta";
 
-        let classe="";
-        if(minutos>=60) classe="critico";
-        else if(minutos>=30) classe="alerta";
+      listaDisp.innerHTML+=`
+        <div class="card-veiculo ${classe}">
+          <h3>${c.placa}</h3>
+          <small>⏱ ${minutos} min aguardando</small>
+          <small>📍 ${c.endereco || "Localização não informada"}</small>
 
-listaDisp.innerHTML+=`
-  <div class="card-veiculo ${classe}">
-    <h3>${c.placa}</h3>
-    <small>⏱ ${minutos} min aguardando</small>
-    <small>📍 ${c.endereco || "Localização não informada"}</small>
-
-    <button class="btn btn-azul" onclick="addFila('${c.placa}')">
-      ➕ Adicionar à Fila
-    </button>
-  </div>
-`;
-      });
+          <button class="btn btn-azul" onclick="addFila('${c.placa}')">
+            ➕ Adicionar à Fila
+          </button>
+        </div>
+      `;
     });
+
   });
 }
 
