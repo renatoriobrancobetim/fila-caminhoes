@@ -339,12 +339,20 @@ window.enviar=async function(status){
       await deleteDoc(doc(db,"fila",placa));
     }
 
-    await setDoc(doc(db,"motoristas",placa),{
-      placa,
-      nome:dados.nome,
-      status,
-      atualizadoEm:serverTimestamp()
-    });
+   navigator.geolocation.getCurrentPosition(async (pos)=>{
+
+  const latitude = pos.coords.latitude;
+  const longitude = pos.coords.longitude;
+
+  await setDoc(doc(db,"motoristas",placa),{
+    placa,
+    status:"DISPONÍVEL",
+    latitude,
+    longitude,
+    atualizadoEm: serverTimestamp()
+  });
+
+});
 
     localStorage.setItem("placaMotorista",placa);
     monitorarChamado(placa);
