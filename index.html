@@ -311,7 +311,7 @@ function carregarDisponibilidade(){
       snapshot.forEach(docSnap=>{
 
         const c = docSnap.data();
-        if(c.status!=="DISPONÍVEL") return;
+        if((c.status || "").toUpperCase() !== "DISPONÍVEL") return;
         if(placasFila.has(c.placa)) return;
 
         const minutos = calcularMinutos(c.atualizadoEm);
