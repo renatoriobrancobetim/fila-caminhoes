@@ -280,13 +280,20 @@ onSnapshot(qMotoristas, snap=>{
   });
 
 function render(){
+
   listaDisp.innerHTML="";
 
-  motoristas.forEach((docSnap,index)=>{
+  // 🔥 1️⃣ Filtra primeiro
+  const disponiveis = motoristas.filter(docSnap=>{
     const c = docSnap.data();
+    if((c.status||"").toUpperCase()!=="DISPONÍVEL") return false;
+    if(fila.includes(docSnap.id)) return false;
+    return true;
+  });
 
-    if((c.status||"").toUpperCase()!=="DISPONÍVEL") return;
-    if(fila.includes(docSnap.id)) return;
+  // 🔥 2️⃣ Agora percorre os filtrados
+  disponiveis.forEach((docSnap,index)=>{
+    const c = docSnap.data();
 
     listaDisp.innerHTML+=`
       <div class="card-veiculo">
@@ -313,6 +320,7 @@ function render(){
       </div>
     `;
   });
+
 }
 }
 
