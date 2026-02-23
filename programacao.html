@@ -386,18 +386,16 @@ btnSalvar.addEventListener("click", async ()=>{
     }).length + 1;
 
     const numeroCarga = `${baseNumero}-${String(contador).padStart(3,"0")}`;
-
-    await addDoc(collection(db,"programacao_cargas"),{
-      numeroCarga,
-      const dataInput = document.getElementById("dataCarregamento").value;
+const dataInput = document.getElementById("dataCarregamento").value;
 
 if(!dataInput){
   mostrarErro("Informe a data do carregamento.");
   resetarBotao();
   return;
 }
-
-dataCarregamento:new Date(dataInput),
+    await addDoc(collection(db,"programacao_cargas"),{
+      numeroCarga,
+      dataCarregamento:new Date(dataInput),
       horarioPrevisto:document.getElementById("horarioPrevisto").value,
       placa:placaInput.value.toUpperCase(),
       tipoCaminhao:tipoCaminhaoAtual,
