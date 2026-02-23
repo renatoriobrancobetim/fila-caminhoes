@@ -244,6 +244,27 @@ body{
   from{ transform:rotate(0deg); }
   to{ transform:rotate(360deg); }
 }
+  /* ===== BRILHO AO CHAMAR ===== */
+
+.item.chamando{
+  background:#e6ffed !important;
+  border-left:6px solid #28a745 !important;
+  animation:blinkChamada .6s ease-in-out 3;
+}
+
+@keyframes blinkChamada{
+  0%{ box-shadow:0 0 0 0 rgba(40,167,69,.6); }
+  50%{ box-shadow:0 0 18px 4px rgba(40,167,69,.7); }
+  100%{ box-shadow:0 0 0 0 rgba(40,167,69,0); }
+}
+
+/* ===== TRANSIÇÃO SUAVE DE SAÍDA ===== */
+
+.item.saindo{
+  opacity:0;
+  transform:translateX(40px);
+  transition:all .4s ease;
+}
 </style>
 </head>
 
@@ -329,11 +350,11 @@ function carregarFila(){
     listaFila.innerHTML="";
     snapshot.forEach((docSnap,i)=>{
       const c = docSnap.data();
-      listaFila.innerHTML+=`
-        <div class="item ${i===0?"proximo":""}">
-          <b>${c.placa}</b>
-        </div>
-      `;
+ listaFila.innerHTML+=`
+  <div class="item ${i===0?"proximo":""}" id="fila-${docSnap.id}">
+    <b>${c.placa}</b>
+  </div>
+`;
     });
   });
 }
@@ -444,14 +465,26 @@ window.chamarProximo = async function(){
 
   if(snap.empty){
     alert("Fila vazia");
-    btn.disabled = false;
-    text.innerText = "🔔 Chamar Próximo";
-    loader.classList.add("hidden");
+    resetBtn();
     return;
   }
 
   const primeiro = snap.docs[0];
   const placa = primeiro.id;
+
+  const elemento = document.getElementById(`fila-${placa}`);
+
+  if(elemento){
+    elemento.classList.add("chamando");
+
+    // Espera animação de brilho
+    await new Promise(res => setTimeout(res, 900));
+
+    elemento.classList.add("saindo");
+
+    // Espera transição sair
+    await new Promise(res => setTimeout(res, 400));
+  }
 
   await setDoc(doc(db,"motoristas",placa),{
     status:"EM_ATENDIMENTO"
@@ -459,9 +492,13 @@ window.chamarProximo = async function(){
 
   await deleteDoc(doc(db,"fila",placa));
 
-  btn.disabled = false;
-  text.innerText = "🔔 Chamar Próximo";
-  loader.classList.add("hidden");
+  resetBtn();
+
+  function resetBtn(){
+    btn.disabled = false;
+    text.innerText = "🔔 Chamar Próximo";
+    loader.classList.add("hidden");
+  }
 };
 
 </script>
