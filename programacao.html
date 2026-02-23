@@ -359,10 +359,14 @@ tabela.innerHTML+=`
 <td>${c.tipoCaminhao}</td>
 <td>${c.capacidadeTotal?.toLocaleString()} L</td>
 <td><span class="status ${c.status}">${c.status}</span></td>
-<td>${c.status==="PROGRAMADO" ? `
-<button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>
-<button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
-` : "-"}
+<td>
+<button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">
+${c.placa ? "Alterar Placa" : "Vincular"}
+</button>
+
+<button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">
+Excluir
+</button>
 </td>
 </tr>`;
 });
