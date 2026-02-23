@@ -138,7 +138,26 @@ th{
 }
 
 .PROGRAMADO{ background:#cfe2ff; color:#084298; }
+.card-sucesso{
+  margin-top:20px;
+  background:linear-gradient(135deg,#d1e7dd,#badbcc);
+  border-left:6px solid #198754;
+  padding:18px;
+  border-radius:12px;
+  font-weight:600;
+  font-size:16px;
+  color:#0f5132;
+  animation:fadeIn .4s ease;
+}
 
+.card-sucesso strong{
+  font-size:20px;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(-5px);}
+  to{opacity:1; transform:translateY(0);}
+}
 </style>
 </head>
 
@@ -160,6 +179,7 @@ th{
     <input type="time" id="horarioPrevisto">
     <input type="text" id="placa" placeholder="Placa">
   </div>
+  <div id="sucessoCarga" class="card-sucesso hidden"></div>
 
   <div class="info-veiculo" id="infoVeiculo"></div>
 
@@ -318,7 +338,7 @@ btnSalvar.addEventListener("click", async ()=>{
     const linhas = document.querySelectorAll(".compartimento");
 
     if(linhas.length === 0){
-      alert("Informe a placa para gerar os compartimentos.");
+      mostrarErro("Informe a placa para gerar os compartimentos.");
       resetarBotao();
       return;
     }
@@ -334,7 +354,6 @@ btnSalvar.addEventListener("click", async ()=>{
       const vendedor = linha.querySelector(".vendedor").value.trim();
 
       const completo = cliente && municipio && vendedor;
-
       if(completo) preenchidos++;
 
       compartimentos.push({
@@ -347,9 +366,8 @@ btnSalvar.addEventListener("click", async ()=>{
 
     });
 
-    // 🔒 REGRA NOVA
     if(preenchidos < 2){
-      alert("Preencha pelo menos 2 compartimentos antes de salvar.");
+      mostrarErro("Preencha pelo menos 2 compartimentos antes de salvar.");
       resetarBotao();
       return;
     }
@@ -378,18 +396,42 @@ btnSalvar.addEventListener("click", async ()=>{
       criadoEm:serverTimestamp()
     });
 
-    alert("Carga criada com sucesso!");
-
+    mostrarSucesso(numeroCarga);
     limparFormularioCompleto();
 
   }catch(error){
     console.error(error);
-    alert("Erro ao salvar.");
+    mostrarErro("Erro ao salvar carga.");
   }
 
   resetarBotao();
 
 });
+  function mostrarSucesso(numero){
+
+  const box = document.getElementById("sucessoCarga");
+
+  box.innerHTML = `
+    ✅ Carga criada com sucesso! <br>
+    Número da Carga: <strong>${numero}</strong>
+  `;
+
+  box.classList.remove("hidden");
+
+  setTimeout(()=>{
+    box.classList.add("hidden");
+  },5000);
+}
+
+function mostrarErro(msg){
+  alert(msg); // Podemos depois evoluir para card vermelho
+}
+
+function resetarBotao(){
+  btnSalvar.disabled = false;
+  textoBtn.innerText = "Salvar Carga";
+  loaderBtn.classList.add("hidden");
+}
 function resetarBotao(){
   btnSalvar.disabled = false;
   textoBtn.innerText = "Salvar Carga";
