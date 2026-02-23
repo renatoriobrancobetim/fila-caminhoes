@@ -86,7 +86,25 @@ th{
   font-size:12px;
   font-weight:600;
 }
+.loader{
+  width:16px;
+  height:16px;
+  border:3px solid rgba(255,255,255,0.4);
+  border-top:3px solid #fff;
+  border-radius:50%;
+  display:inline-block;
+  margin-left:8px;
+  animation:spin .7s linear infinite;
+}
 
+.hidden{
+  display:none;
+}
+
+@keyframes spin{
+  from{ transform:rotate(0deg); }
+  to{ transform:rotate(360deg); }
+}
 .PROGRAMADO{ background:#cfe2ff; color:#084298; }
 .EM_FILA{ background:#fff3cd; color:#664d03; }
 .EM_CARREGAMENTO{ background:#ffe5d0; color:#842029; }
@@ -122,7 +140,10 @@ th{
   <input type="text" id="observacoes" placeholder="Observações">
 </div>
 
-<button class="btn btn-azul" onclick="criarCarga()">Salvar Carga</button>
+<button class="btn btn-azul" id="btnSalvar">
+  <span id="textoBtn">Salvar Carga</span>
+  <span id="loaderBtn" class="loader hidden"></span>
+</button>
 
 <div class="table-wrap">
   <table>
@@ -169,45 +190,91 @@ const tabela = document.getElementById("tabelaCargas");
 
 /* SALVAR CARGA */
 
-async function salvarCarga(dados){
+const btnSalvar = document.getElementById("btnSalvar");
+const textoBtn = document.getElementById("textoBtn");
+const loaderBtn = document.getElementById("loaderBtn");
 
-  const cadastroRef = doc(db,"motoristas_cadastro",dados.placa);
-  const cadastroSnap = await getDoc(cadastroRef);
+btnSalvar.addEventListener("click", async ()=>{
 
-  if(!cadastroSnap.exists()){
-    alert("Placa não cadastrada!");
-    return;
+  btnSalvar.disabled = true;
+  textoBtn.innerText = "Salvando...";
+  loaderBtn.classList.remove("hidden");
+
+  try{
+
+    const dados = {
+      dataCarregamento: document.getElementById("dataCarregamento").value,
+      vendedor: document.getElementById("vendedor").value,
+      cliente: document.getElementById("cliente").value,
+      municipio: document.getElementById("municipio").value,
+      tipoCaminhao: document.getElementById("tipoCaminhao").value,
+      volume: document.getElementById("volume").value,
+      freteUnitario: document.getElementById("freteUnitario").value,
+      total: document.getElementById("total").value,
+      horarioPrevisto: document.getElementById("horarioPrevisto").value,
+      placa: document.getElementById("placa").value.toUpperCase(),
+      km: document.getElementById("km").value,
+      observacoes: document.getElementById("observacoes").value
+    };
+
+    // 🔵 Buscar placa
+    const cadastroRef = doc(db,"motoristas_cadastro",dados.placa);
+    const cadastroSnap = await getDoc(cadastroRef);
+
+    if(!cadastroSnap.exists()){
+      alert("Placa não cadastrada!");
+      resetBtn();
+      return;
+    }
+
+    const dadosPlaca = cadastroSnap.data();
+
+    const novaCarga = {
+      dataCarregamento: new Date(dados.dataCarregamento),
+      vendedor: dados.vendedor,
+      cliente: dados.cliente,
+      municipio: dados.municipio,
+      tipoCaminhao: dados.tipoCaminhao,
+      volume: Number(dados.volume),
+      freteUnitario: Number(dados.freteUnitario),
+      total: Number(dados.total),
+      horarioPrevisto: dados.horarioPrevisto,
+      observacoes: dados.observacoes || "",
+      placa: dados.placa,
+      motorista: dadosPlaca.motorista || "",
+      configEixos: dadosPlaca.configEixos || "",
+      capacidade: dadosPlaca.capacidade || 0,
+      transportadora: dadosPlaca.transportadora || "",
+      plotado: dadosPlaca.plotado || false,
+      km: Number(dados.km) || 0,
+      status: "PROGRAMADO",
+      criadoEm: serverTimestamp()
+    };
+
+    await addDoc(collection(db,"programacao_cargas"), novaCarga);
+
+    alert("Carga criada com sucesso!");
+    limparFormulario();
+
+  }catch(error){
+    console.error(error);
+    alert("Erro ao salvar carga.");
   }
 
-  const dadosPlaca = cadastroSnap.data();
+  resetBtn();
 
-  const novaCarga = {
-    dataCarregamento: new Date(dados.dataCarregamento),
-    vendedor: dados.vendedor,
-    cliente: dados.cliente,
-    municipio: dados.municipio,
-    tipoCaminhao: dados.tipoCaminhao,
-    volume: Number(dados.volume),
-    freteUnitario: Number(dados.freteUnitario),
-    total: Number(dados.total),
-    horarioPrevisto: dados.horarioPrevisto,
-    observacoes: dados.observacoes || "",
-    placa: dados.placa,
-    motorista: dadosPlaca.motorista || "",
-    configEixos: dadosPlaca.configEixos || "",
-    capacidade: dadosPlaca.capacidade || 0,
-    transportadora: dadosPlaca.transportadora || "",
-    plotado: dadosPlaca.plotado || false,
-    km: Number(dados.km) || 0,
-    status: "PROGRAMADO",
-    criadoEm: serverTimestamp()
-  };
+  function resetBtn(){
+    btnSalvar.disabled = false;
+    textoBtn.innerText = "Salvar Carga";
+    loaderBtn.classList.add("hidden");
+  }
 
-  await addDoc(collection(db,"programacao_cargas"), novaCarga);
-
-  alert("Carga criada com sucesso!");
+});
+function limparFormulario(){
+  document.querySelectorAll(".form-grid input").forEach(input=>{
+    input.value="";
+  });
 }
-
 window.criarCarga = function(){
 
   const dados = {
