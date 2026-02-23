@@ -11,46 +11,39 @@
   --vermelho:#dc2626;
   --cinza:#f1f5f9;
 }
-
 body{
   margin:0;
   font-family:'Segoe UI',Arial,sans-serif;
   background:var(--cinza);
 }
-
 header{
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
   color:#fff;
   padding:25px;
   text-align:center;
 }
-
 main{
   padding:40px;
   max-width:1300px;
   margin:auto;
 }
-
 .card-form{
   background:#fff;
   padding:25px;
   border-radius:16px;
   box-shadow:0 8px 25px rgba(0,0,0,.08);
 }
-
 .linha-topo,.linha-bottom{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:12px;
   margin-bottom:15px;
 }
-
 input,select{
   padding:10px;
   border-radius:8px;
   border:1px solid #ccc;
 }
-
 .info-veiculo{
   background:#f1f5f9;
   padding:12px;
@@ -59,7 +52,6 @@ input,select{
   margin-bottom:15px;
   display:none;
 }
-
 .compartimento{
   background:#f8fafc;
   padding:12px;
@@ -69,12 +61,10 @@ input,select{
   grid-template-columns:120px 1fr 1fr 1fr;
   gap:10px;
 }
-
 .capacidade{
   font-weight:700;
   color:var(--azul);
 }
-
 .btn{
   padding:8px 14px;
   border:none;
@@ -82,11 +72,9 @@ input,select{
   cursor:pointer;
   font-weight:600;
 }
-
 .btn-azul{ background:var(--azul); color:#fff; }
 .btn-vincular{ background:#198754; color:#fff; }
 .btn-excluir{ background:#dc2626; color:#fff; }
-
 .loader{
   width:16px;
   height:16px;
@@ -97,21 +85,11 @@ input,select{
   margin-left:8px;
   animation:spin .7s linear infinite;
 }
-
-.hidden{
-  display:none !important;
-}
-
+.hidden{ display:none !important; }
 @keyframes spin{
   from{ transform:rotate(0deg); }
   to{ transform:rotate(360deg); }
 }
-
-@keyframes fadeIn{
-  from{opacity:0; transform:scale(.95);}
-  to{opacity:1; transform:scale(1);}
-}
-
 .table-wrap{
   background:#fff;
   border-radius:14px;
@@ -119,53 +97,45 @@ input,select{
   box-shadow:0 6px 18px rgba(0,0,0,.08);
   margin-top:30px;
 }
-
 table{
   width:100%;
   border-collapse:collapse;
 }
-
 th,td{
   padding:14px;
   border-bottom:1px solid #eee;
   text-align:center;
 }
-
 th{
   background:var(--azul);
   color:#fff;
 }
-
 .status{
   padding:6px 12px;
   border-radius:20px;
   font-size:12px;
   font-weight:600;
 }
-
 .PROGRAMADO{ background:#cfe2ff; color:#084298; }
 .AGUARDANDO_FILA{ background:#fff3cd; color:#664d03; }
 
+/* MODAL */
 .modal-overlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.45);
-  display:none; /* 👈 IMPORTANTE */
+  display:none;
   align-items:center;
   justify-content:center;
   z-index:999;
 }
-
 .modal-box{
   background:#fff;
   width:400px;
   max-width:90%;
   padding:25px;
   border-radius:14px;
-  box-shadow:0 15px 40px rgba(0,0,0,.3);
-  animation:fadeIn .2s ease;
 }
-
 .modal-actions{
   margin-top:20px;
   display:flex;
@@ -230,7 +200,7 @@ th{
 </main>
 
 <!-- MODAL -->
-<div id="modalOverlay" class="modal-overlay hidden">
+<div id="modalOverlay" class="modal-overlay">
   <div class="modal-box">
     <h3 id="modalTitulo"></h3>
     <div id="modalConteudo"></div>
@@ -243,8 +213,14 @@ th{
 
 <script type="module">
 
+/* ===== IMPORTS (APENAS UMA VEZ) ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getAuth, 
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
   getFirestore, 
   collection, 
@@ -257,6 +233,7 @@ import {
   serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* ===== FIREBASE INIT ===== */
 const app = initializeApp({
   apiKey:"AIzaSy...",
   authDomain:"tabela-frete-rio-branco.firebaseapp.com",
@@ -268,6 +245,7 @@ const auth = getAuth(app);
 
 setPersistence(auth, browserLocalPersistence);
 
+/* ===== VARIÁVEIS ===== */
 let tipoCaminhaoAtual="";
 let capacidadeTotalAtual=0;
 
@@ -278,7 +256,7 @@ const btnSalvar=document.getElementById("btnSalvar");
 const textoBtn=document.getElementById("textoBtn");
 const loaderBtn=document.getElementById("loaderBtn");
 
-/* GERAR COMPARTIMENTOS */
+/* ===== GERAR COMPARTIMENTOS ===== */
 document.getElementById("tipoVeiculo").addEventListener("change",e=>{
 const valor=e.target.value;
 if(!valor){
@@ -309,34 +287,21 @@ container.innerHTML+=`
 });
 });
 
-/* SALVAR */
+/* ===== SALVAR CARGA ===== */
 btnSalvar.addEventListener("click",async()=>{
-
 btnSalvar.disabled=true;
 loaderBtn.classList.remove("hidden");
 textoBtn.innerText="Salvando...";
 
 try{
 
-if(!tipoCaminhaoAtual){
-alert("Selecione o tipo de veículo.");
-reset();
-return;
-}
+if(!tipoCaminhaoAtual) throw "Selecione o tipo de veículo.";
 
 const dataInput=document.getElementById("dataCarregamento").value;
-if(!dataInput){
-alert("Informe a data.");
-reset();
-return;
-}
+if(!dataInput) throw "Informe a data.";
 
 const linhas=document.querySelectorAll(".compartimento");
-if(linhas.length===0){
-alert("Compartimentos não gerados.");
-reset();
-return;
-}
+if(linhas.length===0) throw "Compartimentos não gerados.";
 
 let preenchidos=0;
 let compartimentos=[];
@@ -350,11 +315,7 @@ if(cliente&&municipio&&vendedor) preenchidos++;
 compartimentos.push({capacidade:Number(cap),cliente,municipio,vendedor});
 });
 
-if(preenchidos<2){
-alert("Preencha ao menos 2 compartimentos.");
-reset();
-return;
-}
+if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
 
 const base=new Date().toISOString().slice(0,10).replaceAll("-","");
 const snap=await getDocs(collection(db,"programacao_cargas"));
@@ -374,95 +335,54 @@ criadoEm:serverTimestamp()
 });
 
 alert("Carga criada com sucesso!");
-resetForm();
+location.reload();
 
 }catch(e){
-console.error(e);
-alert("Erro ao salvar.");
+alert(e);
 }
 
-reset();
-});
-
-function reset(){
 btnSalvar.disabled=false;
 loaderBtn.classList.add("hidden");
 textoBtn.innerText="Salvar Carga";
-}
-
-function resetForm(){
-document.getElementById("tipoVeiculo").value="";
-document.getElementById("dataCarregamento").value="";
-document.getElementById("horarioPrevisto").value="";
-document.getElementById("km").value="";
-document.getElementById("observacoes").value="";
-container.innerHTML="";
-infoVeiculo.style.display="none";
-tipoCaminhaoAtual="";
-capacidadeTotalAtual=0;
-}
-
-/* MODAL SEGURO */
-function abrirModal(titulo,conteudo,acaoConfirmar){
-
-document.getElementById("modalTitulo").innerText=titulo;
-document.getElementById("modalConteudo").innerHTML=conteudo;
-
-const btnOriginal=document.getElementById("btnConfirmarModal");
-const novoBtn=btnOriginal.cloneNode(true);
-btnOriginal.parentNode.replaceChild(novoBtn,btnOriginal);
-
-novoBtn.onclick=acaoConfirmar;
-
-const overlay = document.getElementById("modalOverlay");
-overlay.classList.remove("hidden");
-overlay.style.display = "flex";
-}
-
-window.fecharModal=function(){
-  const overlay = document.getElementById("modalOverlay");
-  overlay.classList.add("hidden");
-  overlay.style.display = "none";
-};
-
-/* TABELA */
-onAuthStateChanged(auth,user=>{
-if(!user){
-  console.log("Usuário não autenticado.");
-}
-
-  onSnapshot(collection(db,"programacao_cargas"),snap=>{
-    tabela.innerHTML="";
-
-    snap.forEach(docSnap=>{
-      const c=docSnap.data();
-      tabela.innerHTML+=`
-      <tr>
-        <td>${c.numeroCarga}</td>
-        <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
-        <td>${c.placa||"-"}</td>
-        <td>${c.tipoCaminhao}</td>
-        <td>${c.capacidadeTotal?.toLocaleString()} L</td>
-        <td><span class="status ${c.status}">${c.status}</span></td>
-        <td>${c.status==="PROGRAMADO" ? `
-        <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>
-        <button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
-        ` : "-"}
-        </td>
-      </tr>`;
-    });
-
-  });
-
 });
 
-/* VINCULAR */
+/* ===== CARREGAR TABELA ===== */
+onSnapshot(collection(db,"programacao_cargas"),snap=>{
+tabela.innerHTML="";
+snap.forEach(docSnap=>{
+const c=docSnap.data();
+tabela.innerHTML+=`
+<tr>
+<td>${c.numeroCarga}</td>
+<td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
+<td>${c.placa||"-"}</td>
+<td>${c.tipoCaminhao}</td>
+<td>${c.capacidadeTotal?.toLocaleString()} L</td>
+<td><span class="status ${c.status}">${c.status}</span></td>
+<td>${c.status==="PROGRAMADO" ? `
+<button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>
+<button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
+` : "-"}
+</td>
+</tr>`;
+});
+});
+
+/* ===== MODAL ===== */
+window.abrirModal=function(titulo,conteudo,acao){
+document.getElementById("modalTitulo").innerText=titulo;
+document.getElementById("modalConteudo").innerHTML=conteudo;
+document.getElementById("btnConfirmarModal").onclick=acao;
+document.getElementById("modalOverlay").style.display="flex";
+}
+window.fecharModal=function(){
+document.getElementById("modalOverlay").style.display="none";
+}
 window.vincular=function(id){
-abrirModal(
-"Vincular Caminhão",
-`<input id="inputPlacaModal" placeholder="Digite a placa" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;">`,
+abrirModal("Vincular Caminhão",
+`<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
 async()=>{
-const placa=document.getElementById("inputPlacaModal").value.trim();
+const placa=document.getElementById("placaModal").value.trim();
 if(!placa) return;
 await updateDoc(doc(db,"programacao_cargas",id),{
 placa:placa.toUpperCase(),
@@ -470,19 +390,16 @@ status:"AGUARDANDO_FILA"
 });
 fecharModal();
 });
-};
-
-/* EXCLUIR */
+}
 window.excluirCarga=function(id){
-abrirModal(
-"Excluir Carga",
-`<p>Deseja realmente excluir esta carga?</p>`,
+abrirModal("Excluir Carga",
+"<p>Deseja realmente excluir?</p>",
 async()=>{
 await deleteDoc(doc(db,"programacao_cargas",id));
 fecharModal();
 });
-};
-
+}
 </script>
+
 </body>
 </html>
