@@ -284,9 +284,11 @@ import {
   getDoc, 
   getDocs, 
   collection,
-  onSnapshot
+  onSnapshot,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { query, where } from "firebase/firestore";
+
 
 const app = initializeApp({
   apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -340,7 +342,12 @@ monitorarFila();
 async function carregarKPIs(){
 
   const motoristasSnap = await getDocs(collection(db,"motoristas"));
-  const filaSnap = await getDocs(collection(db,"fila"));
+  const filaQuery = query(
+  collection(db,"fila"),
+  where("status","==","AGUARDANDO")
+);
+
+const filaSnap = await getDocs(filaQuery);
 
   let total = motoristasSnap.size;
   let disponiveis = 0;
