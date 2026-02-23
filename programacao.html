@@ -98,7 +98,9 @@ input,select{
   animation:spin .7s linear infinite;
 }
 
-.hidden{ display:none; }
+.hidden{
+  display:none !important;
+}
 
 @keyframes spin{
   from{ transform:rotate(0deg); }
@@ -148,7 +150,7 @@ th{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.45);
-  display:flex;
+  display:none; /* 👈 IMPORTANTE */
   align-items:center;
   justify-content:center;
   z-index:999;
@@ -398,11 +400,15 @@ btnOriginal.parentNode.replaceChild(novoBtn,btnOriginal);
 
 novoBtn.onclick=acaoConfirmar;
 
-document.getElementById("modalOverlay").classList.remove("hidden");
+const overlay = document.getElementById("modalOverlay");
+overlay.classList.remove("hidden");
+overlay.style.display = "flex";
 }
 
 window.fecharModal=function(){
-document.getElementById("modalOverlay").classList.add("hidden");
+  const overlay = document.getElementById("modalOverlay");
+  overlay.classList.add("hidden");
+  overlay.style.display = "none";
 };
 
 /* TABELA */
