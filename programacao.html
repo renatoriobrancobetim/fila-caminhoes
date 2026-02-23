@@ -11,39 +11,46 @@
   --vermelho:#dc2626;
   --cinza:#f1f5f9;
 }
+
 body{
   margin:0;
   font-family:'Segoe UI',Arial,sans-serif;
   background:var(--cinza);
 }
+
 header{
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
   color:#fff;
   padding:25px;
   text-align:center;
 }
+
 main{
   padding:40px;
   max-width:1300px;
   margin:auto;
 }
+
 .card-form{
   background:#fff;
   padding:25px;
   border-radius:16px;
   box-shadow:0 8px 25px rgba(0,0,0,.08);
 }
+
 .linha-topo,.linha-bottom{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:12px;
   margin-bottom:15px;
 }
+
 input,select{
   padding:10px;
   border-radius:8px;
   border:1px solid #ccc;
 }
+
 .info-veiculo{
   background:#f1f5f9;
   padding:12px;
@@ -52,6 +59,7 @@ input,select{
   margin-bottom:15px;
   display:none;
 }
+
 .compartimento{
   background:#f8fafc;
   padding:12px;
@@ -61,10 +69,12 @@ input,select{
   grid-template-columns:120px 1fr 1fr 1fr;
   gap:10px;
 }
+
 .capacidade{
   font-weight:700;
   color:var(--azul);
 }
+
 .btn{
   padding:8px 14px;
   border:none;
@@ -72,8 +82,11 @@ input,select{
   cursor:pointer;
   font-weight:600;
 }
+
 .btn-azul{ background:var(--azul); color:#fff; }
 .btn-vincular{ background:#198754; color:#fff; }
+.btn-excluir{ background:#dc2626; color:#fff; }
+
 .loader{
   width:16px;
   height:16px;
@@ -84,11 +97,19 @@ input,select{
   margin-left:8px;
   animation:spin .7s linear infinite;
 }
+
 .hidden{ display:none; }
+
 @keyframes spin{
   from{ transform:rotate(0deg); }
   to{ transform:rotate(360deg); }
 }
+
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(.95);}
+  to{opacity:1; transform:scale(1);}
+}
+
 .table-wrap{
   background:#fff;
   border-radius:14px;
@@ -96,32 +117,34 @@ input,select{
   box-shadow:0 6px 18px rgba(0,0,0,.08);
   margin-top:30px;
 }
+
 table{
   width:100%;
   border-collapse:collapse;
 }
+
 th,td{
   padding:14px;
   border-bottom:1px solid #eee;
   text-align:center;
 }
+
 th{
   background:var(--azul);
   color:#fff;
 }
+
 .status{
   padding:6px 12px;
   border-radius:20px;
   font-size:12px;
   font-weight:600;
 }
+
 .PROGRAMADO{ background:#cfe2ff; color:#084298; }
 .AGUARDANDO_FILA{ background:#fff3cd; color:#664d03; }
-  .btn-excluir{
-  background:#dc2626;
-  color:#fff;
-}
-  .modal-overlay{
+
+.modal-overlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.45);
@@ -204,22 +227,30 @@ th{
 
 </main>
 
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3 id="modalTitulo"></h3>
+    <div id="modalConteudo"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-azul" id="btnConfirmarModal">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import {
-getFirestore, collection, addDoc, doc, getDocs,
-updateDoc, deleteDoc, onSnapshot, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDocs, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const app = initializeApp({
-apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+apiKey:"AIzaSy...",
 authDomain:"tabela-frete-rio-branco.firebaseapp.com",
 projectId:"tabela-frete-rio-branco"
 });
+
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 let tipoCaminhaoAtual="";
 let capacidadeTotalAtual=0;
@@ -234,7 +265,12 @@ const loaderBtn=document.getElementById("loaderBtn");
 /* GERAR COMPARTIMENTOS */
 document.getElementById("tipoVeiculo").addEventListener("change",e=>{
 const valor=e.target.value;
-if(!valor) return;
+if(!valor){
+tipoCaminhaoAtual="";
+container.innerHTML="";
+infoVeiculo.style.display="none";
+return;
+}
 
 const [numeros,tipo]=valor.split(" - ");
 tipoCaminhaoAtual=tipo;
@@ -257,7 +293,7 @@ container.innerHTML+=`
 });
 });
 
-/* SALVAR CARGA */
+/* SALVAR */
 btnSalvar.addEventListener("click",async()=>{
 
 btnSalvar.disabled=true;
@@ -266,9 +302,22 @@ textoBtn.innerText="Salvando...";
 
 try{
 
+if(!tipoCaminhaoAtual){
+alert("Selecione o tipo de veículo.");
+reset();
+return;
+}
+
+const dataInput=document.getElementById("dataCarregamento").value;
+if(!dataInput){
+alert("Informe a data.");
+reset();
+return;
+}
+
 const linhas=document.querySelectorAll(".compartimento");
 if(linhas.length===0){
-alert("Selecione o tipo de veículo.");
+alert("Compartimentos não gerados.");
 reset();
 return;
 }
@@ -298,7 +347,7 @@ const numeroCarga=`${base}-${String(contador).padStart(3,"0")}`;
 
 await addDoc(collection(db,"programacao_cargas"),{
 numeroCarga,
-dataCarregamento:new Date(document.getElementById("dataCarregamento").value),
+dataCarregamento:new Date(dataInput),
 horarioPrevisto:document.getElementById("horarioPrevisto").value,
 tipoCaminhao:tipoCaminhaoAtual,
 capacidadeTotal:capacidadeTotalAtual,
@@ -308,9 +357,8 @@ compartimentos,
 criadoEm:serverTimestamp()
 });
 
-alert("Carga criada!");
-container.innerHTML="";
-infoVeiculo.style.display="none";
+alert("Carga criada com sucesso!");
+resetForm();
 
 }catch(e){
 console.error(e);
@@ -325,21 +373,38 @@ btnSalvar.disabled=false;
 loaderBtn.classList.add("hidden");
 textoBtn.innerText="Salvar Carga";
 }
+
+function resetForm(){
+document.getElementById("tipoVeiculo").value="";
+document.getElementById("dataCarregamento").value="";
+document.getElementById("horarioPrevisto").value="";
+document.getElementById("km").value="";
+document.getElementById("observacoes").value="";
+container.innerHTML="";
+infoVeiculo.style.display="none";
+tipoCaminhaoAtual="";
+capacidadeTotalAtual=0;
+}
+
+/* MODAL SEGURO */
 function abrirModal(titulo,conteudo,acaoConfirmar){
 
-  document.getElementById("modalTitulo").innerText=titulo;
-  document.getElementById("modalConteudo").innerHTML=conteudo;
+document.getElementById("modalTitulo").innerText=titulo;
+document.getElementById("modalConteudo").innerHTML=conteudo;
 
-  const btnConfirmar=document.getElementById("btnConfirmarModal");
+const btnOriginal=document.getElementById("btnConfirmarModal");
+const novoBtn=btnOriginal.cloneNode(true);
+btnOriginal.parentNode.replaceChild(novoBtn,btnOriginal);
 
-  btnConfirmar.onclick=acaoConfirmar;
+novoBtn.onclick=acaoConfirmar;
 
-  document.getElementById("modalOverlay").classList.remove("hidden");
+document.getElementById("modalOverlay").classList.remove("hidden");
 }
 
-function fecharModal(){
-  document.getElementById("modalOverlay").classList.add("hidden");
-}
+window.fecharModal=function(){
+document.getElementById("modalOverlay").classList.add("hidden");
+};
+
 /* TABELA */
 onSnapshot(collection(db,"programacao_cargas"),snap=>{
 tabela.innerHTML="";
@@ -354,60 +419,41 @@ tabela.innerHTML+=`
 <td>${c.capacidadeTotal?.toLocaleString()} L</td>
 <td><span class="status ${c.status}">${c.status}</span></td>
 <td>${c.status==="PROGRAMADO" ? `
-  <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>
-  <button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
+<button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>
+<button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
 ` : "-"}
 </td>
 </tr>`;
 });
 });
 
-/* VINCULAR CAMINHÃO */
-window.vincular = function(id){
-
-  abrirModal(
-    "Vincular Caminhão",
-    `
-    <input id="inputPlacaModal" placeholder="Digite a placa" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;">
-    `,
-    async ()=>{
-      const placa = document.getElementById("inputPlacaModal").value.trim();
-      if(!placa) return;
-
-      await updateDoc(doc(db,"programacao_cargas",id),{
-        placa:placa.toUpperCase(),
-        status:"AGUARDANDO_FILA"
-      });
-
-      fecharModal();
-    }
-  );
-
+/* VINCULAR */
+window.vincular=function(id){
+abrirModal(
+"Vincular Caminhão",
+`<input id="inputPlacaModal" placeholder="Digite a placa" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;">`,
+async()=>{
+const placa=document.getElementById("inputPlacaModal").value.trim();
+if(!placa) return;
+await updateDoc(doc(db,"programacao_cargas",id),{
+placa:placa.toUpperCase(),
+status:"AGUARDANDO_FILA"
+});
+fecharModal();
+});
 };
-window.excluirCarga = function(id){
 
-  abrirModal(
-    "Excluir Carga",
-    `<p>Deseja realmente excluir esta carga?</p>`,
-    async ()=>{
-      await deleteDoc(doc(db,"programacao_cargas",id));
-      fecharModal();
-    }
-  );
-
+/* EXCLUIR */
+window.excluirCarga=function(id){
+abrirModal(
+"Excluir Carga",
+`<p>Deseja realmente excluir esta carga?</p>`,
+async()=>{
+await deleteDoc(doc(db,"programacao_cargas",id));
+fecharModal();
+});
 };
+
 </script>
-  <!-- MODAL -->
-<div id="modalOverlay" class="modal-overlay hidden">
-  <div class="modal-box">
-    <h3 id="modalTitulo"></h3>
-    <div id="modalConteudo"></div>
-
-    <div class="modal-actions">
-      <button class="btn" onclick="fecharModal()">Cancelar</button>
-      <button class="btn btn-azul" id="btnConfirmarModal">Confirmar</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
