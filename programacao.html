@@ -259,14 +259,17 @@ onAuthStateChanged(auth,user=>{
 });
 
 /* 🔎 BUSCAR PLACA */
-placaInput.addEventListener("blur", async ()=>{
+async function carregarPlaca(){
 
-  const placa = placaInput.value.toUpperCase();
+  const placa = placaInput.value.toUpperCase().trim();
   if(!placa) return;
 
   const snap = await getDoc(doc(db,"motoristas_cadastro",placa));
+
   if(!snap.exists()){
     alert("Placa não cadastrada!");
+    containerCompartimentos.innerHTML="";
+    infoVeiculo.style.display="none";
     return;
   }
 
@@ -294,6 +297,13 @@ placaInput.addEventListener("blur", async ()=>{
     `;
   });
 
+}
+
+/* Disparadores inteligentes */
+placaInput.addEventListener("blur", carregarPlaca);
+placaInput.addEventListener("change", carregarPlaca);
+placaInput.addEventListener("keyup", (e)=>{
+  if(e.key === "Enter") carregarPlaca();
 });
 
 /* 💾 SALVAR */
