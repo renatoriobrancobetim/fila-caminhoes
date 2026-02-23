@@ -369,36 +369,50 @@ tabela.innerHTML+=`
 });
 
 /* ===== MODAL ===== */
-window.abrirModal=function(titulo,conteudo,acao){
-document.getElementById("modalTitulo").innerText=titulo;
-document.getElementById("modalConteudo").innerHTML=conteudo;
-document.getElementById("btnConfirmarModal").onclick=acao;
-document.getElementById("modalOverlay").style.display="flex";
+function abrirModal(titulo,conteudo,acao){
+  document.getElementById("modalTitulo").innerText=titulo;
+  document.getElementById("modalConteudo").innerHTML=conteudo;
+  document.getElementById("btnConfirmarModal").onclick=acao;
+  document.getElementById("modalOverlay").style.display="flex";
 }
-window.fecharModal=function(){
-document.getElementById("modalOverlay").style.display="none";
+
+function fecharModal(){
+  document.getElementById("modalOverlay").style.display="none";
 }
-window.vincular=function(id){
-abrirModal("Vincular Caminhão",
-`<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
-async()=>{
-const placa=document.getElementById("placaModal").value.trim();
-if(!placa) return;
-await updateDoc(doc(db,"programacao_cargas",id),{
-placa:placa.toUpperCase(),
-status:"AGUARDANDO_FILA"
-});
-fecharModal();
-});
+
+function vincular(id){
+  abrirModal(
+    "Vincular Caminhão",
+    `<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
+    async()=>{
+      const placa=document.getElementById("placaModal").value.trim();
+      if(!placa) return;
+      await updateDoc(doc(db,"programacao_cargas",id),{
+        placa:placa.toUpperCase(),
+        status:"AGUARDANDO_FILA"
+      });
+      fecharModal();
+    }
+  );
 }
-window.excluirCarga=function(id){
-abrirModal("Excluir Carga",
-"<p>Deseja realmente excluir?</p>",
-async()=>{
-await deleteDoc(doc(db,"programacao_cargas",id));
-fecharModal();
-});
+
+function excluirCarga(id){
+  abrirModal(
+    "Excluir Carga",
+    "<p>Deseja realmente excluir?</p>",
+    async()=>{
+      await deleteDoc(doc(db,"programacao_cargas",id));
+      fecharModal();
+    }
+  );
 }
+
+/* 👇 AQUI ESTÁ A MÁGICA */
+window.vincular = vincular;
+window.excluirCarga = excluirCarga;
+window.fecharModal = fecharModal;
+
+
 </script>
 
 </body>
