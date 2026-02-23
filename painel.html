@@ -339,30 +339,38 @@ monitorarFila();
   setTimeout(()=>cards.classList.add("loaded"),50);
 });
 
-async function carregarKPIs(){
+function carregarKPIs(){
 
-  const motoristasSnap = await getDocs(collection(db,"motoristas"));
-  const filaQuery = query(
-  collection(db,"fila"),
-  where("status","==","AGUARDANDO")
-);
+  const motoristasRef = collection(db,"motoristas");
 
-const filaSnap = await getDocs(filaQuery);
+  const filaRef = query(
+    collection(db,"fila"),
+    where("status","==","AGUARDANDO")
+  );
 
-  let total = motoristasSnap.size;
-  let disponiveis = 0;
-  let atendimento = 0;
+  // 🔵 MOTORISTAS (tempo real)
+  onSnapshot(motoristasRef,(snapshot)=>{
 
-  motoristasSnap.forEach(doc=>{
-    const d = doc.data();
-    if(d.status === "DISPONÍVEL") disponiveis++;
-    if(d.status === "EM_ATENDIMENTO") atendimento++;
+    let total = snapshot.size;
+    let disponiveis = 0;
+    let atendimento = 0;
+
+    snapshot.forEach(doc=>{
+      const d = doc.data();
+      if(d.status === "DISPONÍVEL") disponiveis++;
+      if(d.status === "EM_ATENDIMENTO") atendimento++;
+    });
+
+    document.getElementById("kpiCaminhoes").innerText = total;
+    document.getElementById("kpiDisponiveis").innerText = disponiveis;
+    document.getElementById("kpiAtendimento").innerText = atendimento;
+
   });
 
-  document.getElementById("kpiCaminhoes").innerText = total;
-  document.getElementById("kpiDisponiveis").innerText = disponiveis;
-  document.getElementById("kpiFila").innerText = filaSnap.size;
-  document.getElementById("kpiAtendimento").innerText = atendimento;
+  // 🟠 FILA (tempo real)
+  onSnapshot(filaRef,(snapshot)=>{
+    document.getElementById("kpiFila").innerText = snapshot.size;
+  });
 
   document.getElementById("kpiContainer").style.display="grid";
 }
