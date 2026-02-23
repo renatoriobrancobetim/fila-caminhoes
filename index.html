@@ -199,6 +199,51 @@ body{
 .item:hover::after{
   left:100%;
 }
+  /* ===== PULSO DO PRIMEIRO ===== */
+
+.item.proximo{
+  animation:pulseProximo 1.8s ease-in-out infinite;
+}
+
+@keyframes pulseProximo{
+  0%{ box-shadow:0 0 0 0 rgba(10,61,145,.4); }
+  70%{ box-shadow:0 0 0 12px rgba(10,61,145,0); }
+  100%{ box-shadow:0 0 0 0 rgba(10,61,145,0); }
+}
+  /* ===== VIBRAÇÃO SUAVE ===== */
+
+.item:hover{
+  animation:shake 0.25s linear 1;
+}
+
+@keyframes shake{
+  0%{ transform:translateX(0); }
+  25%{ transform:translateX(-2px); }
+  50%{ transform:translateX(2px); }
+  75%{ transform:translateX(-2px); }
+  100%{ transform:translateX(0); }
+}
+  /* ===== SPINNER ===== */
+
+.loader{
+  width:16px;
+  height:16px;
+  border:3px solid rgba(255,255,255,0.3);
+  border-top:3px solid #fff;
+  border-radius:50%;
+  display:inline-block;
+  margin-left:8px;
+  animation:spin 0.7s linear infinite;
+}
+
+.hidden{
+  display:none;
+}
+
+@keyframes spin{
+  from{ transform:rotate(0deg); }
+  to{ transform:rotate(360deg); }
+}
 </style>
 </head>
 
@@ -218,9 +263,10 @@ body{
   <!-- FILA -->
   <div class="card">
     <h2>📋 Fila Atual</h2>
-    <button class="btn btn-vermelho" onclick="chamarProximo()">
-      🔔 Chamar Próximo
-    </button>
+<button class="btn btn-vermelho" id="btnChamar" onclick="chamarProximo()">
+  <span id="btnText">🔔 Chamar Próximo</span>
+  <span id="btnLoader" class="loader hidden"></span>
+</button>
     <div class="lista" id="listaFila"></div>
   </div>
 
@@ -383,23 +429,39 @@ window.addFila=async function(placa){
   });
 };
 
-window.chamarProximo=async function(){
-  const q=query(collection(db,"fila"),orderBy("entradaEm"));
-  const snap=await getDocs(q);
+window.chamarProximo = async function(){
+
+  const btn = document.getElementById("btnChamar");
+  const text = document.getElementById("btnText");
+  const loader = document.getElementById("btnLoader");
+
+  btn.disabled = true;
+  text.innerText = "Chamando...";
+  loader.classList.remove("hidden");
+
+  const q = query(collection(db,"fila"),orderBy("entradaEm"));
+  const snap = await getDocs(q);
 
   if(snap.empty){
     alert("Fila vazia");
+    btn.disabled = false;
+    text.innerText = "🔔 Chamar Próximo";
+    loader.classList.add("hidden");
     return;
   }
 
-  const primeiro=snap.docs[0];
-  const placa=primeiro.id;
+  const primeiro = snap.docs[0];
+  const placa = primeiro.id;
 
   await setDoc(doc(db,"motoristas",placa),{
     status:"EM_ATENDIMENTO"
   },{merge:true});
 
   await deleteDoc(doc(db,"fila",placa));
+
+  btn.disabled = false;
+  text.innerText = "🔔 Chamar Próximo";
+  loader.classList.add("hidden");
 };
 
 </script>
