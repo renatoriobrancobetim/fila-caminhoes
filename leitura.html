@@ -181,7 +181,8 @@ import {
   collection,
   query,
   orderBy,
-  onSnapshot
+  onSnapshot,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -199,6 +200,7 @@ const totalFila = document.getElementById("totalFila");
 const statusAtualizacao = document.getElementById("statusAtualizacao");
 
 let ultimoProximo = "";
+  let mapaCompartimentos = {};
 
 /* UTIL */
 function calcularMinutos(timestamp){
@@ -214,6 +216,19 @@ function tocarSom(){
 /* FILA TEMPO REAL */
 
 const q = query(collection(db,"fila"), orderBy("entradaEm"));
+  // 🔵 Carrega tipos de compartimento
+async function carregarCompartimentos(){
+
+  const snap = await getDocs(collection(db,"motoristas_cadastro"));
+
+  snap.forEach(docSnap=>{
+    const d = docSnap.data();
+    mapaCompartimentos[docSnap.id] = d.configEixos || "-";
+  });
+
+}
+
+await carregarCompartimentos();
 
 onSnapshot(q,snapshot=>{
 
@@ -240,7 +255,7 @@ onSnapshot(q,snapshot=>{
       <tr class="${classe}">
         <td>${index}</td>
         <td>${c.placa}</td>
-        <td>${c.configEixos || "-"}</td>
+       <td>${mapaCompartimentos[c.placa] || "-"}</td>
         <td>${minutos} min</td>
       </tr>
     `;
