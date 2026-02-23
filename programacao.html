@@ -38,7 +38,7 @@ main{
   margin-bottom:20px;
 }
 
-input, select{
+input{
   padding:10px;
   border-radius:8px;
   border:1px solid #ccc;
@@ -86,6 +86,7 @@ th{
   font-size:12px;
   font-weight:600;
 }
+
 .loader{
   width:16px;
   height:16px;
@@ -97,20 +98,14 @@ th{
   animation:spin .7s linear infinite;
 }
 
-.hidden{
-  display:none;
-}
+.hidden{ display:none; }
 
 @keyframes spin{
   from{ transform:rotate(0deg); }
   to{ transform:rotate(360deg); }
 }
-.PROGRAMADO{ background:#cfe2ff; color:#084298; }
-.EM_FILA{ background:#fff3cd; color:#664d03; }
-.EM_CARREGAMENTO{ background:#ffe5d0; color:#842029; }
-.FINALIZADO{ background:#d1e7dd; color:#0f5132; }
-.CANCELADO{ background:#f8d7da; color:#842029; }
 
+.PROGRAMADO{ background:#cfe2ff; color:#084298; }
 </style>
 </head>
 
@@ -167,6 +162,7 @@ th{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
   getFirestore,
   collection,
@@ -185,11 +181,20 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const tabela = document.getElementById("tabelaCargas");
 
-/* SALVAR CARGA */
+/* 🔐 PROTEGER PÁGINA */
+onAuthStateChanged(auth,user=>{
+  if(!user){
+    window.location.href="login.html";
+    return;
+  }
+  carregarCargas();
+});
 
+/* 📥 SALVAR CARGA */
 const btnSalvar = document.getElementById("btnSalvar");
 const textoBtn = document.getElementById("textoBtn");
 const loaderBtn = document.getElementById("loaderBtn");
@@ -202,24 +207,9 @@ btnSalvar.addEventListener("click", async ()=>{
 
   try{
 
-    const dados = {
-      dataCarregamento: document.getElementById("dataCarregamento").value,
-      vendedor: document.getElementById("vendedor").value,
-      cliente: document.getElementById("cliente").value,
-      municipio: document.getElementById("municipio").value,
-      tipoCaminhao: document.getElementById("tipoCaminhao").value,
-      volume: document.getElementById("volume").value,
-      freteUnitario: document.getElementById("freteUnitario").value,
-      total: document.getElementById("total").value,
-      horarioPrevisto: document.getElementById("horarioPrevisto").value,
-      placa: document.getElementById("placa").value.toUpperCase(),
-      km: document.getElementById("km").value,
-      observacoes: document.getElementById("observacoes").value
-    };
+    const placa = document.getElementById("placa").value.toUpperCase();
 
-    // 🔵 Buscar placa
-    const cadastroRef = doc(db,"motoristas_cadastro",dados.placa);
-    const cadastroSnap = await getDoc(cadastroRef);
+    const cadastroSnap = await getDoc(doc(db,"motoristas_cadastro",placa));
 
     if(!cadastroSnap.exists()){
       alert("Placa não cadastrada!");
@@ -229,32 +219,30 @@ btnSalvar.addEventListener("click", async ()=>{
 
     const dadosPlaca = cadastroSnap.data();
 
-    const novaCarga = {
-      dataCarregamento: new Date(dados.dataCarregamento),
-      vendedor: dados.vendedor,
-      cliente: dados.cliente,
-      municipio: dados.municipio,
-      tipoCaminhao: dados.tipoCaminhao,
-      volume: Number(dados.volume),
-      freteUnitario: Number(dados.freteUnitario),
-      total: Number(dados.total),
-      horarioPrevisto: dados.horarioPrevisto,
-      observacoes: dados.observacoes || "",
-      placa: dados.placa,
+    await addDoc(collection(db,"programacao_cargas"),{
+      dataCarregamento: new Date(document.getElementById("dataCarregamento").value),
+      vendedor: document.getElementById("vendedor").value,
+      cliente: document.getElementById("cliente").value,
+      municipio: document.getElementById("municipio").value,
+      tipoCaminhao: document.getElementById("tipoCaminhao").value,
+      volume: Number(document.getElementById("volume").value),
+      freteUnitario: Number(document.getElementById("freteUnitario").value),
+      total: Number(document.getElementById("total").value),
+      horarioPrevisto: document.getElementById("horarioPrevisto").value,
+      observacoes: document.getElementById("observacoes").value,
+      placa,
       motorista: dadosPlaca.motorista || "",
       configEixos: dadosPlaca.configEixos || "",
       capacidade: dadosPlaca.capacidade || 0,
       transportadora: dadosPlaca.transportadora || "",
       plotado: dadosPlaca.plotado || false,
-      km: Number(dados.km) || 0,
-      status: "PROGRAMADO",
+      km: Number(document.getElementById("km").value) || 0,
+      status:"PROGRAMADO",
       criadoEm: serverTimestamp()
-    };
-
-    await addDoc(collection(db,"programacao_cargas"), novaCarga);
+    });
 
     alert("Carga criada com sucesso!");
-    limparFormulario();
+    document.querySelectorAll(".form-grid input").forEach(i=>i.value="");
 
   }catch(error){
     console.error(error);
@@ -263,61 +251,40 @@ btnSalvar.addEventListener("click", async ()=>{
 
   resetBtn();
 
-  function resetBtn(){
-    btnSalvar.disabled = false;
-    textoBtn.innerText = "Salvar Carga";
-    loaderBtn.classList.add("hidden");
-  }
-
 });
-function limparFormulario(){
-  document.querySelectorAll(".form-grid input").forEach(input=>{
-    input.value="";
-  });
+
+function resetBtn(){
+  btnSalvar.disabled = false;
+  textoBtn.innerText = "Salvar Carga";
+  loaderBtn.classList.add("hidden");
 }
-window.criarCarga = function(){
 
-  const dados = {
-    dataCarregamento: document.getElementById("dataCarregamento").value,
-    vendedor: document.getElementById("vendedor").value,
-    cliente: document.getElementById("cliente").value,
-    municipio: document.getElementById("municipio").value,
-    tipoCaminhao: document.getElementById("tipoCaminhao").value,
-    volume: document.getElementById("volume").value,
-    freteUnitario: document.getElementById("freteUnitario").value,
-    total: document.getElementById("total").value,
-    horarioPrevisto: document.getElementById("horarioPrevisto").value,
-    placa: document.getElementById("placa").value.toUpperCase(),
-    km: document.getElementById("km").value,
-    observacoes: document.getElementById("observacoes").value
-  };
+/* 📊 RENDERIZAR TABELA */
+function carregarCargas(){
 
-  salvarCarga(dados);
-};
+  onSnapshot(collection(db,"programacao_cargas"), snapshot=>{
 
-/* RENDERIZAR TABELA */
+    tabela.innerHTML="";
 
-onSnapshot(collection(db,"programacao_cargas"), snapshot=>{
+    snapshot.forEach(docSnap=>{
+      const c = docSnap.data();
 
-  tabela.innerHTML="";
+      tabela.innerHTML+=`
+        <tr>
+          <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
+          <td>${c.cliente}</td>
+          <td>${c.municipio}</td>
+          <td>${c.placa}</td>
+          <td>${c.motorista}</td>
+          <td>${c.volume}</td>
+          <td><span class="status ${c.status}">${c.status}</span></td>
+        </tr>
+      `;
+    });
 
-  snapshot.forEach(docSnap=>{
-    const c = docSnap.data();
-
-    tabela.innerHTML+=`
-      <tr>
-        <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
-        <td>${c.cliente}</td>
-        <td>${c.municipio}</td>
-        <td>${c.placa}</td>
-        <td>${c.motorista}</td>
-        <td>${c.volume}</td>
-        <td><span class="status ${c.status}">${c.status}</span></td>
-      </tr>
-    `;
   });
 
-});
+}
 
 </script>
 
