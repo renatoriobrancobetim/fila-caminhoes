@@ -264,6 +264,9 @@ projectId:"tabela-frete-rio-branco"
 
 const db = getFirestore(app);
 const auth = getAuth(app);
+  import { setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+await setPersistence(auth, browserLocalPersistence);
 
 let tipoCaminhaoAtual="";
 let capacidadeTotalAtual=0;
@@ -424,10 +427,9 @@ window.fecharModal=function(){
 
 /* TABELA */
 onAuthStateChanged(auth,user=>{
-  if(!user){
-    window.location.href="login.html";
-    return;
-  }
+if(!user){
+  console.log("Usuário não autenticado.");
+}
 
   onSnapshot(collection(db,"programacao_cargas"),snap=>{
     tabela.innerHTML="";
