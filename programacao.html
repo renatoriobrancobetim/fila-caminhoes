@@ -244,8 +244,20 @@ th{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, getDocs, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  doc, 
+  getDocs, 
+  updateDoc, 
+  deleteDoc, 
+  onSnapshot, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const db = getFirestore(app);
+const auth = getAuth(app);
 const app = initializeApp({
 apiKey:"AIzaSy...",
 authDomain:"tabela-frete-rio-branco.firebaseapp.com",
@@ -412,25 +424,35 @@ window.fecharModal=function(){
 };
 
 /* TABELA */
-onSnapshot(collection(db,"programacao_cargas"),snap=>{
-tabela.innerHTML="";
-snap.forEach(docSnap=>{
-const c=docSnap.data();
-tabela.innerHTML+=`
-<tr>
-<td>${c.numeroCarga}</td>
-<td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
-<td>${c.placa||"-"}</td>
-<td>${c.tipoCaminhao}</td>
-<td>${c.capacidadeTotal?.toLocaleString()} L</td>
-<td><span class="status ${c.status}">${c.status}</span></td>
-<td>${c.status==="PROGRAMADO" ? `
-<button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>
-<button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
-` : "-"}
-</td>
-</tr>`;
-});
+onAuthStateChanged(auth,user=>{
+  if(!user){
+    window.location.href="login.html";
+    return;
+  }
+
+  onSnapshot(collection(db,"programacao_cargas"),snap=>{
+    tabela.innerHTML="";
+
+    snap.forEach(docSnap=>{
+      const c=docSnap.data();
+      tabela.innerHTML+=`
+      <tr>
+        <td>${c.numeroCarga}</td>
+        <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
+        <td>${c.placa||"-"}</td>
+        <td>${c.tipoCaminhao}</td>
+        <td>${c.capacidadeTotal?.toLocaleString()} L</td>
+        <td><span class="status ${c.status}">${c.status}</span></td>
+        <td>${c.status==="PROGRAMADO" ? `
+        <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>
+        <button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
+        ` : "-"}
+        </td>
+      </tr>`;
+    });
+
+  });
+
 });
 
 /* VINCULAR */
