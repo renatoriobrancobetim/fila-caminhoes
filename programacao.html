@@ -11,47 +11,39 @@
   --vermelho:#dc2626;
   --cinza:#f1f5f9;
 }
-
 body{
   margin:0;
   font-family:'Segoe UI',Arial,sans-serif;
   background:var(--cinza);
 }
-
 header{
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
   color:#fff;
   padding:25px;
   text-align:center;
 }
-
 main{
   padding:40px;
   max-width:1300px;
   margin:auto;
 }
-
 .card-form{
   background:#fff;
   padding:25px;
   border-radius:16px;
   box-shadow:0 8px 25px rgba(0,0,0,.08);
 }
-
 .linha-topo,.linha-bottom{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:12px;
   margin-bottom:15px;
 }
-
-input{
+input,select{
   padding:10px;
   border-radius:8px;
   border:1px solid #ccc;
-  font-size:14px;
 }
-
 .info-veiculo{
   background:#f1f5f9;
   padding:12px;
@@ -60,7 +52,6 @@ input{
   margin-bottom:15px;
   display:none;
 }
-
 .compartimento{
   background:#f8fafc;
   padding:12px;
@@ -69,24 +60,20 @@ input{
   display:grid;
   grid-template-columns:120px 1fr 1fr 1fr;
   gap:10px;
-  align-items:center;
 }
-
 .capacidade{
   font-weight:700;
   color:var(--azul);
 }
-
 .btn{
-  padding:10px 18px;
+  padding:8px 14px;
   border:none;
   border-radius:8px;
   cursor:pointer;
   font-weight:600;
 }
-
 .btn-azul{ background:var(--azul); color:#fff; }
-
+.btn-vincular{ background:#198754; color:#fff; }
 .loader{
   width:16px;
   height:16px;
@@ -97,14 +84,11 @@ input{
   margin-left:8px;
   animation:spin .7s linear infinite;
 }
-
 .hidden{ display:none; }
-
 @keyframes spin{
   from{ transform:rotate(0deg); }
   to{ transform:rotate(360deg); }
 }
-
 .table-wrap{
   background:#fff;
   border-radius:14px;
@@ -112,55 +96,29 @@ input{
   box-shadow:0 6px 18px rgba(0,0,0,.08);
   margin-top:30px;
 }
-
 table{
   width:100%;
   border-collapse:collapse;
 }
-
 th,td{
   padding:14px;
   border-bottom:1px solid #eee;
   text-align:center;
-  font-size:14px;
 }
-
 th{
   background:var(--azul);
   color:#fff;
 }
-
 .status{
   padding:6px 12px;
   border-radius:20px;
   font-size:12px;
   font-weight:600;
 }
-
 .PROGRAMADO{ background:#cfe2ff; color:#084298; }
-.card-sucesso{
-  margin-top:20px;
-  background:linear-gradient(135deg,#d1e7dd,#badbcc);
-  border-left:6px solid #198754;
-  padding:18px;
-  border-radius:12px;
-  font-weight:600;
-  font-size:16px;
-  color:#0f5132;
-  animation:fadeIn .4s ease;
-}
-
-.card-sucesso strong{
-  font-size:20px;
-}
-
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(-5px);}
-  to{opacity:1; transform:translateY(0);}
-}
+.AGUARDANDO_FILA{ background:#fff3cd; color:#664d03; }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -170,322 +128,205 @@ th{
 
 <main>
 
-<h2>Nova Carga</h2>
-
 <div class="card-form">
 
-  <div class="linha-topo">
-    <input type="date" id="dataCarregamento">
-    <input type="time" id="horarioPrevisto">
-    <input type="text" id="placa" placeholder="Placa">
-  </div>
-  <div id="sucessoCarga" class="card-sucesso hidden"></div>
+<div class="linha-topo">
+<input type="date" id="dataCarregamento">
+<input type="time" id="horarioPrevisto">
+<select id="tipoVeiculo">
+<option value="">Selecione Tipo</option>
+<option value="5532 - Truck">5532 - Truck</option>
+<option value="612 - Bitrem">612 - Bitrem</option>
+</select>
+</div>
 
-  <div class="info-veiculo" id="infoVeiculo"></div>
+<div class="info-veiculo" id="infoVeiculo"></div>
+<div id="containerCompartimentos"></div>
 
-  <div id="containerCompartimentos"></div>
+<div class="linha-bottom">
+<input type="number" id="km" placeholder="KM">
+<input type="text" id="observacoes" placeholder="Observações">
+</div>
 
-  <div class="linha-bottom">
-    <input type="number" id="km" placeholder="KM">
-    <input type="text" id="observacoes" placeholder="Observações">
-  </div>
-
-  <button class="btn btn-azul" id="btnSalvar">
-    <span id="textoBtn">Salvar Carga</span>
-    <span id="loaderBtn" class="loader hidden"></span>
-  </button>
+<button class="btn btn-azul" id="btnSalvar">
+<span id="textoBtn">Salvar Carga</span>
+<span id="loaderBtn" class="loader hidden"></span>
+</button>
 
 </div>
 
 <div class="table-wrap">
-  <table>
-    <thead>
-      <tr>
-        <th>Nº Carga</th>
-        <th>Data</th>
-        <th>Placa</th>
-        <th>Tipo</th>
-        <th>Total L</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="tabelaCargas"></tbody>
-  </table>
+<table>
+<thead>
+<tr>
+<th>Nº</th>
+<th>Data</th>
+<th>Placa</th>
+<th>Tipo</th>
+<th>Total L</th>
+<th>Status</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody id="tabelaCargas"></tbody>
+</table>
 </div>
 
 </main>
-
-<datalist id="cidadesMG">
-<option>Belo Horizonte</option>
-<option>Contagem</option>
-<option>Betim</option>
-<option>Uberlândia</option>
-<option>Uberaba</option>
-<option>Juiz de Fora</option>
-<option>Montes Claros</option>
-<option>Ipatinga</option>
-<option>Sete Lagoas</option>
-<option>Divinópolis</option>
-<option>Paraopeba</option>
-<option>Curvelo</option>
-<option>Varginha</option>
-<option>Poços de Caldas</option>
-</datalist>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  serverTimestamp
+getFirestore, collection, addDoc, doc, getDocs,
+updateDoc, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
-  authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco"
-};
-
-const app = initializeApp(firebaseConfig);
+const app = initializeApp({
+apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+authDomain:"tabela-frete-rio-branco.firebaseapp.com",
+projectId:"tabela-frete-rio-branco"
+});
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-const placaInput = document.getElementById("placa");
-const containerCompartimentos = document.getElementById("containerCompartimentos");
-const infoVeiculo = document.getElementById("infoVeiculo");
-const tabela = document.getElementById("tabelaCargas");
+let tipoCaminhaoAtual="";
+let capacidadeTotalAtual=0;
 
-const btnSalvar = document.getElementById("btnSalvar");
-const textoBtn = document.getElementById("textoBtn");
-const loaderBtn = document.getElementById("loaderBtn");
+const infoVeiculo=document.getElementById("infoVeiculo");
+const container=document.getElementById("containerCompartimentos");
+const tabela=document.getElementById("tabelaCargas");
+const btnSalvar=document.getElementById("btnSalvar");
+const textoBtn=document.getElementById("textoBtn");
+const loaderBtn=document.getElementById("loaderBtn");
 
-let tipoCaminhaoAtual = "";
-let capacidadeTotalAtual = 0;
+/* GERAR COMPARTIMENTOS */
+document.getElementById("tipoVeiculo").addEventListener("change",e=>{
+const valor=e.target.value;
+if(!valor) return;
 
-/* 🔐 PROTEGER PÁGINA */
-onAuthStateChanged(auth,user=>{
-  if(!user){
-    window.location.href="login.html";
-    return;
-  }
-  carregarCargas();
+const [numeros,tipo]=valor.split(" - ");
+tipoCaminhaoAtual=tipo;
+
+const compartimentos=numeros.split("").map(n=>Number(n)*1000);
+capacidadeTotalAtual=compartimentos.reduce((a,b)=>a+b,0);
+
+infoVeiculo.style.display="block";
+infoVeiculo.innerHTML=`🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L`;
+
+container.innerHTML="";
+compartimentos.forEach(cap=>{
+container.innerHTML+=`
+<div class="compartimento">
+<div class="capacidade">${cap.toLocaleString()} L</div>
+<input class="cliente" placeholder="Cliente">
+<input class="municipio" placeholder="Município">
+<input class="vendedor" placeholder="Vendedor">
+</div>`;
+});
 });
 
-/* 🔎 BUSCAR PLACA */
-async function carregarPlaca(){
+/* SALVAR CARGA */
+btnSalvar.addEventListener("click",async()=>{
 
-  const placa = placaInput.value.toUpperCase().trim();
-  if(!placa) return;
+btnSalvar.disabled=true;
+loaderBtn.classList.remove("hidden");
+textoBtn.innerText="Salvando...";
 
-  const snap = await getDoc(doc(db,"motoristas_cadastro",placa));
+try{
 
-  if(!snap.exists()){
-    alert("Placa não cadastrada!");
-    containerCompartimentos.innerHTML="";
-    infoVeiculo.style.display="none";
-    return;
-  }
-
-  const dados = snap.data();
-  if(!dados.configEixos || !dados.configEixos.includes(" - ")){
-  alert("Configuração de eixos inválida para essa placa.");
-  return;
+const linhas=document.querySelectorAll(".compartimento");
+if(linhas.length===0){
+alert("Selecione o tipo de veículo.");
+reset();
+return;
 }
 
-const [numeros,tipo] = dados.configEixos.split(" - ");
+let preenchidos=0;
+let compartimentos=[];
 
-  tipoCaminhaoAtual = tipo;
-
-  const compartimentos = numeros.split("").map(n => Number(n)*1000);
-  capacidadeTotalAtual = compartimentos.reduce((a,b)=>a+b,0);
-
-  infoVeiculo.style.display="block";
-  infoVeiculo.innerHTML=`🚛 ${tipo} • Capacidade Total: ${capacidadeTotalAtual.toLocaleString()} L`;
-
-  containerCompartimentos.innerHTML="";
-
-  compartimentos.forEach(capacidade=>{
-    containerCompartimentos.innerHTML+=`
-      <div class="compartimento">
-        <div class="capacidade">${capacidade.toLocaleString()} L</div>
-        <input placeholder="Cliente" class="cliente">
-        <input placeholder="Município" class="municipio" list="cidadesMG">
-        <input placeholder="Vendedor" class="vendedor">
-      </div>
-    `;
-  });
-
-}
-
-/* Disparadores inteligentes */
-placaInput.addEventListener("blur", carregarPlaca);
-placaInput.addEventListener("change", carregarPlaca);
-placaInput.addEventListener("keyup", (e)=>{
-  if(e.key === "Enter") carregarPlaca();
+linhas.forEach(l=>{
+const cap=l.querySelector(".capacidade").innerText.replace(/\D/g,"");
+const cliente=l.querySelector(".cliente").value.trim();
+const municipio=l.querySelector(".municipio").value.trim();
+const vendedor=l.querySelector(".vendedor").value.trim();
+if(cliente&&municipio&&vendedor) preenchidos++;
+compartimentos.push({capacidade:Number(cap),cliente,municipio,vendedor});
 });
 
-/* 💾 SALVAR */
-btnSalvar.addEventListener("click", async ()=>{
-
-  btnSalvar.disabled = true;
-  textoBtn.innerText = "Salvando...";
-  loaderBtn.classList.remove("hidden");
-
-  try{
-
-    const linhas = document.querySelectorAll(".compartimento");
-
-    if(linhas.length === 0){
-      mostrarErro("Informe a placa para gerar os compartimentos.");
-      resetarBotao();
-      return;
-    }
-
-    let compartimentos = [];
-    let preenchidos = 0;
-
-    linhas.forEach(linha=>{
-
-      const capacidade = linha.querySelector(".capacidade").innerText.replace(/\D/g,"");
-      const cliente = linha.querySelector(".cliente").value.trim();
-      const municipio = linha.querySelector(".municipio").value.trim();
-      const vendedor = linha.querySelector(".vendedor").value.trim();
-
-      const completo = cliente && municipio && vendedor;
-      if(completo) preenchidos++;
-
-      compartimentos.push({
-        capacidade:Number(capacidade),
-        volume:Number(capacidade),
-        cliente,
-        municipio,
-        vendedor
-      });
-
-    });
-
-    if(preenchidos < 2){
-      mostrarErro("Preencha pelo menos 2 compartimentos antes de salvar.");
-      resetarBotao();
-      return;
-    }
-
-    const hoje = new Date();
-    const baseNumero = hoje.toISOString().slice(0,10).replaceAll("-","");
-    const snapHoje = await getDocs(collection(db,"programacao_cargas"));
-
-    const contador = snapHoje.docs.filter(doc=>{
-      return doc.data().numeroCarga?.startsWith(baseNumero);
-    }).length + 1;
-
-    const numeroCarga = `${baseNumero}-${String(contador).padStart(3,"0")}`;
-const dataInput = document.getElementById("dataCarregamento").value;
-
-if(!dataInput){
-  mostrarErro("Informe a data do carregamento.");
-  resetarBotao();
-  return;
+if(preenchidos<2){
+alert("Preencha ao menos 2 compartimentos.");
+reset();
+return;
 }
-    await addDoc(collection(db,"programacao_cargas"),{
-      numeroCarga,
-      dataCarregamento:new Date(dataInput),
-      horarioPrevisto:document.getElementById("horarioPrevisto").value,
-      placa:placaInput.value.toUpperCase(),
-      tipoCaminhao:tipoCaminhaoAtual,
-      capacidadeTotal:capacidadeTotalAtual,
-      km:Number(document.getElementById("km").value)||0,
-      observacoes:document.getElementById("observacoes").value||"",
-      compartimentos,
-      status:"PROGRAMADO",
-      criadoEm:serverTimestamp()
-    });
 
-    mostrarSucesso(numeroCarga);
-    limparFormularioCompleto();
+const base=new Date().toISOString().slice(0,10).replaceAll("-","");
+const snap=await getDocs(collection(db,"programacao_cargas"));
+const contador=snap.docs.filter(d=>d.data().numeroCarga?.startsWith(base)).length+1;
+const numeroCarga=`${base}-${String(contador).padStart(3,"0")}`;
 
-  }catch(error){
-    console.error(error);
-    mostrarErro("Erro ao salvar carga.");
-  }
-
-  resetarBotao();
-
+await addDoc(collection(db,"programacao_cargas"),{
+numeroCarga,
+dataCarregamento:new Date(document.getElementById("dataCarregamento").value),
+horarioPrevisto:document.getElementById("horarioPrevisto").value,
+tipoCaminhao:tipoCaminhaoAtual,
+capacidadeTotal:capacidadeTotalAtual,
+placa:null,
+status:"PROGRAMADO",
+compartimentos,
+criadoEm:serverTimestamp()
 });
-  function mostrarSucesso(numero){
 
-  const box = document.getElementById("sucessoCarga");
+alert("Carga criada!");
+container.innerHTML="";
+infoVeiculo.style.display="none";
 
-  box.innerHTML = `
-    ✅ Carga criada com sucesso! <br>
-    Número da Carga: <strong>${numero}</strong>
-  `;
-
-  box.classList.remove("hidden");
-
-  setTimeout(()=>{
-    box.classList.add("hidden");
-  },5000);
+}catch(e){
+console.error(e);
+alert("Erro ao salvar.");
 }
 
-function mostrarErro(msg){
-  alert(msg); // Podemos depois evoluir para card vermelho
+reset();
+});
+
+function reset(){
+btnSalvar.disabled=false;
+loaderBtn.classList.add("hidden");
+textoBtn.innerText="Salvar Carga";
 }
 
-function resetarBotao(){
-  btnSalvar.disabled = false;
-  textoBtn.innerText = "Salvar Carga";
-  loaderBtn.classList.add("hidden");
-}
+/* TABELA */
+onSnapshot(collection(db,"programacao_cargas"),snap=>{
+tabela.innerHTML="";
+snap.forEach(docSnap=>{
+const c=docSnap.data();
+tabela.innerHTML+=`
+<tr>
+<td>${c.numeroCarga}</td>
+<td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
+<td>${c.placa||"-"}</td>
+<td>${c.tipoCaminhao}</td>
+<td>${c.capacidadeTotal?.toLocaleString()} L</td>
+<td><span class="status ${c.status}">${c.status}</span></td>
+<td>
+${c.status==="PROGRAMADO"?
+`<button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">Vincular</button>`:"-"}
+</td>
+</tr>`;
+});
+});
 
-
-function limparFormularioCompleto(){
-
-  document.getElementById("dataCarregamento").value="";
-  document.getElementById("horarioPrevisto").value="";
-  document.getElementById("placa").value="";
-  document.getElementById("km").value="";
-  document.getElementById("observacoes").value="";
-
-  containerCompartimentos.innerHTML="";
-  infoVeiculo.style.display="none";
-
-}
-  
-
-/* 📊 TABELA */
-function carregarCargas(){
-
-  onSnapshot(collection(db,"programacao_cargas"), snapshot=>{
-
-    tabela.innerHTML="";
-
-    snapshot.forEach(docSnap=>{
-      const c = docSnap.data();
-
-      tabela.innerHTML+=`
-        <tr>
-          <td>${c.numeroCarga}</td>
-          <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
-          <td>${c.placa}</td>
-          <td>${c.tipoCaminhao}</td>
-          <td>${c.capacidadeTotal?.toLocaleString()} L</td>
-          <td><span class="status ${c.status}">${c.status}</span></td>
-        </tr>
-      `;
-    });
-
-  });
-
-}
+/* VINCULAR CAMINHÃO */
+window.vincular=async function(id){
+const placa=prompt("Informe a placa disponível:");
+if(!placa) return;
+await updateDoc(doc(db,"programacao_cargas",id),{
+placa:placa.toUpperCase(),
+status:"AGUARDANDO_FILA"
+});
+};
 
 </script>
-
 </body>
 </html>
