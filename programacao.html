@@ -31,11 +31,18 @@ main{
   margin:auto;
 }
 
-.form-grid{
+.card-form{
+  background:#fff;
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.linha-topo,.linha-bottom{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
-  margin-bottom:20px;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+  margin-bottom:15px;
 }
 
 input{
@@ -43,6 +50,31 @@ input{
   border-radius:8px;
   border:1px solid #ccc;
   font-size:14px;
+}
+
+.info-veiculo{
+  background:#f1f5f9;
+  padding:12px;
+  border-radius:10px;
+  font-weight:600;
+  margin-bottom:15px;
+  display:none;
+}
+
+.compartimento{
+  background:#f8fafc;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:10px;
+  display:grid;
+  grid-template-columns:120px 1fr 1fr 1fr;
+  gap:10px;
+  align-items:center;
+}
+
+.capacidade{
+  font-weight:700;
+  color:var(--azul);
 }
 
 .btn{
@@ -54,6 +86,24 @@ input{
 }
 
 .btn-azul{ background:var(--azul); color:#fff; }
+
+.loader{
+  width:16px;
+  height:16px;
+  border:3px solid rgba(255,255,255,0.4);
+  border-top:3px solid #fff;
+  border-radius:50%;
+  display:inline-block;
+  margin-left:8px;
+  animation:spin .7s linear infinite;
+}
+
+.hidden{ display:none; }
+
+@keyframes spin{
+  from{ transform:rotate(0deg); }
+  to{ transform:rotate(360deg); }
+}
 
 .table-wrap{
   background:#fff;
@@ -87,25 +137,8 @@ th{
   font-weight:600;
 }
 
-.loader{
-  width:16px;
-  height:16px;
-  border:3px solid rgba(255,255,255,0.4);
-  border-top:3px solid #fff;
-  border-radius:50%;
-  display:inline-block;
-  margin-left:8px;
-  animation:spin .7s linear infinite;
-}
-
-.hidden{ display:none; }
-
-@keyframes spin{
-  from{ transform:rotate(0deg); }
-  to{ transform:rotate(360deg); }
-}
-
 .PROGRAMADO{ background:#cfe2ff; color:#084298; }
+
 </style>
 </head>
 
@@ -120,36 +153,39 @@ th{
 
 <h2>Nova Carga</h2>
 
-<div class="form-grid">
-  <input type="date" id="dataCarregamento">
-  <input type="text" id="vendedor" placeholder="Vendedor">
-  <input type="text" id="cliente" placeholder="Cliente">
-  <input type="text" id="municipio" placeholder="Município">
-  <input type="text" id="tipoCaminhao" placeholder="Tipo Caminhão">
-  <input type="number" id="volume" placeholder="Volume">
-  <input type="number" id="freteUnitario" placeholder="Frete Unitário">
-  <input type="number" id="total" placeholder="Total">
-  <input type="time" id="horarioPrevisto">
-  <input type="text" id="placa" placeholder="Placa">
-  <input type="number" id="km" placeholder="KM">
-  <input type="text" id="observacoes" placeholder="Observações">
-</div>
+<div class="card-form">
 
-<button class="btn btn-azul" id="btnSalvar">
-  <span id="textoBtn">Salvar Carga</span>
-  <span id="loaderBtn" class="loader hidden"></span>
-</button>
+  <div class="linha-topo">
+    <input type="date" id="dataCarregamento">
+    <input type="time" id="horarioPrevisto">
+    <input type="text" id="placa" placeholder="Placa">
+  </div>
+
+  <div class="info-veiculo" id="infoVeiculo"></div>
+
+  <div id="containerCompartimentos"></div>
+
+  <div class="linha-bottom">
+    <input type="number" id="km" placeholder="KM">
+    <input type="text" id="observacoes" placeholder="Observações">
+  </div>
+
+  <button class="btn btn-azul" id="btnSalvar">
+    <span id="textoBtn">Salvar Carga</span>
+    <span id="loaderBtn" class="loader hidden"></span>
+  </button>
+
+</div>
 
 <div class="table-wrap">
   <table>
     <thead>
       <tr>
+        <th>Nº Carga</th>
         <th>Data</th>
-        <th>Cliente</th>
-        <th>Município</th>
         <th>Placa</th>
-        <th>Motorista</th>
-        <th>Volume</th>
+        <th>Tipo</th>
+        <th>Total L</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -158,6 +194,23 @@ th{
 </div>
 
 </main>
+
+<datalist id="cidadesMG">
+<option>Belo Horizonte</option>
+<option>Contagem</option>
+<option>Betim</option>
+<option>Uberlândia</option>
+<option>Uberaba</option>
+<option>Juiz de Fora</option>
+<option>Montes Claros</option>
+<option>Ipatinga</option>
+<option>Sete Lagoas</option>
+<option>Divinópolis</option>
+<option>Paraopeba</option>
+<option>Curvelo</option>
+<option>Varginha</option>
+<option>Poços de Caldas</option>
+</datalist>
 
 <script type="module">
 
@@ -169,6 +222,7 @@ import {
   addDoc,
   doc,
   getDoc,
+  getDocs,
   onSnapshot,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -183,7 +237,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+const placaInput = document.getElementById("placa");
+const containerCompartimentos = document.getElementById("containerCompartimentos");
+const infoVeiculo = document.getElementById("infoVeiculo");
 const tabela = document.getElementById("tabelaCargas");
+
+const btnSalvar = document.getElementById("btnSalvar");
+const textoBtn = document.getElementById("textoBtn");
+const loaderBtn = document.getElementById("loaderBtn");
+
+let tipoCaminhaoAtual = "";
+let capacidadeTotalAtual = 0;
 
 /* 🔐 PROTEGER PÁGINA */
 onAuthStateChanged(auth,user=>{
@@ -194,72 +258,104 @@ onAuthStateChanged(auth,user=>{
   carregarCargas();
 });
 
-/* 📥 SALVAR CARGA */
-const btnSalvar = document.getElementById("btnSalvar");
-const textoBtn = document.getElementById("textoBtn");
-const loaderBtn = document.getElementById("loaderBtn");
+/* 🔎 BUSCAR PLACA */
+placaInput.addEventListener("blur", async ()=>{
 
+  const placa = placaInput.value.toUpperCase();
+  if(!placa) return;
+
+  const snap = await getDoc(doc(db,"motoristas_cadastro",placa));
+  if(!snap.exists()){
+    alert("Placa não cadastrada!");
+    return;
+  }
+
+  const dados = snap.data();
+  const [numeros,tipo] = dados.configEixos.split(" - ");
+
+  tipoCaminhaoAtual = tipo;
+
+  const compartimentos = numeros.split("").map(n => Number(n)*1000);
+  capacidadeTotalAtual = compartimentos.reduce((a,b)=>a+b,0);
+
+  infoVeiculo.style.display="block";
+  infoVeiculo.innerHTML=`🚛 ${tipo} • Capacidade Total: ${capacidadeTotalAtual.toLocaleString()} L`;
+
+  containerCompartimentos.innerHTML="";
+
+  compartimentos.forEach(capacidade=>{
+    containerCompartimentos.innerHTML+=`
+      <div class="compartimento">
+        <div class="capacidade">${capacidade.toLocaleString()} L</div>
+        <input placeholder="Cliente" class="cliente">
+        <input placeholder="Município" class="municipio" list="cidadesMG">
+        <input placeholder="Vendedor" class="vendedor">
+      </div>
+    `;
+  });
+
+});
+
+/* 💾 SALVAR */
 btnSalvar.addEventListener("click", async ()=>{
 
-  btnSalvar.disabled = true;
-  textoBtn.innerText = "Salvando...";
+  btnSalvar.disabled=true;
+  textoBtn.innerText="Salvando...";
   loaderBtn.classList.remove("hidden");
 
   try{
 
-    const placa = document.getElementById("placa").value.toUpperCase();
+    const hoje = new Date();
+    const baseNumero = hoje.toISOString().slice(0,10).replaceAll("-","");
+    const snapHoje = await getDocs(collection(db,"programacao_cargas"));
 
-    const cadastroSnap = await getDoc(doc(db,"motoristas_cadastro",placa));
+    const contador = snapHoje.docs.filter(doc=>{
+      return doc.data().numeroCarga?.startsWith(baseNumero);
+    }).length + 1;
 
-    if(!cadastroSnap.exists()){
-      alert("Placa não cadastrada!");
-      resetBtn();
-      return;
-    }
+    const numeroCarga = `${baseNumero}-${String(contador).padStart(3,"0")}`;
 
-    const dadosPlaca = cadastroSnap.data();
+    const compartimentos = [];
+
+    document.querySelectorAll(".compartimento").forEach(linha=>{
+      const capacidade = linha.querySelector(".capacidade").innerText.replace(/\D/g,"");
+      compartimentos.push({
+        capacidade:Number(capacidade),
+        volume:Number(capacidade),
+        cliente:linha.querySelector(".cliente").value,
+        municipio:linha.querySelector(".municipio").value,
+        vendedor:linha.querySelector(".vendedor").value
+      });
+    });
 
     await addDoc(collection(db,"programacao_cargas"),{
-      dataCarregamento: new Date(document.getElementById("dataCarregamento").value),
-      vendedor: document.getElementById("vendedor").value,
-      cliente: document.getElementById("cliente").value,
-      municipio: document.getElementById("municipio").value,
-      tipoCaminhao: document.getElementById("tipoCaminhao").value,
-      volume: Number(document.getElementById("volume").value),
-      freteUnitario: Number(document.getElementById("freteUnitario").value),
-      total: Number(document.getElementById("total").value),
-      horarioPrevisto: document.getElementById("horarioPrevisto").value,
-      observacoes: document.getElementById("observacoes").value,
-      placa,
-      motorista: dadosPlaca.motorista || "",
-      configEixos: dadosPlaca.configEixos || "",
-      capacidade: dadosPlaca.capacidade || 0,
-      transportadora: dadosPlaca.transportadora || "",
-      plotado: dadosPlaca.plotado || false,
-      km: Number(document.getElementById("km").value) || 0,
+      numeroCarga,
+      dataCarregamento:new Date(document.getElementById("dataCarregamento").value),
+      horarioPrevisto:document.getElementById("horarioPrevisto").value,
+      placa:placaInput.value.toUpperCase(),
+      tipoCaminhao:tipoCaminhaoAtual,
+      capacidadeTotal:capacidadeTotalAtual,
+      km:Number(document.getElementById("km").value)||0,
+      observacoes:document.getElementById("observacoes").value||"",
+      compartimentos,
       status:"PROGRAMADO",
-      criadoEm: serverTimestamp()
+      criadoEm:serverTimestamp()
     });
 
     alert("Carga criada com sucesso!");
-    document.querySelectorAll(".form-grid input").forEach(i=>i.value="");
 
   }catch(error){
     console.error(error);
-    alert("Erro ao salvar carga.");
+    alert("Erro ao salvar.");
   }
 
-  resetBtn();
+  btnSalvar.disabled=false;
+  textoBtn.innerText="Salvar Carga";
+  loaderBtn.classList.add("hidden");
 
 });
 
-function resetBtn(){
-  btnSalvar.disabled = false;
-  textoBtn.innerText = "Salvar Carga";
-  loaderBtn.classList.add("hidden");
-}
-
-/* 📊 RENDERIZAR TABELA */
+/* 📊 TABELA */
 function carregarCargas(){
 
   onSnapshot(collection(db,"programacao_cargas"), snapshot=>{
@@ -271,12 +367,11 @@ function carregarCargas(){
 
       tabela.innerHTML+=`
         <tr>
+          <td>${c.numeroCarga}</td>
           <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
-          <td>${c.cliente}</td>
-          <td>${c.municipio}</td>
           <td>${c.placa}</td>
-          <td>${c.motorista}</td>
-          <td>${c.volume}</td>
+          <td>${c.tipoCaminhao}</td>
+          <td>${c.capacidadeTotal?.toLocaleString()} L</td>
           <td><span class="status ${c.status}">${c.status}</span></td>
         </tr>
       `;
