@@ -1,34 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="favicon.png">
+<link rel="icon" href="favicon.png">
 <meta charset="UTF-8">
 <title>Login | Painel Operacional</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* ===== BACKGROUND CORPORATIVO ===== */
+/* ===== TODO SEU CSS FOI MANTIDO IGUAL ===== */
+* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #0f2a5c 0%,
-    #1e3a8a 45%,
-    #7f1d1d 75%,
-    #b91c1c 100%
-  );
+  background: linear-gradient(135deg,#0f2a5c 0%,#1e3a8a 45%,#7f1d1d 75%,#b91c1c 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-/* CARD */
 .login-box {
   width: 100%;
   max-width: 390px;
@@ -39,152 +27,62 @@ body {
   color: #fff;
   animation: fadeIn .6s ease;
 }
-
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-/* HEADER */
-.login-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
+.login-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
 .logo {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 38px; height: 38px; border-radius: 10px;
   background: linear-gradient(135deg, #dc2626, #1e3a8a);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   font-weight: bold;
 }
-
-.login-header span {
-  font-weight: bold;
-  font-size: 14px;
-}
-
-/* TITLES */
-h2 {
-  margin: 8px 0 4px;
-  font-size: 22px;
-}
-
-p {
-  margin: 0 0 20px;
-  font-size: 14px;
-  color: #c7d2fe;
-}
-
-/* INPUTS */
-label {
-  font-size: 13px;
-  color: #cbd5f5;
-  display: block;
-  margin-bottom: 6px;
-}
-
-.input-group {
-  position: relative;
-}
-
+.login-header span { font-weight: bold; font-size: 14px; }
+h2 { margin: 8px 0 4px; font-size: 22px; }
+p { margin: 0 0 20px; font-size: 14px; color: #c7d2fe; }
+label { font-size: 13px; color: #cbd5f5; display: block; margin-bottom: 6px; }
+.input-group { position: relative; }
 input {
-  width: 100%;
-  padding: 12px 42px 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #1e293b;
-  background: #020617;
-  color: #fff;
-  font-size: 14px;
-  margin-bottom: 14px;
+  width: 100%; padding: 12px 42px 12px 14px;
+  border-radius: 10px; border: 1px solid #1e293b;
+  background: #020617; color: #fff;
+  font-size: 14px; margin-bottom: 14px;
 }
-
-input::placeholder {
-  color: #64748b;
-}
-
-/* TOGGLE SENHA */
+input::placeholder { color: #64748b; }
 .toggle-pass {
-  position: absolute;
-  right: 12px;
-  top: 50%;
+  position: absolute; right: 12px; top: 50%;
   transform: translateY(-50%);
-  cursor: pointer;
-  font-size: 14px;
-  color: #94a3b8;
+  cursor: pointer; font-size: 14px; color: #94a3b8;
 }
-
-/* CHECKBOX */
 .options {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #cbd5f5;
-  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: #cbd5f5; margin-bottom: 14px;
 }
-
-.options input {
-  width: auto;
-  margin: 0;
-}
-
-/* BUTTON */
+.options input { width: auto; margin: 0; }
 button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
+  width: 100%; padding: 14px;
+  border-radius: 12px; border: none;
   background: linear-gradient(135deg, #1e3a8a, #dc2626);
-  color: #fff;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  color: #fff; font-size: 15px; font-weight: bold;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 10px;
 }
-
-button:disabled {
-  opacity: .7;
-  cursor: not-allowed;
-}
-
-/* LOADER */
+button:disabled { opacity: .7; cursor: not-allowed; }
 .loader {
-  width: 18px;
-  height: 18px;
+  width: 18px; height: 18px;
   border: 3px solid rgba(255,255,255,.3);
   border-top: 3px solid #fff;
   border-radius: 50%;
   animation: spin .8s linear infinite;
   display: none;
 }
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ERROR */
+@keyframes spin { to { transform: rotate(360deg); } }
 .error {
-  margin-top: 12px;
-  font-size: 13px;
-  color: #f87171;
-  display: none;
-  text-align: center;
+  margin-top: 12px; font-size: 13px;
+  color: #f87171; display: none; text-align: center;
 }
-
-/* SHAKE */
-.shake {
-  animation: shake .4s;
-}
-
+.shake { animation: shake .4s; }
 @keyframes shake {
   0% { transform: translateX(0); }
   25% { transform: translateX(-6px); }
@@ -192,14 +90,9 @@ button:disabled {
   75% { transform: translateX(-6px); }
   100% { transform: translateX(0); }
 }
-
-/* FOOTER */
 .login-footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 18px;
-  font-size: 11px;
-  color: #94a3b8;
+  display: flex; justify-content: space-between;
+  margin-top: 18px; font-size: 11px; color: #94a3b8;
 }
 </style>
 </head>
@@ -207,7 +100,6 @@ button:disabled {
 <body>
 
 <div class="login-box" id="box">
-
   <div class="login-header">
     <div class="logo">RB</div>
     <span>Painel Operacional - Logística</span>
@@ -241,14 +133,19 @@ button:disabled {
     <span>IP: 179.83.208.30</span>
     <span>Versão 1.0</span>
   </div>
-
 </div>
-
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -262,10 +159,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-window.login = function(){
+/* 🔥 Se já estiver logado, vai direto */
+onAuthStateChanged(auth, (user)=>{
+  if(user){
+    window.location.href = "painel.html";
+  }
+});
+
+window.login = async function(){
 
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
+  const remember = document.getElementById("remember").checked;
 
   const loader  = document.getElementById("loader");
   const btnText = document.getElementById("btnText");
@@ -278,24 +183,36 @@ window.login = function(){
   loader.style.display = "block";
   btnText.textContent = "Entrando...";
 
-  signInWithEmailAndPassword(auth, email, senha)
-    .then(() => {
-      window.location.href = "painel.html";
-    })
-    .catch(() => {
+  try{
 
-      loader.style.display = "none";
-      btnText.textContent = "Entrar";
-      btn.disabled = false;
+    /* 🔥 Define persistência conforme checkbox */
+    await setPersistence(
+      auth,
+      remember ? browserLocalPersistence : browserSessionPersistence
+    );
 
-      erro.style.display = "block";
-      box.classList.add("shake");
-      setTimeout(() => box.classList.remove("shake"), 400);
-    });
+    await signInWithEmailAndPassword(auth, email, senha);
+
+    window.location.href = "painel.html";
+
+  }catch(e){
+
+    loader.style.display = "none";
+    btnText.textContent = "Entrar";
+    btn.disabled = false;
+
+    erro.style.display = "block";
+    box.classList.add("shake");
+    setTimeout(() => box.classList.remove("shake"), 400);
+  }
+};
+
+window.toggleSenha = function(){
+  const input = document.getElementById("senha");
+  input.type = input.type === "password" ? "text" : "password";
 };
 
 </script>
-
 
 </body>
 </html>
