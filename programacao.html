@@ -309,11 +309,50 @@ placaInput.addEventListener("keyup", (e)=>{
 /* 💾 SALVAR */
 btnSalvar.addEventListener("click", async ()=>{
 
-  btnSalvar.disabled=true;
-  textoBtn.innerText="Salvando...";
+  btnSalvar.disabled = true;
+  textoBtn.innerText = "Salvando...";
   loaderBtn.classList.remove("hidden");
 
   try{
+
+    const linhas = document.querySelectorAll(".compartimento");
+
+    if(linhas.length === 0){
+      alert("Informe a placa para gerar os compartimentos.");
+      resetarBotao();
+      return;
+    }
+
+    let compartimentos = [];
+    let preenchidos = 0;
+
+    linhas.forEach(linha=>{
+
+      const capacidade = linha.querySelector(".capacidade").innerText.replace(/\D/g,"");
+      const cliente = linha.querySelector(".cliente").value.trim();
+      const municipio = linha.querySelector(".municipio").value.trim();
+      const vendedor = linha.querySelector(".vendedor").value.trim();
+
+      const completo = cliente && municipio && vendedor;
+
+      if(completo) preenchidos++;
+
+      compartimentos.push({
+        capacidade:Number(capacidade),
+        volume:Number(capacidade),
+        cliente,
+        municipio,
+        vendedor
+      });
+
+    });
+
+    // 🔒 REGRA NOVA
+    if(preenchidos < 2){
+      alert("Preencha pelo menos 2 compartimentos antes de salvar.");
+      resetarBotao();
+      return;
+    }
 
     const hoje = new Date();
     const baseNumero = hoje.toISOString().slice(0,10).replaceAll("-","");
@@ -324,19 +363,6 @@ btnSalvar.addEventListener("click", async ()=>{
     }).length + 1;
 
     const numeroCarga = `${baseNumero}-${String(contador).padStart(3,"0")}`;
-
-    const compartimentos = [];
-
-    document.querySelectorAll(".compartimento").forEach(linha=>{
-      const capacidade = linha.querySelector(".capacidade").innerText.replace(/\D/g,"");
-      compartimentos.push({
-        capacidade:Number(capacidade),
-        volume:Number(capacidade),
-        cliente:linha.querySelector(".cliente").value,
-        municipio:linha.querySelector(".municipio").value,
-        vendedor:linha.querySelector(".vendedor").value
-      });
-    });
 
     await addDoc(collection(db,"programacao_cargas"),{
       numeroCarga,
@@ -354,16 +380,35 @@ btnSalvar.addEventListener("click", async ()=>{
 
     alert("Carga criada com sucesso!");
 
+    limparFormularioCompleto();
+
   }catch(error){
     console.error(error);
     alert("Erro ao salvar.");
   }
 
-  btnSalvar.disabled=false;
-  textoBtn.innerText="Salvar Carga";
-  loaderBtn.classList.add("hidden");
+  resetarBotao();
 
 });
+function resetarBotao(){
+  btnSalvar.disabled = false;
+  textoBtn.innerText = "Salvar Carga";
+  loaderBtn.classList.add("hidden");
+}
+
+function limparFormularioCompleto(){
+
+  document.getElementById("dataCarregamento").value="";
+  document.getElementById("horarioPrevisto").value="";
+  document.getElementById("placa").value="";
+  document.getElementById("km").value="";
+  document.getElementById("observacoes").value="";
+
+  containerCompartimentos.innerHTML="";
+  infoVeiculo.style.display="none";
+
+}
+  
 
 /* 📊 TABELA */
 function carregarCargas(){
