@@ -342,12 +342,7 @@ monitorarFila();
 function carregarKPIs(){
 
   const motoristasRef = collection(db,"motoristas");
-
- const filaRef = collection(db,"fila");
-
-onSnapshot(filaRef,(snapshot)=>{
-  document.getElementById("kpiFila").innerText = snapshot.size;
-});
+  const filaRef = collection(db,"fila");
 
   // 🔵 MOTORISTAS (tempo real)
   onSnapshot(motoristasRef,(snapshot)=>{
@@ -368,7 +363,7 @@ onSnapshot(filaRef,(snapshot)=>{
 
   });
 
-  // 🟠 FILA (tempo real)
+  // 🟠 FILA (tempo real) – APENAS UMA VEZ
   onSnapshot(filaRef,(snapshot)=>{
     document.getElementById("kpiFila").innerText = snapshot.size;
   });
