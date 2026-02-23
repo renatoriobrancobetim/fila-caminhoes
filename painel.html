@@ -286,6 +286,7 @@ import {
   collection,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { query, where } from "firebase/firestore";
 
 const app = initializeApp({
   apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -358,9 +359,12 @@ async function carregarKPIs(){
 
   document.getElementById("kpiContainer").style.display="grid";
 }
-  function monitorarFila(){
+function monitorarFila(){
 
-  const filaRef = collection(db,"fila");
+  const filaRef = query(
+    collection(db,"fila"),
+    where("status","==","AGUARDANDO")
+  );
 
   onSnapshot(filaRef, (snapshot)=>{
 
