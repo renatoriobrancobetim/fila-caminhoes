@@ -256,30 +256,17 @@ import {
   onSnapshot, 
   serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 const app = initializeApp({
-apiKey:"AIzaSy...",
-authDomain:"tabela-frete-rio-branco.firebaseapp.com",
-projectId:"tabela-frete-rio-branco"
+  apiKey:"AIzaSy...",
+  authDomain:"tabela-frete-rio-branco.firebaseapp.com",
+  projectId:"tabela-frete-rio-branco"
 });
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-  getAuth, 
-  onAuthStateChanged, 
-  setPersistence, 
-  browserLocalPersistence 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  doc, 
-  getDocs, 
-  updateDoc, 
-  deleteDoc, 
-  onSnapshot, 
-  serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+setPersistence(auth, browserLocalPersistence);
 
 let tipoCaminhaoAtual="";
 let capacidadeTotalAtual=0;
