@@ -321,26 +321,57 @@ textoBtn.innerText="Salvar Carga";
 });
 
 /* ===== TABELA ===== */
-onSnapshot(collection(db,"programacao_cargas"),snap=>{
-tabela.innerHTML="";
-snap.forEach(docSnap=>{
-const c=docSnap.data();
-tabela.innerHTML+=`
-<tr>
-<td>${c.numeroCarga}</td>
-<td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
-<td>${c.placa||"-"}</td>
-<td>${c.tipoCaminhao}</td>
-<td>${c.capacidadeTotal?.toLocaleString()} L</td>
-<td><span class="status ${c.status}">${c.status}</span></td>
-<td>
-<button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">
-${c.placa ? "Alterar Placa" : "Vincular"}
-</button>
-<button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">Excluir</button>
-</td>
-</tr>`;
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+onAuthStateChanged(auth, user => {
+
+  if (!user) {
+    console.log("Usuário não autenticado");
+    return;
+  }
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+onAuthStateChanged(auth, user => {
+
+  if (!user) {
+    alert("Você precisa estar logado.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  console.log("Usuário autenticado:", user.email);
+
+  onSnapshot(collection(db,"programacao_cargas"), snap => {
+
+    tabela.innerHTML="";
+
+    snap.forEach(docSnap=>{
+      const c=docSnap.data();
+
+      tabela.innerHTML+=`
+      <tr>
+      <td>${c.numeroCarga}</td>
+      <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
+      <td>${c.placa||"-"}</td>
+      <td>${c.tipoCaminhao}</td>
+      <td>${c.capacidadeTotal?.toLocaleString()} L</td>
+      <td><span class="status ${c.status}">${c.status}</span></td>
+      <td>
+      <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">
+      ${c.placa ? "Alterar Placa" : "Vincular"}
+      </button>
+      <button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">
+      Excluir
+      </button>
+      </td>
+      </tr>`;
+    });
+
+  });
+
 });
+
 });
 
 /* ===== MODAL ===== */
