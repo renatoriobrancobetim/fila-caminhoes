@@ -294,7 +294,12 @@ async function carregarPlaca(){
   }
 
   const dados = snap.data();
-  const [numeros,tipo] = dados.configEixos.split(" - ");
+  if(!dados.configEixos || !dados.configEixos.includes(" - ")){
+  alert("Configuração de eixos inválida para essa placa.");
+  return;
+}
+
+const [numeros,tipo] = dados.configEixos.split(" - ");
 
   tipoCaminhaoAtual = tipo;
 
@@ -384,7 +389,15 @@ btnSalvar.addEventListener("click", async ()=>{
 
     await addDoc(collection(db,"programacao_cargas"),{
       numeroCarga,
-      dataCarregamento:new Date(document.getElementById("dataCarregamento").value),
+      const dataInput = document.getElementById("dataCarregamento").value;
+
+if(!dataInput){
+  mostrarErro("Informe a data do carregamento.");
+  resetarBotao();
+  return;
+}
+
+dataCarregamento:new Date(dataInput),
       horarioPrevisto:document.getElementById("horarioPrevisto").value,
       placa:placaInput.value.toUpperCase(),
       tipoCaminhao:tipoCaminhaoAtual,
@@ -432,11 +445,7 @@ function resetarBotao(){
   textoBtn.innerText = "Salvar Carga";
   loaderBtn.classList.add("hidden");
 }
-function resetarBotao(){
-  btnSalvar.disabled = false;
-  textoBtn.innerText = "Salvar Carga";
-  loaderBtn.classList.add("hidden");
-}
+
 
 function limparFormularioCompleto(){
 
