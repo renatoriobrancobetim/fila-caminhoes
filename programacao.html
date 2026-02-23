@@ -217,7 +217,17 @@ import {
   setPersistence, 
   browserLocalPersistence 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, doc, getDocs, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  doc, 
+  getDocs, 
+  updateDoc, 
+  deleteDoc, 
+  onSnapshot, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===== FIREBASE INIT ===== */
 const app = initializeApp({
@@ -228,7 +238,8 @@ const app = initializeApp({
 
 const db = getFirestore(app);
 const auth = getAuth(app);
-setPersistence(auth, browserLocalPersistence);
+
+await setPersistence(auth, browserLocalPersistence);
 
 /* ===== VARIÁVEIS ===== */
 let tipoCaminhaoAtual="";
@@ -243,107 +254,103 @@ const loaderBtn=document.getElementById("loaderBtn");
 
 /* ===== GERAR COMPARTIMENTOS ===== */
 document.getElementById("tipoVeiculo").addEventListener("change",e=>{
-const valor=e.target.value;
-if(!valor){
-tipoCaminhaoAtual="";
-container.innerHTML="";
-infoVeiculo.style.display="none";
-return;
-}
+  const valor=e.target.value;
 
-const [numeros,tipo]=valor.split(" - ");
-tipoCaminhaoAtual=tipo;
+  if(!valor){
+    tipoCaminhaoAtual="";
+    container.innerHTML="";
+    infoVeiculo.style.display="none";
+    return;
+  }
 
-const compartimentos=numeros.split("").map(n=>Number(n)*1000);
-capacidadeTotalAtual=compartimentos.reduce((a,b)=>a+b,0);
+  const [numeros,tipo]=valor.split(" - ");
+  tipoCaminhaoAtual=tipo;
 
-infoVeiculo.style.display="block";
-infoVeiculo.innerHTML=`🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L`;
+  const compartimentos=numeros.split("").map(n=>Number(n)*1000);
+  capacidadeTotalAtual=compartimentos.reduce((a,b)=>a+b,0);
 
-container.innerHTML="";
-compartimentos.forEach(cap=>{
-container.innerHTML+=`
-<div class="compartimento">
-<div class="capacidade">${cap.toLocaleString()} L</div>
-<input class="cliente" placeholder="Cliente">
-<input class="municipio" placeholder="Município">
-<input class="vendedor" placeholder="Vendedor">
-</div>`;
-});
+  infoVeiculo.style.display="block";
+  infoVeiculo.innerHTML=`🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L`;
+
+  container.innerHTML="";
+  compartimentos.forEach(cap=>{
+    container.innerHTML+=`
+    <div class="compartimento">
+      <div class="capacidade">${cap.toLocaleString()} L</div>
+      <input class="cliente" placeholder="Cliente">
+      <input class="municipio" placeholder="Município">
+      <input class="vendedor" placeholder="Vendedor">
+    </div>`;
+  });
 });
 
 /* ===== SALVAR ===== */
 btnSalvar.addEventListener("click",async()=>{
-btnSalvar.disabled=true;
-loaderBtn.classList.remove("hidden");
-textoBtn.innerText="Salvando...";
 
-try{
-if(!tipoCaminhaoAtual) throw "Selecione o tipo de veículo.";
+  btnSalvar.disabled=true;
+  loaderBtn.classList.remove("hidden");
+  textoBtn.innerText="Salvando...";
 
-const dataInput=document.getElementById("dataCarregamento").value;
-if(!dataInput) throw "Informe a data.";
+  try{
 
-const linhas=document.querySelectorAll(".compartimento");
-if(linhas.length===0) throw "Compartimentos não gerados.";
+    if(!tipoCaminhaoAtual) throw "Selecione o tipo de veículo.";
 
-let preenchidos=0;
-let compartimentos=[];
+    const dataInput=document.getElementById("dataCarregamento").value;
+    if(!dataInput) throw "Informe a data.";
 
-linhas.forEach(l=>{
-const cap=l.querySelector(".capacidade").innerText.replace(/\D/g,"");
-const cliente=l.querySelector(".cliente").value.trim();
-const municipio=l.querySelector(".municipio").value.trim();
-const vendedor=l.querySelector(".vendedor").value.trim();
-if(cliente&&municipio&&vendedor) preenchidos++;
-compartimentos.push({capacidade:Number(cap),cliente,municipio,vendedor});
-});
+    const linhas=document.querySelectorAll(".compartimento");
+    if(linhas.length===0) throw "Compartimentos não gerados.";
 
-if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
+    let preenchidos=0;
+    let compartimentos=[];
 
-const base=new Date().toISOString().slice(0,10).replaceAll("-","");
-const snap=await getDocs(collection(db,"programacao_cargas"));
-const contador=snap.docs.filter(d=>d.data().numeroCarga?.startsWith(base)).length+1;
-const numeroCarga=`${base}-${String(contador).padStart(3,"0")}`;
+    linhas.forEach(l=>{
+      const cap=l.querySelector(".capacidade").innerText.replace(/\D/g,"");
+      const cliente=l.querySelector(".cliente").value.trim();
+      const municipio=l.querySelector(".municipio").value.trim();
+      const vendedor=l.querySelector(".vendedor").value.trim();
 
-await addDoc(collection(db,"programacao_cargas"),{
-numeroCarga,
-dataCarregamento:new Date(dataInput),
-horarioPrevisto:document.getElementById("horarioPrevisto").value,
-tipoCaminhao:tipoCaminhaoAtual,
-capacidadeTotal:capacidadeTotalAtual,
-placa:null,
-status:"PROGRAMADO",
-compartimentos,
-criadoEm:serverTimestamp()
-});
+      if(cliente&&municipio&&vendedor) preenchidos++;
 
-location.reload();
-}catch(e){ alert(e); }
+      compartimentos.push({
+        capacidade:Number(cap),
+        cliente,
+        municipio,
+        vendedor
+      });
+    });
 
-btnSalvar.disabled=false;
-loaderBtn.classList.add("hidden");
-textoBtn.innerText="Salvar Carga";
-});
+    if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
 
-/* ===== TABELA ===== */
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    const base=new Date().toISOString().slice(0,10).replaceAll("-","");
+    const snap=await getDocs(collection(db,"programacao_cargas"));
+    const contador=snap.docs.filter(d=>d.data().numeroCarga?.startsWith(base)).length+1;
+    const numeroCarga=`${base}-${String(contador).padStart(3,"0")}`;
 
-onAuthStateChanged(auth, user => {
+    await addDoc(collection(db,"programacao_cargas"),{
+      numeroCarga,
+      dataCarregamento:new Date(dataInput),
+      horarioPrevisto:document.getElementById("horarioPrevisto").value,
+      tipoCaminhao:tipoCaminhaoAtual,
+      capacidadeTotal:capacidadeTotalAtual,
+      placa:null,
+      status:"PROGRAMADO",
+      compartimentos,
+      criadoEm:serverTimestamp()
+    });
 
-  if (!user) {
-    console.log("Usuário não autenticado");
-    return;
+    location.reload();
+
+  }catch(e){
+    alert(e);
   }
 
-  if (!user) {
-    alert("Você precisa estar logado.");
-    window.location.href = "login.html";
-    return;
-  }
+  btnSalvar.disabled=false;
+  loaderBtn.classList.add("hidden");
+  textoBtn.innerText="Salvar Carga";
+});
 
-  console.log("Usuário autenticado:", user.email);
-
+/* ===== AUTENTICAÇÃO + TABELA ===== */
 onAuthStateChanged(auth, user => {
 
   if (!user) {
@@ -360,20 +367,20 @@ onAuthStateChanged(auth, user => {
 
       tabela.innerHTML+=`
       <tr>
-      <td>${c.numeroCarga}</td>
-      <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
-      <td>${c.placa||"-"}</td>
-      <td>${c.tipoCaminhao}</td>
-      <td>${c.capacidadeTotal?.toLocaleString()} L</td>
-      <td><span class="status ${c.status}">${c.status}</span></td>
-      <td>
-      <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">
-      ${c.placa ? "Alterar Placa" : "Vincular"}
-      </button>
-      <button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">
-      Excluir
-      </button>
-      </td>
+        <td>${c.numeroCarga}</td>
+        <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
+        <td>${c.placa||"-"}</td>
+        <td>${c.tipoCaminhao}</td>
+        <td>${c.capacidadeTotal?.toLocaleString()} L</td>
+        <td><span class="status ${c.status}">${c.status}</span></td>
+        <td>
+          <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">
+            ${c.placa ? "Alterar Placa" : "Vincular"}
+          </button>
+          <button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">
+            Excluir
+          </button>
+        </td>
       </tr>`;
     });
 
@@ -381,39 +388,45 @@ onAuthStateChanged(auth, user => {
 
 });
 
-});
-
-});
-
 /* ===== MODAL ===== */
 function abrirModal(titulo,conteudo,acao){
-document.getElementById("modalTitulo").innerText=titulo;
-document.getElementById("modalConteudo").innerHTML=conteudo;
-document.getElementById("btnConfirmarModal").onclick=acao;
-document.getElementById("modalOverlay").style.display="flex";
+  document.getElementById("modalTitulo").innerText=titulo;
+  document.getElementById("modalConteudo").innerHTML=conteudo;
+  document.getElementById("btnConfirmarModal").onclick=acao;
+  document.getElementById("modalOverlay").style.display="flex";
 }
+
 function fecharModal(){
-document.getElementById("modalOverlay").style.display="none";
+  document.getElementById("modalOverlay").style.display="none";
 }
+
 function vincular(id){
-abrirModal("Vincular Caminhão",
-`<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
-async()=>{
-const placa=document.getElementById("placaModal").value.trim();
-if(!placa) return;
-await updateDoc(doc(db,"programacao_cargas",id),{
-placa:placa.toUpperCase(),
-status:"AGUARDANDO_FILA"
-});
-fecharModal();
-});
+  abrirModal(
+    "Vincular Caminhão",
+    `<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
+    async()=>{
+      const placa=document.getElementById("placaModal").value.trim();
+      if(!placa) return;
+
+      await updateDoc(doc(db,"programacao_cargas",id),{
+        placa:placa.toUpperCase(),
+        status:"AGUARDANDO_FILA"
+      });
+
+      fecharModal();
+    }
+  );
 }
+
 function excluirCarga(id){
-abrirModal("Excluir Carga","<p>Deseja realmente excluir?</p>",
-async()=>{
-await deleteDoc(doc(db,"programacao_cargas",id));
-fecharModal();
-});
+  abrirModal(
+    "Excluir Carga",
+    "<p>Deseja realmente excluir?</p>",
+    async()=>{
+      await deleteDoc(doc(db,"programacao_cargas",id));
+      fecharModal();
+    }
+  );
 }
 
 window.vincular=vincular;
