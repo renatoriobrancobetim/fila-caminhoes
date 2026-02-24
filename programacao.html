@@ -591,9 +591,10 @@ onSnapshot(
     const hoje = new Date();
     hoje.setHours(0,0,0,0);
 
-    let cargasHoje = [];
-    let cargasFuturas = [];
-    let cargasFaturadas = [];
+let cargasHoje = [];
+let cargasFuturas = [];
+let cargasAntigas = [];
+let cargasFaturadas = [];
 
     snap.forEach(docSnap=>{
       const c = docSnap.data();
@@ -616,9 +617,8 @@ else if(dataCarga.getTime() > hoje.getTime()){
   cargasFuturas.push(item);
 }
 else{
-  // Datas anteriores e ainda não faturadas
-  // continuam no grupo operacional principal
-  cargasHoje.push(item);
+  // Data menor que hoje (1 dia ou mais atrás)
+  cargasAntigas.push(item);
 }
 
     });
@@ -627,6 +627,7 @@ else{
     cargasHoje.sort((a,b)=>a.dataObj - b.dataObj);
     cargasFuturas.sort((a,b)=>a.dataObj - b.dataObj);
     cargasFaturadas.sort((a,b)=>a.dataObj - b.dataObj);
+    cargasAntigas.sort((a,b)=>a.dataObj - b.dataObj);
 
    function renderGrupo(titulo, lista, cor, grupoId){
 
@@ -684,7 +685,11 @@ else{
 }
 
 renderGrupo("📦 CARGAS DE HOJE", cargasHoje, "#0A3D91", "hoje");
-renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#2563eb", "futuras");
+
+renderGrupo("⚠️ CARGAS ANTIGAS", cargasAntigas, "#b45309", "antigas");
+
+renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#3b82f6", "futuras");
+
 renderGrupo("💰 CARGAS FATURADAS", cargasFaturadas, "#16a34a", "faturadas");
 
     },
