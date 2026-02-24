@@ -286,7 +286,11 @@ td{
 .icon{
   font-size:14px;
 }
-  
+  .status-FATURADO{
+  background:#d1fae5;
+  color:#065f46;
+  border:1px solid #6ee7b7;
+}
 </style>
 </head>
 <body>
@@ -660,8 +664,14 @@ else{
         <td>${c.capacidadeTotal?.toLocaleString()} L</td>
         <td>
           <span class="status-badge status-${c.status}">
-            ${c.status === "PROGRAMADO" ? "🟢 PROGRAMADO" : "🟡 AGUARDANDO FILA"}
-          </span>
+  ${
+    c.status === "PROGRAMADO"
+      ? "🟢 PROGRAMADO"
+      : c.status === "FATURADO"
+      ? "💰 FATURADO"
+      : "🟡 AGUARDANDO FILA"
+  }
+</span>
         </td>
         <td>
           <div class="col-acoes">
