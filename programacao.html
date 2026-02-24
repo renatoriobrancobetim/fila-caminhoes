@@ -572,12 +572,7 @@ onSnapshot(
       return;
     }
 
-    snap.forEach(docSnap=>{
-      onSnapshot(
-  collection(db,"programacao_cargas"),
-  snap => {
-
-    tabela.innerHTML="";
+        tabela.innerHTML="";
 
     if (snap.empty) {
       tabela.innerHTML="<tr><td colspan='7'>Nenhuma carga encontrada</td></tr>";
@@ -675,10 +670,7 @@ onSnapshot(
     renderGrupo("📦 CARGAS DE HOJE", cargasHoje, "#0A3D91");
     renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#7c3aed");
 
-  }
-);
-
-  },
+    },
   error => {
     console.error("Erro ao ler cargas:", error);
   }
