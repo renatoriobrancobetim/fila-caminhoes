@@ -573,51 +573,110 @@ onSnapshot(
     }
 
     snap.forEach(docSnap=>{
-      const c=docSnap.data();
+      onSnapshot(
+  collection(db,"programacao_cargas"),
+  snap => {
 
-      tabela.innerHTML+=`
-     <tr class="linha-status status-${c.status}">
-        <td>${c.numeroCarga}</td>
-        <td>${
-          c.dataCarregamento?.toDate 
-            ? c.dataCarregamento.toDate().toLocaleDateString() 
-            : new Date(c.dataCarregamento).toLocaleDateString()
-        }</td>
-        <td>${c.placa||"-"}</td>
-        <td>${c.tipoCaminhao} ${c.configEixos || ""}</td>
-        <td>${c.capacidadeTotal?.toLocaleString()} L</td>
-        <td>
-  <span class="status-badge status-${c.status}">
-    ${c.status === "PROGRAMADO" ? "🟢 PROGRAMADO" : "🟡 AGUARDANDO FILA"}
-  </span>
-</td>
-        <td>
-  <div class="col-acoes">
+    tabela.innerHTML="";
 
-    <button class="btn btn-azul" onclick="toggleDetalhe('${docSnap.id}')">
-      👁 Ver
-    </button>
+    if (snap.empty) {
+      tabela.innerHTML="<tr><td colspan='7'>Nenhuma carga encontrada</td></tr>";
+      return;
+    }
 
-    <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">
-      ${c.placa ? "Alterar" : "Vincular"}
-    </button>
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
 
-    ${c.placa ? `
-      <button class="btn btn-warning"
-        onclick="voltarFila('${docSnap.id}')">
-        ↩ Fila
-      </button>
-    ` : ""}
+    let cargasHoje = [];
+    let cargasFuturas = [];
 
-    <button class="btn btn-excluir"
-      onclick="excluirCarga('${docSnap.id}')">
-      Excluir
-    </button>
+    snap.forEach(docSnap=>{
+      const c = docSnap.data();
 
-  </div>
-</td>
-      </tr>`;
+      const dataCarga = c.dataCarregamento?.toDate 
+        ? c.dataCarregamento.toDate()
+        : new Date(c.dataCarregamento);
+
+      dataCarga.setHours(0,0,0,0);
+
+      const item = { id: docSnap.id, ...c, dataObj: dataCarga };
+
+      if(dataCarga.getTime() === hoje.getTime()){
+        cargasHoje.push(item);
+      }else if(dataCarga > hoje){
+        cargasFuturas.push(item);
+      }else{
+        cargasHoje.push(item); // atrasadas entram como hoje
+      }
+
     });
+
+    // Ordenar por data crescente
+    cargasHoje.sort((a,b)=>a.dataObj - b.dataObj);
+    cargasFuturas.sort((a,b)=>a.dataObj - b.dataObj);
+
+    function renderGrupo(titulo, lista, cor){
+
+      if(lista.length === 0) return;
+
+      tabela.innerHTML += `
+        <tr>
+          <td colspan="7" style="
+            background:${cor};
+            color:#fff;
+            font-weight:600;
+            text-align:left;
+            padding:12px 20px;
+            font-size:13px;
+            letter-spacing:.5px;
+          ">
+            ${titulo}
+          </td>
+        </tr>
+      `;
+
+      lista.forEach(c=>{
+
+        tabela.innerHTML+=`
+          <tr class="linha-status status-${c.status}">
+            <td>${c.numeroCarga}</td>
+            <td>${c.dataObj.toLocaleDateString()}</td>
+            <td>${c.placa||"-"}</td>
+            <td>${c.tipoCaminhao} ${c.configEixos || ""}</td>
+            <td>${c.capacidadeTotal?.toLocaleString()} L</td>
+            <td>
+              <span class="status-badge status-${c.status}">
+                ${c.status === "PROGRAMADO" ? "🟢 PROGRAMADO" : "🟡 AGUARDANDO FILA"}
+              </span>
+            </td>
+            <td>
+              <div class="col-acoes">
+                <button class="btn btn-azul" onclick="toggleDetalhe('${c.id}')">👁 Ver</button>
+                <button class="btn btn-vincular" onclick="vincular('${c.id}')">
+                  ${c.placa ? "Alterar" : "Vincular"}
+                </button>
+                ${c.placa ? `
+                  <button class="btn btn-warning" onclick="voltarFila('${c.id}')">
+                    ↩ Fila
+                  </button>
+                ` : ""}
+                <button class="btn btn-excluir" onclick="excluirCarga('${c.id}')">
+                  Excluir
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+
+      });
+
+    }
+
+    renderGrupo("📦 CARGAS DE HOJE", cargasHoje, "#0A3D91");
+    renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#7c3aed");
+
+  }
+);
 
   },
   error => {
