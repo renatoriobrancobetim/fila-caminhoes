@@ -639,21 +639,110 @@ function fecharModal(){
 }
 
 function vincular(id){
+
   abrirModal(
     "Vincular Caminhão",
     `<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
     async()=>{
-      const placa=document.getElementById("placaModal").value.trim();
+
+      const placa = document.getElementById("placaModal").value.trim().toUpperCase();
       if(!placa) return;
 
- await updateDoc(doc(db,"programacao_cargas",id),{
-  placa:placa.toUpperCase(),
-  status:"PROGRAMADO"
-});
+      try{
 
-      fecharModal();
+        // 1️⃣ Buscar carga
+        const cargaRef = doc(db,"programacao_cargas",id);
+        const cargaSnap = await getDoc(cargaRef);
+        const carga = cargaSnap.data();
+
+        // 2️⃣ Buscar caminhão
+        const motoristaRef = doc(db,"motoristas_cadastro",placa);
+        const motoristaSnap = await getDoc(motoristaRef);
+
+        if(!motoristaSnap.exists()){
+          alert("Placa não cadastrada no sistema.");
+          return;
+        }
+
+        const motorista = motoristaSnap.data();
+
+        // ===== VALIDAÇÃO POR CAPACIDADE TOTAL =====
+        if (capacidadeCaminhao < carga.capacidadeTotal) {
+
+          alert(`❌ Capacidade insuficiente!
+
+Carga: ${carga.capacidadeTotal.toLocaleString()} L
+Caminhão: ${motorista.capacidadeTotal.toLocaleString()} L`);
+
+          return;
+        }
+
+        // ===== VALIDAÇÃO POR DISTRIBUIÇÃO REAL =====
+        function podeDistribuir(volumesCarga, compartimentosCaminhao){
+
+          let disponiveis = [...compartimentosCaminhao];
+
+          for(let volume of volumesCarga){
+
+            let encaixou = false;
+
+            for(let i=0; i<disponiveis.length; i++){
+
+              if(disponiveis[i] >= volume){
+                disponiveis[i] -= volume;
+                encaixou = true;
+                break;
+              }
+
+            }
+
+            if(!encaixou) return false;
+          }
+
+          return true;
+        }
+
+        const volumesCarga = carga.compartimentos
+          .filter(c => c.cliente)
+          .map(c => c.capacidade);
+
+// Extrai apenas a parte numérica antes do "-"
+const configNumerica = motorista.configEixos.split("-")[0];
+
+// Gera compartimentos reais
+const compartimentosCaminhao = configNumerica
+  .split("")
+  .map(n => Number(n) * 1000);
+
+// Calcula capacidade automaticamente
+const capacidadeCaminhao = compartimentosCaminhao.reduce((a,b)=>a+b,0);
+
+        if(!podeDistribuir(volumesCarga, compartimentosCaminhao)){
+
+          alert(`❌ Distribuição incompatível!
+
+Os volumes da carga não encaixam
+nos compartimentos do caminhão.`);
+
+          return;
+        }
+
+        // 3️⃣ Se passou na validação
+        await updateDoc(cargaRef,{
+          placa:placa,
+          status:"PROGRAMADO"
+        });
+
+        fecharModal();
+
+      }catch(error){
+        console.error(error);
+        alert("Erro ao vincular caminhão.");
+      }
+
     }
   );
+
 }
   function voltarFila(id){
   abrirModal(
