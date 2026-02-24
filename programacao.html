@@ -684,7 +684,7 @@ else{
                 ↩ Fila
               </button>
             ` : ""}
-            ${c.status !== "FATURADO" ? `
+           ${c.placa && c.status !== "FATURADO" ? `
   <button class="btn" 
     style="background:#16a34a;color:#fff;"
     onclick="faturarCarga('${c.id}')">
