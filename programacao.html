@@ -534,6 +534,57 @@ snap.forEach(docSnap => {
 });
 
 const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
+    // ================= PREVIEW =================
+
+let resumoHTML = `
+  <div style="text-align:left;font-size:14px;">
+    <p><strong>Data:</strong> ${dataInput}</p>
+    <p><strong>Tipo:</strong> ${tipoCaminhaoAtual}</p>
+    <p><strong>Total:</strong> ${capacidadeTotalAtual.toLocaleString()} L</p>
+    <hr style="margin:10px 0;">
+`;
+
+compartimentos.forEach(c=>{
+  if(c.cliente){
+    resumoHTML += `
+      <div style="margin-bottom:6px;">
+        <strong>${c.cliente}</strong> - ${c.municipio}  
+        <br>
+        ${c.capacidade.toLocaleString()} L • ${c.vendedor}
+      </div>
+    `;
+  }
+});
+
+resumoHTML += "</div>";
+
+// Confirmação antes de salvar
+let confirmou = false;
+
+await new Promise(resolve=>{
+ abrirModal(
+  "Carga Criada com Sucesso",
+  `
+  <div style="text-align:left;font-size:14px;">
+    <p style="font-size:16px;font-weight:700;">
+      Nº da Carga: ${numeroCarga}
+    </p>
+    <hr style="margin:10px 0;">
+    ${resumoHTML}
+  </div>
+  `,
+  ()=>{
+    fecharModal();
+  }
+);
+});
+
+if(!confirmou){
+  btnSalvar.disabled=false;
+  loaderBtn.classList.add("hidden");
+  textoBtn.innerText="Salvar Carga";
+  return;
+}
 
     await addDoc(collection(db,"programacao_cargas"),{
       numeroCarga,
@@ -551,8 +602,7 @@ const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
       
     });
 
-    location.reload();
-
+ 
   }catch(e){
     alert(e);
   }
