@@ -695,6 +695,11 @@ else{
         <td>
           <div class="col-acoes">
             <button class="btn btn-azul" onclick="toggleDetalhe('${c.id}')">👁 Ver</button>
+            <button class="btn" 
+  style="background:#2563eb;color:#fff;"
+  onclick="alterarCarga('${c.id}')">
+  ✏ Alterar
+</button>
             <button class="btn btn-vincular" onclick="vincular('${c.id}')">
               ${c.placa ? "Alterar" : "Vincular"}
             </button>
@@ -1003,6 +1008,67 @@ function excluirCarga(id){
     }
   );
 }
+  async function alterarCarga(id){
+
+  const cargaRef = doc(db,"programacao_cargas",id);
+  const cargaSnap = await getDoc(cargaRef);
+
+  if(!cargaSnap.exists()) return;
+
+  const carga = cargaSnap.data();
+
+  let html = `
+    <div style="text-align:left;font-size:14px;">
+      <p><strong>Nº:</strong> ${carga.numeroCarga}</p>
+      <p><strong>Tipo:</strong> ${carga.tipoCaminhao}</p>
+      <hr style="margin:10px 0;">
+  `;
+
+  carga.compartimentos.forEach((comp,index)=>{
+    html += `
+      <div style="margin-bottom:12px;padding:8px;background:#f8fafc;border-radius:8px;">
+        <strong>${comp.capacidade.toLocaleString()} L</strong><br>
+        <input id="cliente_${index}" value="${comp.cliente || ""}" 
+          style="width:100%;margin-top:4px;text-transform:uppercase;">
+        <input id="municipio_${index}" value="${comp.municipio || ""}" 
+          style="width:100%;margin-top:4px;text-transform:uppercase;">
+        <input id="vendedor_${index}" value="${comp.vendedor || ""}" 
+          style="width:100%;margin-top:4px;text-transform:uppercase;">
+      </div>
+    `;
+  });
+
+  html += `
+    <hr>
+    <label>Observações</label>
+    <input id="obs_edit" value="${carga.observacoes || ""}" 
+      style="width:100%;margin-top:4px;text-transform:uppercase;">
+    </div>
+  `;
+
+  abrirModal(
+    "Alterar Carga",
+    html,
+    async ()=>{
+
+      let novosCompartimentos = carga.compartimentos.map((comp,index)=>({
+        capacidade: comp.capacidade,
+        cliente: document.getElementById(`cliente_${index}`).value.trim().toUpperCase(),
+        municipio: document.getElementById(`municipio_${index}`).value.trim().toUpperCase(),
+        vendedor: document.getElementById(`vendedor_${index}`).value.trim().toUpperCase()
+      }));
+
+      await updateDoc(cargaRef,{
+        compartimentos: novosCompartimentos,
+        observacoes: document.getElementById("obs_edit").value.trim().toUpperCase()
+      });
+
+      fecharModal();
+    }
+  );
+}
+
+window.alterarCarga = alterarCarga;
 
   function faturarCarga(id){
 
