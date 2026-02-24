@@ -667,14 +667,14 @@ onSnapshot(
 
     }
 
-    renderGrupo("📦 CARGAS DE HOJE", cargasHoje, "#0A3D91");
-    renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#7c3aed");
+         renderGrupo("📦 CARGAS DE HOJE", cargasHoje, "#0A3D91");
+      renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#7c3aed");
 
     },
-  error => {
-    console.error("Erro ao ler cargas:", error);
-  }
-);
+    error => {
+      console.error("Erro ao ler cargas:", error);
+    }
+  );
 
 }
 
