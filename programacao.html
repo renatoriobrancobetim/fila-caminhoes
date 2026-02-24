@@ -444,13 +444,27 @@ window.vincular=vincular;
 window.excluirCarga=excluirCarga;
 window.fecharModal=fecharModal;
   
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async (user) => {
 
   if (user) {
     console.log("Usuário autenticado:", user.email);
     carregarTabela();
   } else {
-    console.log("Usuário ainda não autenticado...");
+
+    // Aguarda um pequeno tempo para o Firebase restaurar a sessão
+    setTimeout(() => {
+
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        console.log("Sessão restaurada:", currentUser.email);
+        carregarTabela();
+      } else {
+        console.log("Sem sessão ativa.");
+      }
+
+    }, 500);
+
   }
 
 });
