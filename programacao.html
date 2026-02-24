@@ -291,6 +291,9 @@ td{
   color:#065f46;
   border:1px solid #6ee7b7;
 }
+  input[type="text"]{
+  text-transform: uppercase;
+}
 </style>
 </head>
 <body>
@@ -346,7 +349,7 @@ td{
 
 <div class="linha-bottom">
 <input type="number" id="km" placeholder="KM">
-<input type="text" id="observacoes" placeholder="Observações">
+<input type="text" id="observacoes" placeholder="Observações" style="text-transform:uppercase;">
 </div>
 
 <button class="btn btn-azul" id="btnSalvar">
@@ -474,9 +477,9 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
     container.innerHTML+=`
       <div class="compartimento">
         <div class="capacidade">${cap.toLocaleString()} L</div>
-        <input class="cliente" placeholder="Cliente">
-        <input class="municipio" placeholder="Município">
-        <input class="vendedor" placeholder="Vendedor">
+<input class="cliente" placeholder="Cliente" style="text-transform:uppercase;">
+<input class="municipio" placeholder="Município" style="text-transform:uppercase;">
+<input class="vendedor" placeholder="Vendedor" style="text-transform:uppercase;">
       </div>
     `;
   });
@@ -505,9 +508,9 @@ btnSalvar.addEventListener("click",async()=>{
 
     linhas.forEach(l=>{
       const cap=l.querySelector(".capacidade").innerText.replace(/\D/g,"");
-      const cliente=l.querySelector(".cliente").value.trim();
-      const municipio=l.querySelector(".municipio").value.trim();
-      const vendedor=l.querySelector(".vendedor").value.trim();
+ const cliente=l.querySelector(".cliente").value.trim().toUpperCase();
+const municipio=l.querySelector(".municipio").value.trim().toUpperCase();
+const vendedor=l.querySelector(".vendedor").value.trim().toUpperCase();
 
       if(cliente&&municipio&&vendedor) preenchidos++;
 
@@ -1036,7 +1039,7 @@ async function confirmarSalvarCarga(){
       placa:null,
       status:"AGUARDANDO_FILA",
       compartimentos:dados.compartimentos,
-      observacoes: document.getElementById("observacoes").value,
+      observacoes: document.getElementById("observacoes").value.toUpperCase(),
       criadoEm:serverTimestamp()
     });
 
