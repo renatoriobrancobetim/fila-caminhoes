@@ -239,7 +239,7 @@ const app = initializeApp({
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-await setPersistence(auth, browserLocalPersistence);
+setPersistence(auth, browserLocalPersistence);
 
 /* ===== VARIÁVEIS ===== */
 let tipoCaminhaoAtual="";
@@ -430,13 +430,12 @@ window.fecharModal=fecharModal;
   
 onAuthStateChanged(auth, user => {
 
-  if (!user) {
-    window.location.href = "login.html";
-    return;
+  if (user) {
+    console.log("Usuário autenticado:", user.email);
+    carregarTabela();
+  } else {
+    console.log("Usuário ainda não autenticado...");
   }
-
-  console.log("Usuário autenticado:", user.email);
-  carregarTabela();
 
 });
 </script>
