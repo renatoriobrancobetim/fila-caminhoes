@@ -475,10 +475,18 @@ btnSalvar.addEventListener("click",async()=>{
     if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
 
     const dataBase = document.getElementById("dataCarregamento").value;
-const base = dataBase.replaceAll("-","");
-    const snap=await getDocs(collection(db,"programacao_cargas"));
-    const contador=snap.docs.filter(d=>d.data().numeroCarga?.startsWith(base)).length+1;
-    const numeroCarga=`${base}-${String(contador).padStart(3,"0")}`;
+const snap = await getDocs(collection(db,"programacao_cargas"));
+
+let ultimoNumero = 0;
+
+snap.forEach(docSnap => {
+  const numero = parseInt(docSnap.data().numeroCarga);
+  if (!isNaN(numero) && numero > ultimoNumero) {
+    ultimoNumero = numero;
+  }
+});
+
+const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
 
     await addDoc(collection(db,"programacao_cargas"),{
       numeroCarga,
