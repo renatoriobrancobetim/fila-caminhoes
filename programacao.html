@@ -530,7 +530,7 @@ onSnapshot(
       const c=docSnap.data();
 
       tabela.innerHTML+=`
-      <tr class="linha-status status-lateral-${c.status}">
+     <tr class="linha-status status-${c.status}">
         <td>${c.numeroCarga}</td>
         <td>${
           c.dataCarregamento?.toDate 
