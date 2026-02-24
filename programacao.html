@@ -536,7 +536,8 @@ const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
       dataCarregamento:new Date(dataInput + "T12:00:00"),
       dataReferencia: dataInput,
       horarioPrevisto:document.getElementById("horarioPrevisto").value,
-      tipoCaminhao:tipoCaminhaoAtual,
+      tipoCaminhao: tipoCaminhaoAtual,
+      configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
       capacidadeTotal:capacidadeTotalAtual,
       placa:null,
       status:"AGUARDANDO_FILA",
@@ -583,7 +584,7 @@ onSnapshot(
             : new Date(c.dataCarregamento).toLocaleDateString()
         }</td>
         <td>${c.placa||"-"}</td>
-        <td>${c.tipoCaminhao}</td>
+        <td>${c.tipoCaminhao} ${c.configEixos || ""}</td>
         <td>${c.capacidadeTotal?.toLocaleString()} L</td>
         <td>
   <span class="status-badge status-${c.status}">
