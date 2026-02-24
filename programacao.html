@@ -474,14 +474,15 @@ btnSalvar.addEventListener("click",async()=>{
 
     if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
 
-    const base=new Date().toISOString().slice(0,10).replaceAll("-","");
+    const dataBase = document.getElementById("dataCarregamento").value;
+const base = dataBase.replaceAll("-","");
     const snap=await getDocs(collection(db,"programacao_cargas"));
     const contador=snap.docs.filter(d=>d.data().numeroCarga?.startsWith(base)).length+1;
     const numeroCarga=`${base}-${String(contador).padStart(3,"0")}`;
 
     await addDoc(collection(db,"programacao_cargas"),{
       numeroCarga,
-      dataCarregamento: serverTimestamp(),
+      dataCarregamento:new Date(dataInput + "T12:00:00"),
       dataReferencia: dataInput,
       horarioPrevisto:document.getElementById("horarioPrevisto").value,
       tipoCaminhao:tipoCaminhaoAtual,
