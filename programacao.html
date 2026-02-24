@@ -19,12 +19,23 @@ body{
   background:var(--cinza);
 }
 
-/* HEADER */
 header{
   background:linear-gradient(90deg,var(--azul),var(--vermelho));
   color:#fff;
-  padding:25px;
+  padding:12px 20px;   /* 👈 reduz altura */
   text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:20px;      /* 👈 menor */
+  font-weight:600;
+}
+
+header p{
+  margin:4px 0 0 0;
+  font-size:12px;      /* 👈 mais compacto */
+  opacity:.9;
 }
 
 main{
