@@ -278,7 +278,15 @@ td{
   color:#334155;
   text-transform:uppercase;
   letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
+
+.icon{
+  font-size:14px;
+}
+  
 </style>
 </head>
 <body>
@@ -792,6 +800,12 @@ onAuthStateChanged(auth, async (user) => {
   }
 
 });
+  const hoje = new Date();
+const yyyy = hoje.getFullYear();
+const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+const dd = String(hoje.getDate()).padStart(2, '0');
+
+document.getElementById("dataCarregamento").value = `${yyyy}-${mm}-${dd}`;
 </script>
 
 </body>
