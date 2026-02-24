@@ -834,30 +834,42 @@ function vincular(id){
         }
 
         // ===== VALIDAÇÃO DE DISTRIBUIÇÃO REAL =====
-        function podeDistribuir(volumesCarga, compartimentos){
+function podeDistribuir(volumesCarga, compartimentos){
 
-          let disponiveis = [...compartimentos];
+  // Copia para não alterar original
+  let disponiveis = [...compartimentos];
 
-          for(let volume of volumesCarga){
+  // Ordena maior para menor (melhor encaixe)
+  disponiveis.sort((a,b)=>b-a);
 
-            let encaixou = false;
+  for(let volume of volumesCarga){
 
-            for(let i=0; i<disponiveis.length; i++){
+    let restante = volume;
 
-              if(disponiveis[i] >= volume){
-                disponiveis[i] -= volume;
-                encaixou = true;
-                break;
-              }
+    // Ordena novamente a cada cliente
+    disponiveis.sort((a,b)=>b-a);
 
-            }
+    for(let i=0; i<disponiveis.length; i++){
 
-            if(!encaixou) return false;
-          }
+      if(disponiveis[i] > 0){
 
-          return true;
-        }
+        const usado = Math.min(disponiveis[i], restante);
 
+        disponiveis[i] -= usado;
+        restante -= usado;
+
+        if(restante === 0) break;
+      }
+    }
+
+    // Se terminou compartimentos e ainda sobrou volume
+    if(restante > 0){
+      return false;
+    }
+  }
+
+  return true;
+}
         const volumesCarga = carga.compartimentos
           .filter(c => c.cliente)
           .map(c => c.capacidade);
