@@ -536,6 +536,8 @@ snap.forEach(docSnap => {
 const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
     // ================= PREVIEW =================
 
+// ================= PREVIEW =================
+
 let resumoHTML = `
   <div style="text-align:left;font-size:14px;">
     <p><strong>Data:</strong> ${dataInput}</p>
@@ -548,8 +550,7 @@ compartimentos.forEach(c=>{
   if(c.cliente){
     resumoHTML += `
       <div style="margin-bottom:6px;">
-        <strong>${c.cliente}</strong> - ${c.municipio}  
-        <br>
+        <strong>${c.cliente}</strong> - ${c.municipio}<br>
         ${c.capacidade.toLocaleString()} L • ${c.vendedor}
       </div>
     `;
@@ -558,33 +559,23 @@ compartimentos.forEach(c=>{
 
 resumoHTML += "</div>";
 
-// Confirmação antes de salvar
-let confirmou = false;
+// Guarda dados temporariamente
+window._dadosTempCarga = {
+  numeroCarga,
+  dataInput,
+  compartimentos,
+  resumoHTML
+};
 
-await new Promise(resolve=>{
- abrirModal(
-  "Carga Criada com Sucesso",
-  `
-  <div style="text-align:left;font-size:14px;">
-    <p style="font-size:16px;font-weight:700;">
-      Nº da Carga: ${numeroCarga}
-    </p>
-    <hr style="margin:10px 0;">
-    ${resumoHTML}
-  </div>
-  `,
-  ()=>{
-    fecharModal();
-  }
+abrirModal(
+  "Confirmar Criação da Carga",
+  resumoHTML + "<br><p><strong>Deseja confirmar?</strong></p>",
+  confirmarSalvarCarga
 );
-});
 
-if(!confirmou){
-  btnSalvar.disabled=false;
-  loaderBtn.classList.add("hidden");
-  textoBtn.innerText="Salvar Carga";
-  return;
-}
+return; // 🔥 IMPORTANTÍSSIMO
+
+
 
     await addDoc(collection(db,"programacao_cargas"),{
       numeroCarga,
@@ -1050,6 +1041,55 @@ function excluirCarga(id){
   );
 
 }
+
+  async function confirmarSalvarCarga(){
+
+  const dados = window._dadosTempCarga;
+  fecharModal();
+
+  try{
+
+    await addDoc(collection(db,"programacao_cargas"),{
+      numeroCarga: dados.numeroCarga,
+      dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
+      dataReferencia: dados.dataInput,
+      horarioPrevisto:document.getElementById("horarioPrevisto").value,
+      tipoCaminhao:tipoCaminhaoAtual,
+      configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
+      capacidadeTotal:capacidadeTotalAtual,
+      placa:null,
+      status:"AGUARDANDO_FILA",
+      compartimentos:dados.compartimentos,
+      observacoes: document.getElementById("observacoes").value,
+      criadoEm:serverTimestamp()
+    });
+
+    abrirModal(
+      "Carga Criada com Sucesso",
+      `
+      <div style="text-align:left;font-size:14px;">
+        <p style="font-size:16px;font-weight:700;">
+          Nº da Carga: ${dados.numeroCarga}
+        </p>
+        <hr style="margin:10px 0;">
+        ${dados.resumoHTML}
+      </div>
+      `,
+      ()=>{ fecharModal(); }
+    );
+
+  }catch(error){
+    console.error(error);
+    abrirModal(
+      "Erro",
+      "<p>Erro ao salvar carga.</p>",
+      ()=>{ fecharModal(); }
+    );
+  }
+
+}
+
+window.confirmarSalvarCarga = confirmarSalvarCarga;
 
 window.faturarCarga = faturarCarga;
 
