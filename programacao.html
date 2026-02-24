@@ -329,7 +329,8 @@ btnSalvar.addEventListener("click",async()=>{
 
     await addDoc(collection(db,"programacao_cargas"),{
       numeroCarga,
-      dataCarregamento:new Date(dataInput),
+      dataCarregamento: serverTimestamp(),
+      dataReferencia: dataInput,
       horarioPrevisto:document.getElementById("horarioPrevisto").value,
       tipoCaminhao:tipoCaminhaoAtual,
       capacidadeTotal:capacidadeTotalAtual,
@@ -353,9 +354,16 @@ btnSalvar.addEventListener("click",async()=>{
 /* ===== AUTENTICAÇÃO + TABELA ===== */
 function carregarTabela() {
 
-  onSnapshot(collection(db,"programacao_cargas"), snap => {
+onSnapshot(
+  collection(db,"programacao_cargas"),
+  snap => {
 
     tabela.innerHTML="";
+
+    if (snap.empty) {
+      tabela.innerHTML="<tr><td colspan='7'>Nenhuma carga encontrada</td></tr>";
+      return;
+    }
 
     snap.forEach(docSnap=>{
       const c=docSnap.data();
@@ -363,7 +371,11 @@ function carregarTabela() {
       tabela.innerHTML+=`
       <tr>
         <td>${c.numeroCarga}</td>
-        <td>${c.dataCarregamento?.toDate().toLocaleDateString()}</td>
+        <td>${
+          c.dataCarregamento?.toDate 
+            ? c.dataCarregamento.toDate().toLocaleDateString() 
+            : new Date(c.dataCarregamento).toLocaleDateString()
+        }</td>
         <td>${c.placa||"-"}</td>
         <td>${c.tipoCaminhao}</td>
         <td>${c.capacidadeTotal?.toLocaleString()} L</td>
@@ -379,7 +391,11 @@ function carregarTabela() {
       </tr>`;
     });
 
-  });
+  },
+  error => {
+    console.error("Erro ao ler cargas:", error);
+  }
+);
 
 }
 
