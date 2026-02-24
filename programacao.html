@@ -201,6 +201,35 @@ th{
   background:#f59e0b;
   color:#fff;
 }
+  .status-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.5px;
+  transition:all .3s ease;
+  animation:statusFade .3s ease;
+}
+
+.status-AGUARDANDO_FILA{
+  background:#fef3c7;
+  color:#92400e;
+  border:1px solid #fde68a;
+}
+
+.status-PROGRAMADO{
+  background:#dcfce7;
+  color:#166534;
+  border:1px solid #86efac;
+}
+
+@keyframes statusFade{
+  from{opacity:0; transform:scale(.9);}
+  to{opacity:1; transform:scale(1);}
+}
 </style>
 </head>
 <body>
@@ -468,7 +497,11 @@ onSnapshot(
         <td>${c.placa||"-"}</td>
         <td>${c.tipoCaminhao}</td>
         <td>${c.capacidadeTotal?.toLocaleString()} L</td>
-        <td><span class="status ${c.status}">${c.status}</span></td>
+        <td>
+  <span class="status-badge status-${c.status}">
+    ${c.status === "PROGRAMADO" ? "🟢 PROGRAMADO" : "🟡 AGUARDANDO FILA"}
+  </span>
+</td>
         <td>
   <div class="col-acoes">
 
