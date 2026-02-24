@@ -461,12 +461,23 @@ onSnapshot(
   <button class="btn btn-azul" onclick="toggleDetalhe('${docSnap.id}')">
     👁 Ver
   </button>
+  <td>
+
   <button class="btn btn-vincular" onclick="vincular('${docSnap.id}')">
     ${c.placa ? "Alterar Placa" : "Vincular"}
   </button>
+
+  ${c.placa ? `
+    <button class="btn" style="background:#f59e0b;color:#fff;"
+      onclick="voltarFila('${docSnap.id}')">
+      Voltar Fila
+    </button>
+  ` : ""}
+
   <button class="btn btn-excluir" onclick="excluirCarga('${docSnap.id}')">
     Excluir
   </button>
+
 </td>
       </tr>`;
     });
