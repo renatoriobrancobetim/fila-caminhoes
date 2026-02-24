@@ -410,7 +410,7 @@ btnSalvar.addEventListener("click",async()=>{
       tipoCaminhao:tipoCaminhaoAtual,
       capacidadeTotal:capacidadeTotalAtual,
       placa:null,
-      status:"PROGRAMADO",
+      status:"AGUARDANDO_FILA",
       compartimentos,
       observacoes: document.getElementById("observacoes").value,
       criadoEm:serverTimestamp()
@@ -499,10 +499,10 @@ function vincular(id){
       const placa=document.getElementById("placaModal").value.trim();
       if(!placa) return;
 
-      await updateDoc(doc(db,"programacao_cargas",id),{
-        placa:placa.toUpperCase(),
-        status:"AGUARDANDO_FILA"
-      });
+ await updateDoc(doc(db,"programacao_cargas",id),{
+  placa:placa.toUpperCase(),
+  status:"PROGRAMADO"
+});
 
       fecharModal();
     }
