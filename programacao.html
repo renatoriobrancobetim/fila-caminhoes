@@ -674,6 +674,13 @@ else{
                 ↩ Fila
               </button>
             ` : ""}
+            ${c.status !== "FATURADO" ? `
+  <button class="btn" 
+    style="background:#16a34a;color:#fff;"
+    onclick="faturarCarga('${c.id}')">
+    💰 Faturar
+  </button>
+` : ""}
             <button class="btn btn-excluir" onclick="excluirCarga('${c.id}')">
               Excluir
             </button>
@@ -967,6 +974,24 @@ function excluirCarga(id){
     }
   );
 }
+
+  function faturarCarga(id){
+
+  abrirModal(
+    "Confirmar Faturamento",
+    "<p>Deseja marcar esta carga como FATURADA?</p>",
+    async()=>{
+      await updateDoc(doc(db,"programacao_cargas",id),{
+        status:"FATURADO",
+        faturadoEm: serverTimestamp()
+      });
+      fecharModal();
+    }
+  );
+
+}
+
+window.faturarCarga = faturarCarga;
 
 window.vincular=vincular;
 window.excluirCarga=excluirCarga;
