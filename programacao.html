@@ -142,39 +142,52 @@ th{
   justify-content:flex-end;
   gap:10px;
 }
-  .detalhe-linha {
-  background:#f8fafc;
-  animation:fadeDetalhe .2s ease;
-}
-
-.detalhe-box {
-  padding:20px;
-  text-align:left;
-}
-
-.detalhe-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
-}
-
-.detalhe-card {
+.detalhe-linha {
   background:#ffffff;
-  border-radius:10px;
-  padding:12px;
-  border:1px solid #e5e7eb;
-  font-size:13px;
 }
 
-.detalhe-card strong {
-  display:block;
-  color:var(--azul);
-  margin-bottom:5px;
+.detalhe-container {
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  margin:10px 0;
 }
 
-@keyframes fadeDetalhe {
-  from{opacity:0; transform:translateY(-5px);}
-  to{opacity:1; transform:translateY(0);}
+.detalhe-header {
+  background:linear-gradient(90deg,#0A3D91,#1e3a8a);
+  color:#fff;
+  padding:12px 20px;
+  font-weight:600;
+  font-size:14px;
+  letter-spacing:.5px;
+}
+
+.detalhe-colunas {
+  background:#e2e8f0;
+  display:grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr;
+  padding:10px 20px;
+  font-weight:600;
+  font-size:12px;
+  text-transform:uppercase;
+}
+
+.detalhe-item {
+  display:grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr;
+  padding:12px 20px;
+  border-top:1px solid #e5e7eb;
+  font-size:14px;
+  align-items:center;
+}
+
+.detalhe-item:nth-child(even){
+  background:#f8fafc;
+}
+
+.volume-destaque{
+  font-weight:700;
+  color:#0A3D91;
 }
 </style>
 </head>
@@ -494,53 +507,62 @@ function vincular(id){
 }
 function toggleDetalhe(id){
 
-  const linhaExistente = document.getElementById("detalhe-"+id);
-
-  // Se já estiver aberta → fecha
-  if(linhaExistente){
-    linhaExistente.remove();
+  const existente = document.getElementById("detalhe-"+id);
+  if(existente){
+    existente.remove();
     return;
   }
 
   const docRef = doc(db,"programacao_cargas",id);
 
-  getDocs(collection(db,"programacao_cargas")).then(()=>{
+  getDoc(docRef).then(docSnap=>{
 
-    // Pega dados atuais via snapshot
-    onSnapshot(docRef,(docSnap)=>{
+    const c = docSnap.data();
 
-      const c = docSnap.data();
-      const linha = document.createElement("tr");
-      linha.id = "detalhe-"+id;
-      linha.className="detalhe-linha";
+    const linha = document.createElement("tr");
+    linha.id="detalhe-"+id;
+    linha.className="detalhe-linha";
 
-      let htmlCompartimentos = "";
+    let itensHTML="";
 
-      c.compartimentos.forEach(comp=>{
-        htmlCompartimentos += `
-          <div class="detalhe-card">
-            <strong>${comp.capacidade.toLocaleString()} L</strong>
-            Cliente: ${comp.cliente || "-"}<br>
-            Município: ${comp.municipio || "-"}<br>
-            Vendedor: ${comp.vendedor || "-"}
+    c.compartimentos.forEach(comp=>{
+      if(comp.cliente || comp.municipio || comp.vendedor){
+
+        itensHTML += `
+          <div class="detalhe-item">
+            <div>${comp.cliente || "-"}</div>
+            <div>${comp.municipio || "-"}</div>
+            <div class="volume-destaque">${comp.capacidade.toLocaleString()} L</div>
+            <div>${comp.vendedor || "-"}</div>
           </div>
         `;
-      });
+      }
+    });
 
-      linha.innerHTML = `
-        <td colspan="7">
-          <div class="detalhe-box">
-            <div class="detalhe-grid">
-              ${htmlCompartimentos}
-            </div>
+    linha.innerHTML = `
+      <td colspan="7">
+        <div class="detalhe-container">
+
+          <div class="detalhe-header">
+            CÁLCULO DA CARGA – ${c.numeroCarga}
           </div>
-        </td>
-      `;
 
-      const linhaPrincipal = [...tabela.rows].find(r => r.innerHTML.includes(id));
-      linhaPrincipal.after(linha);
+          <div class="detalhe-colunas">
+            <div>Cliente</div>
+            <div>Município</div>
+            <div>Volume</div>
+            <div>Vendedor</div>
+          </div>
 
-    },{ once:true });
+          ${itensHTML}
+
+        </div>
+      </td>
+    `;
+
+    const linhasTabela = [...tabela.querySelectorAll("tr")];
+    const linhaPrincipal = linhasTabela.find(tr => tr.innerHTML.includes(id));
+    linhaPrincipal.after(linha);
 
   });
 
