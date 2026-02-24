@@ -653,44 +653,64 @@ function vincular(id){
         // 1️⃣ Buscar carga
         const cargaRef = doc(db,"programacao_cargas",id);
         const cargaSnap = await getDoc(cargaRef);
+
+        if(!cargaSnap.exists()){
+          fecharModal();
+          return;
+        }
+
         const carga = cargaSnap.data();
 
         // 2️⃣ Buscar caminhão
         const motoristaRef = doc(db,"motoristas_cadastro",placa);
         const motoristaSnap = await getDoc(motoristaRef);
 
-      abrirModal(
-  "Caminhão não encontrado",
-  `<p>Placa <strong>${placa}</strong> não está cadastrada no sistema.</p>`,
-  ()=>{ fecharModal(); }
-);
-return;
+        if(!motoristaSnap.exists()){
+          abrirModal(
+            "Caminhão não encontrado",
+            `<p>Placa <strong>${placa}</strong> não está cadastrada no sistema.</p>`,
+            ()=>{ fecharModal(); }
+          );
+          return;
         }
 
         const motorista = motoristaSnap.data();
 
-        // ===== VALIDAÇÃO POR CAPACIDADE TOTAL =====
+        // 3️⃣ Extrair configuração numérica (ex: 5532)
+        const configNumerica = motorista.configEixos.split("-")[0];
+
+        // 4️⃣ Gerar compartimentos reais
+        const compartimentosCaminhao = configNumerica
+          .split("")
+          .map(n => Number(n) * 1000);
+
+        // 5️⃣ Calcular capacidade total
+        const capacidadeCaminhao = compartimentosCaminhao
+          .reduce((a,b)=>a+b,0);
+
+        // ===== VALIDAÇÃO DE CAPACIDADE =====
         if (capacidadeCaminhao < carga.capacidadeTotal) {
 
- abrirModal(
-  "Capacidade Insuficiente",
-  `
-  <p><strong>Carga:</strong> ${carga.capacidadeTotal.toLocaleString()} L</p>
-  <p><strong>Caminhão:</strong> ${capacidadeCaminhao.toLocaleString()} L</p>
-  <br>
-  <p style="color:#b91c1c;font-weight:600;">
-    O caminhão não possui capacidade suficiente.
-  </p>
-  `,
-  ()=>{ fecharModal(); }
-);
-return;
+          abrirModal(
+            "Capacidade Insuficiente",
+            `
+            <p><strong>Carga:</strong> ${carga.capacidadeTotal.toLocaleString()} L</p>
+            <p><strong>Caminhão:</strong> ${capacidadeCaminhao.toLocaleString()} L</p>
+            <br>
+            <p style="color:#b91c1c;font-weight:600;">
+              O caminhão não possui capacidade suficiente.
+            </p>
+            `,
+            ()=>{ fecharModal(); }
+          );
+
+          return;
         }
 
-        // ===== VALIDAÇÃO POR DISTRIBUIÇÃO REAL =====
-        function podeDistribuir(volumesCarga, compartimentosCaminhao){
+        // ===== VALIDAÇÃO DE DISTRIBUIÇÃO REAL =====
+        function podeDistribuir(volumesCarga, compartimentos){
 
-          let disponiveis = [...compartimentosCaminhao];
+          let disponiveis = [...compartimentos];
 
           for(let volume of volumesCarga){
 
@@ -716,35 +736,25 @@ return;
           .filter(c => c.cliente)
           .map(c => c.capacidade);
 
-// Extrai apenas a parte numérica antes do "-"
-const configNumerica = motorista.configEixos.split("-")[0];
-
-// Gera compartimentos reais
-const compartimentosCaminhao = configNumerica
-  .split("")
-  .map(n => Number(n) * 1000);
-
-// Calcula capacidade automaticamente
-const capacidadeCaminhao = compartimentosCaminhao.reduce((a,b)=>a+b,0);
-
         if(!podeDistribuir(volumesCarga, compartimentosCaminhao)){
 
-abrirModal(
-  "Distribuição Incompatível",
-  `
-  <p>Os volumes da carga não encaixam</p>
-  <p>nos compartimentos do caminhão.</p>
-  <br>
-  <p style="color:#b91c1c;font-weight:600;">
-    Verifique a configuração de eixos.
-  </p>
-  `,
-  ()=>{ fecharModal(); }
-);
-return;
+          abrirModal(
+            "Distribuição Incompatível",
+            `
+            <p>Os volumes da carga não encaixam</p>
+            <p>nos compartimentos do caminhão.</p>
+            <br>
+            <p style="color:#b91c1c;font-weight:600;">
+              Verifique a configuração de eixos.
+            </p>
+            `,
+            ()=>{ fecharModal(); }
+          );
+
+          return;
         }
 
-        // 3️⃣ Se passou na validação
+        // 6️⃣ Se passou em tudo
         await updateDoc(cargaRef,{
           placa:placa,
           status:"PROGRAMADO"
@@ -754,8 +764,17 @@ return;
 
       }catch(error){
         console.error(error);
-        alert("Erro ao vincular caminhão.");
+        abrirModal(
+          "Erro",
+          "<p>Erro ao vincular caminhão.</p>",
+          ()=>{ fecharModal(); }
+        );
       }
+
+    }
+  );
+
+}
 
     }
   );
