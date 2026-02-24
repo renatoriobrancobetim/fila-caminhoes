@@ -558,10 +558,11 @@ const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
   textoBtn.innerText="Salvar Carga";
 });
   
-function toggleGrupo(id){
+window.toggleGrupo = function(id){
   const linhas = document.querySelectorAll(".grupo-" + id);
+
   linhas.forEach(linha=>{
-    linha.style.display = 
+    linha.style.display =
       linha.style.display === "none" ? "table-row" : "none";
   });
 }
