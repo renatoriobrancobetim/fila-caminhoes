@@ -158,9 +158,15 @@ th{
 <input type="date" id="dataCarregamento">
 <input type="time" id="horarioPrevisto">
 <select id="tipoVeiculo">
-<option value="">Selecione Tipo</option>
-<option value="5532 - Truck">5532 - Truck</option>
-<option value="612 - Bitrem">612 - Bitrem</option>
+  <option value="">Selecione Tipo</option>
+
+  <option value="Toco|532">Toco 532</option>
+  <option value="Truck|555">Truck 555</option>
+  <option value="Truck|5532">Truck 5532</option>
+  <option value="Truck|53232">Truck 53232</option>
+  <option value="Bitruck|5555">Bitruck 5555</option>
+  <option value="Frota|5-5-5-2.5-2.5-2.5">Frota 5-5-5/2.5/2.5/2.5</option>
+  <option value="Carreta|555555">Carreta 555555</option>
 </select>
 </div>
 
@@ -253,35 +259,56 @@ const textoBtn=document.getElementById("textoBtn");
 const loaderBtn=document.getElementById("loaderBtn");
 
 /* ===== GERAR COMPARTIMENTOS ===== */
-document.getElementById("tipoVeiculo").addEventListener("change",e=>{
-  const valor=e.target.value;
+document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
-  if(!valor){
+  const valor = e.target.value;
+
+  if (!valor) {
     tipoCaminhaoAtual="";
     container.innerHTML="";
     infoVeiculo.style.display="none";
     return;
   }
 
-  const [numeros,tipo]=valor.split(" - ");
-  tipoCaminhaoAtual=tipo;
+  const [tipo, configuracao] = valor.split("|");
 
-  const compartimentos=numeros.split("").map(n=>Number(n)*1000);
-  capacidadeTotalAtual=compartimentos.reduce((a,b)=>a+b,0);
+  tipoCaminhaoAtual = tipo;
+
+  let compartimentos = [];
+
+  // Caso Frota (tem valores decimais)
+  if (configuracao.includes("-")) {
+
+    compartimentos = configuracao
+      .split("-")
+      .map(v => Number(v) * 1000);
+
+  } else {
+
+    compartimentos = configuracao
+      .split("")
+      .map(n => Number(n) * 1000);
+
+  }
+
+  capacidadeTotalAtual = compartimentos.reduce((a,b)=>a+b,0);
 
   infoVeiculo.style.display="block";
   infoVeiculo.innerHTML=`🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L`;
 
   container.innerHTML="";
+
   compartimentos.forEach(cap=>{
     container.innerHTML+=`
-    <div class="compartimento">
-      <div class="capacidade">${cap.toLocaleString()} L</div>
-      <input class="cliente" placeholder="Cliente">
-      <input class="municipio" placeholder="Município">
-      <input class="vendedor" placeholder="Vendedor">
-    </div>`;
+      <div class="compartimento">
+        <div class="capacidade">${cap.toLocaleString()} L</div>
+        <input class="cliente" placeholder="Cliente">
+        <input class="municipio" placeholder="Município">
+        <input class="vendedor" placeholder="Vendedor">
+      </div>
+    `;
   });
+
 });
 
 /* ===== SALVAR ===== */
