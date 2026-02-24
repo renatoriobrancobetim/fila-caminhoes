@@ -261,17 +261,24 @@ th{
   transition: all .25s ease;
 }
 
-.linha-status.status-AGUARDANDO_FILA{
-  background: #fffbeb;
-}
-
-.linha-status.status-PROGRAMADO{
-  background: #f0fdf4;
-}
-
 .linha-status:hover{
   transform: scale(1.003);
   box-shadow: 0 4px 12px rgba(0,0,0,.06);
+}
+  .linha-status td{
+  transition: background .25s ease;
+}
+
+.linha-status.status-AGUARDANDO_FILA td{
+  background: #fffbeb;
+}
+
+.linha-status.status-PROGRAMADO td{
+  background: #f0fdf4;
+}
+
+.linha-status:hover td{
+  background: #f8fafc;
 }
 </style>
 </head>
