@@ -606,14 +606,19 @@ onSnapshot(
 
       const item = { id: docSnap.id, ...c, dataObj: dataCarga };
 
-   if(c.status === "FATURADO"){
+if(c.status === "FATURADO"){
   cargasFaturadas.push(item);
 }
 else if(dataCarga.getTime() === hoje.getTime()){
   cargasHoje.push(item);
 }
-else{
+else if(dataCarga.getTime() > hoje.getTime()){
   cargasFuturas.push(item);
+}
+else{
+  // Datas anteriores e ainda não faturadas
+  // continuam no grupo operacional principal
+  cargasHoje.push(item);
 }
 
     });
