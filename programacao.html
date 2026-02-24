@@ -659,9 +659,12 @@ function vincular(id){
         const motoristaRef = doc(db,"motoristas_cadastro",placa);
         const motoristaSnap = await getDoc(motoristaRef);
 
-        if(!motoristaSnap.exists()){
-          alert("Placa não cadastrada no sistema.");
-          return;
+      abrirModal(
+  "Caminhão não encontrado",
+  `<p>Placa <strong>${placa}</strong> não está cadastrada no sistema.</p>`,
+  ()=>{ fecharModal(); }
+);
+return;
         }
 
         const motorista = motoristaSnap.data();
@@ -669,12 +672,19 @@ function vincular(id){
         // ===== VALIDAÇÃO POR CAPACIDADE TOTAL =====
         if (capacidadeCaminhao < carga.capacidadeTotal) {
 
-          alert(`❌ Capacidade insuficiente!
-
-Carga: ${carga.capacidadeTotal.toLocaleString()} L
-Caminhão: ${motorista.capacidadeTotal.toLocaleString()} L`);
-
-          return;
+ abrirModal(
+  "Capacidade Insuficiente",
+  `
+  <p><strong>Carga:</strong> ${carga.capacidadeTotal.toLocaleString()} L</p>
+  <p><strong>Caminhão:</strong> ${capacidadeCaminhao.toLocaleString()} L</p>
+  <br>
+  <p style="color:#b91c1c;font-weight:600;">
+    O caminhão não possui capacidade suficiente.
+  </p>
+  `,
+  ()=>{ fecharModal(); }
+);
+return;
         }
 
         // ===== VALIDAÇÃO POR DISTRIBUIÇÃO REAL =====
@@ -719,12 +729,19 @@ const capacidadeCaminhao = compartimentosCaminhao.reduce((a,b)=>a+b,0);
 
         if(!podeDistribuir(volumesCarga, compartimentosCaminhao)){
 
-          alert(`❌ Distribuição incompatível!
-
-Os volumes da carga não encaixam
-nos compartimentos do caminhão.`);
-
-          return;
+abrirModal(
+  "Distribuição Incompatível",
+  `
+  <p>Os volumes da carga não encaixam</p>
+  <p>nos compartimentos do caminhão.</p>
+  <br>
+  <p style="color:#b91c1c;font-weight:600;">
+    Verifique a configuração de eixos.
+  </p>
+  `,
+  ()=>{ fecharModal(); }
+);
+return;
         }
 
         // 3️⃣ Se passou na validação
