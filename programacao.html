@@ -230,6 +230,33 @@ th{
   from{opacity:0; transform:scale(.9);}
   to{opacity:1; transform:scale(1);}
 }
+  .linha-status{
+  position:relative;
+  transition:background .3s ease;
+}
+
+.linha-status::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:6px;
+  border-radius:6px 0 0 6px;
+}
+
+.status-lateral-AGUARDANDO_FILA::before{
+  background:#f59e0b;
+}
+
+.status-lateral-PROGRAMADO::before{
+  background:#16a34a;
+}
+
+/* leve efeito hover */
+.linha-status:hover{
+  background:#f8fafc;
+}
 </style>
 </head>
 <body>
@@ -487,7 +514,7 @@ onSnapshot(
       const c=docSnap.data();
 
       tabela.innerHTML+=`
-      <tr>
+      <tr class="linha-status status-lateral-${c.status}">
         <td>${c.numeroCarga}</td>
         <td>${
           c.dataCarregamento?.toDate 
