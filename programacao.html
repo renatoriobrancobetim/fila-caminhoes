@@ -593,6 +593,7 @@ onSnapshot(
 
     let cargasHoje = [];
     let cargasFuturas = [];
+    let cargasFaturadas = [];
 
     snap.forEach(docSnap=>{
       const c = docSnap.data();
@@ -605,19 +606,22 @@ onSnapshot(
 
       const item = { id: docSnap.id, ...c, dataObj: dataCarga };
 
-      if(dataCarga.getTime() === hoje.getTime()){
-        cargasHoje.push(item);
-      }else if(dataCarga > hoje){
-        cargasFuturas.push(item);
-      }else{
-        cargasHoje.push(item); // atrasadas entram como hoje
-      }
+   if(c.status === "FATURADO"){
+  cargasFaturadas.push(item);
+}
+else if(dataCarga.getTime() === hoje.getTime()){
+  cargasHoje.push(item);
+}
+else{
+  cargasFuturas.push(item);
+}
 
     });
 
     // Ordenar por data crescente
     cargasHoje.sort((a,b)=>a.dataObj - b.dataObj);
     cargasFuturas.sort((a,b)=>a.dataObj - b.dataObj);
+    cargasFaturadas.sort((a,b)=>a.dataObj - b.dataObj);
 
    function renderGrupo(titulo, lista, cor, grupoId){
 
@@ -676,6 +680,7 @@ onSnapshot(
 
 renderGrupo("📦 CARGAS DE HOJE", cargasHoje, "#0A3D91", "hoje");
 renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#2563eb", "futuras");
+renderGrupo("💰 CARGAS FATURADAS", cargasFaturadas, "#16a34a", "faturadas");
 
     },
     error => {
