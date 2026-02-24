@@ -413,6 +413,7 @@ btnSalvar.addEventListener("click",async()=>{
       status:"PROGRAMADO",
       compartimentos,
       criadoEm:serverTimestamp()
+      observacoes: document.getElementById("observacoes").value,
     });
 
     location.reload();
@@ -540,26 +541,51 @@ function toggleDetalhe(id){
       }
     });
 
-    linha.innerHTML = `
-      <td colspan="7">
-        <div class="detalhe-container">
+ linha.innerHTML = `
+  <td colspan="7">
+    <div class="detalhe-container">
 
-          <div class="detalhe-header">
-            CÁLCULO DA CARGA – ${c.numeroCarga}
-          </div>
+      <div class="detalhe-header">
+        CÁLCULO DA CARGA – ${c.numeroCarga} • ${c.tipoCaminhao}
+      </div>
 
-          <div class="detalhe-colunas">
-            <div>Cliente</div>
-            <div>Município</div>
-            <div>Volume</div>
-            <div>Vendedor</div>
-          </div>
+      <div style="
+        padding:10px 20px;
+        background:#f1f5f9;
+        font-size:13px;
+        display:flex;
+        justify-content:space-between;
+        flex-wrap:wrap;
+        gap:10px;
+      ">
+        <div><strong>Status:</strong> ${c.status}</div>
+        <div><strong>Placa:</strong> ${c.placa || "-"}</div>
+        <div><strong>Total:</strong> ${c.capacidadeTotal?.toLocaleString()} L</div>
+      </div>
 
-          ${itensHTML}
+      ${c.observacoes ? `
+      <div style="
+        padding:12px 20px;
+        background:#fff7ed;
+        border-top:1px solid #e5e7eb;
+        font-size:13px;
+      ">
+        <strong>Observações:</strong> ${c.observacoes}
+      </div>
+      ` : ""}
 
-        </div>
-      </td>
-    `;
+      <div class="detalhe-colunas">
+        <div>Cliente</div>
+        <div>Município</div>
+        <div>Volume</div>
+        <div>Vendedor</div>
+      </div>
+
+      ${itensHTML}
+
+    </div>
+  </td>
+`;
 
     const linhasTabela = [...tabela.querySelectorAll("tr")];
     const linhaPrincipal = linhasTabela.find(tr => tr.innerHTML.includes(id));
