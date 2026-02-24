@@ -576,24 +576,6 @@ abrirModal(
 return; // 🔥 IMPORTANTÍSSIMO
 
 
-
-    await addDoc(collection(db,"programacao_cargas"),{
-      numeroCarga,
-      dataCarregamento:new Date(dataInput + "T12:00:00"),
-      dataReferencia: dataInput,
-      horarioPrevisto:document.getElementById("horarioPrevisto").value,
-      tipoCaminhao: tipoCaminhaoAtual,
-      configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
-      capacidadeTotal:capacidadeTotalAtual,
-      placa:null,
-      status:"AGUARDANDO_FILA",
-      compartimentos,
-      observacoes: document.getElementById("observacoes").value,
-      criadoEm:serverTimestamp()
-      
-    });
-
- 
   }catch(e){
     alert(e);
   }
@@ -1035,13 +1017,28 @@ function excluirCarga(id){
 
 }
 
-  async function confirmarSalvarCarga(){
+async function confirmarSalvarCarga(){
 
   const dados = window._dadosTempCarga;
   fecharModal();
 
   try{
 
+    // 🔥 AGORA SIM SALVA NO FIRESTORE
+    await addDoc(collection(db,"programacao_cargas"),{
+      numeroCarga: dados.numeroCarga,
+      dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
+      dataReferencia: dados.dataInput,
+      horarioPrevisto:document.getElementById("horarioPrevisto").value,
+      tipoCaminhao:tipoCaminhaoAtual,
+      configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
+      capacidadeTotal:capacidadeTotalAtual,
+      placa:null,
+      status:"AGUARDANDO_FILA",
+      compartimentos:dados.compartimentos,
+      observacoes: document.getElementById("observacoes").value,
+      criadoEm:serverTimestamp()
+    });
 
     abrirModal(
       "Carga Criada com Sucesso",
@@ -1056,14 +1053,21 @@ function excluirCarga(id){
       `,
       ()=>{ fecharModal(); }
     );
-    // Limpar formulário
-document.getElementById("observacoes").value = "";
-document.getElementById("km").value = "";
-document.getElementById("horarioPrevisto").value = "";
-document.getElementById("tipoVeiculo").value = "";
-container.innerHTML = "";
-infoVeiculo.style.display = "none";
 
+    // 🔄 LIMPAR FORMULÁRIO
+    document.getElementById("observacoes").value = "";
+    document.getElementById("km").value = "";
+    document.getElementById("horarioPrevisto").value = "";
+    document.getElementById("tipoVeiculo").value = "";
+    container.innerHTML = "";
+    infoVeiculo.style.display = "none";
+
+    // 🔄 Resetar data para hoje novamente
+    const hoje = new Date();
+    const yyyy = hoje.getFullYear();
+    const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoje.getDate()).padStart(2, '0');
+    document.getElementById("dataCarregamento").value = `${yyyy}-${mm}-${dd}`;
 
   }catch(error){
     console.error(error);
@@ -1073,9 +1077,11 @@ infoVeiculo.style.display = "none";
       ()=>{ fecharModal(); }
     );
   }
-btnSalvar.disabled = false;
-loaderBtn.classList.add("hidden");
-textoBtn.innerText = "Salvar Carga";
+
+  // 🔥 RESET BOTÃO SEM LOOP
+  btnSalvar.disabled = false;
+  loaderBtn.classList.add("hidden");
+  textoBtn.innerText = "Salvar Carga";
 }
 
 window.confirmarSalvarCarga = confirmarSalvarCarga;
