@@ -412,8 +412,9 @@ btnSalvar.addEventListener("click",async()=>{
       placa:null,
       status:"PROGRAMADO",
       compartimentos,
-      criadoEm:serverTimestamp()
       observacoes: document.getElementById("observacoes").value,
+      criadoEm:serverTimestamp()
+      
     });
 
     location.reload();
