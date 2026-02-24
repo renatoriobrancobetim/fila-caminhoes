@@ -519,6 +519,21 @@ function vincular(id){
     }
   );
 }
+  function voltarFila(id){
+  abrirModal(
+    "Retornar carga para fila",
+    "<p>Deseja remover a placa e retornar para Aguardando Fila?</p>",
+    async()=>{
+      await updateDoc(doc(db,"programacao_cargas",id),{
+        placa: null,
+        status:"AGUARDANDO_FILA"
+      });
+      fecharModal();
+    }
+  );
+}
+
+window.voltarFila = voltarFila;
 function toggleDetalhe(id){
 
   const existente = document.getElementById("detalhe-"+id);
