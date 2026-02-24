@@ -542,7 +542,7 @@ function toggleDetalhe(id){
       }
     });
 
- linha.innerHTML = `
+linha.innerHTML = `
   <td colspan="7">
     <div class="detalhe-container">
 
@@ -560,20 +560,12 @@ function toggleDetalhe(id){
         gap:10px;
       ">
         <div><strong>Status:</strong> ${c.status}</div>
-        <div><strong>Placa:</strong> ${c.placa || "-"}</div>
+        <div>
+          <strong>Placa:</strong> 
+          ${c.placa ? c.placa : '<span style="color:#b91c1c;font-weight:600;">Aguardando Veículo</span>'}
+        </div>
         <div><strong>Total:</strong> ${c.capacidadeTotal?.toLocaleString()} L</div>
       </div>
-
-      ${c.observacoes ? `
-      <div style="
-        padding:12px 20px;
-        background:#fff7ed;
-        border-top:1px solid #e5e7eb;
-        font-size:13px;
-      ">
-        <strong>Observações:</strong> ${c.observacoes}
-      </div>
-      ` : ""}
 
       <div class="detalhe-colunas">
         <div>Cliente</div>
@@ -583,6 +575,18 @@ function toggleDetalhe(id){
       </div>
 
       ${itensHTML}
+
+      ${c.observacoes ? `
+        <div style="
+          padding:15px 20px;
+          background:#fff7ed;
+          border-top:1px solid #e5e7eb;
+          font-size:13px;
+        ">
+          <strong>Observações:</strong><br>
+          ${c.observacoes}
+        </div>
+      ` : ""}
 
     </div>
   </td>
