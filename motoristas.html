@@ -115,9 +115,9 @@ button{
   <input id="placa" placeholder="Placa do Caminhão">
   <input id="senha" type="password" placeholder="Senha">
 
-  <button class="btn-ok" onclick="enviar('DISPONÍVEL')">
-    ✅ Estou Disponível
-  </button>
+  <button onclick="marcarDisponivel('ABC1234')">
+  ✅ Estou Disponível
+</button>
 
   <button class="btn-off" onclick="enviar('INDISPONÍVEL')">
     ❌ Ficar Indisponível
@@ -131,11 +131,36 @@ button{
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
-  getFirestore, doc, setDoc, deleteDoc, getDoc,
-  collection, getDocs, query, orderBy,
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+const db = getFirestore();
+
+/* FUNÇÃO MARCAR DISPONÍVEL */
+
+async function marcarDisponivel(placa){
+
+  const refFila = doc(db, "fila", placa);
+  const snap = await getDoc(refFila);
+
+  // Se já estiver na fila, não adiciona novamente
+  if(snap.exists()){
+    console.log("Já está na fila");
+    return;
+  }
+
+  await setDoc(refFila,{
+    placa: placa,
+    entradaEm: serverTimestamp()
+  });
+
+  console.log("Motorista entrou na fila");
+}
 const firebaseConfig = {
   apiKey: "AIzaSy...",
   authDomain: "tabela-frete-rio-branco.firebaseapp.com",
