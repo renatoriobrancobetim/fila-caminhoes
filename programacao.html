@@ -370,6 +370,23 @@ td{
 .linha-nova td{
   animation: destaqueNovaCarga 3s ease;
 }
+  animation: pulseNovaCarga 2s ease-in-out 3;
+}
+
+@keyframes pulseNovaCarga{
+  0%{
+    box-shadow: inset 0 0 0 0 rgba(37, 99, 235, 0.4);
+    background:#e0f2fe;
+  }
+  50%{
+    box-shadow: inset 0 0 0 6px rgba(37, 99, 235, 0.25);
+    background:#bfdbfe;
+  }
+  100%{
+    box-shadow: inset 0 0 0 0 rgba(37, 99, 235, 0);
+    background:inherit;
+  }
+}
 
 @keyframes destaqueNovaCarga{
   0%{
