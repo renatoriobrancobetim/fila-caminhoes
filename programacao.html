@@ -375,6 +375,7 @@ td{
 <tr>
 <th>Nº</th>
 <th>Data</th>
+<th>Hora Criação</th>
 <th>Placa</th>
 <th>Tipo</th>
 <th>Total L</th>
@@ -413,12 +414,14 @@ import {
   collection, 
   addDoc, 
   doc, 
-  getDoc,      // 👈 ADICIONE ISSO
+  getDoc,
   getDocs, 
   updateDoc, 
   deleteDoc, 
   onSnapshot, 
-  serverTimestamp 
+  serverTimestamp,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===== FIREBASE INIT ===== */
@@ -612,7 +615,10 @@ window.toggleGrupo = function(id){
 function carregarTabela() {
 
 onSnapshot(
-  collection(db,"programacao_cargas"),
+  query(
+    collection(db,"programacao_cargas"),
+    orderBy("criadoEm","desc")
+  ),
   snap => {
 
     tabela.innerHTML="";
@@ -689,7 +695,14 @@ else{
       <tr class="linha-status status-${c.status} grupo-${grupoId}">
         <td>${c.numeroCarga}</td>
         <td>${c.dataObj.toLocaleDateString()}</td>
-        <td>${c.placa||"-"}</td>
+<td>
+  ${
+    c.criadoEm?.toDate
+      ? c.criadoEm.toDate().toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"})
+      : "-"
+  }
+</td>
+<td>${c.placa||"-"}</td>
         <td>${c.tipoCaminhao} ${c.configEixos || ""}</td>
         <td>${c.capacidadeTotal?.toLocaleString()} L</td>
         <td>
@@ -965,7 +978,7 @@ function toggleDetalhe(id){
     });
 
 linha.innerHTML = `
-  <td colspan="7">
+  <td colspan="8">
     <div class="detalhe-container">
 
       <div class="detalhe-header">
