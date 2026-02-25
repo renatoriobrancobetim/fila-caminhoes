@@ -80,8 +80,9 @@ input,select{
   border-radius:10px;
   margin-bottom:10px;
   display:grid;
-  grid-template-columns:120px 1fr 1fr 1fr;
+  grid-template-columns:120px 1fr 1fr 120px 140px 1fr;
   gap:10px;
+  align-items:center;
 }
 
 .capacidade{
@@ -286,7 +287,7 @@ td{
   text-align:center;
   background:#e2e8f0;
   display:grid;
-  grid-template-columns:1.5fr 1.5fr 1fr 1fr;
+  grid-template-columns:2fr 2fr 1fr 1.5fr 1fr;
   padding:10px 20px;
   font-weight:600;
   font-size:12px;
@@ -522,14 +523,24 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
   container.innerHTML="";
 
   compartimentos.forEach(cap=>{
-    container.innerHTML+=`
-      <div class="compartimento">
-        <div class="capacidade">${cap.toLocaleString()} L</div>
-<input class="cliente" placeholder="Cliente" style="text-transform:uppercase;">
-<input class="municipio" placeholder="Município" style="text-transform:uppercase;">
-<input class="vendedor" placeholder="Vendedor" style="text-transform:uppercase;">
-      </div>
-    `;
+ container.innerHTML+=`
+  <div class="compartimento">
+    <div class="capacidade">${cap.toLocaleString()} L</div>
+
+    <input class="cliente" placeholder="Cliente" style="text-transform:uppercase;">
+
+    <input class="municipio" placeholder="Município" style="text-transform:uppercase;">
+
+    <input type="time" class="horarioCliente">
+
+    <input type="number" 
+           class="freteUnitario" 
+           step="0.0001" 
+           placeholder="R$ 0,0000">
+
+    <input class="vendedor" placeholder="Vendedor" style="text-transform:uppercase;">
+  </div>
+`;
   });
 
 });
@@ -556,18 +567,22 @@ btnSalvar.addEventListener("click",async()=>{
 
     linhas.forEach(l=>{
       const cap=l.querySelector(".capacidade").innerText.replace(/\D/g,"");
- const cliente=l.querySelector(".cliente").value.trim().toUpperCase();
+const cliente=l.querySelector(".cliente").value.trim().toUpperCase();
 const municipio=l.querySelector(".municipio").value.trim().toUpperCase();
+const horario=l.querySelector(".horarioCliente").value;
+const freteUnitario=parseFloat(l.querySelector(".freteUnitario").value) || 0;
 const vendedor=l.querySelector(".vendedor").value.trim().toUpperCase();
 
       if(cliente&&municipio&&vendedor) preenchidos++;
 
-      compartimentos.push({
-        capacidade:Number(cap),
-        cliente,
-        municipio,
-        vendedor
-      });
+compartimentos.push({
+  capacidade:Number(cap),
+  cliente,
+  municipio,
+  horario,
+  freteUnitario,
+  vendedor
+});
     });
 
     if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
@@ -1006,12 +1021,13 @@ function toggleDetalhe(id){
       if(comp.cliente || comp.municipio || comp.vendedor){
 
         itensHTML += `
-          <div class="detalhe-item">
-            <div>${comp.cliente || "-"}</div>
-            <div>${comp.municipio || "-"}</div>
-            <div class="volume-destaque">${comp.capacidade.toLocaleString()} L</div>
-            <div>${comp.vendedor || "-"}</div>
-          </div>
+<div class="detalhe-item">
+  <div>${comp.cliente || "-"}</div>
+  <div>${comp.municipio || "-"}</div>
+  <div>${comp.horario || "-"}</div>
+  <div>R$ ${(comp.freteUnitario || 0).toFixed(4)}</div>
+  <div>${comp.vendedor || "-"}</div>
+</div>
         `;
       }
     });
@@ -1043,12 +1059,13 @@ linha.innerHTML = `
         <div><strong>Total:</strong> ${c.capacidadeTotal?.toLocaleString()} L</div>
       </div>
 
-      <div class="detalhe-colunas">
-        <div>Cliente</div>
-        <div>Município</div>
-        <div>Volume</div>
-        <div>Vendedor</div>
-      </div>
+  <div class="detalhe-colunas">
+  <div>Cliente</div>
+  <div>Município</div>
+  <div>Horário</div>
+  <div>Frete Unitário</div>
+  <div>Vendedor</div>
+</div>
 
       ${itensHTML}
 
