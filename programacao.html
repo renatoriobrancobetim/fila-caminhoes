@@ -366,6 +366,24 @@ td{
   box-shadow:none;
   cursor:default;
 }
+  /* 🔥 Destaque nova carga */
+.linha-nova td{
+  animation: destaqueNovaCarga 3s ease;
+}
+
+@keyframes destaqueNovaCarga{
+  0%{
+    background:#dbeafe;
+    transform:scale(1.01);
+  }
+  40%{
+    background:#bfdbfe;
+  }
+  100%{
+    background:inherit;
+    transform:scale(1);
+  }
+}
 </style>
 </head>
 <body>
@@ -530,6 +548,7 @@ let capacidadeTotalAtual=0;
 
 let indiceAtual = 0;
 let taxaAtual = 0;
+  let ultimaCargaCriada = null;
   
 
 const infoVeiculo=document.getElementById("infoVeiculo");
@@ -1008,7 +1027,7 @@ ${lista.length}
 
   lista.forEach(c=>{
     tabela.innerHTML+=`
-      <tr class="linha-status status-${c.status} grupo-${grupoId}">
+      <tr class="linha-status status-${c.status} grupo-${grupoId} ${c.numeroCarga === ultimaCargaCriada ? 'linha-nova' : ''}">
         <td>${c.numeroCarga}</td>
         <td>${c.dataObj.toLocaleDateString()}</td>
 <td>
@@ -1617,6 +1636,7 @@ await addDoc(collection(db,"programacao_cargas"),{
   observacoes: document.getElementById("observacoes").value,
   criadoEm:serverTimestamp()
 });
+    ultimaCargaCriada = dados.numeroCarga;
 mostrarSpinnerGlobal();
 
 setTimeout(()=>{
