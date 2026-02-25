@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link rel="icon" href="favicon.png">
+<meta charset="UTF-8">
+<title>Programação de Cargas | ERP Logístico</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --azul:#0A3D91;
+  --vermelho:#dc2626;
+  --cinza:#f1f5f9;
+}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:var(--cinza);
+}
+
+header{
+  background:linear-gradient(90deg,var(--azul),var(--vermelho));
+  color:#fff;
+  padding:12px 20px;   /* 👈 reduz altura */
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:20px;      /* 👈 menor */
+  font-weight:600;
+}
+
+header p{
+  margin:4px 0 0 0;
+  font-size:12px;      /* 👈 mais compacto */
+  opacity:.9;
+}
+
+main{
+  padding:40px;
+  max-width:1300px;
+  margin:auto;
+}
+
+/* CARD FORM */
+.card-form{
+  background:#fff;
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.linha-topo,.linha-bottom{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+  margin-bottom:15px;
+}
+
+input,select{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.info-veiculo{
+  background:#f1f5f9;
+  padding:12px;
+  border-radius:10px;
+  font-weight:600;
+  margin-bottom:15px;
+  display:none;
+}
+  .cabecalho-compartimentos{
+  display:grid;
+  grid-template-columns:120px 1fr 1fr 110px 140px 150px 1fr;
+  gap:10px;
+  padding:8px 12px;
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:#64748b;
+  background:#f8fafc;
+  border-radius:8px;
+  margin-bottom:8px;
+}
+
+.compartimento{
+  background:#f8fafc;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:10px;
+  display:grid;
+  grid-template-columns:120px 1fr 1fr 110px 140px 150px 1fr;
+  gap:10px;
+  align-items:center;
+}
+
+.capacidade{
+  font-weight:700;
+  color:var(--azul);
+}
+
+/* BOTÕES */
+.btn{
+  padding:5px 10px;
+  font-size:12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.btn-azul{ background:var(--azul); color:#fff; }
+.btn-vincular{ background:#198754; color:#fff; }
+.btn-excluir{ background:#dc2626; color:#fff; }
+.btn-warning{ background:#f59e0b; color:#fff; }
+
+/* LOADER */
+.loader{
+  width:16px;
+  height:16px;
+  border:3px solid rgba(255,255,255,0.4);
+  border-top:3px solid #fff;
+  border-radius:50%;
+  display:inline-block;
+  margin-left:8px;
+  animation:spin .7s linear infinite;
+}
+
+.hidden{ display:none !important; }
+
+@keyframes spin{
+  from{ transform:rotate(0deg); }
+  to{ transform:rotate(360deg); }
+}
+
+/* TABELA */
+.table-wrap{
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  margin-top:30px;
+}
+  .linha-grupo td{
+  border-top:14px solid #f1f5f9;
+}
+
+.linha-grupo:first-of-type td{
+  border-top:18px solid #e2e8f0;
+}
+thead{
+  background:linear-gradient(90deg,#0d47a1,#0a3d91);
+  color:#fff;
+  font-weight:600;
+  letter-spacing:.5px;
+  position:relative;
+}
+
+thead::after{
+  content:"";
+  position:absolute;
+  bottom:-8px;
+  left:0;
+  width:100%;
+  height:8px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.08),transparent);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  color:#fff;
+ padding:12px;
+  font-size:13px;
+  text-align:center;
+}
+  th:last-child{
+  text-align:right;   /* 🔥 só a coluna Ação */
+  padding-right:20px;
+}
+  td:last-child{
+  text-align:right;
+  padding-right:20px;
+}
+
+td{
+  padding:8px 10px;   /* mais compacto */
+  font-size:13px;     /* ligeiramente menor */
+  border-bottom:1px solid #f1f5f9;
+  text-align:center;
+}
+
+/* STATUS BADGE */
+.status-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+   padding:4px 10px;
+  font-size:11px;
+  border-radius:20px;
+  font-weight:600;
+  letter-spacing:.5px;
+  transition:all .3s ease;
+  white-space:nowrap;   /* 🔥 impede quebra */
+}
+
+.status-AGUARDANDO_FILA{
+  background:#fef3c7;
+  color:#92400e;
+  border:1px solid #fde68a;
+}
+
+.status-PROGRAMADO{
+  background:#dcfce7;
+  color:#166534;
+  border:1px solid #86efac;
+}
+
+/* TONALIDADE SUAVE NA LINHA */
+.linha-status td{
+  transition: background .25s ease;
+}
+
+.linha-status.status-AGUARDANDO_FILA td{
+  background:#fffbeb;
+}
+
+.linha-status.status-PROGRAMADO td{
+  background:#f0fdf4;
+}
+
+/* HOVER SUAVE */
+.linha-status:hover td{
+  background:#f8fafc;
+}
+
+/* COLUNA AÇÕES */
+.col-acoes{
+  display:flex;
+  gap:6px;
+  justify-content:flex-end;   /* 🔥 joga tudo pra direita */
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.modal-box{
+  background:#fff;
+  width:400px;
+  max-width:90%;
+  padding:25px;
+  border-radius:14px;
+}
+
+.modal-actions{
+  margin-top:20px;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+
+/* DETALHE EXPANDIDO */
+.detalhe-linha td{
+  background:#fff !important;
+}
+
+.detalhe-container{
+  text-align:center;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  margin:10px 0;
+}
+
+.detalhe-header{
+  background:linear-gradient(90deg,#0A3D91,#1e3a8a);
+  color:#fff;
+  padding:12px 20px;
+  font-weight:600;
+  font-size:14px;
+}
+
+.detalhe-colunas{
+  text-align:center;
+  background:#e2e8f0;
+  display:grid;
+  grid-template-columns:2fr 2fr 1fr 1.3fr 1.3fr 1fr;
+  padding:10px 20px;
+  font-weight:600;
+  font-size:12px;
+  text-transform:uppercase;
+}
+
+.detalhe-item{
+  text-align:center;
+  display:grid;
+  grid-template-columns:1.5fr 1.5fr 1fr 1fr;
+  padding:12px 20px;
+  border-top:1px solid #e5e7eb;
+  font-size:14px;
+  align-items:center;
+}
+
+.detalhe-item:nth-child(even){
+  background:#f8fafc;
+}
+
+.volume-destaque{
+  font-weight:700;
+  color:#0A3D91;
+}
+  .campo{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.campo label{
+  font-size:12px;
+  font-weight:600;
+  color:#334155;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.icon{
+  font-size:14px;
+}
+  .status-FATURADO{
+  background:#d1fae5;
+  color:#065f46;
+  border:1px solid #6ee7b7;
+}
+  input[type="text"]{
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>📦 Programação de Cargas</h1>
+<p>Módulo Operacional Integrado</p>
+</header>
+
+<main>
+
+<div class="card-form">
+<div class="linha-topo">
+
+  <div class="campo">
+    <label>
+      <span class="icon">📅</span>
+      Data de Carregamento
+    </label>
+    <input type="date" id="dataCarregamento" placeholder="dd/mm/aaaa">
+  </div>
+
+  <div class="campo">
+    <label>
+      <span class="icon">⏰</span>
+      Hora do Carregamento
+    </label>
+    <input type="time" id="horarioPrevisto" placeholder="--:--">
+  </div>
+
+  <div class="campo">
+    <label>
+      <span class="icon">🚛</span>
+      Tipo de Veículo
+    </label>
+   <select id="tipoVeiculo">
+  <option value="">Selecione Tipo</option>
+
+  <option value="Toco|532">Toco 532</option>
+  <option value="Truck|555">Truck 555</option>
+  <option value="Truck|5532">Truck 5532</option>
+  <option value="Truck|53232">Truck 53232</option>
+  <option value="Bitruck|5555">Bitruck 5555</option>
+  <option value="Frota|5-5-5-2.5-2.5-2.5">Frota 5-5-5/2.5/2.5/2.5</option>
+  <option value="Carreta|555555">Carreta 555555</option>
+</select>
+  </div>
+
+</div>
+
+<div class="info-veiculo" id="infoVeiculo"></div>
+
+<div class="cabecalho-compartimentos" id="cabecalhoCompartimentos" style="display:none;">
+  <div>Capacidade</div>
+  <div>Cliente</div>
+  <div>Município</div>
+  <div>Horário</div>
+  <div>Frete Unitário</div>
+  <div>Total</div>
+  <div>Vendedor</div>
+</div>
+
+<div id="containerCompartimentos"></div>
+
+<div class="linha-bottom">
+<input type="number" id="km" placeholder="KM">
+<input type="text" id="observacoes" placeholder="Observações" style="text-transform:uppercase;">
+</div>
+
+<button class="btn btn-azul" id="btnSalvar">
+<span id="textoBtn">Salvar Carga</span>
+<span id="loaderBtn" class="loader hidden"></span>
+</button>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Nº</th>
+<th>Data</th>
+<th>Hora Criação</th>
+<th>Placa</th>
+<th>Tipo</th>
+<th>Total L</th>
+<th>Status</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody id="tabelaCargas"></tbody>
+</table>
+</div>
+
+</main>
+
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-box">
+    <h3 id="modalTitulo"></h3>
+    <div id="modalConteudo"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-azul" id="btnConfirmarModal">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+  getAuth, 
+  onAuthStateChanged,
+  setPersistence, 
+  browserLocalPersistence 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  doc, 
+  getDoc,
+  getDocs, 
+  updateDoc, 
+  deleteDoc, 
+  onSnapshot, 
+  serverTimestamp,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* ===== FIREBASE INIT ===== */
+const app = initializeApp({
+  apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+ authDomain: "renatoriobrancobetim.github.io",
+  projectId:"tabela-frete-rio-branco"
+});
+
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+setPersistence(auth, browserLocalPersistence);
+
+/* ===== VARIÁVEIS ===== */
+let tipoCaminhaoAtual="";
+let capacidadeTotalAtual=0;
+
+const infoVeiculo=document.getElementById("infoVeiculo");
+const container=document.getElementById("containerCompartimentos");
+const tabela=document.getElementById("tabelaCargas");
+const btnSalvar=document.getElementById("btnSalvar");
+const textoBtn=document.getElementById("textoBtn");
+const loaderBtn=document.getElementById("loaderBtn");
+
+/* ===== GERAR COMPARTIMENTOS ===== */
+document.getElementById("tipoVeiculo").addEventListener("change", e => {
+
+  const valor = e.target.value;
+
+  if (!valor) {
+    tipoCaminhaoAtual="";
+    container.innerHTML="";
+    infoVeiculo.style.display="none";
+    document.getElementById("cabecalhoCompartimentos").style.display="none";
+    return;
+  }
+
+  const [tipo, configuracao] = valor.split("|");
+
+  tipoCaminhaoAtual = tipo;
+
+  let compartimentos = [];
+
+  // Caso Frota (tem valores decimais)
+  if (configuracao.includes("-")) {
+
+    compartimentos = configuracao
+      .split("-")
+      .map(v => Number(v) * 1000);
+
+  } else {
+
+    compartimentos = configuracao
+      .split("")
+      .map(n => Number(n) * 1000);
+
+  }
+
+  capacidadeTotalAtual = compartimentos.reduce((a,b)=>a+b,0);
+
+  infoVeiculo.style.display="block";
+  document.getElementById("cabecalhoCompartimentos").style.display="grid";
+  infoVeiculo.innerHTML=`🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L`;
+
+  container.innerHTML="";
+
+compartimentos.forEach(cap=>{
+  container.innerHTML += `
+    <div class="compartimento">
+      <div class="capacidade">${cap.toLocaleString()} L</div>
+
+      <input class="cliente" placeholder="Cliente" style="text-transform:uppercase;">
+
+      <input class="municipio" placeholder="Município" style="text-transform:uppercase;">
+
+      <input type="time" class="horarioCliente">
+
+      <input type="number" 
+             class="freteUnitario" 
+             step="0.0001" 
+             placeholder="R$ 0,0000">
+
+      <input type="text" 
+             class="totalLinha" 
+             placeholder="R$ 0,00"
+             readonly
+             style="font-weight:700;background:#f1f5f9;">
+
+      <input class="vendedor" placeholder="Vendedor" style="text-transform:uppercase;">
+    </div>
+  `;
+});
+  
+  document.querySelectorAll(".compartimento").forEach(linha => {
+
+  const freteInput = linha.querySelector(".freteUnitario");
+  const totalInput = linha.querySelector(".totalLinha");
+
+  const volume = Number(
+    linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
+  );
+
+freteInput.addEventListener("blur", () => {
+
+  let valor = freteInput.value;
+
+  // Aceita vírgula ou ponto
+  valor = valor.replace(",", ".");
+
+  let numero = parseFloat(valor);
+
+  if (isNaN(numero)) {
+    freteInput.value = "";
+    totalInput.value = "";
+    return;
+  }
+
+  // 🔒 força 4 casas decimais
+  numero = Number(numero.toFixed(4));
+
+  freteInput.value = numero.toFixed(4);
+
+  const total = volume * numero;
+
+  totalInput.value = total.toLocaleString("pt-BR", {
+    style:"currency",
+    currency:"BRL"
+  });
+
+});
+
+});
+
+});
+
+/* ===== SALVAR ===== */
+btnSalvar.addEventListener("click",async()=>{
+
+  btnSalvar.disabled=true;
+  loaderBtn.classList.remove("hidden");
+  textoBtn.innerText="Salvando...";
+
+  try{
+
+    if(!tipoCaminhaoAtual) throw "Selecione o tipo de veículo.";
+
+    const dataInput=document.getElementById("dataCarregamento").value;
+    if(!dataInput) throw "Informe a data.";
+
+    const linhas=document.querySelectorAll(".compartimento");
+    if(linhas.length===0) throw "Compartimentos não gerados.";
+
+    let preenchidos=0;
+    let compartimentos=[];
+
+    linhas.forEach(l=>{
+      const cap=l.querySelector(".capacidade").innerText.replace(/\D/g,"");
+const cliente=l.querySelector(".cliente").value.trim().toUpperCase();
+const municipio=l.querySelector(".municipio").value.trim().toUpperCase();
+const horario=l.querySelector(".horarioCliente").value;
+const freteUnitario=parseFloat(l.querySelector(".freteUnitario").value) || 0;
+const totalLinha = Number(cap) * freteUnitario;
+const vendedor=l.querySelector(".vendedor").value.trim().toUpperCase();
+
+      if(cliente&&municipio&&vendedor) preenchidos++;
+
+compartimentos.push({
+  capacidade:Number(cap),
+  cliente,
+  municipio,
+  horario,
+  freteUnitario,
+  totalLinha,
+  vendedor
+});
+    });
+
+    if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
+
+    const dataBase = document.getElementById("dataCarregamento").value;
+const snap = await getDocs(collection(db,"programacao_cargas"));
+
+let ultimoNumero = 0;
+
+snap.forEach(docSnap => {
+  const numero = parseInt(docSnap.data().numeroCarga);
+  if (!isNaN(numero) && numero > ultimoNumero) {
+    ultimoNumero = numero;
+  }
+});
+
+const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
+    // ================= PREVIEW =================
+
+// ================= PREVIEW =================
+
+let resumoHTML = `
+  <div style="text-align:left;font-size:14px;">
+    <p><strong>Data:</strong> ${dataInput}</p>
+    <p><strong>Tipo:</strong> ${tipoCaminhaoAtual}</p>
+    <p><strong>Total:</strong> ${capacidadeTotalAtual.toLocaleString()} L</p>
+    <hr style="margin:10px 0;">
+`;
+
+compartimentos.forEach(c=>{
+  if(c.cliente){
+    resumoHTML += `
+      <div style="margin-bottom:6px;">
+        <strong>${c.cliente}</strong> - ${c.municipio}<br>
+        ${c.capacidade.toLocaleString()} L • ${c.vendedor}
+      </div>
+    `;
+  }
+});
+
+resumoHTML += "</div>";
+
+// Guarda dados temporariamente
+window._dadosTempCarga = {
+  numeroCarga,
+  dataInput,
+  compartimentos,
+  resumoHTML
+};
+
+abrirModal(
+  "Confirmar Criação da Carga",
+  resumoHTML + "<br><p><strong>Deseja confirmar?</strong></p>",
+  confirmarSalvarCarga
+);
+
+return; // 🔥 IMPORTANTÍSSIMO
+
+
+  }catch(e){
+    alert(e);
+  }
+
+  btnSalvar.disabled=false;
+  loaderBtn.classList.add("hidden");
+  textoBtn.innerText="Salvar Carga";
+});
+  
+window.toggleGrupo = function(id){
+  const linhas = document.querySelectorAll(".grupo-" + id);
+
+  linhas.forEach(linha=>{
+    linha.style.display =
+      linha.style.display === "none" ? "table-row" : "none";
+  });
+}
+  
+/* ===== AUTENTICAÇÃO + TABELA ===== */
+function carregarTabela() {
+
+onSnapshot(
+  query(
+    collection(db,"programacao_cargas"),
+    orderBy("criadoEm","desc")
+  ),
+  snap => {
+
+    tabela.innerHTML="";
+
+    if (snap.empty) {
+      tabela.innerHTML="<tr><td colspan='7'>Nenhuma carga encontrada</td></tr>";
+      return;
+    }
+
+        const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+
+let cargasHoje = [];
+let cargasFuturas = [];
+let cargasAntigas = [];
+let cargasFaturadas = [];
+
+    snap.forEach(docSnap=>{
+      const c = docSnap.data();
+
+      const dataCarga = c.dataCarregamento?.toDate 
+        ? c.dataCarregamento.toDate()
+        : new Date(c.dataCarregamento);
+
+      dataCarga.setHours(0,0,0,0);
+
+      const item = { id: docSnap.id, ...c, dataObj: dataCarga };
+
+if(c.status === "FATURADO"){
+  cargasFaturadas.push(item);
+}
+else if(dataCarga.getTime() === hoje.getTime()){
+  cargasHoje.push(item);
+}
+else if(dataCarga.getTime() > hoje.getTime()){
+  cargasFuturas.push(item);
+}
+else{
+  // Data menor que hoje (1 dia ou mais atrás)
+  cargasAntigas.push(item);
+}
+
+    });
+
+    // Ordenar por data crescente
+    cargasHoje.sort((a,b)=>a.dataObj - b.dataObj);
+    cargasFuturas.sort((a,b)=>a.dataObj - b.dataObj);
+    cargasFaturadas.sort((a,b)=>a.dataObj - b.dataObj);
+    cargasAntigas.sort((a,b)=>a.dataObj - b.dataObj);
+
+   function renderGrupo(titulo, lista, cor, grupoId){
+
+  if(lista.length === 0) return;
+
+  // Cabeçalho clicável
+  tabela.innerHTML += `
+    <tr onclick="toggleGrupo('${grupoId}')" 
+    class="linha-grupo grupo-header-${grupoId}"
+    style="cursor:pointer;">
+      <td colspan="8" style="
+        background:${cor};
+        color:#fff;
+        font-weight:700;
+        text-align:left;
+        padding:14px 20px;
+        font-size:13px;
+        letter-spacing:.5px;
+      ">
+        <span style="font-size:12px;opacity:.9;">${titulo}</span>
+<span style="margin-left:8px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:20px;font-size:11px;">
+${lista.length}
+</span>
+      </td>
+    </tr>
+  `;
+
+  lista.forEach(c=>{
+    tabela.innerHTML+=`
+      <tr class="linha-status status-${c.status} grupo-${grupoId}">
+        <td>${c.numeroCarga}</td>
+        <td>${c.dataObj.toLocaleDateString()}</td>
+<td>
+  ${
+    c.criadoEm?.toDate
+      ? c.criadoEm.toDate().toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"})
+      : "-"
+  }
+</td>
+<td>${c.placa||"-"}</td>
+        <td>${c.tipoCaminhao} ${c.configEixos || ""}</td>
+        <td>${c.capacidadeTotal?.toLocaleString()} L</td>
+        <td>
+          <span class="status-badge status-${c.status}">
+  ${
+    c.status === "PROGRAMADO"
+      ? "🟢 PROGRAMADO"
+      : c.status === "FATURADO"
+      ? "💰 FATURADO"
+      : "🟡 AGUARDANDO FILA"
+  }
+</span>
+        </td>
+        <td>
+          <div class="col-acoes">
+            <button class="btn btn-azul" onclick="toggleDetalhe('${c.id}')">👁 Ver</button>
+            <button class="btn" 
+  style="background:#2563eb;color:#fff;"
+  onclick="alterarCarga('${c.id}')">
+  ✏ Alterar
+</button>
+            <button class="btn btn-vincular" onclick="vincular('${c.id}')">
+              ${c.placa ? "Alterar" : "Vincular"}
+            </button>
+            ${c.placa ? `
+              <button class="btn btn-warning" onclick="voltarFila('${c.id}')">
+                ↩ Fila
+              </button>
+            ` : ""}
+           ${c.placa && c.status !== "FATURADO" ? `
+  <button class="btn" 
+    style="background:#16a34a;color:#fff;"
+    onclick="faturarCarga('${c.id}')">
+    💰 Faturar
+  </button>
+` : ""}
+            <button class="btn btn-excluir" onclick="excluirCarga('${c.id}')">
+              Excluir
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+renderGrupo("📦 CARGAS DE HOJE", cargasHoje, "#0A3D91", "hoje");
+
+renderGrupo("📅 CARGAS FUTURAS", cargasFuturas, "#3b82f6", "futuras");
+
+renderGrupo("⚠️ CARGAS ANTIGAS", cargasAntigas, "#b45309", "antigas");
+
+renderGrupo("💰 CARGAS FATURADAS", cargasFaturadas, "#16a34a", "faturadas");
+
+    },
+    error => {
+      console.error("Erro ao ler cargas:", error);
+    }
+  );
+
+}
+
+/* ===== MODAL ===== */
+function abrirModal(titulo,conteudo,acao){
+  document.getElementById("modalTitulo").innerText=titulo;
+  document.getElementById("modalConteudo").innerHTML=conteudo;
+  document.getElementById("btnConfirmarModal").onclick=acao;
+  document.getElementById("modalOverlay").style.display="flex";
+}
+
+function fecharModal(){
+  document.getElementById("modalOverlay").style.display="none";
+}
+
+function vincular(id){
+
+  abrirModal(
+    "Vincular Caminhão",
+    `<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
+    async()=>{
+
+      const placa = document.getElementById("placaModal").value.trim().toUpperCase();
+      if(!placa) return;
+
+      try{
+
+        // 1️⃣ Buscar carga
+        const cargaRef = doc(db,"programacao_cargas",id);
+        const cargaSnap = await getDoc(cargaRef);
+
+        if(!cargaSnap.exists()){
+          fecharModal();
+          return;
+        }
+
+        const carga = cargaSnap.data();
+
+        // 2️⃣ Buscar caminhão
+        const motoristaRef = doc(db,"motoristas_cadastro",placa);
+        const motoristaSnap = await getDoc(motoristaRef);
+
+        if(!motoristaSnap.exists()){
+          abrirModal(
+            "Caminhão não encontrado",
+            `<p>Placa <strong>${placa}</strong> não está cadastrada no sistema.</p>`,
+            ()=>{ fecharModal(); }
+          );
+          return;
+        }
+
+        const motorista = motoristaSnap.data();
+
+        // 3️⃣ Extrair configuração numérica (ex: 5532)
+        const configNumerica = motorista.configEixos.split("-")[0];
+
+        // 4️⃣ Gerar compartimentos reais
+        const compartimentosCaminhao = configNumerica
+          .split("")
+          .map(n => Number(n) * 1000);
+
+        // 5️⃣ Calcular capacidade total
+        const capacidadeCaminhao = compartimentosCaminhao
+          .reduce((a,b)=>a+b,0);
+
+        // ===== VALIDAÇÃO DE CAPACIDADE =====
+        if (capacidadeCaminhao < carga.capacidadeTotal) {
+
+          abrirModal(
+            "Capacidade Insuficiente",
+            `
+            <p><strong>Carga:</strong> ${carga.capacidadeTotal.toLocaleString()} L</p>
+            <p><strong>Caminhão:</strong> ${capacidadeCaminhao.toLocaleString()} L</p>
+            <br>
+            <p style="color:#b91c1c;font-weight:600;">
+              O caminhão não possui capacidade suficiente.
+            </p>
+            `,
+            ()=>{ fecharModal(); }
+          );
+
+          return;
+        }
+
+        // ===== VALIDAÇÃO DE DISTRIBUIÇÃO REAL =====
+function podeDistribuir(volumesCarga, compartimentos){
+
+  // Copia para não alterar original
+  let disponiveis = [...compartimentos];
+
+  // Ordena maior para menor (melhor encaixe)
+  disponiveis.sort((a,b)=>b-a);
+
+  for(let volume of volumesCarga){
+
+    let restante = volume;
+
+    // Ordena novamente a cada cliente
+    disponiveis.sort((a,b)=>b-a);
+
+    for(let i=0; i<disponiveis.length; i++){
+
+      if(disponiveis[i] > 0){
+
+        const usado = Math.min(disponiveis[i], restante);
+
+        disponiveis[i] -= usado;
+        restante -= usado;
+
+        if(restante === 0) break;
+      }
+    }
+
+    // Se terminou compartimentos e ainda sobrou volume
+    if(restante > 0){
+      return false;
+    }
+  }
+
+  return true;
+}
+        const volumesCarga = carga.compartimentos
+          .filter(c => c.cliente)
+          .map(c => c.capacidade);
+
+        if(!podeDistribuir(volumesCarga, compartimentosCaminhao)){
+
+          abrirModal(
+            "Distribuição Incompatível",
+            `
+            <p>Os volumes da carga não encaixam</p>
+            <p>nos compartimentos do caminhão.</p>
+            <br>
+            <p style="color:#b91c1c;font-weight:600;">
+              Verifique a configuração de eixos.
+            </p>
+            `,
+            ()=>{ fecharModal(); }
+          );
+
+          return;
+        }
+
+        // 6️⃣ Se passou em tudo
+        await updateDoc(cargaRef,{
+          placa:placa,
+          status:"PROGRAMADO"
+        });
+
+        fecharModal();
+
+      }catch(error){
+        console.error(error);
+        abrirModal(
+          "Erro",
+          "<p>Erro ao vincular caminhão.</p>",
+          ()=>{ fecharModal(); }
+        );
+      }
+
+    }
+  );
+
+}
+   
+ 
+  function voltarFila(id){
+  abrirModal(
+    "Retornar carga para fila",
+    "<p>Deseja remover a placa e retornar para Aguardando Fila?</p>",
+    async()=>{
+      await updateDoc(doc(db,"programacao_cargas",id),{
+        placa: null,
+        status:"AGUARDANDO_FILA"
+      });
+      fecharModal();
+    }
+  );
+}
+
+window.voltarFila = voltarFila;
+function toggleDetalhe(id){
+
+  const existente = document.getElementById("detalhe-"+id);
+  if(existente){
+    existente.remove();
+    return;
+  }
+
+  const docRef = doc(db,"programacao_cargas",id);
+
+  getDoc(docRef).then(docSnap=>{
+
+    const c = docSnap.data();
+
+    const linha = document.createElement("tr");
+    linha.id="detalhe-"+id;
+    linha.className="detalhe-linha";
+
+    let itensHTML="";
+
+    c.compartimentos.forEach(comp=>{
+      if(comp.cliente || comp.municipio || comp.vendedor){
+
+        itensHTML += `
+<div class="detalhe-item">
+  <div>${comp.cliente || "-"}</div>
+  <div>${comp.municipio || "-"}</div>
+  <div>${comp.horario || "-"}</div>
+  <div>R$ ${(comp.freteUnitario || 0).toFixed(4)}</div>
+  <div style="font-weight:700;color:#0A3D91;">
+    ${(comp.totalLinha || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+  </div>
+  <div>${comp.vendedor || "-"}</div>
+</div>
+        `;
+      }
+    });
+
+linha.innerHTML = `
+  <td colspan="8">
+    <div class="detalhe-container">
+
+      <div class="detalhe-header">
+        CÁLCULO DA CARGA – ${c.numeroCarga} • ${c.tipoCaminhao}
+      </div>
+
+<div style="
+  padding:10px 20px;
+  background:#f1f5f9;
+  font-size:13px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:40px;
+  text-align:center;
+">
+        <div><strong>Status:</strong> ${c.status}</div>
+        <div>
+          <strong>Placa:</strong> 
+          ${c.placa ? c.placa : '<span style="color:#b91c1c;font-weight:600;">Aguardando Veículo</span>'}
+        </div>
+        <div><strong>Total:</strong> ${c.capacidadeTotal?.toLocaleString()} L</div>
+      </div>
+
+  <div class="detalhe-colunas">
+ <div>Cliente</div>
+<div>Município</div>
+<div>Horário</div>
+<div>Frete Unitário</div>
+<div>Total</div>
+<div>Vendedor</div>
+</div>
+
+      ${itensHTML}
+
+      ${c.observacoes ? `
+        <div style="
+          padding:15px 20px;
+          background:#fff7ed;
+          border-top:1px solid #e5e7eb;
+          font-size:13px;
+        ">
+          <strong>Observações:</strong><br>
+          ${c.observacoes}
+        </div>
+      ` : ""}
+
+    </div>
+  </td>
+`;
+
+    const linhasTabela = [...tabela.querySelectorAll("tr")];
+    const linhaPrincipal = linhasTabela.find(tr => tr.innerHTML.includes(id));
+    linhaPrincipal.after(linha);
+
+  });
+
+}
+function excluirCarga(id){
+  abrirModal(
+    "Excluir Carga",
+    "<p>Deseja realmente excluir?</p>",
+    async()=>{
+      await deleteDoc(doc(db,"programacao_cargas",id));
+      fecharModal();
+    }
+  );
+}
+  async function alterarCarga(id){
+
+  const cargaRef = doc(db,"programacao_cargas",id);
+  const cargaSnap = await getDoc(cargaRef);
+
+  if(!cargaSnap.exists()) return;
+
+  const carga = cargaSnap.data();
+
+  let html = `
+    <div style="text-align:left;font-size:14px;">
+      <p><strong>Nº:</strong> ${carga.numeroCarga}</p>
+      <p><strong>Tipo:</strong> ${carga.tipoCaminhao}</p>
+      <hr style="margin:10px 0;">
+  `;
+
+  carga.compartimentos.forEach((comp,index)=>{
+    html += `
+      <div style="margin-bottom:12px;padding:8px;background:#f8fafc;border-radius:8px;">
+        <strong>${comp.capacidade.toLocaleString()} L</strong><br>
+        <input id="cliente_${index}" value="${comp.cliente || ""}" 
+          style="width:100%;margin-top:4px;text-transform:uppercase;">
+        <input id="municipio_${index}" value="${comp.municipio || ""}" 
+          style="width:100%;margin-top:4px;text-transform:uppercase;">
+        <input id="vendedor_${index}" value="${comp.vendedor || ""}" 
+          style="width:100%;margin-top:4px;text-transform:uppercase;">
+      </div>
+    `;
+  });
+
+  html += `
+    <hr>
+    <label>Observações</label>
+    <input id="obs_edit" value="${carga.observacoes || ""}" 
+      style="width:100%;margin-top:4px;text-transform:uppercase;">
+    </div>
+  `;
+
+  abrirModal(
+    "Alterar Carga",
+    html,
+    async ()=>{
+
+      let novosCompartimentos = carga.compartimentos.map((comp,index)=>({
+        capacidade: comp.capacidade,
+        cliente: document.getElementById(`cliente_${index}`).value.trim().toUpperCase(),
+        municipio: document.getElementById(`municipio_${index}`).value.trim().toUpperCase(),
+        vendedor: document.getElementById(`vendedor_${index}`).value.trim().toUpperCase()
+      }));
+
+      await updateDoc(cargaRef,{
+        compartimentos: novosCompartimentos,
+        observacoes: document.getElementById("obs_edit").value.trim().toUpperCase()
+      });
+
+      fecharModal();
+    }
+  );
+}
+
+window.alterarCarga = alterarCarga;
+
+  function faturarCarga(id){
+
+  abrirModal(
+    "Confirmar Faturamento",
+    "<p>Deseja marcar esta carga como FATURADA?</p>",
+    async()=>{
+      await updateDoc(doc(db,"programacao_cargas",id),{
+        status:"FATURADO",
+        faturadoEm: serverTimestamp()
+      });
+      fecharModal();
+    }
+  );
+
+}
+
+async function confirmarSalvarCarga(){
+
+  const dados = window._dadosTempCarga;
+  fecharModal();
+
+  try{
+
+    // 🔥 AGORA SIM SALVA NO FIRESTORE
+    await addDoc(collection(db,"programacao_cargas"),{
+      numeroCarga: dados.numeroCarga,
+      dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
+      dataReferencia: dados.dataInput,
+      horarioPrevisto:document.getElementById("horarioPrevisto").value,
+      tipoCaminhao:tipoCaminhaoAtual,
+      configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
+      capacidadeTotal:capacidadeTotalAtual,
+      placa:null,
+      status:"AGUARDANDO_FILA",
+      compartimentos:dados.compartimentos,
+      observacoes: document.getElementById("observacoes").value.toUpperCase(),
+      criadoEm:serverTimestamp()
+    });
+
+    abrirModal(
+      "Carga Criada com Sucesso",
+      `
+      <div style="text-align:left;font-size:14px;">
+        <p style="font-size:16px;font-weight:700;">
+          Nº da Carga: ${dados.numeroCarga}
+        </p>
+        <hr style="margin:10px 0;">
+        ${dados.resumoHTML}
+      </div>
+      `,
+      ()=>{ fecharModal(); }
+    );
+
+    // 🔄 LIMPAR FORMULÁRIO
+    document.getElementById("observacoes").value = "";
+    document.getElementById("km").value = "";
+    document.getElementById("horarioPrevisto").value = "";
+    document.getElementById("tipoVeiculo").value = "";
+    container.innerHTML = "";
+    infoVeiculo.style.display = "none";
+
+    // 🔄 Resetar data para hoje novamente
+    const hoje = new Date();
+    const yyyy = hoje.getFullYear();
+    const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoje.getDate()).padStart(2, '0');
+    document.getElementById("dataCarregamento").value = `${yyyy}-${mm}-${dd}`;
+
+  }catch(error){
+    console.error(error);
+    abrirModal(
+      "Erro",
+      "<p>Erro ao salvar carga.</p>",
+      ()=>{ fecharModal(); }
+    );
+  }
+
+  // 🔥 RESET BOTÃO SEM LOOP
+  btnSalvar.disabled = false;
+  loaderBtn.classList.add("hidden");
+  textoBtn.innerText = "Salvar Carga";
+}
+
+window.confirmarSalvarCarga = confirmarSalvarCarga;
+
+window.faturarCarga = faturarCarga;
+
+window.vincular=vincular;
+window.excluirCarga=excluirCarga;
+window.fecharModal=fecharModal;
+window.toggleDetalhe = toggleDetalhe;
+  
+onAuthStateChanged(auth, async (user) => {
+
+  if (user) {
+    console.log("Usuário autenticado:", user.email);
+    carregarTabela();
+  } else {
+
+    // Aguarda um pequeno tempo para o Firebase restaurar a sessão
+    setTimeout(() => {
+
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        console.log("Sessão restaurada:", currentUser.email);
+        carregarTabela();
+      } else {
+        console.log("Sem sessão ativa.");
+      }
+
+    }, 500);
+
+  }
+
+});
+  const hoje = new Date();
+const yyyy = hoje.getFullYear();
+const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+const dd = String(hoje.getDate()).padStart(2, '0');
+
+document.getElementById("dataCarregamento").value = `${yyyy}-${mm}-${dd}`;
+</script>
+
+</body>
+</html>
