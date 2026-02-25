@@ -267,6 +267,7 @@ td{
 }
 
 .detalhe-container{
+  text-align:center;
   border-radius:12px;
   overflow:hidden;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
@@ -282,9 +283,10 @@ td{
 }
 
 .detalhe-colunas{
+  text-align:center;
   background:#e2e8f0;
   display:grid;
-  grid-template-columns:2fr 2fr 1fr 1fr;
+  grid-template-columns:1.5fr 1.5fr 1fr 1fr;
   padding:10px 20px;
   font-weight:600;
   font-size:12px;
@@ -292,8 +294,9 @@ td{
 }
 
 .detalhe-item{
+  text-align:center;
   display:grid;
-  grid-template-columns:2fr 2fr 1fr 1fr;
+  grid-template-columns:1.5fr 1.5fr 1fr 1fr;
   padding:12px 20px;
   border-top:1px solid #e5e7eb;
   font-size:14px;
@@ -1021,15 +1024,17 @@ linha.innerHTML = `
         CÁLCULO DA CARGA – ${c.numeroCarga} • ${c.tipoCaminhao}
       </div>
 
-      <div style="
-        padding:10px 20px;
-        background:#f1f5f9;
-        font-size:13px;
-        display:flex;
-        justify-content:space-between;
-        flex-wrap:wrap;
-        gap:10px;
-      ">
+<div style="
+  padding:10px 20px;
+  background:#f1f5f9;
+  font-size:13px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:40px;
+  text-align:center;
+">
         <div><strong>Status:</strong> ${c.status}</div>
         <div>
           <strong>Placa:</strong> 
