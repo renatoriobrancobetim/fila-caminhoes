@@ -578,6 +578,80 @@ function calcularFreteRota(){
   });
 
 }
+
+  function resetarFretes(){
+
+  document.getElementById("km").value = "";
+  document.getElementById("freteTotalRota").value = "";
+  document.getElementById("freteUnitarioMedio").value = "";
+
+  document.querySelectorAll(".freteUnitario").forEach(input=>{
+    input.value = "";
+  });
+
+  document.querySelectorAll(".totalLinha").forEach(input=>{
+    input.value = "";
+  });
+
+}
+  function aplicarRateioAutomatico(){
+
+  const freteTotalTexto = document.getElementById("freteTotalRota").value;
+
+  if(!freteTotalTexto) return;
+
+  const freteTotal = parseFloat(
+    freteTotalTexto.replace(/\./g,"").replace(",",".").replace("R$","")
+  );
+
+  const linhas = document.querySelectorAll(".compartimento");
+
+  let totalVolume = 0;
+  let totalJaDistribuido = 0;
+
+  linhas.forEach(linha=>{
+    const volume = Number(
+      linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
+    );
+
+    const frete = parseFloat(linha.querySelector(".freteUnitario").value) || 0;
+
+    totalVolume += volume;
+    totalJaDistribuido += volume * frete;
+  });
+
+  const diferenca = freteTotal - totalJaDistribuido;
+
+  if(Math.abs(diferenca) < 0.01) return;
+
+  const volumeTotal = totalVolume;
+
+  linhas.forEach(linha=>{
+
+    const volume = Number(
+      linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
+    );
+
+    const freteInput = linha.querySelector(".freteUnitario");
+    const totalInput = linha.querySelector(".totalLinha");
+
+    let freteAtual = parseFloat(freteInput.value) || 0;
+
+    const ajuste = (volume / volumeTotal) * diferenca;
+
+    const novoFreteTotalLinha = (volume * freteAtual) + ajuste;
+    const novoFreteUnit = novoFreteTotalLinha / volume;
+
+    freteInput.value = novoFreteUnit.toFixed(4);
+
+    totalInput.value = novoFreteTotalLinha.toLocaleString("pt-BR",{
+      style:"currency",
+      currency:"BRL"
+    });
+
+  });
+
+}
 /* ===== GERAR COMPARTIMENTOS ===== */
 document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
@@ -609,6 +683,7 @@ if(baseFrete[tipoBase]){
 }
 
   tipoCaminhaoAtual = tipo;
+  resetarFretes();
 
   let compartimentos = [];
 
@@ -704,7 +779,7 @@ freteInput.addEventListener("blur", () => {
     style:"currency",
     currency:"BRL"
   });
-
+aplicarRateioAutomatico();
 });
 
 });
