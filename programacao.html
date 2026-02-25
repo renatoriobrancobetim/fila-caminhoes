@@ -1221,14 +1221,16 @@ function formatarObservacoes(texto){
 
   if(!texto) return "";
 
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urlRegex = /(https?:\/\/[^\s]+)/gi;
 
   return texto.replace(urlRegex, function(url){
 
+    const urlLower = url.toLowerCase();
+
     const isGoogleMaps =
-      url.includes("google.com/maps") ||
-      url.includes("maps.app.goo.gl") ||
-      url.includes("goo.gl/maps");
+      urlLower.includes("google.com/maps") ||
+      urlLower.includes("maps.app.goo.gl") ||
+      urlLower.includes("goo.gl/maps");
 
     if(isGoogleMaps){
 
@@ -1259,7 +1261,6 @@ function formatarObservacoes(texto){
       `;
     }
 
-    // Se for outro tipo de link
     return `
       <div style="margin-top:8px;">
         <a href="${url}" 
@@ -1269,7 +1270,6 @@ function formatarObservacoes(texto){
         </a>
       </div>
     `;
-
   });
 
 }
@@ -1614,7 +1614,7 @@ await addDoc(collection(db,"programacao_cargas"),{
   placa:null,
   status:"AGUARDANDO_FILA",
   compartimentos:dados.compartimentos,
-  observacoes: document.getElementById("observacoes").value.toUpperCase(),
+  observacoes: document.getElementById("observacoes").value,
   criadoEm:serverTimestamp()
 });
 
