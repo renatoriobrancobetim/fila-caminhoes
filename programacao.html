@@ -311,7 +311,7 @@ td{
 .detalhe-item{
   text-align:center;
   display:grid;
-  grid-template-columns:1.5fr 1.5fr 1fr 1fr;
+  grid-template-columns:2fr 2fr 1fr 1.3fr 1.3fr 1fr;
   padding:12px 20px;
   border-top:1px solid #e5e7eb;
   font-size:14px;
@@ -1263,7 +1263,7 @@ function toggleDetalhe(id){
     c.compartimentos.forEach(comp=>{
       if(comp.cliente || comp.municipio || comp.vendedor){
 
-        itensHTML += `
+itensHTML += `
 <div class="detalhe-item">
   <div>${comp.cliente || "-"}</div>
   <div>${comp.municipio || "-"}</div>
@@ -1274,7 +1274,7 @@ function toggleDetalhe(id){
   </div>
   <div>${comp.vendedor || "-"}</div>
 </div>
-        `;
+`;
       }
     });
 
