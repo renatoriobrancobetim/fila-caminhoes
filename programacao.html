@@ -91,7 +91,8 @@ input,select{
 
 /* BOTÕES */
 .btn{
-  padding:8px 14px;
+  padding:5px 10px;
+  font-size:12px;
   border:none;
   border-radius:8px;
   cursor:pointer;
@@ -142,12 +143,14 @@ thead tr{
 
 th{
   color:#fff;
-  padding:16px;
+ padding:12px;
+  font-size:13px;
   text-align:center;
 }
 
 td{
-  padding:14px;
+  padding:8px 10px;   /* mais compacto */
+  font-size:13px;     /* ligeiramente menor */
   border-bottom:1px solid #f1f5f9;
   text-align:center;
 }
@@ -157,12 +160,13 @@ td{
   display:inline-flex;
   align-items:center;
   gap:6px;
-  padding:6px 14px;
+   padding:4px 10px;
+  font-size:11px;
   border-radius:20px;
-  font-size:12px;
   font-weight:600;
   letter-spacing:.5px;
   transition:all .3s ease;
+  white-space:nowrap;   /* 🔥 impede quebra */
 }
 
 .status-AGUARDANDO_FILA{
