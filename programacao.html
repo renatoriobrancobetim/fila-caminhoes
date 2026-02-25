@@ -1287,7 +1287,7 @@ linha.innerHTML = `
       </div>
 
 <div style="
-  padding:10px 20px;
+  padding:15px 20px;
   background:#f1f5f9;
   font-size:13px;
   display:flex;
@@ -1297,6 +1297,33 @@ linha.innerHTML = `
   gap:40px;
   text-align:center;
 ">
+
+  <div>
+    <strong>Status:</strong> ${c.status}
+  </div>
+
+  <div>
+    <strong>Placa:</strong> 
+    ${c.placa ? c.placa : '<span style="color:#b91c1c;font-weight:600;">Aguardando Veículo</span>'}
+  </div>
+
+  <div>
+    <strong>Total Litros:</strong> ${c.capacidadeTotal?.toLocaleString()} L
+  </div>
+
+  <div>
+    <strong>KM:</strong> ${c.km || 0}
+  </div>
+
+  <div>
+    <strong>Frete Total:</strong> ${c.freteTotalRota || "—"}
+  </div>
+
+  <div>
+    <strong>Frete Unit. Médio:</strong> ${c.freteUnitarioMedio || "—"}
+  </div>
+
+</div>
         <div><strong>Status:</strong> ${c.status}</div>
         <div>
           <strong>Placa:</strong> 
@@ -1435,20 +1462,23 @@ async function confirmarSalvarCarga(){
   try{
 
     // 🔥 AGORA SIM SALVA NO FIRESTORE
-    await addDoc(collection(db,"programacao_cargas"),{
-      numeroCarga: dados.numeroCarga,
-      dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
-      dataReferencia: dados.dataInput,
-      horarioPrevisto:document.getElementById("horarioPrevisto").value,
-      tipoCaminhao:tipoCaminhaoAtual,
-      configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
-      capacidadeTotal:capacidadeTotalAtual,
-      placa:null,
-      status:"AGUARDANDO_FILA",
-      compartimentos:dados.compartimentos,
-      observacoes: document.getElementById("observacoes").value.toUpperCase(),
-      criadoEm:serverTimestamp()
-    });
+   await addDoc(collection(db,"programacao_cargas"),{
+  numeroCarga: dados.numeroCarga,
+  dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
+  dataReferencia: dados.dataInput,
+  horarioPrevisto:document.getElementById("horarioPrevisto").value,
+  tipoCaminhao:tipoCaminhaoAtual,
+  configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
+  capacidadeTotal:capacidadeTotalAtual,
+  km: parseFloat(document.getElementById("km").value) || 0,
+  freteTotalRota: document.getElementById("freteTotalRota").value || "",
+  freteUnitarioMedio: document.getElementById("freteUnitarioMedio").value || "",
+  placa:null,
+  status:"AGUARDANDO_FILA",
+  compartimentos:dados.compartimentos,
+  observacoes: document.getElementById("observacoes").value.toUpperCase(),
+  criadoEm:serverTimestamp()
+});
 
     abrirModal(
       "Carga Criada com Sucesso",
