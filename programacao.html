@@ -1280,130 +1280,120 @@ itensHTML += `
     });
 
 linha.innerHTML = `
-  <td colspan="8">
-    <div class="detalhe-container">
+<td colspan="8">
+  <div class="detalhe-container">
 
-      <div class="detalhe-header">
-        CÁLCULO DA CARGA – ${c.numeroCarga} • ${c.tipoCaminhao}
-      </div>
-
-<div style="
-  padding:15px 20px;
-  background:#f1f5f9;
-  font-size:13px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:40px;
-  text-align:center;
-">
-
-  <div>
-    <strong>Status:</strong> ${c.status}
-  </div>
-
-   <div class="detalhe-colunas">
- <div>Cliente</div>
-<div>Município</div>
-<div>Horário</div>
-<div>Frete Unitário</div>
-<div>Total</div>
-<div>Vendedor</div>
-</div>
-
-      ${itensHTML}
-<div style="
-  padding:12px 15px;
-  background:#f8fafc;
-  border-top:1px solid #e2e8f0;
-  margin-top:6px;
-">
-
-<div style="
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:8px;
-  font-size:12px;
-  text-align:center;
-">
-
-    <div>
-      <strong>KM Rota</strong><br>
-      ${c.km || 0}
+    <div class="detalhe-header">
+      CÁLCULO DA CARGA – ${c.numeroCarga} • ${c.tipoCaminhao}
     </div>
-
-    <div>
-      <strong>Índice Utilizado</strong><br>
-      ${(c.indiceUsado || 0).toFixed(4)}
-    </div>
-
-    <div>
-      <strong>Taxa Utilizada</strong><br>
-      ${(c.taxaUsada || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
-    </div>
-
-    <div>
-      <strong>Frete Total Rota</strong><br>
-      ${c.freteTotalRota || "—"}
-    </div>
-
-    <div>
-      <strong>Frete Unitário Médio</strong><br>
-      ${c.freteUnitarioMedio || "—"}
-    </div>
-
-  </div>
-
-</div>
-${c.observacoes ? `
-<div style="
-  display:flex;
-  justify-content:center;
-  padding:12px 15px;
-    background:#f8fafc;
-    border-top:1px solid #e5e7eb;
-  ">
 
     <div style="
-      max-width:700px;
-      width:100%;
-      background:#ffffff;
-      border-left:5px solid #0A3D91;
-      border-radius:10px;
-      padding:14px 18px;
-      box-shadow:0 6px 18px rgba(0,0,0,.08);
+      padding:12px 20px;
+      background:#f1f5f9;
+      font-size:13px;
       text-align:center;
     ">
+      <strong>Status:</strong> ${c.status}
+      &nbsp;&nbsp;&nbsp;
+      <strong>Placa:</strong>
+      ${c.placa ? c.placa : '<span style="color:#b91c1c;font-weight:600;">Aguardando Veículo</span>'}
+      &nbsp;&nbsp;&nbsp;
+      <strong>Total Litros:</strong> ${c.capacidadeTotal?.toLocaleString()} L
+    </div>
 
+    <div class="detalhe-colunas">
+      <div>Cliente</div>
+      <div>Município</div>
+      <div>Horário</div>
+      <div>Frete Unitário</div>
+      <div>Total</div>
+      <div>Vendedor</div>
+    </div>
+
+    ${itensHTML}
+
+    <!-- BLOCO FINANCEIRO -->
+    <div style="
+      padding:12px 15px;
+      background:#f8fafc;
+      border-top:1px solid #e2e8f0;
+      margin-top:6px;
+    ">
       <div style="
-        font-weight:600;
-        margin-bottom:10px;
-        color:#0A3D91;
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+        gap:8px;
+        font-size:12px;
+        text-align:center;
+      ">
+
+        <div>
+          <strong>KM Rota</strong><br>
+          ${c.km || 0}
+        </div>
+
+        <div>
+          <strong>Índice Utilizado</strong><br>
+          ${(c.indiceUsado || 0).toFixed(4)}
+        </div>
+
+        <div>
+          <strong>Taxa Utilizada</strong><br>
+          ${(c.taxaUsada || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+        </div>
+
+        <div>
+          <strong>Frete Total Rota</strong><br>
+          ${c.freteTotalRota || "—"}
+        </div>
+
+        <div>
+          <strong>Frete Unitário Médio</strong><br>
+          ${c.freteUnitarioMedio || "—"}
+        </div>
+
+      </div>
+    </div>
+
+    ${c.observacoes ? `
+      <div style="
         display:flex;
         justify-content:center;
-        align-items:center;
-        gap:8px;
-        font-size:14px;
+        padding:12px 15px;
+        background:#f8fafc;
+        border-top:1px solid #e5e7eb;
       ">
-        📝 Observações
+        <div style="
+          max-width:700px;
+          width:100%;
+          background:#ffffff;
+          border-left:5px solid #0A3D91;
+          border-radius:10px;
+          padding:14px 18px;
+          box-shadow:0 6px 18px rgba(0,0,0,.08);
+          text-align:center;
+        ">
+          <div style="
+            font-weight:600;
+            margin-bottom:8px;
+            color:#0A3D91;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:8px;
+            font-size:13px;
+          ">
+            📝 Observações
+          </div>
+          <div style="font-size:12px;color:#334155;">
+            ${c.observacoes}
+          </div>
+        </div>
       </div>
-
-      <div style="
-        font-size:13px;
-        color:#334155;
-        line-height:1.6;
-      ">
-        ${c.observacoes}
-      </div>
-
-    </div>
+    ` : ""}
 
   </div>
-` : ""}
-
-    </div>
-  </td>
+</td>
 `;
 
     const linhasTabela = [...tabela.querySelectorAll("tr")];
