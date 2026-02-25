@@ -302,7 +302,7 @@ td{
   background:#e2e8f0;
   display:grid;
   grid-template-columns:2fr 2fr 1fr 1.3fr 1.3fr 1fr;
-  padding:10px 20px;
+  padding:6px 20px;
   font-weight:600;
   font-size:12px;
   text-transform:uppercase;
@@ -311,11 +311,12 @@ td{
 .detalhe-item{
   text-align:center;
   display:grid;
-  grid-template-columns:1.5fr 1.5fr 1fr 1fr;
-  padding:12px 20px;
+  grid-template-columns:2fr 2fr 1fr 1.3fr 1.3fr 1fr;
+  padding:6px 20px;
   border-top:1px solid #e5e7eb;
   font-size:14px;
   align-items:center;
+  line-height:1.2;
 }
 
 .detalhe-item:nth-child(even){
@@ -353,6 +354,17 @@ td{
 }
   input[type="text"]{
   text-transform: uppercase;
+}
+.campo-calculado{
+  background:#eef2f7 !important;
+  font-weight:700;
+  color:#0A3D91;
+  border:1px solid #dbe3ec;
+}
+  .campo-calculado:focus{
+  outline:none;
+  box-shadow:none;
+  cursor:default;
 }
 </style>
 </head>
@@ -420,6 +432,15 @@ td{
 
 <div class="linha-bottom">
 <input type="number" id="km" placeholder="KM">
+ <input type="text" id="freteTotalRota" 
+       placeholder="Frete Total" 
+       readonly 
+       class="campo-calculado">
+
+<input type="text" id="freteUnitarioMedio" 
+       placeholder="Frete Unitário Médio" 
+       readonly 
+       class="campo-calculado">
 <input type="text" id="observacoes" placeholder="Observações" style="text-transform:uppercase;">
 </div>
 
@@ -499,6 +520,17 @@ setPersistence(auth, browserLocalPersistence);
 /* ===== VARIÁVEIS ===== */
 let tipoCaminhaoAtual="";
 let capacidadeTotalAtual=0;
+  const baseFrete = {
+  FROTA:{indice:5.8402,taxa:669.32},
+  BITRUCK:{indice:4.9381,taxa:414.93},
+  TRUCK:{indice:4.4266,taxa:412.57},
+  TOCO:{indice:3.5686,taxa:364.71},
+  CARRETA:{indice:5.6203,taxa:460.29}
+};
+
+let indiceAtual = 0;
+let taxaAtual = 0;
+  
 
 const infoVeiculo=document.getElementById("infoVeiculo");
 const container=document.getElementById("containerCompartimentos");
@@ -507,6 +539,138 @@ const btnSalvar=document.getElementById("btnSalvar");
 const textoBtn=document.getElementById("textoBtn");
 const loaderBtn=document.getElementById("loaderBtn");
 
+  document.getElementById("km").addEventListener("input", calcularFreteRota);
+
+function calcularFreteRota(){
+
+  const km = parseFloat(document.getElementById("km").value);
+
+  if(!km || !indiceAtual){
+    document.getElementById("freteTotalRota").value = "";
+    document.getElementById("freteUnitarioMedio").value = "";
+    return;
+  }
+
+  const freteTotal = (km * indiceAtual) + taxaAtual;
+
+  // 🔥 Atualiza Frete Total
+  document.getElementById("freteTotalRota").value =
+    freteTotal.toLocaleString("pt-BR",{
+      style:"currency",
+      currency:"BRL"
+    });
+
+  // 🔥 Calcula Frete Unitário Médio
+  if(capacidadeTotalAtual > 0){
+
+    const freteUnitMedio = freteTotal / capacidadeTotalAtual;
+
+    document.getElementById("freteUnitarioMedio").value =
+      freteUnitMedio.toFixed(4);
+
+    distribuirFreteAutomatico(freteUnitMedio);
+  }
+}
+
+  function distribuirFreteAutomatico(valorUnitario){
+
+  document.querySelectorAll(".compartimento").forEach(linha => {
+
+    const volume = Number(
+      linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
+    );
+
+    const freteInput = linha.querySelector(".freteUnitario");
+    const totalInput = linha.querySelector(".totalLinha");
+
+    // 🔥 Preenche frete unitário
+    freteInput.value = valorUnitario.toFixed(4);
+
+    // 🔥 Calcula total da linha
+    const total = volume * valorUnitario;
+
+    totalInput.value = total.toLocaleString("pt-BR",{
+      style:"currency",
+      currency:"BRL"
+    });
+
+  });
+
+}
+
+  function resetarFretes(){
+
+  document.getElementById("km").value = "";
+  document.getElementById("freteTotalRota").value = "";
+  document.getElementById("freteUnitarioMedio").value = "";
+
+  document.querySelectorAll(".freteUnitario").forEach(input=>{
+    input.value = "";
+  });
+
+  document.querySelectorAll(".totalLinha").forEach(input=>{
+    input.value = "";
+  });
+
+}
+  function aplicarRateioAutomatico(){
+
+  const freteTotalTexto = document.getElementById("freteTotalRota").value;
+
+  if(!freteTotalTexto) return;
+
+  const freteTotal = parseFloat(
+    freteTotalTexto.replace(/\./g,"").replace(",",".").replace("R$","")
+  );
+
+  const linhas = document.querySelectorAll(".compartimento");
+
+  let totalVolume = 0;
+  let totalJaDistribuido = 0;
+
+  linhas.forEach(linha=>{
+    const volume = Number(
+      linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
+    );
+
+    const frete = parseFloat(linha.querySelector(".freteUnitario").value) || 0;
+
+    totalVolume += volume;
+    totalJaDistribuido += volume * frete;
+  });
+
+  const diferenca = freteTotal - totalJaDistribuido;
+
+  if(Math.abs(diferenca) < 0.01) return;
+
+  const volumeTotal = totalVolume;
+
+  linhas.forEach(linha=>{
+
+    const volume = Number(
+      linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
+    );
+
+    const freteInput = linha.querySelector(".freteUnitario");
+    const totalInput = linha.querySelector(".totalLinha");
+
+    let freteAtual = parseFloat(freteInput.value) || 0;
+
+    const ajuste = (volume / volumeTotal) * diferenca;
+
+    const novoFreteTotalLinha = (volume * freteAtual) + ajuste;
+    const novoFreteUnit = novoFreteTotalLinha / volume;
+
+    freteInput.value = novoFreteUnit.toFixed(4);
+
+    totalInput.value = novoFreteTotalLinha.toLocaleString("pt-BR",{
+      style:"currency",
+      currency:"BRL"
+    });
+
+  });
+
+}
 /* ===== GERAR COMPARTIMENTOS ===== */
 document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
@@ -514,6 +678,7 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
   if (!valor) {
     tipoCaminhaoAtual="";
+
     container.innerHTML="";
     infoVeiculo.style.display="none";
     document.getElementById("cabecalhoCompartimentos").style.display="none";
@@ -521,8 +686,23 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
   }
 
   const [tipo, configuracao] = valor.split("|");
+  // 🔥 Ajusta tipo para baseFrete
+let tipoBase = tipo.toUpperCase();
+
+if(tipoBase.startsWith("TRUCK")) {
+  tipoBase = "TRUCK";
+}
+
+if(baseFrete[tipoBase]){
+  indiceAtual = baseFrete[tipoBase].indice;
+  taxaAtual = baseFrete[tipoBase].taxa;
+} else {
+  indiceAtual = 0;
+  taxaAtual = 0;
+}
 
   tipoCaminhaoAtual = tipo;
+  resetarFretes();
 
   let compartimentos = [];
 
@@ -545,7 +725,14 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
   infoVeiculo.style.display="block";
   document.getElementById("cabecalhoCompartimentos").style.display="grid";
-  infoVeiculo.innerHTML=`🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L`;
+  infoVeiculo.innerHTML = `
+  🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L
+  <br>
+  <small>
+    Índice: ${indiceAtual.toFixed(4)} • 
+    Taxa: ${taxaAtual.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+  </small>
+`;
 
   container.innerHTML="";
 
@@ -611,7 +798,7 @@ freteInput.addEventListener("blur", () => {
     style:"currency",
     currency:"BRL"
   });
-
+aplicarRateioAutomatico();
 });
 
 });
@@ -1095,7 +1282,7 @@ function toggleDetalhe(id){
     c.compartimentos.forEach(comp=>{
       if(comp.cliente || comp.municipio || comp.vendedor){
 
-        itensHTML += `
+itensHTML += `
 <div class="detalhe-item">
   <div>${comp.cliente || "-"}</div>
   <div>${comp.municipio || "-"}</div>
@@ -1106,67 +1293,193 @@ function toggleDetalhe(id){
   </div>
   <div>${comp.vendedor || "-"}</div>
 </div>
-        `;
+`;
       }
     });
 
 linha.innerHTML = `
-  <td colspan="8">
-    <div class="detalhe-container">
+<td colspan="8">
+  <div class="detalhe-container">
 
-      <div class="detalhe-header">
-        CÁLCULO DA CARGA – ${c.numeroCarga} • ${c.tipoCaminhao}
-      </div>
-
-<div style="
-  padding:10px 20px;
-  background:#f1f5f9;
-  font-size:13px;
+   <div class="detalhe-header" style="
   display:flex;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
-  flex-wrap:wrap;
-  gap:40px;
-  text-align:center;
+  padding:14px 20px;
+  background:linear-gradient(90deg,#0A3D91,#1e3a8a);
+  border-top-left-radius:12px;
+  border-top-right-radius:12px;
 ">
-        <div><strong>Status:</strong> ${c.status}</div>
-        <div>
-          <strong>Placa:</strong> 
-          ${c.placa ? c.placa : '<span style="color:#b91c1c;font-weight:600;">Aguardando Veículo</span>'}
-        </div>
-        <div><strong>Total:</strong> ${c.capacidadeTotal?.toLocaleString()} L</div>
-      </div>
 
-  <div class="detalhe-colunas">
- <div>Cliente</div>
-<div>Município</div>
-<div>Horário</div>
-<div>Frete Unitário</div>
-<div>Total</div>
-<div>Vendedor</div>
+  <div style="font-weight:600;font-size:14px;letter-spacing:.5px;">
+    📦 CÁLCULO DA CARGA – ${c.numeroCarga}
+    <span style="opacity:.8;font-weight:400;">
+      • ${c.tipoCaminhao}
+    </span>
+  </div>
+
+  <div id="badgeStatus_${c.numeroCarga}"></div>
+
 </div>
 
-      ${itensHTML}
-
-      ${c.observacoes ? `
-        <div style="
-          padding:15px 20px;
-          background:#fff7ed;
-          border-top:1px solid #e5e7eb;
-          font-size:13px;
-        ">
-          <strong>Observações:</strong><br>
-          ${c.observacoes}
-        </div>
-      ` : ""}
-
+    <div style="
+      padding:12px 20px;
+      background:#f1f5f9;
+      font-size:13px;
+      text-align:center;
+    ">
+      <strong>Status:</strong> ${c.status}
+      &nbsp;&nbsp;&nbsp;
+      <strong>Placa:</strong>
+      ${c.placa ? c.placa : '<span style="color:#b91c1c;font-weight:600;">Aguardando Veículo</span>'}
+      &nbsp;&nbsp;&nbsp;
+      <strong>Total Litros:</strong> ${c.capacidadeTotal?.toLocaleString()} L
     </div>
-  </td>
+
+    <div class="detalhe-colunas">
+      <div>Cliente</div>
+      <div>Município</div>
+      <div>Horário</div>
+      <div>Frete Unitário</div>
+      <div>Total</div>
+      <div>Vendedor</div>
+    </div>
+
+    ${itensHTML}
+
+    <!-- BLOCO FINANCEIRO -->
+    <div style="
+      padding:8px 15px;
+      background:#f8fafc;
+      border-top:1px solid #e2e8f0;
+      margin-top:6px;
+    ">
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+        gap:4px;
+        font-size:12px;
+        text-align:center;
+      ">
+
+        <div>
+          <strong>KM Rota</strong><br>
+          ${c.km || 0}
+        </div>
+
+        <div>
+          <strong>Índice Utilizado</strong><br>
+          ${(c.indiceUsado || 0).toFixed(4)}
+        </div>
+
+        <div>
+          <strong>Taxa Utilizada</strong><br>
+          ${(c.taxaUsada || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+        </div>
+
+        <div>
+          <strong>Frete Total Rota</strong><br>
+          ${c.freteTotalRota || "—"}
+        </div>
+
+        <div>
+          <strong>Frete Unitário Médio</strong><br>
+          ${c.freteUnitarioMedio || "—"}
+        </div>
+
+      </div>
+    </div>
+
+    ${c.observacoes ? `
+      <div style="
+        display:flex;
+        justify-content:center;
+        padding:12px 15px;
+        background:#f8fafc;
+        border-top:1px solid #e5e7eb;
+      ">
+        <div style="
+          max-width:700px;
+          width:100%;
+          background:#ffffff;
+          border-left:5px solid #0A3D91;
+          border-radius:10px;
+          padding:14px 18px;
+          box-shadow:0 6px 18px rgba(0,0,0,.08);
+          text-align:center;
+        ">
+          <div style="
+            font-weight:600;
+            margin-bottom:8px;
+            color:#0A3D91;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:8px;
+            font-size:13px;
+          ">
+            📝 Observações
+          </div>
+          <div style="font-size:12px;color:#334155;">
+            ${c.observacoes}
+          </div>
+        </div>
+      </div>
+    ` : ""}
+
+  </div>
+</td>
 `;
 
     const linhasTabela = [...tabela.querySelectorAll("tr")];
     const linhaPrincipal = linhasTabela.find(tr => tr.innerHTML.includes(id));
     linhaPrincipal.after(linha);
+
+// 👇 COLE O PASSO 2 AQUI
+setTimeout(() => {
+
+  const badge = document.getElementById("badgeStatus_" + c.numeroCarga);
+
+  if(!badge) return;
+
+  let corFundo = "";
+  let corTexto = "";
+  let texto = "";
+
+  if(c.status === "AGUARDANDO_FILA"){
+    corFundo = "#fef3c7";
+    corTexto = "#92400e";
+    texto = "🟡 AGUARDANDO FILA";
+  }
+
+  if(c.status === "PROGRAMADO"){
+    corFundo = "#dcfce7";
+    corTexto = "#166534";
+    texto = "🟢 PROGRAMADO";
+  }
+
+  if(c.status === "FATURADO"){
+    corFundo = "#d1fae5";
+    corTexto = "#065f46";
+    texto = "💰 FATURADO";
+  }
+
+  badge.innerHTML = `
+    <div style="
+      background:${corFundo};
+      color:${corTexto};
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:.5px;
+      border:1px solid rgba(0,0,0,.05);
+    ">
+      ${texto}
+    </div>
+  `;
+
+}, 0);
 
   });
 
@@ -1267,20 +1580,28 @@ async function confirmarSalvarCarga(){
   try{
 
     // 🔥 AGORA SIM SALVA NO FIRESTORE
-    await addDoc(collection(db,"programacao_cargas"),{
-      numeroCarga: dados.numeroCarga,
-      dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
-      dataReferencia: dados.dataInput,
-      horarioPrevisto:document.getElementById("horarioPrevisto").value,
-      tipoCaminhao:tipoCaminhaoAtual,
-      configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
-      capacidadeTotal:capacidadeTotalAtual,
-      placa:null,
-      status:"AGUARDANDO_FILA",
-      compartimentos:dados.compartimentos,
-      observacoes: document.getElementById("observacoes").value.toUpperCase(),
-      criadoEm:serverTimestamp()
-    });
+await addDoc(collection(db,"programacao_cargas"),{
+  numeroCarga: dados.numeroCarga,
+  dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
+  dataReferencia: dados.dataInput,
+  horarioPrevisto:document.getElementById("horarioPrevisto").value,
+  tipoCaminhao:tipoCaminhaoAtual,
+  configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
+  capacidadeTotal:capacidadeTotalAtual,
+
+  km: parseFloat(document.getElementById("km").value) || 0,
+  freteTotalRota: document.getElementById("freteTotalRota").value || "",
+  freteUnitarioMedio: document.getElementById("freteUnitarioMedio").value || "",
+
+  indiceUsado: indiceAtual,
+  taxaUsada: taxaAtual,
+
+  placa:null,
+  status:"AGUARDANDO_FILA",
+  compartimentos:dados.compartimentos,
+  observacoes: document.getElementById("observacoes").value.toUpperCase(),
+  criadoEm:serverTimestamp()
+});
 
     abrirModal(
       "Carga Criada com Sucesso",
