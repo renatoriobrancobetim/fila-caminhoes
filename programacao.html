@@ -1284,9 +1284,26 @@ linha.innerHTML = `
 <td colspan="8">
   <div class="detalhe-container">
 
-    <div class="detalhe-header">
-      CÁLCULO DA CARGA – ${c.numeroCarga} • ${c.tipoCaminhao}
-    </div>
+   <div class="detalhe-header" style="
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 20px;
+  background:linear-gradient(90deg,#0A3D91,#1e3a8a);
+  border-top-left-radius:12px;
+  border-top-right-radius:12px;
+">
+
+  <div style="font-weight:600;font-size:14px;letter-spacing:.5px;">
+    📦 CÁLCULO DA CARGA – ${c.numeroCarga}
+    <span style="opacity:.8;font-weight:400;">
+      • ${c.tipoCaminhao}
+    </span>
+  </div>
+
+  <div id="badgeStatus_${c.numeroCarga}"></div>
+
+</div>
 
     <div style="
       padding:12px 20px;
@@ -1400,6 +1417,52 @@ linha.innerHTML = `
     const linhasTabela = [...tabela.querySelectorAll("tr")];
     const linhaPrincipal = linhasTabela.find(tr => tr.innerHTML.includes(id));
     linhaPrincipal.after(linha);
+
+// 👇 COLE O PASSO 2 AQUI
+setTimeout(() => {
+
+  const badge = document.getElementById("badgeStatus_" + c.numeroCarga);
+
+  if(!badge) return;
+
+  let corFundo = "";
+  let corTexto = "";
+  let texto = "";
+
+  if(c.status === "AGUARDANDO_FILA"){
+    corFundo = "#fef3c7";
+    corTexto = "#92400e";
+    texto = "🟡 AGUARDANDO FILA";
+  }
+
+  if(c.status === "PROGRAMADO"){
+    corFundo = "#dcfce7";
+    corTexto = "#166534";
+    texto = "🟢 PROGRAMADO";
+  }
+
+  if(c.status === "FATURADO"){
+    corFundo = "#d1fae5";
+    corTexto = "#065f46";
+    texto = "💰 FATURADO";
+  }
+
+  badge.innerHTML = `
+    <div style="
+      background:${corFundo};
+      color:${corTexto};
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:.5px;
+      border:1px solid rgba(0,0,0,.05);
+    ">
+      ${texto}
+    </div>
+  `;
+
+}, 0);
 
   });
 
