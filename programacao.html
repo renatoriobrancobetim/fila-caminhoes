@@ -1217,6 +1217,63 @@ async function vincular(id){
 }
 
 window.voltarFila = voltarFila;
+function formatarObservacoes(texto){
+
+  if(!texto) return "";
+
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  return texto.replace(urlRegex, function(url){
+
+    const isGoogleMaps =
+      url.includes("google.com/maps") ||
+      url.includes("maps.app.goo.gl") ||
+      url.includes("goo.gl/maps");
+
+    if(isGoogleMaps){
+
+      return `
+        <div style="margin-top:8px;">
+          <a href="${url}" 
+             target="_blank" 
+             style="
+               display:inline-flex;
+               align-items:center;
+               gap:8px;
+               background:linear-gradient(90deg,#0A3D91,#2563eb);
+               color:#fff;
+               padding:10px 18px;
+               border-radius:30px;
+               text-decoration:none;
+               font-weight:600;
+               font-size:13px;
+               box-shadow:0 6px 18px rgba(0,0,0,.15);
+               transition:all .2s ease;
+             "
+             onmouseover="this.style.transform='scale(1.05)'"
+             onmouseout="this.style.transform='scale(1)'"
+          >
+            🗺️ Abrir Rota no Google Maps
+          </a>
+        </div>
+      `;
+    }
+
+    // Se for outro tipo de link
+    return `
+      <div style="margin-top:8px;">
+        <a href="${url}" 
+           target="_blank"
+           style="color:#2563eb;font-weight:600;">
+          🔗 Abrir Link
+        </a>
+      </div>
+    `;
+
+  });
+
+}
+  
 function toggleDetalhe(id){
 
   const existente = document.getElementById("detalhe-"+id);
@@ -1379,7 +1436,7 @@ linha.innerHTML = `
             📝 Observações
           </div>
           <div style="font-size:12px;color:#334155;">
-            ${c.observacoes}
+            ${formatarObservacoes(c.observacoes)}
           </div>
         </div>
       </div>
