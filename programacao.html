@@ -885,17 +885,10 @@ compartimentos.push({
 
     if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
 
-    const dataBase = document.getElementById("dataCarregamento").value;
+  const dataBase = document.getElementById("dataCarregamento").value;
   const numeroCarga = await gerarNumeroCargaSeguro();
 
-let ultimoNumero = 0;
 
-snap.forEach(docSnap => {
-  const numero = parseInt(docSnap.data().numeroCarga);
-  if (!isNaN(numero) && numero > ultimoNumero) {
-    ultimoNumero = numero;
-  }
-});
 
 
     // ================= PREVIEW =================
