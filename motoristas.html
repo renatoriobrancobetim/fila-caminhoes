@@ -115,7 +115,7 @@ button{
   <input id="placa" placeholder="Placa do Caminhão">
   <input id="senha" type="password" placeholder="Senha">
 
-  <button onclick="marcarDisponivel('ABC1234')">
+<button class="btn-ok" onclick="enviar('DISPONÍVEL')">
   ✅ Estou Disponível
 </button>
 
@@ -136,10 +136,13 @@ import {
   doc,
   setDoc,
   getDoc,
+  deleteDoc,
+  getDocs,
+  query,
+  orderBy,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const db = getFirestore();
 
 /* FUNÇÃO MARCAR DISPONÍVEL */
 
@@ -211,6 +214,20 @@ window.enviar = async function(status){
     if(status === "INDISPONÍVEL"){
       await deleteDoc(doc(db,"fila",placa));
     }
+
+    if(status === "DISPONÍVEL"){
+
+  const refFila = doc(db,"fila",placa);
+  const snapFila = await getDoc(refFila);
+
+  if(!snapFila.exists()){
+    await setDoc(refFila,{
+      placa,
+      entradaEm: serverTimestamp()
+    });
+  }
+
+}
 
     await setDoc(doc(db,"motoristas",placa),{
       placa,
