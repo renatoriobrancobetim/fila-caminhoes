@@ -1370,17 +1370,20 @@ linha.innerHTML = `
   </div>
 
 </div>
-      ${c.observacoes ? `
-        <div style="
-          padding:15px 20px;
-          background:#fff7ed;
-          border-top:1px solid #e5e7eb;
-          font-size:13px;
-        ">
-          <strong>Observações:</strong><br>
-          ${c.observacoes}
-        </div>
-      ` : ""}
+ ${c.observacoes ? `
+  <div style="
+    padding:20px;
+    background:#fff7ed;
+    border-top:1px solid #e5e7eb;
+    font-size:13px;
+    text-align:center;
+  ">
+    <strong style="display:block;margin-bottom:8px;">
+      Observações
+    </strong>
+    ${c.observacoes}
+  </div>
+` : ""}
 
     </div>
   </td>
