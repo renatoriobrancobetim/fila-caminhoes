@@ -1618,19 +1618,16 @@ await addDoc(collection(db,"programacao_cargas"),{
   criadoEm:serverTimestamp()
 });
 
-    abrirModal(
-      "Carga Criada com Sucesso",
-      `
-      <div style="text-align:left;font-size:14px;">
-        <p style="font-size:16px;font-weight:700;">
-          Nº da Carga: ${dados.numeroCarga}
-        </p>
-        <hr style="margin:10px 0;">
-        ${dados.resumoHTML}
-      </div>
-      `,
-      ()=>{ fecharModal(); }
-    );
+()=>{
+
+  fecharModal();
+  mostrarSpinnerGlobal();
+
+  setTimeout(()=>{
+    esconderSpinnerGlobal();
+  }, 1000);
+
+}
 
     // 🔄 LIMPAR FORMULÁRIO
     document.getElementById("observacoes").value = "";
@@ -1661,7 +1658,13 @@ await addDoc(collection(db,"programacao_cargas"),{
   loaderBtn.classList.add("hidden");
   textoBtn.innerText = "Salvar Carga";
 }
+function mostrarSpinnerGlobal(){
+  document.getElementById("overlaySpinner").style.display = "flex";
+}
 
+function esconderSpinnerGlobal(){
+  document.getElementById("overlaySpinner").style.display = "none";
+}
 window.confirmarSalvarCarga = confirmarSalvarCarga;
 
 window.faturarCarga = faturarCarga;
@@ -1702,6 +1705,35 @@ const dd = String(hoje.getDate()).padStart(2, '0');
 
 document.getElementById("dataCarregamento").value = `${yyyy}-${mm}-${dd}`;
 </script>
+<div id="overlaySpinner" style="
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.8);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:9999;
+">
 
+  <div style="
+    width:60px;
+    height:60px;
+    border:6px solid #e5e7eb;
+    border-top:6px solid #0A3D91;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  "></div>
+
+  <div style="
+    margin-top:20px;
+    font-weight:600;
+    color:#0A3D91;
+    font-size:14px;
+  ">
+    Atualizando lista de cargas...
+  </div>
+
+</div>
 </body>
 </html>
