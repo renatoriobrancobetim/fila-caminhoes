@@ -1370,18 +1370,49 @@ linha.innerHTML = `
   </div>
 
 </div>
- ${c.observacoes ? `
+${c.observacoes ? `
   <div style="
-    padding:20px;
-    background:#fff7ed;
+    display:flex;
+    justify-content:center;
+    padding:25px 20px;
+    background:#f8fafc;
     border-top:1px solid #e5e7eb;
-    font-size:13px;
-    text-align:center;
   ">
-    <strong style="display:block;margin-bottom:8px;">
-      Observações
-    </strong>
-    ${c.observacoes}
+
+    <div style="
+      max-width:700px;
+      width:100%;
+      background:#ffffff;
+      border-left:5px solid #0A3D91;
+      border-radius:10px;
+      padding:20px 25px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08);
+      text-align:center;
+    ">
+
+      <div style="
+        font-weight:600;
+        margin-bottom:10px;
+        color:#0A3D91;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:8px;
+        font-size:14px;
+      ">
+        📝 Observações
+      </div>
+
+      <div style="
+        font-size:13px;
+        color:#334155;
+        line-height:1.6;
+      ">
+        ${c.observacoes}
+      </div>
+
+    </div>
+
   </div>
 ` : ""}
 
