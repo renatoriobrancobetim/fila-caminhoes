@@ -1342,7 +1342,49 @@ linha.innerHTML = `
 </div>
 
       ${itensHTML}
+<div style="
+  padding:20px;
+  background:#f8fafc;
+  border-top:2px solid #e2e8f0;
+  margin-top:10px;
+">
 
+  <div style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    font-size:13px;
+    text-align:center;
+  ">
+
+    <div>
+      <strong>KM Rota</strong><br>
+      ${c.km || 0}
+    </div>
+
+    <div>
+      <strong>Índice Utilizado</strong><br>
+      ${(c.indiceUsado || 0).toFixed(4)}
+    </div>
+
+    <div>
+      <strong>Taxa Utilizada</strong><br>
+      ${(c.taxaUsada || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+    </div>
+
+    <div>
+      <strong>Frete Total Rota</strong><br>
+      ${c.freteTotalRota || "—"}
+    </div>
+
+    <div>
+      <strong>Frete Unitário Médio</strong><br>
+      ${c.freteUnitarioMedio || "—"}
+    </div>
+
+  </div>
+
+</div>
       ${c.observacoes ? `
         <div style="
           padding:15px 20px;
@@ -1462,7 +1504,7 @@ async function confirmarSalvarCarga(){
   try{
 
     // 🔥 AGORA SIM SALVA NO FIRESTORE
-   await addDoc(collection(db,"programacao_cargas"),{
+await addDoc(collection(db,"programacao_cargas"),{
   numeroCarga: dados.numeroCarga,
   dataCarregamento:new Date(dados.dataInput + "T12:00:00"),
   dataReferencia: dados.dataInput,
@@ -1470,9 +1512,14 @@ async function confirmarSalvarCarga(){
   tipoCaminhao:tipoCaminhaoAtual,
   configEixos: document.getElementById("tipoVeiculo").value.split("|")[1],
   capacidadeTotal:capacidadeTotalAtual,
+
   km: parseFloat(document.getElementById("km").value) || 0,
   freteTotalRota: document.getElementById("freteTotalRota").value || "",
   freteUnitarioMedio: document.getElementById("freteUnitarioMedio").value || "",
+
+  indiceUsado: indiceAtual,
+  taxaUsada: taxaAtual,
+
   placa:null,
   status:"AGUARDANDO_FILA",
   compartimentos:dados.compartimentos,
