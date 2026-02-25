@@ -585,17 +585,36 @@ compartimentos.forEach(cap=>{
     linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
   );
 
-  freteInput.addEventListener("input", () => {
+freteInput.addEventListener("input", () => {
 
-    const frete = parseFloat(freteInput.value) || 0;
-    const total = volume * frete;
+  let valor = freteInput.value;
 
-    totalInput.value = total.toLocaleString("pt-BR", {
-      style:"currency",
-      currency:"BRL"
-    });
+  // 🔒 Permite apenas números e ponto
+  valor = valor.replace(/[^0-9.]/g, "");
 
+  // 🔒 Impede mais de um ponto decimal
+  const partes = valor.split(".");
+  if (partes.length > 2) {
+    valor = partes[0] + "." + partes[1];
+  }
+
+  // 🔒 Limita para 4 casas decimais
+  if (partes[1]) {
+    partes[1] = partes[1].substring(0,4);
+    valor = partes[0] + "." + partes[1];
+  }
+
+  freteInput.value = valor;
+
+  const frete = parseFloat(valor) || 0;
+  const total = volume * frete;
+
+  totalInput.value = total.toLocaleString("pt-BR", {
+    style:"currency",
+    currency:"BRL"
   });
+
+});
 
 });
 
