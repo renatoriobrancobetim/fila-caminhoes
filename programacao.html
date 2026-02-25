@@ -525,7 +525,10 @@ function calcularFreteRota(){
 
   const km = parseFloat(document.getElementById("km").value);
 
-  if(!km || !indiceAtual) return;
+  if(!km || !indiceAtual){
+    document.getElementById("freteTotalRota").value = "";
+    return;
+  }
 
   const frete = (km * indiceAtual) + taxaAtual;
 
@@ -542,17 +545,7 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
   if (!valor) {
     tipoCaminhaoAtual="";
-    // Ajusta tipo para baseFrete
-let tipoBase = tipo;
 
-if(tipo.startsWith("Truck")) {
-  tipoBase = "TRUCK";
-}
-
-if(baseFrete[tipoBase]){
-  indiceAtual = baseFrete[tipoBase].indice;
-  taxaAtual = baseFrete[tipoBase].taxa;
-}
     container.innerHTML="";
     infoVeiculo.style.display="none";
     document.getElementById("cabecalhoCompartimentos").style.display="none";
@@ -560,6 +553,20 @@ if(baseFrete[tipoBase]){
   }
 
   const [tipo, configuracao] = valor.split("|");
+  // 🔥 Ajusta tipo para baseFrete
+let tipoBase = tipo.toUpperCase();
+
+if(tipoBase.startsWith("TRUCK")) {
+  tipoBase = "TRUCK";
+}
+
+if(baseFrete[tipoBase]){
+  indiceAtual = baseFrete[tipoBase].indice;
+  taxaAtual = baseFrete[tipoBase].taxa;
+} else {
+  indiceAtual = 0;
+  taxaAtual = 0;
+}
 
   tipoCaminhaoAtual = tipo;
 
