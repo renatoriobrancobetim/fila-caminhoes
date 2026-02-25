@@ -355,7 +355,17 @@ td{
   input[type="text"]{
   text-transform: uppercase;
 }
-
+.campo-calculado{
+  background:#eef2f7 !important;
+  font-weight:700;
+  color:#0A3D91;
+  border:1px solid #dbe3ec;
+}
+  .campo-calculado:focus{
+  outline:none;
+  box-shadow:none;
+  cursor:default;
+}
 </style>
 </head>
 <body>
@@ -422,8 +432,15 @@ td{
 
 <div class="linha-bottom">
 <input type="number" id="km" placeholder="KM">
-  <input type="text" id="freteTotalRota" placeholder="Frete Total" readonly>
-  <input type="text" id="freteUnitarioMedio" placeholder="Frete Unitário Médio" readonly>
+ <input type="text" id="freteTotalRota" 
+       placeholder="Frete Total" 
+       readonly 
+       class="campo-calculado">
+
+<input type="text" id="freteUnitarioMedio" 
+       placeholder="Frete Unitário Médio" 
+       readonly 
+       class="campo-calculado">
 <input type="text" id="observacoes" placeholder="Observações" style="text-transform:uppercase;">
 </div>
 
