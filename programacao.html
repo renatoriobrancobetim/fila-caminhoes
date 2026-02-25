@@ -80,7 +80,7 @@ input,select{
   border-radius:10px;
   margin-bottom:10px;
   display:grid;
-  grid-template-columns:120px 1fr 1fr 120px 140px 1fr;
+  grid-template-columns:120px 1fr 1fr 110px 140px 150px 1fr;
   gap:10px;
   align-items:center;
 }
@@ -287,7 +287,7 @@ td{
   text-align:center;
   background:#e2e8f0;
   display:grid;
-  grid-template-columns:2fr 2fr 1fr 1.5fr 1fr;
+  grid-template-columns:2fr 2fr 1fr 1.3fr 1.3fr 1fr;
   padding:10px 20px;
   font-weight:600;
   font-size:12px;
@@ -533,15 +533,58 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
     <input type="time" class="horarioCliente">
 
+container.innerHTML+=`
+  <div class="compartimento">
+    <div class="capacidade">${cap.toLocaleString()} L</div>
+
+    <input class="cliente" placeholder="Cliente" style="text-transform:uppercase;">
+
+    <input class="municipio" placeholder="Município" style="text-transform:uppercase;">
+
+    <input type="time" class="horarioCliente">
+
     <input type="number" 
            class="freteUnitario" 
            step="0.0001" 
            placeholder="R$ 0,0000">
 
+    <input type="text" 
+           class="totalLinha" 
+           placeholder="R$ 0,00"
+           readonly
+           style="font-weight:700;background:#f1f5f9;">
+
+    <input class="vendedor" placeholder="Vendedor" style="text-transform:uppercase;">
+  </div>
+`;
+
     <input class="vendedor" placeholder="Vendedor" style="text-transform:uppercase;">
   </div>
 `;
   });
+  
+  document.querySelectorAll(".compartimento").forEach(linha => {
+
+  const freteInput = linha.querySelector(".freteUnitario");
+  const totalInput = linha.querySelector(".totalLinha");
+
+  const volume = Number(
+    linha.querySelector(".capacidade").innerText.replace(/\D/g,"")
+  );
+
+  freteInput.addEventListener("input", () => {
+
+    const frete = parseFloat(freteInput.value) || 0;
+    const total = volume * frete;
+
+    totalInput.value = total.toLocaleString("pt-BR", {
+      style:"currency",
+      currency:"BRL"
+    });
+
+  });
+
+});
 
 });
 
@@ -571,6 +614,7 @@ const cliente=l.querySelector(".cliente").value.trim().toUpperCase();
 const municipio=l.querySelector(".municipio").value.trim().toUpperCase();
 const horario=l.querySelector(".horarioCliente").value;
 const freteUnitario=parseFloat(l.querySelector(".freteUnitario").value) || 0;
+const totalLinha = Number(cap) * freteUnitario;
 const vendedor=l.querySelector(".vendedor").value.trim().toUpperCase();
 
       if(cliente&&municipio&&vendedor) preenchidos++;
@@ -581,6 +625,7 @@ compartimentos.push({
   municipio,
   horario,
   freteUnitario,
+  totalLinha,
   vendedor
 });
     });
@@ -1026,6 +1071,9 @@ function toggleDetalhe(id){
   <div>${comp.municipio || "-"}</div>
   <div>${comp.horario || "-"}</div>
   <div>R$ ${(comp.freteUnitario || 0).toFixed(4)}</div>
+  <div style="font-weight:700;color:#0A3D91;">
+    ${(comp.totalLinha || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+  </div>
   <div>${comp.vendedor || "-"}</div>
 </div>
         `;
@@ -1060,11 +1108,12 @@ linha.innerHTML = `
       </div>
 
   <div class="detalhe-colunas">
-  <div>Cliente</div>
-  <div>Município</div>
-  <div>Horário</div>
-  <div>Frete Unitário</div>
-  <div>Vendedor</div>
+ <div>Cliente</div>
+<div>Município</div>
+<div>Horário</div>
+<div>Frete Unitário</div>
+<div>Total</div>
+<div>Vendedor</div>
 </div>
 
       ${itensHTML}
