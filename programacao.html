@@ -420,6 +420,7 @@ td{
 
 <div class="linha-bottom">
 <input type="number" id="km" placeholder="KM">
+  <input type="text" id="freteTotalRota" placeholder="Frete Total" readonly>
 <input type="text" id="observacoes" placeholder="Observações" style="text-transform:uppercase;">
 </div>
 
@@ -499,6 +500,17 @@ setPersistence(auth, browserLocalPersistence);
 /* ===== VARIÁVEIS ===== */
 let tipoCaminhaoAtual="";
 let capacidadeTotalAtual=0;
+  const baseFrete = {
+  FROTA:{indice:5.8402,taxa:669.32},
+  BITRUCK:{indice:4.9381,taxa:414.93},
+  TRUCK:{indice:4.4266,taxa:412.57},
+  TOCO:{indice:3.5686,taxa:364.71},
+  CARRETA:{indice:5.6203,taxa:460.29}
+};
+
+let indiceAtual = 0;
+let taxaAtual = 0;
+  
 
 const infoVeiculo=document.getElementById("infoVeiculo");
 const container=document.getElementById("containerCompartimentos");
@@ -507,6 +519,22 @@ const btnSalvar=document.getElementById("btnSalvar");
 const textoBtn=document.getElementById("textoBtn");
 const loaderBtn=document.getElementById("loaderBtn");
 
+  document.getElementById("km").addEventListener("input", calcularFreteRota);
+
+function calcularFreteRota(){
+
+  const km = parseFloat(document.getElementById("km").value);
+
+  if(!km || !indiceAtual) return;
+
+  const frete = (km * indiceAtual) + taxaAtual;
+
+  document.getElementById("freteTotalRota").value =
+    frete.toLocaleString("pt-BR",{
+      style:"currency",
+      currency:"BRL"
+    });
+}
 /* ===== GERAR COMPARTIMENTOS ===== */
 document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
@@ -514,6 +542,17 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
   if (!valor) {
     tipoCaminhaoAtual="";
+    // Ajusta tipo para baseFrete
+let tipoBase = tipo;
+
+if(tipo.startsWith("Truck")) {
+  tipoBase = "TRUCK";
+}
+
+if(baseFrete[tipoBase]){
+  indiceAtual = baseFrete[tipoBase].indice;
+  taxaAtual = baseFrete[tipoBase].taxa;
+}
     container.innerHTML="";
     infoVeiculo.style.display="none";
     document.getElementById("cabecalhoCompartimentos").style.display="none";
@@ -545,7 +584,14 @@ document.getElementById("tipoVeiculo").addEventListener("change", e => {
 
   infoVeiculo.style.display="block";
   document.getElementById("cabecalhoCompartimentos").style.display="grid";
-  infoVeiculo.innerHTML=`🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L`;
+  infoVeiculo.innerHTML = `
+  🚛 ${tipo} • ${capacidadeTotalAtual.toLocaleString()} L
+  <br>
+  <small>
+    Índice: ${indiceAtual.toFixed(4)} • 
+    Taxa: ${taxaAtual.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+  </small>
+`;
 
   container.innerHTML="";
 
