@@ -1617,17 +1617,12 @@ await addDoc(collection(db,"programacao_cargas"),{
   observacoes: document.getElementById("observacoes").value,
   criadoEm:serverTimestamp()
 });
+mostrarSpinnerGlobal();
 
-()=>{
+setTimeout(()=>{
+  esconderSpinnerGlobal();
+}, 1000);
 
-  fecharModal();
-  mostrarSpinnerGlobal();
-
-  setTimeout(()=>{
-    esconderSpinnerGlobal();
-  }, 1000);
-
-}
 
     // 🔄 LIMPAR FORMULÁRIO
     document.getElementById("observacoes").value = "";
