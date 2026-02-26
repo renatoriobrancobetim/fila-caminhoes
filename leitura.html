@@ -185,6 +185,63 @@ tbody tr:first-child{
   font-size:18px;
   font-weight:500;
 }
+  /* =============================
+   NOVO PADRÃO FILA EM CARD
+============================= */
+
+.fila-card-wrap{
+  margin-top:20px;
+}
+
+.fila-item{
+  display:flex;
+  flex-wrap:wrap;
+  gap:28px;
+  align-items:center;
+  background:#ffffff;
+  color:#000;
+  padding:18px 22px;
+  border-radius:14px;
+  margin-bottom:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  transition:all .25s ease;
+  cursor:default;
+}
+
+.fila-item:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 28px rgba(0,0,0,.18);
+}
+
+.fila-label{
+  font-size:10px;
+  color:#94a3b8;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.fila-valor{
+  font-weight:700;
+  font-size:18px;
+}
+
+.fila-ordem{
+  font-size:22px;
+  color:var(--azul);
+}
+
+.fila-placa{
+  font-size:22px;
+  color:#dc2626;
+}
+
+.fila-alerta{
+  background:#fff3cd;
+}
+
+.fila-critico{
+  background:#f8d7da;
+}
 </style>
 </head>
 
@@ -209,19 +266,10 @@ tbody tr:first-child{
     </div>
   </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Ordem</th>
-          <th>Placa</th>
-          <th>Compartimento</th>
-          <th>Tempo na Fila</th>
-        </tr>
-      </thead>
-      <tbody id="fila"></tbody>
-    </table>
-  </div>
+<div class="fila-card-wrap">
+  <div id="fila"></div>
+</div>
+  
 <div class="ultima-carga">
   <h2>📦 Última Carga Alocada</h2>
   <div id="cardUltimaCarga" class="card-carga">
@@ -315,14 +363,39 @@ function renderizarFila(){
     if(minutos>=60) classe="critico";
     else if(minutos>=30) classe="alerta";
 
-    tbody.innerHTML+=`
-      <tr class="${classe}">
-        <td>${index}</td>
-        <td>${c.placa}</td>
-        <td>${mapaCompartimentos[c.placa] || "-"}</td>
-        <td>${minutos} min</td>
-      </tr>
-    `;
+let classeCard="";
+if(minutos>=60) classeCard="fila-critico";
+else if(minutos>=30) classeCard="fila-alerta";
+
+tbody.innerHTML+=`
+  <div class="fila-item ${classeCard}">
+
+    <div>
+      <div class="fila-label">Ordem</div>
+      <div class="fila-valor fila-ordem">${index}</div>
+    </div>
+
+    <div>
+      <div class="fila-label">Placa</div>
+      <div class="fila-valor fila-placa">${c.placa}</div>
+    </div>
+
+    <div>
+      <div class="fila-label">Compartimento</div>
+      <div class="fila-valor">
+        ${mapaCompartimentos[c.placa] || "-"}
+      </div>
+    </div>
+
+    <div>
+      <div class="fila-label">Tempo na Fila</div>
+      <div class="fila-valor">
+        ${minutos} min
+      </div>
+    </div>
+
+  </div>
+`;
 
     if(index===1){
 
