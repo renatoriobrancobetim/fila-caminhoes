@@ -1912,14 +1912,15 @@ filtroDataResumo.addEventListener("change", carregarResumo);
 async function carregarResumo(){
 
   const dataSelecionada = filtroDataResumo.value;
-  const tituloResumo = document.getElementById("tituloResumoCIF");
 
-const dataFormatada = new Date(dataSelecionada + "T00:00:00")
+  
+  if(!dataSelecionada) return;
+    const tituloResumo = document.getElementById("tituloResumoCIF");
+  const dataFormatada = new Date(dataSelecionada + "T00:00:00")
   .toLocaleDateString("pt-BR");
-
 tituloResumo.innerHTML = `📊 Resumo Cargas CIF (${dataFormatada})`;
 tituloResumo.style.display = "block";
-  if(!dataSelecionada) return;
+
 
   tabelaResumo.innerHTML = "Carregando...";
 
@@ -2005,7 +2006,7 @@ tituloResumo.style.display = "block";
 
       </div>
     `;
-      .toLocaleDateString("pt-BR");
+      
 
   });
 
