@@ -400,39 +400,41 @@ td{
     transform:scale(1);
   }
 }
- /* =========================
-   NAVBAR PADRÃO ERP
+/* =========================
+   HEADER INTEGRADO ERP
 ========================= */
 
+.topbar{
+  background:linear-gradient(90deg,#0A3D91,#7a1f4d,#D71920);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(0,0,0,.35);
+}
+
 .navbar{
-  background:linear-gradient(90deg,#0A3D91,#D71920);
-  padding:16px 40px;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  align-items:center;
+  padding:16px 40px 8px 40px;
 }
 
 .nav-left{
-  font-size:18px;
+  font-size:16px;
   font-weight:700;
-  color:#ffffff;
   letter-spacing:1px;
 }
 
 .nav-right{
   display:flex;
-  gap:28px;
-  align-items:center;
+  gap:26px;
 }
 
 .nav-right a{
   text-decoration:none;
   color:#ffffff;
-  font-size:15px;
+  font-size:14px;
   font-weight:500;
   opacity:.85;
-  transition:all .25s ease;
+  transition:.25s ease;
 }
 
 .nav-right a:hover{
@@ -446,30 +448,51 @@ td{
   border-bottom:2px solid #ffffff;
   padding-bottom:4px;
 }
+
+.page-header{
+  text-align:center;
+  padding:25px 20px 30px;
+}
+
+.page-header h1{
+  margin:0;
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:.5px;
+}
+
+.page-header p{
+  margin-top:6px;
+  font-size:14px;
+  opacity:.9;
+}
 </style>
 </head>
 <body>
-<div class="navbar">
+<div class="topbar">
 
-  <div class="nav-left">
-    🚛 MONTEIRO ERP
+  <div class="navbar">
+    <div class="nav-left">
+      🚛 MONTEIRO ERP
+    </div>
+
+    <div class="nav-right">
+      <a href="painel.html">📊 Painel</a>
+      <a href="programacao.html" class="active">📦 Programação</a>
+      <a href="leitura.html">📺 Fila</a>
+      <a href="motoristas.html">🚛 Motoristas</a>
+      <a href="frete.html">💰 Frete</a>
+      <a href="usuarios-admin.html">👥 Usuários</a>
+      <a href="consumo-firestore.html">🔥 Consumo</a>
+    </div>
   </div>
 
-  <div class="nav-right">
-    <a href="painel.html">📊 Painel</a>
-    <a href="programacao.html">📦 Programação</a>
-    <a href="leitura.html">📺 Fila</a>
-    <a href="motoristas.html">🚛 Motoristas</a>
-    <a href="frete.html">💰 Frete</a>
-    <a href="usuarios-admin.html">👥 Usuários</a>
-    <a href="consumo-firestore.html">🔥 Consumo</a>
+  <div class="page-header">
+    <h1>📦 Programação de Cargas</h1>
+    <p>Módulo Operacional Integrado</p>
   </div>
 
 </div>
-<header>
-<h1>📦 Programação de Cargas</h1>
-<p>Módulo Operacional Integrado</p>
-</header>
 
 <main>
 
