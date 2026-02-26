@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Fila de Caminhões | Rio Branco</title>
+<title>Fila de Caminhões</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -22,7 +22,6 @@ body{
   color:#fff;
 }
 
-/* HEADER */
 .tv-header{
   padding:25px;
   text-align:center;
@@ -41,14 +40,12 @@ body{
   opacity:.9;
 }
 
-/* CONTAINER */
 .container{
   padding:30px;
   max-width:1400px;
   margin:auto;
 }
 
-/* CARDS */
 .cards{
   display:grid;
   grid-template-columns:2fr 1fr;
@@ -74,7 +71,6 @@ body{
   letter-spacing:1px;
 }
 
-/* PRÓXIMO */
 .proximo{
   background:linear-gradient(135deg,var(--vermelho),#ff3b3b);
   font-size:46px;
@@ -97,13 +93,11 @@ body{
   100%{left:100%}
 }
 
-/* TOTAL */
 .total{
   background:linear-gradient(135deg,#1E90FF,#0b5ed7);
   font-size:40px;
 }
 
-/* ANIMAÇÃO */
 .flash{
   animation:flash 0.6s ease 2;
 }
@@ -114,7 +108,6 @@ body{
   100%{transform:scale(1)}
 }
 
-/* TABELA */
 .table-wrap{
   background:#fff;
   border-radius:16px;
@@ -143,22 +136,16 @@ td{
   border-bottom:1px solid #e5e7eb;
 }
 
-tbody tr{
-  transition:.2s;
-}
-
 tbody tr:hover{
   background:#eef3ff;
 }
 
-/* PRIMEIRO DA FILA */
 tbody tr:first-child{
   background:#fff3cd;
   font-weight:700;
   font-size:22px;
 }
 
-/* ALERTAS */
 .alerta{
   background:#ffeeba !important;
 }
@@ -168,7 +155,6 @@ tbody tr:first-child{
   font-weight:700;
 }
 
-/* STATUS */
 .status{
   text-align:center;
   margin-top:18px;
@@ -176,7 +162,6 @@ tbody tr:first-child{
   opacity:.8;
 }
 
-/* RESPONSIVO */
 @media(max-width:900px){
   .cards{grid-template-columns:1fr}
   .proximo{font-size:34px}
@@ -241,7 +226,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+  apiKey: "SUA_KEY",
   authDomain: "tabela-frete-rio-branco.firebaseapp.com",
   projectId: "tabela-frete-rio-branco"
 };
@@ -255,7 +240,8 @@ const totalFila = document.getElementById("totalFila");
 const statusAtualizacao = document.getElementById("statusAtualizacao");
 
 let ultimoProximo = "";
-  let mapaCompartimentos = {};
+let mapaCompartimentos = {};
+let dadosFila = [];
 
 /* UTIL */
 function calcularMinutos(timestamp){
@@ -268,38 +254,32 @@ function tocarSom(){
   document.getElementById("somChamada").play().catch(()=>{});
 }
 
-/* FILA TEMPO REAL */
-
-const q = query(collection(db,"fila"), orderBy("entradaEm"));
-  // 🔵 Carrega tipos de compartimento
+/* CARREGAR COMPARTIMENTOS */
 async function carregarCompartimentos(){
-
   const snap = await getDocs(collection(db,"motoristas_cadastro"));
-
   snap.forEach(docSnap=>{
     const d = docSnap.data();
     mapaCompartimentos[docSnap.id] = d.configEixos || "-";
   });
-
 }
 
 await carregarCompartimentos();
 
-onSnapshot(q,snapshot=>{
+/* RENDERIZAÇÃO */
+function renderizarFila(){
 
   tbody.innerHTML="";
-  totalFila.innerHTML=`<span>🚚 TOTAL NA FILA</span>${snapshot.size}`;
+  totalFila.innerHTML=`<span>🚚 TOTAL NA FILA</span>${dadosFila.length}`;
 
-  if(snapshot.empty){
+  if(dadosFila.length===0){
     proximoCard.innerHTML="<span>🔔 PRÓXIMO CAMINHÃO</span>Fila vazia";
     return;
   }
 
   let index=1;
 
-  snapshot.forEach(docSnap=>{
+  dadosFila.forEach(c=>{
 
-    const c = docSnap.data();
     const minutos = calcularMinutos(c.entradaEm);
 
     let classe="";
@@ -310,12 +290,13 @@ onSnapshot(q,snapshot=>{
       <tr class="${classe}">
         <td>${index}</td>
         <td>${c.placa}</td>
-       <td>${mapaCompartimentos[c.placa] || "-"}</td>
+        <td>${mapaCompartimentos[c.placa] || "-"}</td>
         <td>${minutos} min</td>
       </tr>
     `;
 
     if(index===1){
+
       const atual=c.placa;
 
       proximoCard.innerHTML=
@@ -333,10 +314,30 @@ onSnapshot(q,snapshot=>{
     index++;
   });
 
-  statusAtualizacao.textContent=
+  statusAtualizacao.textContent =
     "Última atualização: "+new Date().toLocaleTimeString();
+}
 
+/* TEMPO REAL FIRESTORE */
+const q = query(collection(db,"fila"), orderBy("entradaEm"));
+
+onSnapshot(q, snapshot=>{
+
+  dadosFila = [];
+
+  snapshot.forEach(docSnap=>{
+    dadosFila.push(docSnap.data());
+  });
+
+  renderizarFila();
 });
+
+/* ATUALIZA TEMPO A CADA 60 SEGUNDOS */
+setInterval(()=>{
+  if(dadosFila.length>0){
+    renderizarFila();
+  }
+},60000);
 
 </script>
 
