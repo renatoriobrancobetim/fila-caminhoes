@@ -357,6 +357,10 @@ onSnapshot(q, snapshot=>{
 
   renderizarFila();
 });
+/* =========================
+   ÚLTIMA CARGA PROGRAMADA
+========================= */
+
 const cardUltimaCarga = document.getElementById("cardUltimaCarga");
 
 const qUltimaCarga = query(
@@ -365,7 +369,7 @@ const qUltimaCarga = query(
   limit(10)
 );
 
-onSnapshot(qUltimaCarga, snapshot=>{
+onSnapshot(qUltimaCarga, (snapshot) => {
 
   if(snapshot.empty){
     cardUltimaCarga.innerHTML = "Nenhuma carga encontrada.";
@@ -373,7 +377,7 @@ onSnapshot(qUltimaCarga, snapshot=>{
   }
 
   const cargaProgramada = snapshot.docs
-    .map(d=>d.data())
+    .map(doc => doc.data())
     .find(c => c.status === "PROGRAMADO" && c.placa);
 
   if(!cargaProgramada){
@@ -416,8 +420,8 @@ onSnapshot(qUltimaCarga, snapshot=>{
       <strong>Compartimentos:</strong> ${cargaProgramada.configEixos}
     </div>
   `;
+
 });
-  },
   error=>{
     console.warn("Aguardando índice ficar pronto...");
   }
