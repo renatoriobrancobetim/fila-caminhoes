@@ -407,20 +407,20 @@ onSnapshot(qUltimasCargas, (snapshot) => {
     ">
   `;
 
-  cargasProgramadas.forEach(carga => {
+cargasProgramadas.forEach(carga => {
 
-    const primeiraCidade = carga.compartimentos
-      ?.find(c => c.municipio)?.municipio || "-";
+  const primeiraCidade = carga.compartimentos
+    ?.find(c => c.municipio)?.municipio || "-";
 
-    const nomeMotorista = mapaMotoristas[carga.placa] || "-";
+  const nomeMotorista = mapaMotoristas[carga.placa] || "-";
 
-    const dataCarga = carga.dataCarregamento?.toDate
-      ? carga.dataCarregamento.toDate().toLocaleDateString()
-      : carga.dataReferencia || "-";
+  const dataCarga = carga.dataCarregamento?.toDate
+    ? carga.dataCarregamento.toDate().toLocaleDateString()
+    : carga.dataReferencia || "-";
 
-    const horaCriacao = carga.criadoEm?.toDate
-      ? carga.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
-      : "-";
+  const horaCriacao = carga.criadoEm?.toDate
+    ? carga.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
+    : "-";
 
   html += `
   <div style="
@@ -452,18 +452,14 @@ onSnapshot(qUltimasCargas, (snapshot) => {
       <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
         Data
       </div>
-      <div>
-        ${dataCarga}
-      </div>
+      <div>${dataCarga}</div>
     </div>
 
     <div>
       <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
         Hora
       </div>
-      <div>
-        ${horaCriacao}
-      </div>
+      <div>${horaCriacao}</div>
     </div>
 
     <div>
@@ -479,32 +475,26 @@ onSnapshot(qUltimasCargas, (snapshot) => {
       <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
         Motorista
       </div>
-      <div>
-        ${nomeMotorista}
-      </div>
+      <div>${nomeMotorista}</div>
     </div>
 
     <div>
       <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
         Cidade
       </div>
-      <div>
-        ${primeiraCidade}
-      </div>
+      <div>${primeiraCidade}</div>
     </div>
 
-        <div>
+    <div>
       <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
         Eixos
       </div>
-      <div>
-        ${carga.configEixos}
-      </div>
+      <div>${carga.configEixos}</div>
     </div>
 
   </div>
   `;
-  });
+});
 
     html += "</div>";
   cardUltimaCarga.innerHTML = html;
