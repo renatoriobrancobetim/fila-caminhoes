@@ -6,6 +6,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+  /* ================= NAVBAR GLOBAL ================= */
+
+.topbar{
+  background:linear-gradient(90deg,#0A3D91,#7a1f4d,#D71920);
+  color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+
+.navbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 40px;
+  gap:30px;
+}
+
+.nav-left{
+  font-size:15px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.page-title{
+  font-size:18px;
+  font-weight:700;
+  text-align:center;
+  flex:1;
+}
+
+.page-title span{
+  display:block;
+  font-size:12px;
+  font-weight:400;
+  opacity:.85;
+  margin-top:2px;
+}
+
+.nav-right{
+  display:flex;
+  gap:22px;
+  white-space:nowrap;
+}
+
+.nav-right a{
+  text-decoration:none;
+  color:#ffffff;
+  font-size:14px;
+  opacity:.85;
+  transition:.2s;
+}
+
+.nav-right a:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
+
+.nav-right a.active{
+  opacity:1;
+  font-weight:600;
+  border-bottom:2px solid #fff;
+  padding-bottom:4px;
+}
 :root{
   --azul:#0A3D91;
   --azul-claro:#1557c0;
@@ -310,7 +372,14 @@ body{
 </div>
 
 <script type="module">
+import { renderHeader } from "./components/header.js";
 
+document.addEventListener("DOMContentLoaded", () => {
+  renderHeader(
+    "🧭 Controle de Fila",
+    "Módulo Operacional Logístico"
+  );
+});
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
