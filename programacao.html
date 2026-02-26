@@ -654,7 +654,8 @@ import {
   serverTimestamp,
   query,
   orderBy,
-  runTransaction
+  runTransaction,
+  where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===== FIREBASE INIT ===== */
@@ -1887,22 +1888,18 @@ links.forEach(link=>{
 /* ================================
    📊 RESUMO DE CARGAS POR DATA
 ================================ */
-
-import { where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
 const filtroDataResumo = document.getElementById("filtroDataResumo");
 const tabelaResumo = document.getElementById("tabelaResumo");
 
 // 🔹 Define hoje como padrão
-const hoje = new Date().toISOString().split("T")[0];
-filtroDataResumo.value = hoje;
+const hojeResumo = new Date().toISOString().split("T")[0];
+filtroDataResumo.value = hojeResumo;
 
 filtroDataResumo.addEventListener("change", carregarResumo);
 
 async function carregarResumo(){
 
   const dataSelecionada = filtroDataResumo.value;
-
   if(!dataSelecionada) return;
 
   tabelaResumo.innerHTML = "Carregando...";
@@ -1933,13 +1930,21 @@ async function carregarResumo(){
       ? c.dataCarregamento.toDate().toLocaleDateString()
       : "-";
 
+    // 🔥 Clientes
     const clientes = c.compartimentos
       ?.map(comp => comp.cliente)
       .filter(Boolean)
       .join(", ") || "-";
 
+    // 🔥 Vendedores
+    const vendedores = c.compartimentos
+      ?.map(comp => comp.vendedor)
+      .filter(Boolean)
+      .join(", ") || "-";
+
+    // 🔥 Volume correto (capacidade)
     const volumeTotal = c.compartimentos
-      ?.reduce((total, comp)=> total + (Number(comp.volume)||0),0) || 0;
+      ?.reduce((total, comp)=> total + (Number(comp.capacidade)||0),0) || 0;
 
     html += `
       <div class="resumo-item">
@@ -1961,12 +1966,12 @@ async function carregarResumo(){
 
         <div class="resumo-bloco">
           <div class="resumo-label">Tipo</div>
-          <div class="resumo-valor">${c.tipoCarga || "-"}</div>
+          <div class="resumo-valor">${c.tipoCaminhao || "-"}</div>
         </div>
 
         <div class="resumo-bloco">
-          <div class="resumo-label">Vendedor</div>
-          <div class="resumo-valor">${c.vendedor || "-"}</div>
+          <div class="resumo-label">Vendedores</div>
+          <div class="resumo-valor">${vendedores}</div>
         </div>
 
         <div class="resumo-bloco" style="flex:1;">
@@ -1976,7 +1981,7 @@ async function carregarResumo(){
 
         <div class="resumo-bloco">
           <div class="resumo-label">Volume Total</div>
-          <div class="resumo-valor">${volumeTotal}</div>
+          <div class="resumo-valor">${volumeTotal.toLocaleString()} L</div>
         </div>
 
       </div>
