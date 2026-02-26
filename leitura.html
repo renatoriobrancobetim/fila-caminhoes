@@ -51,23 +51,32 @@ body{
   display:grid;
   grid-template-columns:2fr 1fr;
   gap:25px;
-  margin-bottom:30px;
+  margin-bottom:25px;
 }
 
 .card{
-  padding:20px 28px; /* antes 35px */
+  padding:18px 28px;
   border-radius:16px;
-  box-shadow:0 12px 30px rgba(0,0,0,.35);
+  box-shadow:0 10px 25px rgba(0,0,0,.35);
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  display:flex;
+  flex-direction:column;   /* 🔥 garante quebra vertical */
+  justify-content:center;
 }
 
 .card span{
-  font-size:12px; /* antes 14px */
+  font-size:12px;
   margin-bottom:6px;
+  letter-spacing:1px;
+  display:block;           /* 🔥 força linha separada */
+  opacity:.9;
 }
 
 .proximo{
   background:linear-gradient(135deg,var(--vermelho),#ff3b3b);
-  font-size:34px; /* antes 46px */
+  font-size:32px;
   letter-spacing:2px;
 }
 
@@ -89,7 +98,7 @@ body{
 
 .total{
   background:linear-gradient(135deg,#1E90FF,#0b5ed7);
-  font-size:28px; /* antes 40px */
+  font-size:26px;
 }
 
 .flash{
