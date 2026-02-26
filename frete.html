@@ -2,12 +2,14 @@
 <html lang="pt-BR">
 <head>
 <script type="module">
-  import { renderHeader } from "./components/header.js";
+import { renderHeader } from "./components/header.js";
 
-renderHeader(
-  "📦 Cálculo de Frete",
-  "Módulo Operacional Logística"
-);
+document.addEventListener("DOMContentLoaded", () => {
+  renderHeader(
+    "💰 Cálculo de Frete",
+    "Módulo Operacional Logística"
+  );
+});
   import { 
   doc, 
   setDoc, 
@@ -171,11 +173,6 @@ onAuthStateChanged(auth, (user) => {
 </div>
 
 </div>
-
-<div class="container">
-  <div class="header">
-    <h2>CÁLCULO DE FRETE POR ROTA</h2>
-  </div>
 
   <div class="content">
 
