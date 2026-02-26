@@ -13,16 +13,16 @@ export function renderHeader(pageTitle, pageSubtitle) {
         <span>${pageSubtitle}</span>
       </div>
 
-<div class="nav-right">
-  <a href="index.html">🧭 Controle Fila</a>
-  <a href="painel.html">📊 Painel</a>
-  <a href="programacao.html">📦 Programação</a>
-  <a href="leitura.html">📺 Fila TV</a>
-  <a href="motoristas.html">🚛 Motoristas</a>
-  <a href="frete.html">💰 Frete</a>
-  <a href="usuarios-admin.html">👥 Usuários</a>
-  <a href="consumo-firestore.html">🔥 Consumo</a>
-</div>
+      <div class="nav-right">
+        <a href="index.html">🧭 Controle Fila</a>
+        <a href="painel.html">📊 Painel</a>
+        <a href="programacao.html">📦 Programação</a>
+        <a href="leitura.html">📺 Fila TV</a>
+        <a href="motoristas.html">🚛 Motoristas</a>
+        <a href="frete.html">💰 Frete</a>
+        <a href="usuarios-admin.html">👥 Usuários</a>
+        <a href="consumo-firestore.html">🔥 Consumo</a>
+      </div>
 
     </div>
   </div>
@@ -30,9 +30,14 @@ export function renderHeader(pageTitle, pageSubtitle) {
 
   document.body.insertAdjacentHTML("afterbegin", headerHTML);
 
-  // Destacar página ativa
+  // 🔎 Detectar página ativa corretamente
+  let currentPage = window.location.pathname.split("/").pop();
+
+  if(currentPage === "" || currentPage === "/"){
+    currentPage = "index.html";
+  }
+
   const links = document.querySelectorAll(".nav-right a");
-  const currentPage = window.location.pathname.split("/").pop();
 
   links.forEach(link=>{
     if(link.getAttribute("href") === currentPage){
