@@ -391,17 +391,23 @@ function renderizarFila(){
 
   let index=1;
 
-  dadosFila.forEach(c=>{
+ dadosFila.forEach(c=>{
 
-    const tempoFormatado = calcularTempoFormatado(c.entradaEm);
+  const dataEntrada = c.entradaEm?.toDate();
+  const diffMin = dataEntrada
+    ? Math.floor((new Date() - dataEntrada) / 60000)
+    : 0;
 
-    let classe="";
-    if(minutos>=60) classe="critico";
-    else if(minutos>=30) classe="alerta";
+  const horas = Math.floor(diffMin / 60);
+  const minutosRestantes = diffMin % 60;
 
-let classeCard="";
-if(minutos>=60) classeCard="fila-critico";
-else if(minutos>=30) classeCard="fila-alerta";
+  const tempoFormatado = horas > 0
+    ? `${horas}h ${minutosRestantes}min`
+    : `${minutosRestantes} min`;
+
+  let classeCard="";
+  if(diffMin >= 60) classeCard="fila-critico";
+  else if(diffMin >= 30) classeCard="fila-alerta";
 
 tbody.innerHTML+=`
   <div class="fila-item ${classeCard}">
