@@ -497,6 +497,40 @@ td{
   font-weight:400;   /* remove negrito */
   font-size:14px;
 }
+  /* 🔷 BARRA EXECUTIVA RESUMO */
+
+.resumo-barra{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin:20px 0 25px 0;
+  flex-wrap:wrap;
+}
+
+.resumo-titulo{
+  font-size:16px;
+  font-weight:600;
+  color:#0A3D91;
+  padding-bottom:6px;
+  border-bottom:2px solid #0A3D91;
+  min-width:280px;
+}
+
+.resumo-filtro{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.resumo-filtro input{
+  padding:7px 10px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:13px;
+}
 </style>
 </head>
 <body>
@@ -600,31 +634,23 @@ td{
 <!-- ============================= -->
 
 <div class="card-form" style="margin-top:40px;">
-<h2 style="margin-top:0;">📊 Resumo de Cargas do Dia</h2>
 
-<!-- 🔹 Primeiro vem o seletor -->
-<div style="margin:15px 0 10px 0;">
-  <label style="font-size:14px;font-weight:600;">
-    Selecionar Data:
-  </label>
-  <input type="date" id="filtroDataResumo"
-    style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;margin-left:10px;">
-</div>
+  <h2 style="margin-top:0;">📊 Resumo de Cargas do Dia</h2>
 
-<!-- 🔹 Depois o título dinâmico -->
-<div id="tituloResumoCIF"
-     style="
-       font-size:16px;
-       font-weight:600;
-       color:#0A3D91;
-       padding-bottom:8px;
-       border-bottom:2px solid #0A3D91;
-       display:none;
-       margin-bottom:20px;
-     ">
-</div>
+  <!-- 🔷 Barra executiva -->
+  <div class="resumo-barra">
+
+    <div id="tituloResumoCIF" class="resumo-titulo"></div>
+
+    <div class="resumo-filtro">
+      <label>Selecionar Data:</label>
+      <input type="date" id="filtroDataResumo">
+    </div>
+
+  </div>
 
   <div id="tabelaResumo"></div>
+
 </div>
   
 </main>
