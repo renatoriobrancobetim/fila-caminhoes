@@ -361,43 +361,62 @@ const cardUltimaCarga = document.getElementById("cardUltimaCarga");
 
 const qUltimaCarga = query(
   collection(db,"programacao_cargas"),
- orderBy("criadoEm","desc"),
-limit(5)
+  orderBy("criadoEm","desc"),
+  limit(10)
 );
 
-onSnapshot(qUltimaCarga, 
-  snapshot=>{
-    if(snapshot.empty){
-      cardUltimaCarga.innerHTML = "Nenhuma carga programada no momento.";
-      return;
-    }
+onSnapshot(qUltimaCarga, snapshot=>{
 
-    snapshot.forEach(docSnap=>{
-      const c = docSnap.data();
+  if(snapshot.empty){
+    cardUltimaCarga.innerHTML = "Nenhuma carga encontrada.";
+    return;
+  }
 
-      const dataCarga = c.dataCarregamento?.toDate
-        ? c.dataCarregamento.toDate().toLocaleDateString()
-        : "-";
+  const cargaProgramada = snapshot.docs
+    .map(d=>d.data())
+    .find(c => c.status === "PROGRAMADO" && c.placa);
 
-      const horaCriacao = c.criadoEm?.toDate
-        ? c.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
-        : "-";
-const cargaProgramada = snapshot.docs
-  .map(d=>d.data())
-  .find(c=>c.status==="PROGRAMADO");
-      
-      cardUltimaCarga.innerHTML = `
-        <div style="font-size:20px;font-weight:700;margin-bottom:10px;">
-          📦 Carga ${c.numeroCarga}
-        </div>
-        <div><strong>Data:</strong> ${dataCarga}</div>
-        <div><strong>Hora:</strong> ${horaCriacao}</div>
-        <hr style="margin:12px 0;">
-        <div><strong>Placa:</strong> ${c.placa}</div>
-        <div><strong>Tipo:</strong> ${c.tipoCaminhao}</div>
-        <div><strong>Compartimentos:</strong> ${c.configEixos}</div>
-      `;
-    });
+  if(!cargaProgramada){
+    cardUltimaCarga.innerHTML = "Nenhuma carga programada no momento.";
+    return;
+  }
+
+  const dataCarga = cargaProgramada.dataCarregamento?.toDate
+    ? cargaProgramada.dataCarregamento.toDate().toLocaleDateString()
+    : cargaProgramada.dataReferencia || "-";
+
+  const horaCriacao = cargaProgramada.criadoEm?.toDate
+    ? cargaProgramada.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
+    : "-";
+
+  cardUltimaCarga.innerHTML = `
+    <div style="font-size:22px;font-weight:700;margin-bottom:12px;color:#0A3D91;">
+      📦 Carga ${cargaProgramada.numeroCarga}
+    </div>
+
+    <div style="margin-bottom:6px;">
+      <strong>Data:</strong> ${dataCarga}
+    </div>
+
+    <div style="margin-bottom:6px;">
+      <strong>Hora:</strong> ${horaCriacao}
+    </div>
+
+    <hr style="margin:12px 0;">
+
+    <div style="margin-bottom:6px;">
+      <strong>Placa:</strong> ${cargaProgramada.placa}
+    </div>
+
+    <div style="margin-bottom:6px;">
+      <strong>Tipo:</strong> ${cargaProgramada.tipoCaminhao}
+    </div>
+
+    <div>
+      <strong>Compartimentos:</strong> ${cargaProgramada.configEixos}
+    </div>
+  `;
+});
   },
   error=>{
     console.warn("Aguardando índice ficar pronto...");
