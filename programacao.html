@@ -464,6 +464,39 @@ td{
   border-bottom:2px solid #fff;
   padding-bottom:4px;
 }
+  .resumo-item{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  align-items:center;
+  background:#ffffff;
+  padding:14px 18px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  margin-bottom:10px;
+  transition:.2s ease;
+}
+
+.resumo-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,.15);
+}
+
+.resumo-bloco{
+  min-width:130px;
+}
+
+.resumo-label{
+  font-size:10px;
+  color:#94a3b8;
+  text-transform:uppercase;
+  margin-bottom:3px;
+}
+
+.resumo-valor{
+  font-weight:700;
+  font-size:14px;
+}
 </style>
 </head>
 <body>
@@ -562,6 +595,24 @@ td{
 </table>
 </div>
 
+<!-- ============================= -->
+<!-- 📊 RESUMO DE CARGAS DO DIA -->
+<!-- ============================= -->
+
+<div class="card-form" style="margin-top:40px;">
+  <h2 style="margin-top:0;">📊 Resumo de Cargas do Dia</h2>
+
+  <div style="margin-bottom:20px;">
+    <label style="font-size:14px;font-weight:600;">
+      Selecionar Data:
+    </label>
+    <input type="date" id="filtroDataResumo"
+      style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;margin-left:10px;">
+  </div>
+
+  <div id="tabelaResumo"></div>
+</div>
+  
 </main>
 
 <div id="modalOverlay" class="modal-overlay">
@@ -1833,6 +1884,110 @@ links.forEach(link=>{
     link.classList.add("active");
   }
 });
+/* ================================
+   📊 RESUMO DE CARGAS POR DATA
+================================ */
+
+import { where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const filtroDataResumo = document.getElementById("filtroDataResumo");
+const tabelaResumo = document.getElementById("tabelaResumo");
+
+// 🔹 Define hoje como padrão
+const hoje = new Date().toISOString().split("T")[0];
+filtroDataResumo.value = hoje;
+
+filtroDataResumo.addEventListener("change", carregarResumo);
+
+async function carregarResumo(){
+
+  const dataSelecionada = filtroDataResumo.value;
+
+  if(!dataSelecionada) return;
+
+  tabelaResumo.innerHTML = "Carregando...";
+
+  const inicio = new Date(dataSelecionada + "T00:00:00");
+  const fim = new Date(dataSelecionada + "T23:59:59");
+
+  const qResumo = query(
+    collection(db,"programacao_cargas"),
+    where("dataCarregamento",">=",inicio),
+    where("dataCarregamento","<=",fim)
+  );
+
+  const snapshot = await getDocs(qResumo);
+
+  if(snapshot.empty){
+    tabelaResumo.innerHTML = "Nenhuma carga encontrada para essa data.";
+    return;
+  }
+
+  let html = "";
+
+  snapshot.forEach(docSnap => {
+
+    const c = docSnap.data();
+
+    const dataCarreg = c.dataCarregamento?.toDate
+      ? c.dataCarregamento.toDate().toLocaleDateString()
+      : "-";
+
+    const clientes = c.compartimentos
+      ?.map(comp => comp.cliente)
+      .filter(Boolean)
+      .join(", ") || "-";
+
+    const volumeTotal = c.compartimentos
+      ?.reduce((total, comp)=> total + (Number(comp.volume)||0),0) || 0;
+
+    html += `
+      <div class="resumo-item">
+
+        <div class="resumo-bloco">
+          <div class="resumo-label">Nº Carga</div>
+          <div class="resumo-valor">${c.numeroCarga || "-"}</div>
+        </div>
+
+        <div class="resumo-bloco">
+          <div class="resumo-label">Data</div>
+          <div class="resumo-valor">${dataCarreg}</div>
+        </div>
+
+        <div class="resumo-bloco">
+          <div class="resumo-label">Placa</div>
+          <div class="resumo-valor">${c.placa || "-"}</div>
+        </div>
+
+        <div class="resumo-bloco">
+          <div class="resumo-label">Tipo</div>
+          <div class="resumo-valor">${c.tipoCarga || "-"}</div>
+        </div>
+
+        <div class="resumo-bloco">
+          <div class="resumo-label">Vendedor</div>
+          <div class="resumo-valor">${c.vendedor || "-"}</div>
+        </div>
+
+        <div class="resumo-bloco" style="flex:1;">
+          <div class="resumo-label">Clientes</div>
+          <div class="resumo-valor">${clientes}</div>
+        </div>
+
+        <div class="resumo-bloco">
+          <div class="resumo-label">Volume Total</div>
+          <div class="resumo-valor">${volumeTotal}</div>
+        </div>
+
+      </div>
+    `;
+  });
+
+  tabelaResumo.innerHTML = html;
+}
+
+// 🔥 Carrega automaticamente ao abrir
+carregarResumo();
   
 </script>
 <div id="overlaySpinner" style="
