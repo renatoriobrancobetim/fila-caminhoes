@@ -358,89 +358,104 @@ onSnapshot(q, snapshot=>{
   renderizarFila();
 });
 /* =========================
-   ÚLTIMA CARGA PROGRAMADA
+   ÚLTIMAS 10 CARGAS PROGRAMADAS
 ========================= */
 
 const cardUltimaCarga = document.getElementById("cardUltimaCarga");
 
-const qUltimaCarga = query(
+// 🔵 Pré-carrega motoristas uma vez
+let mapaMotoristas = {};
+
+async function carregarMotoristas(){
+  const snap = await getDocs(collection(db,"motoristas_cadastro"));
+  snap.forEach(docSnap=>{
+    mapaMotoristas[docSnap.id] = docSnap.data().nome || "-";
+  });
+}
+
+await carregarMotoristas();
+
+const qUltimasCargas = query(
   collection(db,"programacao_cargas"),
   orderBy("criadoEm","desc"),
-  limit(10)
+  limit(20) // busca mais para garantir 10 programadas
 );
 
-onSnapshot(qUltimaCarga, async (snapshot) => {
+onSnapshot(qUltimasCargas, (snapshot) => {
 
   if(snapshot.empty){
     cardUltimaCarga.innerHTML = "Nenhuma carga encontrada.";
     return;
   }
 
-  const cargaProgramada = snapshot.docs
+  const cargasProgramadas = snapshot.docs
     .map(doc => doc.data())
-    .find(c => c.status === "PROGRAMADO" && c.placa);
+    .filter(c => c.status === "PROGRAMADO" && c.placa)
+    .slice(0,10);
 
-  if(!cargaProgramada){
+  if(cargasProgramadas.length === 0){
     cardUltimaCarga.innerHTML = "Nenhuma carga programada no momento.";
     return;
   }
 
-  // 🔵 Primeira cidade encontrada
-  const primeiraCidade = cargaProgramada.compartimentos
-    ?.find(c => c.municipio)?.municipio || "-";
-
-  // 🔵 Buscar nome do motorista
-  let nomeMotorista = "-";
-
-  try{
-    const snapMotorista = await getDocs(
-      query(collection(db,"motoristas_cadastro"))
-    );
-
-    snapMotorista.forEach(docSnap=>{
-      if(docSnap.id === cargaProgramada.placa){
-        nomeMotorista = docSnap.data().nome || "-";
-      }
-    });
-
-  }catch(e){
-    console.warn("Erro ao buscar motorista");
-  }
-
-  const dataCarga = cargaProgramada.dataCarregamento?.toDate
-    ? cargaProgramada.dataCarregamento.toDate().toLocaleDateString()
-    : cargaProgramada.dataReferencia || "-";
-
-  const horaCriacao = cargaProgramada.criadoEm?.toDate
-    ? cargaProgramada.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
-    : "-";
-
-  // 🔥 Layout horizontal compacto
-  cardUltimaCarga.innerHTML = `
+  let html = `
     <div style="
       display:flex;
-      flex-wrap:wrap;
-      gap:25px;
-      align-items:center;
-      font-size:15px;
+      flex-direction:column;
+      gap:8px;
+      font-size:14px;
     ">
-
-      <div><strong>📦</strong> ${cargaProgramada.numeroCarga}</div>
-
-      <div><strong>📅</strong> ${dataCarga}</div>
-
-      <div><strong>⏰</strong> ${horaCriacao}</div>
-
-      <div><strong>🚛</strong> ${cargaProgramada.placa}</div>
-
-      <div><strong>👤</strong> ${nomeMotorista}</div>
-
-      <div><strong>📍</strong> ${primeiraCidade}</div>
-
-      <div><strong>🧩</strong> ${cargaProgramada.configEixos}</div>
-
-    </div>
   `;
+
+  cargasProgramadas.forEach(carga => {
+
+    const primeiraCidade = carga.compartimentos
+      ?.find(c => c.municipio)?.municipio || "-";
+
+    const nomeMotorista = mapaMotoristas[carga.placa] || "-";
+
+    const dataCarga = carga.dataCarregamento?.toDate
+      ? carga.dataCarregamento.toDate().toLocaleDateString()
+      : carga.dataReferencia || "-";
+
+    const horaCriacao = carga.criadoEm?.toDate
+      ? carga.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
+      : "-";
+
+    html += `
+      <div style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:18px;
+        align-items:center;
+        background:#f8fafc;
+        padding:8px 12px;
+        border-radius:8px;
+      ">
+
+        <div><strong>📦</strong> ${carga.numeroCarga}</div>
+
+        <div><strong>📅</strong> ${dataCarga}</div>
+
+        <div><strong>⏰</strong> ${horaCriacao}</div>
+
+        <div style="color:#0A3D91;font-weight:600;">
+          <strong>🚛</strong> ${carga.placa}
+        </div>
+
+        <div><strong>👤</strong> ${nomeMotorista}</div>
+
+        <div><strong>📍</strong> ${primeiraCidade}</div>
+
+        <div><strong>🧩</strong> ${carga.configEixos}</div>
+
+      </div>
+    `;
+  });
+
+  html += "</div>";
+
+  cardUltimaCarga.innerHTML = html;
 
 });
   error=>{
