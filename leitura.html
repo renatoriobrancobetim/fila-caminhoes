@@ -189,83 +189,67 @@ tbody tr:first-child{
    NOVO PADRÃO FILA EM CARD
 ============================= */
 
+/* =============================
+   FILA PADRÃO IGUAL CARGA
+============================= */
+
 .fila-card-wrap{
-  margin-top:20px;
+  margin-top:30px;
 }
 
 .fila-item{
-  display:grid;
-  grid-template-columns: 80px 160px 180px 1fr;
+  display:flex;
+  flex-wrap:wrap;
+  gap:30px;
   align-items:center;
   background:#ffffff;
   color:#000;
-  padding:12px 18px;
-  border-radius:12px;
-  margin-bottom:8px;
-  box-shadow:0 4px 14px rgba(0,0,0,.12);
-  transition:all .35s ease;
-  opacity:0;
-  transform:translateY(10px);
-  animation:fadeSlide .35s ease forwards;
+  padding:16px 22px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  transition:all .25s ease;
+  margin-bottom:10px;
 }
 
-@keyframes fadeSlide{
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+.fila-item:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 22px rgba(0,0,0,.15);
+}
+
+.fila-bloco{
+  display:flex;
+  flex-direction:column;
+  min-width:120px;
 }
 
 .fila-label{
   font-size:9px;
   color:#94a3b8;
   text-transform:uppercase;
-  letter-spacing:.6px;
+  letter-spacing:.8px;
+  margin-bottom:2px;
 }
 
 .fila-valor{
   font-weight:700;
-  font-size:16px;
+  font-size:15px;
 }
 
 .fila-ordem{
-  font-size:18px;
-  color:var(--azul);
+  color:#0A3D91;
 }
 
 .fila-placa{
-  font-size:18px;
   color:#dc2626;
-}
-
-.fila-label{
-  font-size:10px;
-  color:#94a3b8;
-  text-transform:uppercase;
-  letter-spacing:.8px;
-}
-
-.fila-valor{
   font-weight:800;
-  font-size:24px;
-}
-
-.fila-ordem{
-  font-size:22px;
-  color:var(--azul);
-}
-
-.fila-placa{
-  font-size:22px;
-  color:#dc2626;
 }
 
 .fila-alerta{
-  background:#fff3cd;
+  background:#fff8e1;
 }
 
 .fila-critico{
-  background:#f8d7da;
+  background:#ffe5e5;
 }
 </style>
 </head>
@@ -412,25 +396,25 @@ function renderizarFila(){
 tbody.innerHTML+=`
   <div class="fila-item ${classeCard}">
 
-    <div>
-      <div class="fila-label">Ordem</div>
+    <div class="fila-bloco">
+      <div class="fila-label">ORDEM</div>
       <div class="fila-valor fila-ordem">${index}</div>
     </div>
 
-    <div>
-      <div class="fila-label">Placa</div>
+    <div class="fila-bloco">
+      <div class="fila-label">PLACA</div>
       <div class="fila-valor fila-placa">${c.placa}</div>
     </div>
 
-    <div>
-      <div class="fila-label">Compartimento</div>
+    <div class="fila-bloco">
+      <div class="fila-label">COMPARTIMENTO</div>
       <div class="fila-valor">
         ${mapaCompartimentos[c.placa] || "-"}
       </div>
     </div>
 
-    <div>
-      <div class="fila-label">Tempo na Fila</div>
+    <div class="fila-bloco">
+      <div class="fila-label">TEMPO NA FILA</div>
       <div class="fila-valor">
         ${tempoFormatado}
       </div>
