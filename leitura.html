@@ -194,35 +194,48 @@ tbody tr:first-child{
 }
 
 .fila-item{
-  display:flex;
-  flex-wrap:wrap;
-  gap:28px;
-  align-items:center;
-  background:#ffffff;
-  color:#000;
-  padding:18px 22px;
-  border-radius:14px;
-  margin-bottom:12px;
-  box-shadow:0 6px 18px rgba(0,0,0,.12);
-  transition:all .25s ease;
-  cursor:default;
-}
-.fila-item{
   display:grid;
-  grid-template-columns: 120px 220px 220px 1fr;
+  grid-template-columns: 80px 160px 180px 1fr;
   align-items:center;
   background:#ffffff;
   color:#000;
-  padding:22px 28px;
-  border-radius:16px;
-  margin-bottom:14px;
-  box-shadow:0 8px 22px rgba(0,0,0,.15);
-  transition:all .25s ease;
+  padding:12px 18px;
+  border-radius:12px;
+  margin-bottom:8px;
+  box-shadow:0 4px 14px rgba(0,0,0,.12);
+  transition:all .35s ease;
+  opacity:0;
+  transform:translateY(10px);
+  animation:fadeSlide .35s ease forwards;
 }
 
-.fila-item:hover{
-  transform:translateY(-5px);
-  box-shadow:0 16px 36px rgba(0,0,0,.22);
+@keyframes fadeSlide{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.fila-label{
+  font-size:9px;
+  color:#94a3b8;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+}
+
+.fila-valor{
+  font-weight:700;
+  font-size:16px;
+}
+
+.fila-ordem{
+  font-size:18px;
+  color:var(--azul);
+}
+
+.fila-placa{
+  font-size:18px;
+  color:#dc2626;
 }
 
 .fila-label{
@@ -330,10 +343,20 @@ let mapaCompartimentos = {};
 let dadosFila = [];
 
 /* UTIL */
-function calcularMinutos(timestamp){
-  if(!timestamp) return 0;
+function calcularTempoFormatado(timestamp){
+  if(!timestamp) return "0 min";
+
   const data = timestamp.toDate();
-  return Math.floor((new Date()-data)/60000);
+  const diffMin = Math.floor((new Date() - data) / 60000);
+
+  const horas = Math.floor(diffMin / 60);
+  const minutos = diffMin % 60;
+
+  if(horas > 0){
+    return `${horas}h ${minutos}min`;
+  }
+
+  return `${minutos} min`;
 }
 
 function tocarSom(){
@@ -353,7 +376,8 @@ await carregarCompartimentos();
 
 /* RENDERIZAÇÃO */
 function renderizarFila(){
-
+  
+  tbody.style.opacity = "0.5";
   tbody.innerHTML="";
   totalFila.innerHTML=`<span>🚚 TOTAL NA FILA</span>${dadosFila.length}`;
 
@@ -369,7 +393,7 @@ function renderizarFila(){
 
   dadosFila.forEach(c=>{
 
-    const minutos = calcularMinutos(c.entradaEm);
+    const tempoFormatado = calcularTempoFormatado(c.entradaEm);
 
     let classe="";
     if(minutos>=60) classe="critico";
@@ -402,7 +426,7 @@ tbody.innerHTML+=`
     <div>
       <div class="fila-label">Tempo na Fila</div>
       <div class="fila-valor">
-        ${minutos} min
+        ${tempoFormatado}
       </div>
     </div>
 
@@ -432,6 +456,9 @@ tbody.innerHTML+=`
   statusAtualizacao.textContent =
     "Última atualização: " + new Date().toLocaleTimeString();
 }
+  setTimeout(()=>{
+  tbody.style.opacity = "1";
+},150);
 }
 
 /* TEMPO REAL FIRESTORE */
