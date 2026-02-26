@@ -602,6 +602,18 @@ td{
 <div class="card-form" style="margin-top:40px;">
   <h2 style="margin-top:0;">📊 Resumo de Cargas do Dia</h2>
 
+<div id="tituloResumoCIF"
+     style="
+       margin-top:15px;
+       font-size:16px;
+       font-weight:600;
+       color:#0A3D91;
+       padding-bottom:8px;
+       border-bottom:2px solid #0A3D91;
+       display:none;
+     ">
+</div>
+
   <div style="margin-bottom:20px;">
     <label style="font-size:14px;font-weight:600;">
       Selecionar Data:
@@ -1900,6 +1912,13 @@ filtroDataResumo.addEventListener("change", carregarResumo);
 async function carregarResumo(){
 
   const dataSelecionada = filtroDataResumo.value;
+  const tituloResumo = document.getElementById("tituloResumoCIF");
+
+const dataFormatada = new Date(dataSelecionada + "T00:00:00")
+  .toLocaleDateString("pt-BR");
+
+tituloResumo.innerHTML = `📊 Resumo Cargas CIF (${dataFormatada})`;
+tituloResumo.style.display = "block";
   if(!dataSelecionada) return;
 
   tabelaResumo.innerHTML = "Carregando...";
@@ -1986,21 +2005,8 @@ async function carregarResumo(){
 
       </div>
     `;
-    const dataFormatada = new Date(dataSelecionada + "T00:00:00")
-  .toLocaleDateString("pt-BR");
+      .toLocaleDateString("pt-BR");
 
-html += `
-  <div style="
-    font-size:16px;
-    font-weight:600;
-    margin-bottom:20px;
-    padding-bottom:8px;
-    border-bottom:2px solid #0A3D91;
-    color:#0A3D91;
-  ">
-    📊 Resumo Cargas CIF (${dataFormatada})
-  </div>
-`;
   });
 
   tabelaResumo.innerHTML = html;
