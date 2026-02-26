@@ -361,60 +361,48 @@ const cardUltimaCarga = document.getElementById("cardUltimaCarga");
 
 const qUltimaCarga = query(
   collection(db,"programacao_cargas"),
-  where("status","==","PROGRAMADO"),
-  orderBy("criadoEm","desc"),
-  limit(1)
+ orderBy("criadoEm","desc"),
+limit(5)
 );
 
-onSnapshot(qUltimaCarga, snapshot=>{
+onSnapshot(qUltimaCarga, 
+  snapshot=>{
+    if(snapshot.empty){
+      cardUltimaCarga.innerHTML = "Nenhuma carga programada no momento.";
+      return;
+    }
 
-  if(snapshot.empty){
-    cardUltimaCarga.innerHTML = "Nenhuma carga programada no momento.";
-    return;
+    snapshot.forEach(docSnap=>{
+      const c = docSnap.data();
+
+      const dataCarga = c.dataCarregamento?.toDate
+        ? c.dataCarregamento.toDate().toLocaleDateString()
+        : "-";
+
+      const horaCriacao = c.criadoEm?.toDate
+        ? c.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
+        : "-";
+const cargaProgramada = snapshot.docs
+  .map(d=>d.data())
+  .find(c=>c.status==="PROGRAMADO");
+      
+      cardUltimaCarga.innerHTML = `
+        <div style="font-size:20px;font-weight:700;margin-bottom:10px;">
+          📦 Carga ${c.numeroCarga}
+        </div>
+        <div><strong>Data:</strong> ${dataCarga}</div>
+        <div><strong>Hora:</strong> ${horaCriacao}</div>
+        <hr style="margin:12px 0;">
+        <div><strong>Placa:</strong> ${c.placa}</div>
+        <div><strong>Tipo:</strong> ${c.tipoCaminhao}</div>
+        <div><strong>Compartimentos:</strong> ${c.configEixos}</div>
+      `;
+    });
+  },
+  error=>{
+    console.warn("Aguardando índice ficar pronto...");
   }
-
-  snapshot.forEach(docSnap=>{
-
-    const c = docSnap.data();
-
-    const dataCarga = c.dataCarregamento?.toDate
-      ? c.dataCarregamento.toDate().toLocaleDateString()
-      : "-";
-
-    const horaCriacao = c.criadoEm?.toDate
-      ? c.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
-      : "-";
-
-    cardUltimaCarga.innerHTML = `
-      <div style="font-size:20px;font-weight:700;margin-bottom:10px;">
-        📦 Carga ${c.numeroCarga}
-      </div>
-
-      <div style="margin-bottom:8px;">
-        <strong>Data:</strong> ${dataCarga}
-      </div>
-
-      <div style="margin-bottom:8px;">
-        <strong>Hora:</strong> ${horaCriacao}
-      </div>
-
-      <hr style="margin:12px 0;">
-
-      <div style="margin-bottom:6px;">
-        <strong>Placa:</strong> ${c.placa}
-      </div>
-
-      <div style="margin-bottom:6px;">
-        <strong>Tipo:</strong> ${c.tipoCaminhao}
-      </div>
-
-      <div>
-        <strong>Compartimentos:</strong> ${c.configEixos}
-      </div>
-    `;
-  });
-
-});
+);
 
 /* ATUALIZA TEMPO A CADA 60 SEGUNDOS */
 setInterval(()=>{
