@@ -369,7 +369,7 @@ const qUltimaCarga = query(
   limit(10)
 );
 
-onSnapshot(qUltimaCarga, (snapshot) => {
+onSnapshot(qUltimaCarga, async (snapshot) => {
 
   if(snapshot.empty){
     cardUltimaCarga.innerHTML = "Nenhuma carga encontrada.";
@@ -385,6 +385,28 @@ onSnapshot(qUltimaCarga, (snapshot) => {
     return;
   }
 
+  // 🔵 Primeira cidade encontrada
+  const primeiraCidade = cargaProgramada.compartimentos
+    ?.find(c => c.municipio)?.municipio || "-";
+
+  // 🔵 Buscar nome do motorista
+  let nomeMotorista = "-";
+
+  try{
+    const snapMotorista = await getDocs(
+      query(collection(db,"motoristas_cadastro"))
+    );
+
+    snapMotorista.forEach(docSnap=>{
+      if(docSnap.id === cargaProgramada.placa){
+        nomeMotorista = docSnap.data().nome || "-";
+      }
+    });
+
+  }catch(e){
+    console.warn("Erro ao buscar motorista");
+  }
+
   const dataCarga = cargaProgramada.dataCarregamento?.toDate
     ? cargaProgramada.dataCarregamento.toDate().toLocaleDateString()
     : cargaProgramada.dataReferencia || "-";
@@ -393,31 +415,30 @@ onSnapshot(qUltimaCarga, (snapshot) => {
     ? cargaProgramada.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
     : "-";
 
+  // 🔥 Layout horizontal compacto
   cardUltimaCarga.innerHTML = `
-    <div style="font-size:22px;font-weight:700;margin-bottom:12px;color:#0A3D91;">
-      📦 Carga ${cargaProgramada.numeroCarga}
-    </div>
+    <div style="
+      display:flex;
+      flex-wrap:wrap;
+      gap:25px;
+      align-items:center;
+      font-size:15px;
+    ">
 
-    <div style="margin-bottom:6px;">
-      <strong>Data:</strong> ${dataCarga}
-    </div>
+      <div><strong>📦</strong> ${cargaProgramada.numeroCarga}</div>
 
-    <div style="margin-bottom:6px;">
-      <strong>Hora:</strong> ${horaCriacao}
-    </div>
+      <div><strong>📅</strong> ${dataCarga}</div>
 
-    <hr style="margin:12px 0;">
+      <div><strong>⏰</strong> ${horaCriacao}</div>
 
-    <div style="margin-bottom:6px;">
-      <strong>Placa:</strong> ${cargaProgramada.placa}
-    </div>
+      <div><strong>🚛</strong> ${cargaProgramada.placa}</div>
 
-    <div style="margin-bottom:6px;">
-      <strong>Tipo:</strong> ${cargaProgramada.tipoCaminhao}
-    </div>
+      <div><strong>👤</strong> ${nomeMotorista}</div>
 
-    <div>
-      <strong>Compartimentos:</strong> ${cargaProgramada.configEixos}
+      <div><strong>📍</strong> ${primeiraCidade}</div>
+
+      <div><strong>🧩</strong> ${cargaProgramada.configEixos}</div>
+
     </div>
   `;
 
