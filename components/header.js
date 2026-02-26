@@ -13,16 +13,16 @@ export function renderHeader(pageTitle, pageSubtitle) {
         <span>${pageSubtitle}</span>
       </div>
 
-      <div class="nav-right">
-        <a href="painel.html">📊 Painel</a>
-        <a href="programacao.html">📦 Programação</a>
-        <a href="leitura.html">📺 Fila</a>
-        <a href="index.html">📊 Fila</a>
-        <a href="motoristas.html">🚛 Motoristas</a>
-        <a href="frete.html">💰 Frete</a>
-        <a href="usuarios-admin.html">👥 Usuários</a>
-        <a href="consumo-firestore.html">🔥 Consumo</a>
-      </div>
+<div class="nav-right">
+  <a href="index.html">🧭 Controle Fila</a>
+  <a href="painel.html">📊 Painel</a>
+  <a href="programacao.html">📦 Programação</a>
+  <a href="leitura.html">📺 Fila TV</a>
+  <a href="motoristas.html">🚛 Motoristas</a>
+  <a href="frete.html">💰 Frete</a>
+  <a href="usuarios-admin.html">👥 Usuários</a>
+  <a href="consumo-firestore.html">🔥 Consumo</a>
+</div>
 
     </div>
   </div>
