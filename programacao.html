@@ -494,7 +494,7 @@ td{
 }
 
 .resumo-valor{
-  font-weight:700;
+  font-weight:400;   /* remove negrito */
   font-size:14px;
 }
 </style>
@@ -1986,6 +1986,21 @@ async function carregarResumo(){
 
       </div>
     `;
+    const dataFormatada = new Date(dataSelecionada + "T00:00:00")
+  .toLocaleDateString("pt-BR");
+
+html += `
+  <div style="
+    font-size:16px;
+    font-weight:600;
+    margin-bottom:20px;
+    padding-bottom:8px;
+    border-bottom:2px solid #0A3D91;
+    color:#0A3D91;
+  ">
+    📊 Resumo Cargas CIF (${dataFormatada})
+  </div>
+`;
   });
 
   tabelaResumo.innerHTML = html;
