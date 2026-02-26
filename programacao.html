@@ -1214,6 +1214,8 @@ async function vincular(id){
             placa:placa,
             status:"PROGRAMADO"
           });
+          // 🔥 REMOVE DA FILA
+await deleteDoc(doc(db,"fila",placa));
 
           fecharModal();
 
