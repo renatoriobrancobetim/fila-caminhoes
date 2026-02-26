@@ -407,34 +407,50 @@ td{
 .topbar{
   background:linear-gradient(90deg,#0A3D91,#7a1f4d,#D71920);
   color:#fff;
-  box-shadow:0 8px 22px rgba(0,0,0,.35);
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
 }
 
 .navbar{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:16px 40px 8px 40px;
+  justify-content:space-between;
+  padding:14px 40px;
+  gap:30px;
 }
 
 .nav-left{
-  font-size:16px;
+  font-size:15px;
   font-weight:700;
-  letter-spacing:1px;
+  white-space:nowrap;
+}
+
+.page-title{
+  font-size:18px;
+  font-weight:700;
+  text-align:center;
+  flex:1;
+}
+
+.page-title span{
+  display:block;
+  font-size:12px;
+  font-weight:400;
+  opacity:.85;
+  margin-top:2px;
 }
 
 .nav-right{
   display:flex;
-  gap:26px;
+  gap:22px;
+  white-space:nowrap;
 }
 
 .nav-right a{
   text-decoration:none;
   color:#ffffff;
   font-size:14px;
-  font-weight:500;
   opacity:.85;
-  transition:.25s ease;
+  transition:.2s;
 }
 
 .nav-right a:hover{
@@ -443,28 +459,10 @@ td{
 }
 
 .nav-right a.active{
-  font-weight:700;
   opacity:1;
-  border-bottom:2px solid #ffffff;
+  font-weight:600;
+  border-bottom:2px solid #fff;
   padding-bottom:4px;
-}
-
-.page-header{
-  text-align:center;
-  padding:25px 20px 30px;
-}
-
-.page-header h1{
-  margin:0;
-  font-size:28px;
-  font-weight:700;
-  letter-spacing:.5px;
-}
-
-.page-header p{
-  margin-top:6px;
-  font-size:14px;
-  opacity:.9;
 }
 </style>
 </head>
@@ -472,8 +470,14 @@ td{
 <div class="topbar">
 
   <div class="navbar">
+
     <div class="nav-left">
       🚛 MONTEIRO ERP
+    </div>
+
+    <div class="page-title">
+      📦 Programação de Cargas
+      <span>Módulo Operacional Integrado</span>
     </div>
 
     <div class="nav-right">
@@ -485,11 +489,7 @@ td{
       <a href="usuarios-admin.html">👥 Usuários</a>
       <a href="consumo-firestore.html">🔥 Consumo</a>
     </div>
-  </div>
 
-  <div class="page-header">
-    <h1>📦 Programação de Cargas</h1>
-    <p>Módulo Operacional Integrado</p>
   </div>
 
 </div>
