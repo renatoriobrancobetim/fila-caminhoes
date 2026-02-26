@@ -55,27 +55,20 @@ body{
 }
 
 .card{
-  padding:35px;
-  border-radius:18px;
-  text-align:center;
-  font-weight:700;
-  box-shadow:0 15px 40px rgba(0,0,0,.45);
-  position:relative;
-  overflow:hidden;
+  padding:20px 28px; /* antes 35px */
+  border-radius:16px;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
 }
 
 .card span{
-  display:block;
-  font-size:14px;
-  font-weight:500;
-  margin-bottom:10px;
-  letter-spacing:1px;
+  font-size:12px; /* antes 14px */
+  margin-bottom:6px;
 }
 
 .proximo{
   background:linear-gradient(135deg,var(--vermelho),#ff3b3b);
-  font-size:46px;
-  letter-spacing:3px;
+  font-size:34px; /* antes 46px */
+  letter-spacing:2px;
 }
 
 .proximo::after{
@@ -96,7 +89,7 @@ body{
 
 .total{
   background:linear-gradient(135deg,#1E90FF,#0b5ed7);
-  font-size:40px;
+  font-size:28px; /* antes 40px */
 }
 
 .flash{
@@ -204,11 +197,11 @@ tbody tr:first-child{
   align-items:center;
   background:#ffffff;
   color:#000;
-  padding:16px 22px;
-  border-radius:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  padding:10px 20px; /* antes 16px 22px */
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
   transition:all .25s ease;
-  margin-bottom:10px;
+  margin-bottom:8px; /* antes 10px */
 }
 
 .fila-item:hover{
@@ -220,6 +213,7 @@ tbody tr:first-child{
   display:flex;
   flex-direction:column;
   min-width:120px;
+  line-height:1.1; /* reduz altura interna */
 }
 
 .fila-label{
