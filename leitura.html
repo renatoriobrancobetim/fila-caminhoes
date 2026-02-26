@@ -263,7 +263,7 @@ const db = getFirestore(app);
 const tbody = document.getElementById("fila");
 const proximoCard = document.getElementById("proximo");
 const totalFila = document.getElementById("totalFila");
-const statusAtualizacao = document.getElementById("statusAtualizacao");
+let statusAtualizacao = document.getElementById("statusAtualizacao");
 
 let ultimoProximo = "";
 let mapaCompartimentos = {};
@@ -301,6 +301,9 @@ function renderizarFila(){
     proximoCard.innerHTML="<span>🔔 PRÓXIMO CAMINHÃO</span>Fila vazia";
     return;
   }
+  if(!statusAtualizacao){
+  statusAtualizacao = document.getElementById("statusAtualizacao");
+}
 
   let index=1;
 
@@ -340,8 +343,10 @@ function renderizarFila(){
     index++;
   });
 
+ if(statusAtualizacao){
   statusAtualizacao.textContent =
-    "Última atualização: "+new Date().toLocaleTimeString();
+    "Última atualização: " + new Date().toLocaleTimeString();
+}
 }
 
 /* TEMPO REAL FIRESTORE */
