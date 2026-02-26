@@ -422,16 +422,88 @@ onSnapshot(qUltimasCargas, (snapshot) => {
       ? carga.criadoEm.toDate().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})
       : "-";
 
-    html += `
-      <div style="
-        display:flex;
-        flex-wrap:wrap;
-        gap:18px;
-        align-items:center;
-        background:#f8fafc;
-        padding:8px 12px;
-        border-radius:8px;
-      ">
+  html += `
+  <div style="
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    align-items:center;
+    background:#ffffff;
+    padding:14px 18px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:all .25s ease;
+    cursor:default;
+  "
+  onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 10px 22px rgba(0,0,0,.15)';"
+  onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(0,0,0,.08)';"
+  >
+
+    <div>
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
+        Carga
+      </div>
+      <div style="font-weight:700;color:#0A3D91;">
+        ${carga.numeroCarga}
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
+        Data
+      </div>
+      <div>
+        ${dataCarga}
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
+        Hora
+      </div>
+      <div>
+        ${horaCriacao}
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
+        Placa
+      </div>
+      <div style="font-weight:600;color:#dc2626;">
+        ${carga.placa}
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
+        Motorista
+      </div>
+      <div>
+        ${nomeMotorista}
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
+        Cidade
+      </div>
+      <div>
+        ${primeiraCidade}
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
+        Eixos
+      </div>
+      <div>
+        ${carga.configEixos}
+      </div>
+    </div>
+
+  </div>
+`;
 
         <div><strong>📦</strong> ${carga.numeroCarga}</div>
 
