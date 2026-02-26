@@ -493,7 +493,7 @@ onSnapshot(qUltimasCargas, (snapshot) => {
       </div>
     </div>
 
-    <div>
+        <div>
       <div style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">
         Eixos
       </div>
@@ -501,38 +501,15 @@ onSnapshot(qUltimasCargas, (snapshot) => {
         ${carga.configEixos}
       </div>
     </div>
-`;
+
   </div>
-`;
-
-        <div><strong>📦</strong> ${carga.numeroCarga}</div>
-
-        <div><strong>📅</strong> ${dataCarga}</div>
-
-        <div><strong>⏰</strong> ${horaCriacao}</div>
-
-        <div style="color:#0A3D91;font-weight:600;">
-          <strong>🚛</strong> ${carga.placa}
-        </div>
-
-        <div><strong>👤</strong> ${nomeMotorista}</div>
-
-        <div><strong>📍</strong> ${primeiraCidade}</div>
-
-        <div><strong>🧩</strong> ${carga.configEixos}</div>
-
-      </div>
-    `;
+  `;
   });
 
-  html += "</div>";
-
+    html += "</div>";
   cardUltimaCarga.innerHTML = html;
 
 });
-  error=>{
-    console.warn("Aguardando índice ficar pronto...");
-  }
 
 /* ATUALIZA TEMPO A CADA 60 SEGUNDOS */
 setInterval(()=>{
