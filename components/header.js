@@ -19,6 +19,7 @@ export function renderHeader(pageTitle, pageSubtitle) {
         <a href="programacao.html">📦 Programação</a>
         <a href="leitura.html">📺 Fila TV</a>
         <a href="motoristas.html">🚛 Motoristas</a>
+        <a href="motoristas-admin.html">🛠 Admin Motoristas</a>
         <a href="frete.html">💰 Frete</a>
         <a href="usuarios-admin.html">👥 Usuários</a>
         <a href="consumo-firestore.html">🔥 Consumo</a>
@@ -30,7 +31,6 @@ export function renderHeader(pageTitle, pageSubtitle) {
 
   document.body.insertAdjacentHTML("afterbegin", headerHTML);
 
-  // 🔎 Detectar página ativa corretamente
   let currentPage = window.location.pathname.split("/").pop();
 
   if(currentPage === "" || currentPage === "/"){
