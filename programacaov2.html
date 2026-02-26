@@ -366,14 +366,108 @@ td{
   box-shadow:none;
   cursor:default;
 }
+/* 🔥 EFEITO PULSE - NOVA CARGA */
+
+.linha-nova td{
+  animation: pulseNovaCarga 2s ease-in-out 3;
+}
+
+@keyframes pulseNovaCarga{
+  0%{
+    box-shadow: inset 0 0 0 0 rgba(37, 99, 235, 0.4);
+    background:#e0f2fe;
+  }
+  50%{
+    box-shadow: inset 0 0 0 6px rgba(37, 99, 235, 0.25);
+    background:#bfdbfe;
+  }
+  100%{
+    box-shadow: inset 0 0 0 0 rgba(37, 99, 235, 0);
+    background:inherit;
+  }
+}
+
+@keyframes destaqueNovaCarga{
+  0%{
+    background:#dbeafe;
+    transform:scale(1.01);
+  }
+  40%{
+    background:#bfdbfe;
+  }
+  100%{
+    background:inherit;
+    transform:scale(1);
+  }
+}
+/* =========================
+   HEADER INTEGRADO ERP
+========================= */
+
+.topbar{
+  background:linear-gradient(90deg,#0A3D91,#7a1f4d,#D71920);
+  color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+
+.navbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 40px;
+  gap:30px;
+}
+
+.nav-left{
+  font-size:15px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.page-title{
+  font-size:18px;
+  font-weight:700;
+  text-align:center;
+  flex:1;
+}
+
+.page-title span{
+  display:block;
+  font-size:12px;
+  font-weight:400;
+  opacity:.85;
+  margin-top:2px;
+}
+
+.nav-right{
+  display:flex;
+  gap:22px;
+  white-space:nowrap;
+}
+
+.nav-right a{
+  text-decoration:none;
+  color:#ffffff;
+  font-size:14px;
+  opacity:.85;
+  transition:.2s;
+}
+
+.nav-right a:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
+
+.nav-right a.active{
+  opacity:1;
+  font-weight:600;
+  border-bottom:2px solid #fff;
+  padding-bottom:4px;
+}
 </style>
 </head>
 <body>
 
-<header>
-<h1>📦 Programação de Cargas</h1>
-<p>Módulo Operacional Integrado</p>
-</header>
 
 <main>
 
@@ -483,6 +577,12 @@ td{
 
 <script type="module">
 
+  import { renderHeader } from "./components/header.js";
+
+renderHeader(
+  "📦 Programação de Cargas",
+  "Módulo Operacional Integrado"
+);
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
   getAuth, 
@@ -502,7 +602,8 @@ import {
   onSnapshot, 
   serverTimestamp,
   query,
-  orderBy
+  orderBy,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===== FIREBASE INIT ===== */
@@ -530,6 +631,7 @@ let capacidadeTotalAtual=0;
 
 let indiceAtual = 0;
 let taxaAtual = 0;
+  let ultimaCargaCriada = null;
   
 
 const infoVeiculo=document.getElementById("infoVeiculo");
@@ -849,19 +951,12 @@ compartimentos.push({
 
     if(preenchidos<2) throw "Preencha ao menos 2 compartimentos.";
 
-    const dataBase = document.getElementById("dataCarregamento").value;
-const snap = await getDocs(collection(db,"programacao_cargas"));
+  const dataBase = document.getElementById("dataCarregamento").value;
+  const numeroCarga = await gerarNumeroCargaSeguro();
 
-let ultimoNumero = 0;
 
-snap.forEach(docSnap => {
-  const numero = parseInt(docSnap.data().numeroCarga);
-  if (!isNaN(numero) && numero > ultimoNumero) {
-    ultimoNumero = numero;
-  }
-});
 
-const numeroCarga = String(ultimoNumero + 1).padStart(4,"0");
+
     // ================= PREVIEW =================
 
 // ================= PREVIEW =================
@@ -1008,7 +1103,7 @@ ${lista.length}
 
   lista.forEach(c=>{
     tabela.innerHTML+=`
-      <tr class="linha-status status-${c.status} grupo-${grupoId}">
+      <tr class="linha-status status-${c.status} grupo-${grupoId} ${c.numeroCarga === ultimaCargaCriada ? 'linha-nova' : ''}">
         <td>${c.numeroCarga}</td>
         <td>${c.dataObj.toLocaleDateString()}</td>
 <td>
@@ -1093,153 +1188,115 @@ function fecharModal(){
   document.getElementById("modalOverlay").style.display="none";
 }
 
-function vincular(id){
+async function vincular(id){
 
-  abrirModal(
-    "Vincular Caminhão",
-    `<input id="placaModal" placeholder="Digite a placa" style="width:100%;padding:8px;">`,
-    async()=>{
+  try{
 
-      const placa = document.getElementById("placaModal").value.trim().toUpperCase();
-      if(!placa) return;
+    // 🔥 Buscar todos motoristas cadastrados
+    const snapMotoristas = await getDocs(collection(db,"motoristas_cadastro"));
 
-      try{
+    if(snapMotoristas.empty){
+      abrirModal(
+        "Nenhum caminhão cadastrado",
+        "<p>Cadastre um caminhão primeiro.</p>",
+        ()=>{ fecharModal(); }
+      );
+      return;
+    }
 
-        // 1️⃣ Buscar carga
-        const cargaRef = doc(db,"programacao_cargas",id);
-        const cargaSnap = await getDoc(cargaRef);
+    let optionsHTML = `<option value="">Selecione a placa</option>`;
 
-        if(!cargaSnap.exists()){
+    snapMotoristas.forEach(docSnap=>{
+      const m = docSnap.data();
+      optionsHTML += `
+        <option value="${docSnap.id}">
+          ${docSnap.id} - ${m.nome || "Motorista"} (${m.configEixos})
+        </option>
+      `;
+    });
+
+    abrirModal(
+      "Vincular Caminhão",
+      `
+      <select id="placaModal" style="width:100%;padding:10px;">
+        ${optionsHTML}
+      </select>
+      `,
+      async()=>{
+
+        const placa = document.getElementById("placaModal").value;
+        if(!placa) return;
+
+        try{
+
+          // 1️⃣ Buscar carga
+          const cargaRef = doc(db,"programacao_cargas",id);
+          const cargaSnap = await getDoc(cargaRef);
+
+          if(!cargaSnap.exists()){
+            fecharModal();
+            return;
+          }
+
+          const carga = cargaSnap.data();
+
+          // 2️⃣ Buscar caminhão selecionado
+          const motoristaRef = doc(db,"motoristas_cadastro",placa);
+          const motoristaSnap = await getDoc(motoristaRef);
+
+          if(!motoristaSnap.exists()){
+            fecharModal();
+            return;
+          }
+
+          const motorista = motoristaSnap.data();
+
+          const configNumerica = motorista.configEixos.split("-")[0];
+
+          const compartimentosCaminhao = configNumerica
+            .split("")
+            .map(n => Number(n) * 1000);
+
+          const capacidadeCaminhao = compartimentosCaminhao
+            .reduce((a,b)=>a+b,0);
+
+          // 🔥 VALIDAÇÃO CAPACIDADE
+          if (capacidadeCaminhao < carga.capacidadeTotal) {
+
+            abrirModal(
+              "Capacidade Insuficiente",
+              `
+              <p><strong>Carga:</strong> ${carga.capacidadeTotal.toLocaleString()} L</p>
+              <p><strong>Caminhão:</strong> ${capacidadeCaminhao.toLocaleString()} L</p>
+              `,
+              ()=>{ fecharModal(); }
+            );
+
+            return;
+          }
+
+          // 🔥 Atualiza carga
+          await updateDoc(cargaRef,{
+            placa:placa,
+            status:"PROGRAMADO"
+          });
+          // 🔥 REMOVE CAMINHÃO DA FILA
+await deleteDoc(doc(db,"fila",placa));
+          // 🔥 REMOVE DA FILA
+await deleteDoc(doc(db,"fila",placa));
+
           fecharModal();
-          return;
+
+        }catch(error){
+          console.error(error);
         }
 
-        const carga = cargaSnap.data();
-
-        // 2️⃣ Buscar caminhão
-        const motoristaRef = doc(db,"motoristas_cadastro",placa);
-        const motoristaSnap = await getDoc(motoristaRef);
-
-        if(!motoristaSnap.exists()){
-          abrirModal(
-            "Caminhão não encontrado",
-            `<p>Placa <strong>${placa}</strong> não está cadastrada no sistema.</p>`,
-            ()=>{ fecharModal(); }
-          );
-          return;
-        }
-
-        const motorista = motoristaSnap.data();
-
-        // 3️⃣ Extrair configuração numérica (ex: 5532)
-        const configNumerica = motorista.configEixos.split("-")[0];
-
-        // 4️⃣ Gerar compartimentos reais
-        const compartimentosCaminhao = configNumerica
-          .split("")
-          .map(n => Number(n) * 1000);
-
-        // 5️⃣ Calcular capacidade total
-        const capacidadeCaminhao = compartimentosCaminhao
-          .reduce((a,b)=>a+b,0);
-
-        // ===== VALIDAÇÃO DE CAPACIDADE =====
-        if (capacidadeCaminhao < carga.capacidadeTotal) {
-
-          abrirModal(
-            "Capacidade Insuficiente",
-            `
-            <p><strong>Carga:</strong> ${carga.capacidadeTotal.toLocaleString()} L</p>
-            <p><strong>Caminhão:</strong> ${capacidadeCaminhao.toLocaleString()} L</p>
-            <br>
-            <p style="color:#b91c1c;font-weight:600;">
-              O caminhão não possui capacidade suficiente.
-            </p>
-            `,
-            ()=>{ fecharModal(); }
-          );
-
-          return;
-        }
-
-        // ===== VALIDAÇÃO DE DISTRIBUIÇÃO REAL =====
-function podeDistribuir(volumesCarga, compartimentos){
-
-  // Copia para não alterar original
-  let disponiveis = [...compartimentos];
-
-  // Ordena maior para menor (melhor encaixe)
-  disponiveis.sort((a,b)=>b-a);
-
-  for(let volume of volumesCarga){
-
-    let restante = volume;
-
-    // Ordena novamente a cada cliente
-    disponiveis.sort((a,b)=>b-a);
-
-    for(let i=0; i<disponiveis.length; i++){
-
-      if(disponiveis[i] > 0){
-
-        const usado = Math.min(disponiveis[i], restante);
-
-        disponiveis[i] -= usado;
-        restante -= usado;
-
-        if(restante === 0) break;
       }
-    }
+    );
 
-    // Se terminou compartimentos e ainda sobrou volume
-    if(restante > 0){
-      return false;
-    }
+  }catch(error){
+    console.error(error);
   }
-
-  return true;
-}
-        const volumesCarga = carga.compartimentos
-          .filter(c => c.cliente)
-          .map(c => c.capacidade);
-
-        if(!podeDistribuir(volumesCarga, compartimentosCaminhao)){
-
-          abrirModal(
-            "Distribuição Incompatível",
-            `
-            <p>Os volumes da carga não encaixam</p>
-            <p>nos compartimentos do caminhão.</p>
-            <br>
-            <p style="color:#b91c1c;font-weight:600;">
-              Verifique a configuração de eixos.
-            </p>
-            `,
-            ()=>{ fecharModal(); }
-          );
-
-          return;
-        }
-
-        // 6️⃣ Se passou em tudo
-        await updateDoc(cargaRef,{
-          placa:placa,
-          status:"PROGRAMADO"
-        });
-
-        fecharModal();
-
-      }catch(error){
-        console.error(error);
-        abrirModal(
-          "Erro",
-          "<p>Erro ao vincular caminhão.</p>",
-          ()=>{ fecharModal(); }
-        );
-      }
-
-    }
-  );
 
 }
    
@@ -1259,6 +1316,63 @@ function podeDistribuir(volumesCarga, compartimentos){
 }
 
 window.voltarFila = voltarFila;
+function formatarObservacoes(texto){
+
+  if(!texto) return "";
+
+  const urlRegex = /(https?:\/\/[^\s]+)/gi;
+
+  return texto.replace(urlRegex, function(url){
+
+    const urlLower = url.toLowerCase();
+
+    const isGoogleMaps =
+      urlLower.includes("google.com/maps") ||
+      urlLower.includes("maps.app.goo.gl") ||
+      urlLower.includes("goo.gl/maps");
+
+    if(isGoogleMaps){
+
+      return `
+        <div style="margin-top:8px;">
+          <a href="${url}" 
+             target="_blank" 
+             style="
+               display:inline-flex;
+               align-items:center;
+               gap:8px;
+               background:linear-gradient(90deg,#0A3D91,#2563eb);
+               color:#fff;
+               padding:10px 18px;
+               border-radius:30px;
+               text-decoration:none;
+               font-weight:600;
+               font-size:13px;
+               box-shadow:0 6px 18px rgba(0,0,0,.15);
+               transition:all .2s ease;
+             "
+             onmouseover="this.style.transform='scale(1.05)'"
+             onmouseout="this.style.transform='scale(1)'"
+          >
+            🗺️ Abrir Rota no Google Maps
+          </a>
+        </div>
+      `;
+    }
+
+    return `
+      <div style="margin-top:8px;">
+        <a href="${url}" 
+           target="_blank"
+           style="color:#2563eb;font-weight:600;">
+          🔗 Abrir Link
+        </a>
+      </div>
+    `;
+  });
+
+}
+  
 function toggleDetalhe(id){
 
   const existente = document.getElementById("detalhe-"+id);
@@ -1421,7 +1535,7 @@ linha.innerHTML = `
             📝 Observações
           </div>
           <div style="font-size:12px;color:#334155;">
-            ${c.observacoes}
+            ${formatarObservacoes(c.observacoes)}
           </div>
         </div>
       </div>
@@ -1571,7 +1685,31 @@ window.alterarCarga = alterarCarga;
   );
 
 }
+async function gerarNumeroCargaSeguro(){
 
+  const contadorRef = doc(db, "configuracoes", "contador_cargas");
+
+  return await runTransaction(db, async (transaction) => {
+
+    const contadorDoc = await transaction.get(contadorRef);
+
+    if (!contadorDoc.exists()) {
+      throw "Documento contador_cargas não existe.";
+    }
+
+    const numeroAtual = contadorDoc.data().ultimoNumero || 0;
+
+    const novoNumero = numeroAtual + 1;
+
+    transaction.update(contadorRef, {
+      ultimoNumero: novoNumero
+    });
+
+    return String(novoNumero).padStart(4,"0");
+
+  });
+
+}
 async function confirmarSalvarCarga(){
 
   const dados = window._dadosTempCarga;
@@ -1599,23 +1737,16 @@ await addDoc(collection(db,"programacao_cargas"),{
   placa:null,
   status:"AGUARDANDO_FILA",
   compartimentos:dados.compartimentos,
-  observacoes: document.getElementById("observacoes").value.toUpperCase(),
+  observacoes: document.getElementById("observacoes").value,
   criadoEm:serverTimestamp()
 });
+    ultimaCargaCriada = dados.numeroCarga;
+mostrarSpinnerGlobal();
 
-    abrirModal(
-      "Carga Criada com Sucesso",
-      `
-      <div style="text-align:left;font-size:14px;">
-        <p style="font-size:16px;font-weight:700;">
-          Nº da Carga: ${dados.numeroCarga}
-        </p>
-        <hr style="margin:10px 0;">
-        ${dados.resumoHTML}
-      </div>
-      `,
-      ()=>{ fecharModal(); }
-    );
+setTimeout(()=>{
+  esconderSpinnerGlobal();
+}, 1000);
+
 
     // 🔄 LIMPAR FORMULÁRIO
     document.getElementById("observacoes").value = "";
@@ -1646,7 +1777,13 @@ await addDoc(collection(db,"programacao_cargas"),{
   loaderBtn.classList.add("hidden");
   textoBtn.innerText = "Salvar Carga";
 }
+function mostrarSpinnerGlobal(){
+  document.getElementById("overlaySpinner").style.display = "flex";
+}
 
+function esconderSpinnerGlobal(){
+  document.getElementById("overlaySpinner").style.display = "none";
+}
 window.confirmarSalvarCarga = confirmarSalvarCarga;
 
 window.faturarCarga = faturarCarga;
@@ -1686,7 +1823,47 @@ const mm = String(hoje.getMonth() + 1).padStart(2, '0');
 const dd = String(hoje.getDate()).padStart(2, '0');
 
 document.getElementById("dataCarregamento").value = `${yyyy}-${mm}-${dd}`;
-</script>
+// Destacar página ativa automaticamente
+const links = document.querySelectorAll(".nav-right a");
+const currentPage = window.location.pathname.split("/").pop();
 
+links.forEach(link=>{
+  const linkPage = link.getAttribute("href");
+  if(linkPage === currentPage){
+    link.classList.add("active");
+  }
+});
+  
+</script>
+<div id="overlaySpinner" style="
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.8);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:9999;
+">
+
+  <div style="
+    width:60px;
+    height:60px;
+    border:6px solid #e5e7eb;
+    border-top:6px solid #0A3D91;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  "></div>
+
+  <div style="
+    margin-top:20px;
+    font-weight:600;
+    color:#0A3D91;
+    font-size:14px;
+  ">
+    Atualizando lista de cargas...
+  </div>
+
+</div>
 </body>
 </html>
