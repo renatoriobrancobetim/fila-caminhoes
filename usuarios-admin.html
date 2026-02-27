@@ -107,11 +107,17 @@ button {
 </select>
 
 <div class="permissoes">
-<h4>Permissões</h4>
-<label><input type="checkbox" id="menuPainel"> Painel</label><br>
-<label><input type="checkbox" id="menuFrete"> Frete</label><br>
-<label><input type="checkbox" id="menuClientes"> Clientes</label><br>
-<label><input type="checkbox" id="menuUsuarios"> Usuários</label>
+<h4>Acesso aos Módulos</h4>
+
+<label><input type="checkbox" id="menuPainel"> Painel da Fila</label><br>
+<label><input type="checkbox" id="menuLeitura"> Fila de Caminhões</label><br>
+<label><input type="checkbox" id="menuDisponibilidade"> Disponibilidade</label><br>
+<label><input type="checkbox" id="menuMotoristasAdmin"> Motoristas Admin</label><br>
+<label><input type="checkbox" id="menuFrete"> Cálculo de Frete</label><br>
+<label><input type="checkbox" id="menuUsuarios"> Controle de Usuários</label><br>
+<label><input type="checkbox" id="menuConsumo"> Consumo Firestore</label><br>
+<label><input type="checkbox" id="menuProgramacao"> Programação de Cargas</label>
+
 </div>
 
 <button onclick="abrirConfirmacao()">Criar Usuário</button>
@@ -195,12 +201,16 @@ window.criarUsuario = async function(){
   const senha = document.getElementById("senha").value.trim();
   const nivel = parseInt(document.getElementById("nivel").value);
 
-  const menus = {
-    painel: document.getElementById("menuPainel").checked,
-    frete: document.getElementById("menuFrete").checked,
-    clientes: document.getElementById("menuClientes").checked,
-    usuarios: document.getElementById("menuUsuarios").checked
-  };
+const menus = {
+  painel: document.getElementById("menuPainel").checked,
+  leitura: document.getElementById("menuLeitura").checked,
+  disponibilidade: document.getElementById("menuDisponibilidade").checked,
+  motoristasAdmin: document.getElementById("menuMotoristasAdmin").checked,
+  frete: document.getElementById("menuFrete").checked,
+  usuarios: document.getElementById("menuUsuarios").checked,
+  consumo: document.getElementById("menuConsumo").checked,
+  programacao: document.getElementById("menuProgramacao").checked
+};
 
   const msg = document.getElementById("msg");
 
