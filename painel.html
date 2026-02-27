@@ -324,17 +324,31 @@ document.getElementById("usuarioLogado").innerText =
     await carregarKPIs();
 }else{
 
-  if(dados.menus?.painel)
-    document.getElementById("cardPainelFila").style.display="block";
+if(dados.menus?.painel)
+  document.getElementById("cardPainelFila").style.display="block";
 
-  if(dados.menus?.frete)
-    document.getElementById("cardFrete").style.display="block";
+if(dados.menus?.leitura)
+  document.getElementById("cardLeitura").style.display="block";
 
-  if(dados.menus?.usuarios)
-    document.getElementById("cardUsuarios").style.display="block";
+if(dados.menus?.disponibilidade)
+  document.getElementById("cardDisponibilidade").style.display="block";
 
-  if(dados.menus?.consumo)
-    document.getElementById("cardConsumo").style.display="block";
+if(dados.menus?.motoristasAdmin)
+  document.getElementById("cardMotoristasAdmin").style.display="block";
+
+if(dados.menus?.frete)
+  document.getElementById("cardFrete").style.display="block";
+
+if(dados.menus?.usuarios)
+  document.getElementById("cardUsuarios").style.display="block";
+
+if(dados.menus?.consumo)
+  document.getElementById("cardConsumo").style.display="block";
+
+if(dados.menus?.programacao)
+  document.querySelectorAll('[href="programacao.html"]').forEach(el=>{
+    el.style.display="block";
+  });
 
 }
 // 🔥 ATIVAR BADGE EM TEMPO REAL
