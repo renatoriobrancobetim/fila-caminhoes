@@ -19,19 +19,23 @@ let listaClientesCache = [];
 
 document.documentElement.style.display = "none";
 
-// 🔐 PROTEÇÃO DE AUTENTICAÇÃO
-onAuthStateChanged(auth, async (user) => {
+// 🔐 PROTEÇÃO DE AUTENTICAÇÃO (AGUARDA RESTAURAÇÃO REAL DA SESSÃO)
+auth.authStateReady().then(() => {
 
-  if (!user) {
-    window.location.replace("login.html");
-    return;
-  }
+  onAuthStateChanged(auth, async (user) => {
 
-  usuarioLogado = user;
+    if (!user) {
+      window.location.replace("login.html");
+      return;
+    }
 
-  await carregarClientesCache();
+    usuarioLogado = user;
 
-  document.documentElement.style.display = "block";
+    await carregarClientesCache();
+
+    document.documentElement.style.display = "block";
+  });
+
 });
 
 // disponibiliza auth no console (debug)
