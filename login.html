@@ -87,9 +87,17 @@ window.login = async function(){
 
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
-  const erro  = document.getElementById("erro");
+
+  const loader  = document.getElementById("loader");
+  const btnText = document.getElementById("btnText");
+  const btn     = document.getElementById("btn");
+  const erro    = document.getElementById("erro");
+  const box     = document.getElementById("box");
 
   erro.style.display = "none";
+  btn.disabled = true;
+  loader.style.display = "block";
+  btnText.textContent = "Entrando...";
 
   try {
 
@@ -100,11 +108,17 @@ window.login = async function(){
     window.location.href = "painel.html";
 
   } catch (error) {
+
+    loader.style.display = "none";
+    btnText.textContent = "Entrar";
+    btn.disabled = false;
+
     erro.style.display = "block";
+    box.classList.add("shake");
+    setTimeout(() => box.classList.remove("shake"), 400);
   }
 
 };
-
 </script>
 
 </body>
