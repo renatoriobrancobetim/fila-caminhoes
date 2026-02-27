@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <script type="module">
+  import { auth, db } from "./components/firebase.js";
 import { renderHeader } from "./components/header.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,35 +34,8 @@ async function registrarConsumo(tipo, quantidade = 1){
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 
-import { initializeApp } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
-import { getAuth, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-import { 
-  getFirestore, 
-  collection, 
-  query, 
-  orderBy, 
-  startAt, 
-  endAt, 
-  limit, 
-  getDocs 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
-  authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco",
-  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
-  messagingSenderId: "765019849831",
-  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
   let usuarioLogado = null;
   let listaClientesCache = [];
 
@@ -132,21 +106,6 @@ window.buscarCliente = function(input) {
 // 🔥 TORNA db GLOBAL PARA O SCRIPT PRINCIPAL
 window.db = db;
 
-// ESCONDE A PÁGINA ATÉ VALIDAR LOGIN
-document.documentElement.style.display = "none";
-
-onAuthStateChanged(auth, (user) => {
-
-  if (!user) {
-    window.location.replace("login.html");
-    return;
-  }
-
-  usuarioLogado = user; // 🔥 salva usuário
-  document.documentElement.style.display = "block";
-});
-
-
 </script>
 
 
@@ -164,7 +123,6 @@ onAuthStateChanged(auth, (user) => {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
-<body>
 <body data-menu="frete">
 <div class="spinner-overlay" id="spinner">
   <div class="spinner"></div>
@@ -1961,14 +1919,7 @@ async function calcularEtapasTempo(cidades) {
 
 </script>
 <script>
-const perfil = localStorage.getItem("perfil");
 
-document.querySelectorAll("[data-perfil]").forEach(el => {
-  const permitido = el.dataset.perfil.split(",");
-  if (!permitido.includes(perfil)) {
-    el.style.display = "none";
-  }
-});
 </script>
 
 </body>
