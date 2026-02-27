@@ -313,51 +313,64 @@ onAuthStateChanged(auth, async (user)=>{
 console.log("Documento usuário:", snap.exists(), snap.data());
 
   const dados = snap.data();
+// 🔐 CONTROLE ÚNICO DE VISIBILIDADE
 
-  // 🔐 CONTROLE DE VISIBILIDADE
+// Esconde todos primeiro
+document.querySelectorAll("#cardsContainer .card").forEach(c=>{
+  c.style.display="none";
+});
 
 const menus = dados.menus || {};
 const nivel = dados.nivel || 0;
 
-// 🔴 Esconde todos os cards primeiro
-document.querySelectorAll(".card").forEach(card=>{
-  card.style.display = "none";
-});
-
-// 🟢 Nível 4 vê tudo
+// 🔴 MASTER (nível 4) vê tudo
 if(nivel === 4){
 
-  document.querySelectorAll(".card").forEach(card=>{
-    card.style.display = "block";
+  document.querySelectorAll("#cardsContainer .card").forEach(c=>{
+    c.style.display="block";
   });
 
-}else{
-
-  if(menus.frete)
-    document.getElementById("cardFrete")?.style.display = "block";
-
-  if(menus.painel)
-    document.getElementById("cardPainelFila")?.style.display = "block";
-
-  if(menus.usuarios)
-    document.getElementById("cardUsuarios")?.style.display = "block";
-
-  if(menus.programacao)
-    document.getElementById("cardProgramacao")?.style.display = "block";
-
-  if(menus.consumo)
-    document.getElementById("cardConsumo")?.style.display = "block";
-
-  if(menus.leitura)
-    document.getElementById("cardLeitura")?.style.display = "block";
-
-  if(menus.disponibilidade)
-    document.getElementById("cardDisponibilidade")?.style.display = "block";
-
-  if(menus.motoristasAdmin)
-    document.getElementById("cardMotoristasAdmin")?.style.display = "block";
+  await carregarKPIs();
 }
 
+// 🟡 Supervisor/Admin (nível 3)
+else if(nivel === 3){
+
+  document.querySelectorAll("#cardsContainer .card").forEach(c=>{
+    c.style.display="block";
+  });
+
+  await carregarKPIs();
+}
+
+// 🟢 Níveis menores usam menus
+else{
+
+  if(menus.painel)
+    document.getElementById("cardPainelFila").style.display="block";
+
+  if(menus.leitura)
+    document.getElementById("cardLeitura").style.display="block";
+
+  if(menus.disponibilidade)
+    document.getElementById("cardDisponibilidade").style.display="block";
+
+  if(menus.motoristasAdmin)
+    document.getElementById("cardMotoristasAdmin").style.display="block";
+
+  if(menus.frete)
+    document.getElementById("cardFrete").style.display="block";
+
+  if(menus.usuarios)
+    document.getElementById("cardUsuarios").style.display="block";
+
+  if(menus.consumo)
+    document.getElementById("cardConsumo").style.display="block";
+
+  if(menus.programacao)
+    document.getElementById("cardProgramacao").style.display="block";
+}
+ 
 document.getElementById("usuarioLogado").innerText =
   "Usuário: "+dados.nome+" (Nível "+dados.nivel+")";
 
