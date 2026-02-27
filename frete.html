@@ -2,8 +2,20 @@
 <html lang="pt-BR">
 <head>
 <script type="module">
+
 import { auth, db } from "./components/firebase.js";
+import { renderHeader } from "./components/header.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+let usuarioLogado = null;
+let listaClientesCache = [];
 
 document.documentElement.style.display = "none";
 
@@ -25,20 +37,7 @@ auth.authStateReady().then(() => {
 
 });
 window.auth = auth;
-import { renderHeader } from "./components/header.js";
-import { 
-  collection,
-  getDocs,
-  doc,
-  setDoc,
-  increment,
-  query,
-  where,
-  orderBy,
-  startAt,
-  endAt,
-  limit
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader(
