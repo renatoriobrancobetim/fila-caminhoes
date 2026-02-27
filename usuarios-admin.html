@@ -98,10 +98,12 @@ button {
 <input type="password" id="senha" placeholder="Senha">
 <input type="password" id="confirmarSenha" placeholder="Confirmar senha">
 
-<label>Perfil</label>
-<select id="perfil">
-  <option value="vendedor">Vendedor</option>
-  <option value="admin">Administrador</option>
+<label>Nível de Acesso</label>
+<select id="nivel">
+  <option value="1">Nível 1 - Operacional</option>
+  <option value="2">Nível 2 - Supervisor</option>
+  <option value="3">Nível 3 - Administrador</option>
+  <option value="4">Nível 4 - Master</option>
 </select>
 
 <div class="permissoes">
@@ -164,8 +166,10 @@ onAuthStateChanged(auth, async (user) => {
 
   const userSnap = await getDoc(doc(db,"usuarios",user.uid));
 
-  if (!userSnap.exists() || userSnap.data().perfil !== "admin")
-    return window.location.replace("painel.html");
+const dados = userSnap.data();
+
+if (!userSnap.exists() || dados.nivel < 4)
+  return window.location.replace("painel.html");
 
   document.documentElement.style.display = "block";
 });
@@ -190,6 +194,14 @@ window.criarUsuario = async function(){
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
   const nivel = parseInt(document.getElementById("nivel").value);
+
+  const menus = {
+    painel: document.getElementById("menuPainel").checked,
+    frete: document.getElementById("menuFrete").checked,
+    clientes: document.getElementById("menuClientes").checked,
+    usuarios: document.getElementById("menuUsuarios").checked
+  };
+
   const msg = document.getElementById("msg");
 
   try {
@@ -206,7 +218,8 @@ window.criarUsuario = async function(){
         nome,
         email,
         senha,
-        nivel
+        nivel,
+        menus
       })
     });
 
