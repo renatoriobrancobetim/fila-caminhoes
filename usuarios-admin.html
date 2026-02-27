@@ -186,11 +186,23 @@ animation:spin .7s linear infinite;
 <option value="4">Nível 4 - Master</option>
 </select>
 
-<h4>Permissões</h4>
-<div class="checkbox-group"><input type="checkbox" id="menuPainel">Painel</div>
-<div class="checkbox-group"><input type="checkbox" id="menuFrete">Frete</div>
-<div class="checkbox-group"><input type="checkbox" id="menuUsuarios">Usuários</div>
-<div class="checkbox-group"><input type="checkbox" id="menuProgramacao">Programação</div>
+<h4 style="margin-top:20px;">Permissões</h4>
+
+<div style="display:grid;grid-template-columns:20px 1fr;gap:8px 12px;margin-bottom:15px;align-items:center;">
+
+<input type="checkbox" id="menuPainel">
+<label for="menuPainel">Painel Operacional / Fila</label>
+
+<input type="checkbox" id="menuFrete">
+<label for="menuFrete">Cálculo de Frete</label>
+
+<input type="checkbox" id="menuUsuarios">
+<label for="menuUsuarios">Controle de Usuários</label>
+
+<input type="checkbox" id="menuProgramacao">
+<label for="menuProgramacao">Programação de Cargas</label>
+
+</div>
 
 <button id="btnCriar" onclick="criarUsuario()">Criar Usuário</button>
 <div class="msg" id="msg"></div>
@@ -262,19 +274,54 @@ carregarUsuarios();
 });
 
 async function carregarUsuarios(){
-const snap=await getDocs(collection(db,"usuarios"));
-listaUsuarios.innerHTML="";
-snap.forEach(d=>{
-const u=d.data();
-listaUsuarios.innerHTML+=`
+
+try{
+
+const snap = await getDocs(collection(db,"usuarios"));
+
+listaUsuarios.innerHTML = "";
+
+if(snap.empty){
+listaUsuarios.innerHTML = `
 <tr>
-<td>${u.nome}</td>
-<td>${u.email}</td>
-<td>${u.nivel}</td>
-<td><span class="badge ${u.ativo?'ativo':'inativo'}">${u.ativo?'Ativo':'Inativo'}</span></td>
-<td><button onclick="abrirEditar('${d.id}','${u.nome}',${u.nivel},${u.ativo})">Editar</button></td>
+<td colspan="5" style="text-align:center;color:#94a3b8;">
+Nenhum usuário cadastrado.
+</td>
+</tr>`;
+return;
+}
+
+snap.forEach(docSnap=>{
+const u = docSnap.data();
+
+listaUsuarios.innerHTML += `
+<tr>
+<td>${u.nome || "-"}</td>
+<td>${u.email || "-"}</td>
+<td>${u.nivel || "-"}</td>
+<td>
+<span class="badge ${u.ativo ? 'ativo':'inativo'}">
+${u.ativo ? 'Ativo':'Inativo'}
+</span>
+</td>
+<td>
+<button onclick="abrirEditar('${docSnap.id}','${u.nome}',${u.nivel},${u.ativo})">
+Editar
+</button>
+</td>
 </tr>`;
 });
+
+}catch(error){
+console.error("Erro ao carregar usuários:", error);
+listaUsuarios.innerHTML = `
+<tr>
+<td colspan="5" style="text-align:center;color:#f87171;">
+Erro ao carregar usuários.
+</td>
+</tr>`;
+}
+
 }
 
 window.abrirEditar=(id,nome,nivel,ativo)=>{
