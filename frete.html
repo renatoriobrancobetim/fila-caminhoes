@@ -19,26 +19,25 @@ let listaClientesCache = [];
 
 document.documentElement.style.display = "none";
 
-auth.authStateReady().then(() => {
+// 🔐 PROTEÇÃO DE AUTENTICAÇÃO
+onAuthStateChanged(auth, async (user) => {
 
-  onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.replace("login.html");
+    return;
+  }
 
-    if (!user) {
-      window.location.replace("login.html");
-      return;
-    }
+  usuarioLogado = user;
 
-    usuarioLogado = user;
+  await carregarClientesCache();
 
-    await carregarClientesCache();
-
-    document.documentElement.style.display = "block";
-  });
-
+  document.documentElement.style.display = "block";
 });
+
+// disponibiliza auth no console (debug)
 window.auth = auth;
 
-
+// Renderiza header após DOM pronto
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader(
     "💰 Cálculo de Frete",
@@ -59,9 +58,6 @@ async function registrarConsumo(tipo, quantidade = 1){
   }, { merge: true });
 }
 
-
-  let usuarioLogado = null;
-  let listaClientesCache = [];
 
 async function carregarClientesCache(){
   const snapshot = await getDocs(collection(db, "clientes"));
