@@ -409,7 +409,10 @@ if(dados.menus?.programacao)
 
 }
 // 🔥 ATIVAR BADGE EM TEMPO REAL
-monitorarFila();
+// Só monitora fila se tiver acesso
+if(nivel >= 3 || menus.leitura){
+  monitorarFila();
+}
   document.getElementById("skeletonContainer").style.display="none";
   const cards=document.getElementById("cardsContainer");
   cards.style.display="grid";
