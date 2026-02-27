@@ -76,28 +76,12 @@ button {
 
 <script type="module">
 
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { auth } from "./components/firebase.js";
 import { 
-  getAuth, 
   signInWithEmailAndPassword,
   setPersistence,
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
-  authDomain: "tabela-frete-rio-branco.firebaseapp.com", // 🔥 CORRIGIDO
-  projectId: "tabela-frete-rio-branco",
-  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
-  messagingSenderId: "765019849831",
-  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
-};
-
-const app = getApps().length === 0
-  ? initializeApp(firebaseConfig)
-  : getApps()[0];
-
-const auth = getAuth(app);
 
 window.login = async function(){
 
@@ -109,7 +93,6 @@ window.login = async function(){
 
   try {
 
-    // 🔥 PERSISTÊNCIA DEFINITIVA
     await setPersistence(auth, browserLocalPersistence);
 
     await signInWithEmailAndPassword(auth, email, senha);
