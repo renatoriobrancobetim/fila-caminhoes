@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ===== TODO SEU CSS FOI MANTIDO IGUAL ===== */
 * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
 body {
   margin: 0;
@@ -25,11 +24,6 @@ body {
   padding: 28px 26px;
   box-shadow: 0 25px 60px rgba(0,0,0,.45);
   color: #fff;
-  animation: fadeIn .6s ease;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 .login-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
 .logo {
@@ -38,61 +32,23 @@ body {
   display: flex; align-items: center; justify-content: center;
   font-weight: bold;
 }
-.login-header span { font-weight: bold; font-size: 14px; }
-h2 { margin: 8px 0 4px; font-size: 22px; }
-p { margin: 0 0 20px; font-size: 14px; color: #c7d2fe; }
 label { font-size: 13px; color: #cbd5f5; display: block; margin-bottom: 6px; }
-.input-group { position: relative; }
 input {
-  width: 100%; padding: 12px 42px 12px 14px;
+  width: 100%; padding: 12px;
   border-radius: 10px; border: 1px solid #1e293b;
   background: #020617; color: #fff;
   font-size: 14px; margin-bottom: 14px;
 }
-input::placeholder { color: #64748b; }
-.toggle-pass {
-  position: absolute; right: 12px; top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer; font-size: 14px; color: #94a3b8;
-}
-.options {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px; color: #cbd5f5; margin-bottom: 14px;
-}
-.options input { width: auto; margin: 0; }
 button {
   width: 100%; padding: 14px;
   border-radius: 12px; border: none;
   background: linear-gradient(135deg, #1e3a8a, #dc2626);
   color: #fff; font-size: 15px; font-weight: bold;
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center; gap: 10px;
+  cursor: pointer;
 }
-button:disabled { opacity: .7; cursor: not-allowed; }
-.loader {
-  width: 18px; height: 18px;
-  border: 3px solid rgba(255,255,255,.3);
-  border-top: 3px solid #fff;
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-  display: none;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
 .error {
   margin-top: 12px; font-size: 13px;
   color: #f87171; display: none; text-align: center;
-}
-.shake { animation: shake .4s; }
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
-}
-.login-footer {
-  display: flex; justify-content: space-between;
-  margin-top: 18px; font-size: 11px; color: #94a3b8;
 }
 </style>
 </head>
@@ -106,38 +62,21 @@ button:disabled { opacity: .7; cursor: not-allowed; }
   </div>
 
   <h2>Acesse sua conta</h2>
-  <p>Use suas credenciais para continuar.</p>
 
-  <label>Usuário</label>
+  <label>Email</label>
   <input type="email" id="email" placeholder="Informe seu email">
 
   <label>Senha</label>
-  <div class="input-group">
-    <input type="password" id="senha" placeholder="Informe sua senha">
-    <span class="toggle-pass" onclick="toggleSenha()">👁</span>
-  </div>
+  <input type="password" id="senha" placeholder="Informe sua senha">
 
-  <div class="options">
-    <input type="checkbox" id="remember">
-    <label for="remember">Lembrar acesso</label>
-  </div>
-
-  <button id="btn" onclick="login()">
-    <span id="btnText">Entrar</span>
-    <div class="loader" id="loader"></div>
-  </button>
+  <button onclick="login()">Entrar</button>
 
   <div class="error" id="erro">Usuário ou senha inválidos</div>
-
-  <div class="login-footer">
-    <span>IP: 179.83.208.30</span>
-    <span>Versão 1.0</span>
-  </div>
 </div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
   getAuth, 
   signInWithEmailAndPassword,
@@ -147,35 +86,30 @@ import {
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
-  authDomain: "renatoriobrancobetim.github.io",
+  authDomain: "tabela-frete-rio-branco.firebaseapp.com", // 🔥 CORRIGIDO
   projectId: "tabela-frete-rio-branco",
   storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
   messagingSenderId: "765019849831",
   appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length === 0
+  ? initializeApp(firebaseConfig)
+  : getApps()[0];
+
 const auth = getAuth(app);
 
 window.login = async function(){
 
   const email = document.getElementById("email").value.trim();
   const senha = document.getElementById("senha").value.trim();
-
-  const loader  = document.getElementById("loader");
-  const btnText = document.getElementById("btnText");
-  const btn     = document.getElementById("btn");
-  const erro    = document.getElementById("erro");
-  const box     = document.getElementById("box");
+  const erro  = document.getElementById("erro");
 
   erro.style.display = "none";
-  btn.disabled = true;
-  loader.style.display = "block";
-  btnText.textContent = "Entrando...";
 
   try {
 
-    // 🔥 GARANTE PERSISTÊNCIA REAL
+    // 🔥 PERSISTÊNCIA DEFINITIVA
     await setPersistence(auth, browserLocalPersistence);
 
     await signInWithEmailAndPassword(auth, email, senha);
@@ -183,14 +117,7 @@ window.login = async function(){
     window.location.href = "painel.html";
 
   } catch (error) {
-
-    loader.style.display = "none";
-    btnText.textContent = "Entrar";
-    btn.disabled = false;
-
     erro.style.display = "block";
-    box.classList.add("shake");
-    setTimeout(() => box.classList.remove("shake"), 400);
   }
 
 };
