@@ -254,7 +254,13 @@ animation:spin .7s linear infinite;
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore,collection,getDocs,doc,updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getFirestore, 
+  collection, 
+  doc, 
+  updateDoc,
+  onSnapshot 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -270,59 +276,54 @@ let editId=null;
 
 onAuthStateChanged(auth,user=>{
 if(!user)window.location="login.html";
-carregarUsuarios();
+
 });
 
-async function carregarUsuarios(){
+// 🔥 LISTAGEM EM TEMPO REAL
+const listaUsuarios = document.getElementById("listaUsuarios");
 
-try{
+onSnapshot(collection(db,"usuarios"), (snapshot) => {
 
-const snap = await getDocs(collection(db,"usuarios"));
+  listaUsuarios.innerHTML = "";
 
-listaUsuarios.innerHTML = "";
+  if(snapshot.empty){
+    listaUsuarios.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align:center;color:#94a3b8;">
+          Nenhum usuário cadastrado.
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
-if(snap.empty){
-listaUsuarios.innerHTML = `
-<tr>
-<td colspan="5" style="text-align:center;color:#94a3b8;">
-Nenhum usuário cadastrado.
-</td>
-</tr>`;
-return;
-}
+  snapshot.forEach(docSnap => {
 
-snap.forEach(docSnap=>{
-const u = docSnap.data();
+    const u = docSnap.data();
 
-listaUsuarios.innerHTML += `
-<tr>
-<td>${u.nome || "-"}</td>
-<td>${u.email || "-"}</td>
-<td>${u.nivel || "-"}</td>
-<td>
-<span class="badge ${u.ativo ? 'ativo':'inativo'}">
-${u.ativo ? 'Ativo':'Inativo'}
-</span>
-</td>
-<td>
-<button onclick="abrirEditar('${docSnap.id}','${u.nome}',${u.nivel},${u.ativo})">
-Editar
-</button>
-</td>
-</tr>`;
+    listaUsuarios.innerHTML += `
+      <tr>
+        <td>${u.nome || "-"}</td>
+        <td>${u.email || "-"}</td>
+        <td>${u.nivel || "-"}</td>
+        <td>
+          <span class="badge ${u.ativo ? 'ativo':'inativo'}">
+            ${u.ativo ? 'Ativo':'Inativo'}
+          </span>
+        </td>
+        <td>
+          <button onclick="abrirEditar('${docSnap.id}','${u.nome}',${u.nivel},${u.ativo})">
+            Editar
+          </button>
+        </td>
+      </tr>
+    `;
+
+  });
+
+}, (error) => {
+  console.error("Erro tempo real:", error);
 });
-
-}catch(error){
-console.error("Erro ao carregar usuários:", error);
-listaUsuarios.innerHTML = `
-<tr>
-<td colspan="5" style="text-align:center;color:#f87171;">
-Erro ao carregar usuários.
-</td>
-</tr>`;
-}
-
-}
 
 window.abrirEditar=(id,nome,nivel,ativo)=>{
 editId=id;
@@ -339,7 +340,7 @@ nivel:parseInt(editNivel.value),
 ativo:editAtivo.value==="true"
 });
 modalEditar.style.display="none";
-carregarUsuarios();
+
 }
 
 window.criarUsuario=async function(){
@@ -370,7 +371,7 @@ if(!response.ok)throw new Error(text);
 
 msg.innerText="Usuário criado com sucesso.";
 msg.className="msg success";
-carregarUsuarios();
+
 
 }catch(e){
 msg.innerText=e.message;
