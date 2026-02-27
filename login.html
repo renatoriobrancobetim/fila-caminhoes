@@ -83,43 +83,48 @@ import {
   browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-window.login = async function(){
+document.addEventListener("DOMContentLoaded", () => {
 
-  const email = document.getElementById("email").value.trim();
-  const senha = document.getElementById("senha").value.trim();
+  const emailInput = document.getElementById("email");
+  const senhaInput = document.getElementById("senha");
+  const btn        = document.getElementById("btn");
+  const btnText    = document.getElementById("btnText");
+  const loader     = document.getElementById("loader");
+  const erro       = document.getElementById("erro");
+  const box        = document.getElementById("box");
 
-  const loader  = document.getElementById("loader");
-  const btnText = document.getElementById("btnText");
-  const btn     = document.getElementById("btn");
-  const erro    = document.getElementById("erro");
-  const box     = document.getElementById("box");
+  btn.addEventListener("click", async () => {
 
-  erro.style.display = "none";
-  btn.disabled = true;
-  loader.style.display = "block";
-  btnText.textContent = "Entrando...";
+    const email = emailInput.value.trim();
+    const senha = senhaInput.value.trim();
 
-  try {
+    erro.style.display = "none";
+    btn.disabled = true;
+    loader.style.display = "block";
+    btnText.textContent = "Entrando...";
 
-    await setPersistence(auth, browserLocalPersistence);
+    try {
 
-    await signInWithEmailAndPassword(auth, email, senha);
+      await setPersistence(auth, browserLocalPersistence);
+      await signInWithEmailAndPassword(auth, email, senha);
 
-    window.location.href = "painel.html";
+      window.location.href = "painel.html";
 
-  } catch (error) {
+    } catch (error) {
 
-    loader.style.display = "none";
-    btnText.textContent = "Entrar";
-    btn.disabled = false;
+      loader.style.display = "none";
+      btnText.textContent = "Entrar";
+      btn.disabled = false;
 
-    erro.style.display = "block";
-    box.classList.add("shake");
-    setTimeout(() => box.classList.remove("shake"), 400);
-  }
+      erro.style.display = "block";
+      box.classList.add("shake");
+      setTimeout(() => box.classList.remove("shake"), 400);
+    }
 
-};
+  });
+
+});
+
 </script>
-
 </body>
 </html>
