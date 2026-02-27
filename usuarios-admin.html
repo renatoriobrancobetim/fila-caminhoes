@@ -3,7 +3,7 @@
 <head>
 <link rel="icon" href="favicon.png">
 <meta charset="UTF-8">
-<title>Controle de Usuários</title>
+<title>Administração de Usuários | ERP</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -11,92 +11,126 @@
 
 body{
 margin:0;
-min-height:100vh;
-background:linear-gradient(135deg,#0f2a5c 0%,#1e3a8a 45%,#7f1d1d 75%,#b91c1c 100%);
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.card{
-width:100%;
-max-width:560px;
-background:linear-gradient(180deg,#0b1633,#050b1e);
-border-radius:18px;
-padding:35px;
+background:#0f172a;
 color:#fff;
-box-shadow:0 30px 70px rgba(0,0,0,.5);
+display:flex;
+min-height:100vh;
 }
 
-h2{margin-top:0;margin-bottom:25px}
+/* SIDEBAR */
+.sidebar{
+width:240px;
+background:#0b1633;
+padding:25px;
+display:flex;
+flex-direction:column;
+gap:12px;
+border-right:1px solid rgba(255,255,255,.05);
+}
 
+.sidebar h2{
+margin:0 0 20px 0;
+font-size:18px;
+}
+
+.sidebar a{
+color:#cbd5f5;
+text-decoration:none;
+padding:10px;
+border-radius:8px;
+transition:.2s;
+}
+
+.sidebar a:hover{
+background:rgba(255,255,255,.05);
+}
+
+/* MAIN */
+.main{
+flex:1;
+padding:40px;
+display:grid;
+grid-template-columns: 420px 1fr;
+gap:40px;
+}
+
+/* CARD */
+.card{
+background:#0b1633;
+padding:25px;
+border-radius:14px;
+box-shadow:0 10px 40px rgba(0,0,0,.4);
+}
+
+/* FORM */
 input,select{
 width:100%;
-padding:13px;
-border-radius:12px;
+padding:12px;
+border-radius:10px;
 border:1px solid #1e293b;
 background:#020617;
 color:#fff;
-margin-bottom:14px;
-font-size:14px;
-}
-
-.permissoes{
-background:rgba(255,255,255,.05);
-padding:18px;
-border-radius:14px;
-margin-bottom:20px;
-}
-
-.permissoes h4{
-margin-top:0;
 margin-bottom:12px;
 }
 
 .checkbox-group{
 display:flex;
 align-items:center;
-gap:10px;
-margin-bottom:8px;
-}
-
-.checkbox-group input{
-width:16px;
-height:16px;
+gap:8px;
+margin-bottom:6px;
+font-size:14px;
 }
 
 button{
-width:100%;
-padding:15px;
-border-radius:14px;
+padding:12px;
 border:none;
+border-radius:10px;
 background:linear-gradient(135deg,#1e3a8a,#dc2626);
 color:#fff;
-font-weight:600;
 cursor:pointer;
-font-size:15px;
-transition:.3s;
+width:100%;
+font-weight:600;
 display:flex;
 align-items:center;
 justify-content:center;
-gap:10px;
+gap:8px;
 }
 
-button:disabled{
-opacity:.6;
-cursor:not-allowed;
-}
+button:disabled{opacity:.6}
 
-.msg{
-margin-top:18px;
-text-align:center;
-font-size:14px;
-min-height:22px;
-}
-
+.msg{margin-top:10px;font-size:14px;text-align:center}
 .msg.success{color:#4ade80}
 .msg.error{color:#f87171}
 
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+text-align:left;
+font-size:14px;
+}
+
+th{background:#1e293b}
+
+tr{
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.badge{
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+}
+
+.ativo{background:#16a34a}
+.inativo{background:#dc2626}
+
+/* MODAL */
 .modal-bg{
 position:fixed;
 inset:0;
@@ -108,76 +142,107 @@ align-items:center;
 
 .modal{
 background:#0b1633;
-padding:28px;
-border-radius:16px;
-width:340px;
-text-align:center;
+padding:25px;
+width:400px;
+border-radius:12px;
 }
 
 .spinner{
-width:18px;
-height:18px;
+width:16px;
+height:16px;
 border:3px solid rgba(255,255,255,.3);
 border-top:3px solid #fff;
 border-radius:50%;
 animation:spin .7s linear infinite;
 }
 
-@keyframes spin{
-to{transform:rotate(360deg)}
-}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 
 <body>
 
+<div class="sidebar">
+<h2>ERP Logístico</h2>
+<a href="painel.html">Painel</a>
+<a href="usuarios-admin.html">Usuários</a>
+</div>
+
+<div class="main">
+
+<!-- CADASTRO -->
 <div class="card">
-<h2>Novo Usuário</h2>
+<h3>Novo Usuário</h3>
 
 <input type="text" id="nome" placeholder="Nome completo">
 <input type="email" id="email" placeholder="Email">
 <input type="password" id="senha" placeholder="Senha">
 <input type="password" id="confirmarSenha" placeholder="Confirmar senha">
 
-<label>Nível de Acesso</label>
 <select id="nivel">
-<option value="1">Nível 1 - Operacional</option>
-<option value="2">Nível 2 - Supervisor</option>
-<option value="3">Nível 3 - Administrador</option>
+<option value="1">Nível 1</option>
+<option value="2">Nível 2</option>
+<option value="3">Nível 3</option>
 <option value="4">Nível 4 - Master</option>
 </select>
 
-<div class="permissoes">
-<h4>Acesso aos Módulos</h4>
+<h4>Permissões</h4>
+<div class="checkbox-group"><input type="checkbox" id="menuPainel">Painel</div>
+<div class="checkbox-group"><input type="checkbox" id="menuFrete">Frete</div>
+<div class="checkbox-group"><input type="checkbox" id="menuUsuarios">Usuários</div>
+<div class="checkbox-group"><input type="checkbox" id="menuProgramacao">Programação</div>
 
-<div class="checkbox-group"><input type="checkbox" id="menuPainel"><label for="menuPainel">Painel da Fila</label></div>
-<div class="checkbox-group"><input type="checkbox" id="menuLeitura"><label for="menuLeitura">Fila de Caminhões</label></div>
-<div class="checkbox-group"><input type="checkbox" id="menuDisponibilidade"><label for="menuDisponibilidade">Disponibilidade</label></div>
-<div class="checkbox-group"><input type="checkbox" id="menuMotoristasAdmin"><label for="menuMotoristasAdmin">Motoristas Admin</label></div>
-<div class="checkbox-group"><input type="checkbox" id="menuFrete"><label for="menuFrete">Cálculo de Frete</label></div>
-<div class="checkbox-group"><input type="checkbox" id="menuUsuarios"><label for="menuUsuarios">Controle de Usuários</label></div>
-<div class="checkbox-group"><input type="checkbox" id="menuConsumo"><label for="menuConsumo">Consumo Firestore</label></div>
-<div class="checkbox-group"><input type="checkbox" id="menuProgramacao"><label for="menuProgramacao">Programação de Cargas</label></div>
-</div>
-
-<button id="btnCriar" onclick="abrirConfirmacao()">Criar Usuário</button>
-
+<button id="btnCriar" onclick="criarUsuario()">Criar Usuário</button>
 <div class="msg" id="msg"></div>
+
 </div>
 
-<div class="modal-bg" id="modalConfirmacao">
+<!-- LISTA -->
+<div class="card">
+<h3>Usuários Cadastrados</h3>
+
+<table>
+<thead>
+<tr>
+<th>Nome</th>
+<th>Email</th>
+<th>Nível</th>
+<th>Status</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="listaUsuarios"></tbody>
+</table>
+
+</div>
+
+</div>
+
+<!-- MODAL EDIÇÃO -->
+<div class="modal-bg" id="modalEditar">
 <div class="modal">
-<h4>Confirme sua senha de administrador</h4>
-<input type="password" id="senhaAdmin" placeholder="Senha do administrador">
-<button onclick="criarUsuario()">Confirmar</button>
+<h3>Editar Usuário</h3>
+<input type="text" id="editNome">
+<select id="editNivel">
+<option value="1">Nível 1</option>
+<option value="2">Nível 2</option>
+<option value="3">Nível 3</option>
+<option value="4">Nível 4</option>
+</select>
+<select id="editAtivo">
+<option value="true">Ativo</option>
+<option value="false">Inativo</option>
+</select>
+<br>
+<button onclick="salvarEdicao()">Salvar</button>
 </div>
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore,collection,getDocs,doc,updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
@@ -189,54 +254,58 @@ const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 
-document.documentElement.style.display="none";
+let editId=null;
 
-onAuthStateChanged(auth,async(user)=>{
-if(!user)return window.location.replace("login.html");
-const snap=await getDoc(doc(db,"usuarios",user.uid));
-if(!snap.exists()||snap.data().nivel<4)
-return window.location.replace("painel.html");
-document.documentElement.style.display="block";
+onAuthStateChanged(auth,user=>{
+if(!user)window.location="login.html";
+carregarUsuarios();
 });
 
-window.abrirConfirmacao=function(){
-const senha=document.getElementById("senha").value;
-const confirmar=document.getElementById("confirmarSenha").value;
-const msg=document.getElementById("msg");
-
-if(!senha||senha!==confirmar){
-msg.innerText="As senhas não conferem.";
-msg.className="msg error";
-return;
+async function carregarUsuarios(){
+const snap=await getDocs(collection(db,"usuarios"));
+listaUsuarios.innerHTML="";
+snap.forEach(d=>{
+const u=d.data();
+listaUsuarios.innerHTML+=`
+<tr>
+<td>${u.nome}</td>
+<td>${u.email}</td>
+<td>${u.nivel}</td>
+<td><span class="badge ${u.ativo?'ativo':'inativo'}">${u.ativo?'Ativo':'Inativo'}</span></td>
+<td><button onclick="abrirEditar('${d.id}','${u.nome}',${u.nivel},${u.ativo})">Editar</button></td>
+</tr>`;
+});
 }
-document.getElementById("modalConfirmacao").style.display="flex";
-};
+
+window.abrirEditar=(id,nome,nivel,ativo)=>{
+editId=id;
+modalEditar.style.display="flex";
+editNome.value=nome;
+editNivel.value=nivel;
+editAtivo.value=ativo;
+}
+
+window.salvarEdicao=async()=>{
+await updateDoc(doc(db,"usuarios",editId),{
+nome:editNome.value,
+nivel:parseInt(editNivel.value),
+ativo:editAtivo.value==="true"
+});
+modalEditar.style.display="none";
+carregarUsuarios();
+}
 
 window.criarUsuario=async function(){
 
-const btn=document.getElementById("btnCriar");
-const msg=document.getElementById("msg");
-
+const btn=btnCriar;
 btn.disabled=true;
 btn.innerHTML='<div class="spinner"></div> Criando...';
 
 try{
-
-const nome=document.getElementById("nome").value.trim();
-const email=document.getElementById("email").value.trim();
-const senha=document.getElementById("senha").value.trim();
-const nivel=parseInt(document.getElementById("nivel").value);
-
-const menus={
-painel:menuPainel.checked,
-leitura:menuLeitura.checked,
-disponibilidade:menuDisponibilidade.checked,
-motoristasAdmin:menuMotoristasAdmin.checked,
-frete:menuFrete.checked,
-usuarios:menuUsuarios.checked,
-consumo:menuConsumo.checked,
-programacao:menuProgramacao.checked
-};
+const nome=nome.value.trim();
+const email=email.value.trim();
+const senha=senha.value.trim();
+const nivel=parseInt(nivel.value);
 
 const idToken=await auth.currentUser.getIdToken();
 
@@ -246,27 +315,26 @@ headers:{
 "Content-Type":"application/json",
 "Authorization":"Bearer "+idToken
 },
-body:JSON.stringify({nome,email,senha,nivel,menus})
+body:JSON.stringify({nome,email,senha,nivel})
 });
 
 const text=await response.text();
-
 if(!response.ok)throw new Error(text);
 
 msg.innerText="Usuário criado com sucesso.";
 msg.className="msg success";
+carregarUsuarios();
 
-document.getElementById("modalConfirmacao").style.display="none";
-
-}catch(error){
-msg.innerText=error.message;
+}catch(e){
+msg.innerText=e.message;
 msg.className="msg error";
 }
 
 btn.disabled=false;
 btn.innerHTML="Criar Usuário";
-};
+}
 
 </script>
+
 </body>
 </html>
