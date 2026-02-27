@@ -1,90 +1,130 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="favicon.png">
+<link rel="icon" href="favicon.png">
 <meta charset="UTF-8">
 <title>Controle de Usuários</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg,#0f2a5c 0%,#1e3a8a 45%,#7f1d1d 75%,#b91c1c 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body{
+margin:0;
+min-height:100vh;
+background:linear-gradient(135deg,#0f2a5c 0%,#1e3a8a 45%,#7f1d1d 75%,#b91c1c 100%);
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
-.card {
-  width: 100%;
-  max-width: 520px;
-  background: linear-gradient(180deg,#0b1633,#050b1e);
-  border-radius: 16px;
-  padding: 30px;
-  color: #fff;
-  box-shadow: 0 25px 60px rgba(0,0,0,.45);
+.card{
+width:100%;
+max-width:560px;
+background:linear-gradient(180deg,#0b1633,#050b1e);
+border-radius:18px;
+padding:35px;
+color:#fff;
+box-shadow:0 30px 70px rgba(0,0,0,.5);
 }
 
-h2 { margin-top: 0; }
+h2{margin-top:0;margin-bottom:25px}
 
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #1e293b;
-  background: #020617;
-  color: #fff;
-  margin-bottom: 12px;
+input,select{
+width:100%;
+padding:13px;
+border-radius:12px;
+border:1px solid #1e293b;
+background:#020617;
+color:#fff;
+margin-bottom:14px;
+font-size:14px;
 }
 
-label { font-size: 13px; color: #cbd5f5; }
-
-.permissoes {
-  background: rgba(255,255,255,.05);
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+.permissoes{
+background:rgba(255,255,255,.05);
+padding:18px;
+border-radius:14px;
+margin-bottom:20px;
 }
 
-button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg,#1e3a8a,#dc2626);
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
+.permissoes h4{
+margin-top:0;
+margin-bottom:12px;
 }
 
-.msg {
-  margin-top: 15px;
-  font-size: 13px;
-  text-align: center;
+.checkbox-group{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:8px;
 }
 
-.modal-bg {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  display: none;
-  justify-content: center;
-  align-items: center;
+.checkbox-group input{
+width:16px;
+height:16px;
 }
 
-.modal {
-  background: #0b1633;
-  padding: 25px;
-  border-radius: 14px;
-  width: 320px;
-  color: #fff;
+button{
+width:100%;
+padding:15px;
+border-radius:14px;
+border:none;
+background:linear-gradient(135deg,#1e3a8a,#dc2626);
+color:#fff;
+font-weight:600;
+cursor:pointer;
+font-size:15px;
+transition:.3s;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
 }
 
-.modal button {
-  margin-top: 10px;
+button:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
+
+.msg{
+margin-top:18px;
+text-align:center;
+font-size:14px;
+min-height:22px;
+}
+
+.msg.success{color:#4ade80}
+.msg.error{color:#f87171}
+
+.modal-bg{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal{
+background:#0b1633;
+padding:28px;
+border-radius:16px;
+width:340px;
+text-align:center;
+}
+
+.spinner{
+width:18px;
+height:18px;
+border:3px solid rgba(255,255,255,.3);
+border-top:3px solid #fff;
+border-radius:50%;
+animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg)}
 }
 </style>
 </head>
@@ -101,154 +141,132 @@ button {
 
 <label>Nível de Acesso</label>
 <select id="nivel">
-  <option value="1">Nível 1 - Operacional</option>
-  <option value="2">Nível 2 - Supervisor</option>
-  <option value="3">Nível 3 - Administrador</option>
-  <option value="4">Nível 4 - Master</option>
+<option value="1">Nível 1 - Operacional</option>
+<option value="2">Nível 2 - Supervisor</option>
+<option value="3">Nível 3 - Administrador</option>
+<option value="4">Nível 4 - Master</option>
 </select>
 
 <div class="permissoes">
 <h4>Acesso aos Módulos</h4>
 
-<label><input type="checkbox" id="menuPainel"> Painel da Fila</label><br>
-<label><input type="checkbox" id="menuLeitura"> Fila de Caminhões</label><br>
-<label><input type="checkbox" id="menuDisponibilidade"> Disponibilidade</label><br>
-<label><input type="checkbox" id="menuMotoristasAdmin"> Motoristas Admin</label><br>
-<label><input type="checkbox" id="menuFrete"> Cálculo de Frete</label><br>
-<label><input type="checkbox" id="menuUsuarios"> Controle de Usuários</label><br>
-<label><input type="checkbox" id="menuConsumo"> Consumo Firestore</label><br>
-<label><input type="checkbox" id="menuProgramacao"> Programação de Cargas</label>
-
+<div class="checkbox-group"><input type="checkbox" id="menuPainel"><label for="menuPainel">Painel da Fila</label></div>
+<div class="checkbox-group"><input type="checkbox" id="menuLeitura"><label for="menuLeitura">Fila de Caminhões</label></div>
+<div class="checkbox-group"><input type="checkbox" id="menuDisponibilidade"><label for="menuDisponibilidade">Disponibilidade</label></div>
+<div class="checkbox-group"><input type="checkbox" id="menuMotoristasAdmin"><label for="menuMotoristasAdmin">Motoristas Admin</label></div>
+<div class="checkbox-group"><input type="checkbox" id="menuFrete"><label for="menuFrete">Cálculo de Frete</label></div>
+<div class="checkbox-group"><input type="checkbox" id="menuUsuarios"><label for="menuUsuarios">Controle de Usuários</label></div>
+<div class="checkbox-group"><input type="checkbox" id="menuConsumo"><label for="menuConsumo">Consumo Firestore</label></div>
+<div class="checkbox-group"><input type="checkbox" id="menuProgramacao"><label for="menuProgramacao">Programação de Cargas</label></div>
 </div>
 
-<button onclick="abrirConfirmacao()">Criar Usuário</button>
+<button id="btnCriar" onclick="abrirConfirmacao()">Criar Usuário</button>
 
 <div class="msg" id="msg"></div>
 </div>
 
-<!-- Modal senha admin -->
 <div class="modal-bg" id="modalConfirmacao">
-  <div class="modal">
-    <h4>Confirme sua senha de administrador</h4>
-    <input type="password" id="senhaAdmin" placeholder="Senha do administrador">
-    <button onclick="criarUsuario()">Confirmar</button>
-  </div>
+<div class="modal">
+<h4>Confirme sua senha de administrador</h4>
+<input type="password" id="senhaAdmin" placeholder="Senha do administrador">
+<button onclick="criarUsuario()">Confirmar</button>
+</div>
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-  getAuth, 
-  onAuthStateChanged, 
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import { 
-  getFirestore, 
-  doc, 
-  getDoc, 
-  setDoc 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
-  authDomain: "tabela-frete-rio-branco.firebaseapp.com",
-  projectId: "tabela-frete-rio-branco",
-  storageBucket: "tabela-frete-rio-branco.firebasestorage.app",
-  messagingSenderId: "765019849831",
-  appId: "1:765019849831:web:f2089ab12a3eb7ea6880c2"
+const firebaseConfig={
+apiKey:"AIzaSyCKdfOvWehaJcuK6uX5JXxc7YdN26h8sXY",
+authDomain:"tabela-frete-rio-branco.firebaseapp.com",
+projectId:"tabela-frete-rio-branco"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-document.documentElement.style.display = "none";
+document.documentElement.style.display="none";
 
-onAuthStateChanged(auth, async (user) => {
-
-  if (!user) return window.location.replace("login.html");
-
-  const userSnap = await getDoc(doc(db,"usuarios",user.uid));
-
-const dados = userSnap.data();
-
-if (!userSnap.exists() || dados.nivel < 4)
-  return window.location.replace("painel.html");
-
-  document.documentElement.style.display = "block";
+onAuthStateChanged(auth,async(user)=>{
+if(!user)return window.location.replace("login.html");
+const snap=await getDoc(doc(db,"usuarios",user.uid));
+if(!snap.exists()||snap.data().nivel<4)
+return window.location.replace("painel.html");
+document.documentElement.style.display="block";
 });
 
-window.abrirConfirmacao = function(){
+window.abrirConfirmacao=function(){
+const senha=document.getElementById("senha").value;
+const confirmar=document.getElementById("confirmarSenha").value;
+const msg=document.getElementById("msg");
 
-  const senha = document.getElementById("senha").value;
-  const confirmar = document.getElementById("confirmarSenha").value;
-  const msg = document.getElementById("msg");
-
-  if(!senha || senha !== confirmar){
-    msg.innerText = "As senhas não conferem.";
-    return;
-  }
-
-  document.getElementById("modalConfirmacao").style.display = "flex";
+if(!senha||senha!==confirmar){
+msg.innerText="As senhas não conferem.";
+msg.className="msg error";
+return;
+}
+document.getElementById("modalConfirmacao").style.display="flex";
 };
 
-window.criarUsuario = async function(){
+window.criarUsuario=async function(){
 
-  const nome = document.getElementById("nome").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const senha = document.getElementById("senha").value.trim();
-  const nivel = parseInt(document.getElementById("nivel").value);
+const btn=document.getElementById("btnCriar");
+const msg=document.getElementById("msg");
 
-const menus = {
-  painel: document.getElementById("menuPainel").checked,
-  leitura: document.getElementById("menuLeitura").checked,
-  disponibilidade: document.getElementById("menuDisponibilidade").checked,
-  motoristasAdmin: document.getElementById("menuMotoristasAdmin").checked,
-  frete: document.getElementById("menuFrete").checked,
-  usuarios: document.getElementById("menuUsuarios").checked,
-  consumo: document.getElementById("menuConsumo").checked,
-  programacao: document.getElementById("menuProgramacao").checked
+btn.disabled=true;
+btn.innerHTML='<div class="spinner"></div> Criando...';
+
+try{
+
+const nome=document.getElementById("nome").value.trim();
+const email=document.getElementById("email").value.trim();
+const senha=document.getElementById("senha").value.trim();
+const nivel=parseInt(document.getElementById("nivel").value);
+
+const menus={
+painel:menuPainel.checked,
+leitura:menuLeitura.checked,
+disponibilidade:menuDisponibilidade.checked,
+motoristasAdmin:menuMotoristasAdmin.checked,
+frete:menuFrete.checked,
+usuarios:menuUsuarios.checked,
+consumo:menuConsumo.checked,
+programacao:menuProgramacao.checked
 };
 
-  const msg = document.getElementById("msg");
+const idToken=await auth.currentUser.getIdToken();
 
-  try {
+const response=await fetch("https://criar-usuario-com-nivel-765019849831.us-central1.run.app",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+idToken
+},
+body:JSON.stringify({nome,email,senha,nivel,menus})
+});
 
-    const idToken = await auth.currentUser.getIdToken();
+const text=await response.text();
 
-    const response = await fetch("https://criar-usuario-com-nivel-765019849831.us-central1.run.app", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + idToken
-      },
-      body: JSON.stringify({
-        nome,
-        email,
-        senha,
-        nivel,
-        menus
-      })
-    });
+if(!response.ok)throw new Error(text);
 
- const text = await response.text();
+msg.innerText="Usuário criado com sucesso.";
+msg.className="msg success";
 
-if(!response.ok){
-  throw new Error(text);
+document.getElementById("modalConfirmacao").style.display="none";
+
+}catch(error){
+msg.innerText=error.message;
+msg.className="msg error";
 }
 
-    msg.innerText = "Usuário criado com sucesso.";
-
-  } catch(error){
-    msg.innerText = error.message;
-  }
-
+btn.disabled=false;
+btn.innerHTML="Criar Usuário";
 };
 
 </script>
-
 </body>
 </html>
