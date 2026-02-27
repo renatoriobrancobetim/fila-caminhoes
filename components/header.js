@@ -1,3 +1,4 @@
+import "./security.js";
 export function renderHeader(pageTitle, pageSubtitle) {
 
   const headerHTML = `
