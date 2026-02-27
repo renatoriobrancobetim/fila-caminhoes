@@ -3,7 +3,7 @@
 <head>
 <script type="module">
 
-import { auth, db } from "/fila-caminhoes/components/firebase.js";
+import { auth, db } from "./components/firebase.js";
 import { renderHeader } from "/fila-caminhoes/components/header.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
@@ -18,7 +18,10 @@ let usuarioLogado = null;
 let listaClientesCache = [];
 
 // 🔒 Oculta tela até validar sessão
-document.documentElement.style.display = "none";
+onAuthStateChanged(auth, (user) => {
+  console.log("USUARIO:", user);
+  document.documentElement.style.display = "block";
+});
 
 // 🔐 PROTEÇÃO DEFINITIVA DE AUTENTICAÇÃO
 let authInicializado = false;
