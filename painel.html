@@ -314,10 +314,10 @@ onAuthStateChanged(auth, async (user)=>{
 
   const dados = snap.data();
 
-  document.getElementById("usuarioLogado").innerText =
-    "Usuário: "+dados.nome+" ("+dados.perfil.toUpperCase()+")";
+document.getElementById("usuarioLogado").innerText =
+  "Usuário: "+dados.nome+" (Nível "+dados.nivel+")";
 
-  if(dados.perfil === "admin"){
+  if(dados.nivel >= 3){
     document.querySelectorAll("#cardsContainer .card").forEach(c=>{
       c.style.display="block";
     });
