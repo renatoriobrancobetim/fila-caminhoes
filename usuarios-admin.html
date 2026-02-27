@@ -234,11 +234,11 @@ const menus = {
       })
     });
 
-    const result = await response.json();
+ const text = await response.text();
 
-    if(!response.ok){
-      throw new Error(result);
-    }
+if(!response.ok){
+  throw new Error(text);
+}
 
     msg.innerText = "Usuário criado com sucesso.";
 
