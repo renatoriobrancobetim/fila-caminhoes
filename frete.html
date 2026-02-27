@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 <head>
 <script type="module">
-  import { auth, db } from "./components/firebase.js";
+import { auth } from "./components/firebase.js";
+
+window.auth = auth;
 import { renderHeader } from "./components/header.js";
 import { 
   collection,
