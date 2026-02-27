@@ -266,7 +266,7 @@ footer{
   <div class="desc">Monitoramento de uso</div>
 </a>
 
- <a class="card" href="programacao.html" id="cardConsumo" style="display:none;">
+ <a class="card" href="programacao.html" id="cardProgramacao" style="display:none;">
   <div class="icon">⛽</div>
   <div class="title">Programaçao de Cargas</div>
   <div class="desc">Programação de Cargas</div>
@@ -313,6 +313,50 @@ onAuthStateChanged(auth, async (user)=>{
 console.log("Documento usuário:", snap.exists(), snap.data());
 
   const dados = snap.data();
+
+  // 🔐 CONTROLE DE VISIBILIDADE
+
+const menus = dados.menus || {};
+const nivel = dados.nivel || 0;
+
+// 🔴 Esconde todos os cards primeiro
+document.querySelectorAll(".card").forEach(card=>{
+  card.style.display = "none";
+});
+
+// 🟢 Nível 4 vê tudo
+if(nivel === 4){
+
+  document.querySelectorAll(".card").forEach(card=>{
+    card.style.display = "block";
+  });
+
+}else{
+
+  if(menus.frete)
+    document.getElementById("cardFrete")?.style.display = "block";
+
+  if(menus.painel)
+    document.getElementById("cardPainelFila")?.style.display = "block";
+
+  if(menus.usuarios)
+    document.getElementById("cardUsuarios")?.style.display = "block";
+
+  if(menus.programacao)
+    document.getElementById("cardProgramacao")?.style.display = "block";
+
+  if(menus.consumo)
+    document.getElementById("cardConsumo")?.style.display = "block";
+
+  if(menus.leitura)
+    document.getElementById("cardLeitura")?.style.display = "block";
+
+  if(menus.disponibilidade)
+    document.getElementById("cardDisponibilidade")?.style.display = "block";
+
+  if(menus.motoristasAdmin)
+    document.getElementById("cardMotoristasAdmin")?.style.display = "block";
+}
 
 document.getElementById("usuarioLogado").innerText =
   "Usuário: "+dados.nome+" (Nível "+dados.nivel+")";
